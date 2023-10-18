@@ -1,0 +1,78 @@
+{
+    "global": {
+        "info": {
+            "name": "Quantum Industry",
+            "author": "Democracy modding party",
+            "version": "last",
+            "description": "Ideal unique industry mod for you",
+            "icon": "src/mod_icon.png"
+        },
+        "api": "CoreEngine"
+    },
+    "make": {
+        "debugAbi": "armeabi-v7a",
+        "abis": [
+            "armeabi-v7a"
+        ],
+        "linkNative": [
+            "minecraftpe",
+            "innercore",
+            "nativejs"
+        ],
+        "excludeFromRelease": [],
+        "pushTo": "storage/emulated/0/games/horizon/packs/Inner_Core_2/modpacks/coop-tech/mods/Quantum-Industry",
+        "ndkPath": null
+    },
+    "resources": [
+        {
+			"path": "src/assets",
+			"type": "resource_directory"
+		},
+        {
+			"path": "src/models",
+			"type": "resource_directory"
+		},
+        {
+			"path": "src/assets/gui",
+			"type": "gui"
+		}
+    ],
+    "sources": [
+        {
+            "source": "src/dev",
+            "target": "main.js",
+            "type": "main",
+            "language": "typescript"
+        },
+        {
+            "source": "src/launcher.js",
+            "type": "launcher",
+            "language": "javascript"
+        },
+        {
+            "source": "src/lib/*",
+            "type": "library",
+            "language": "javascript"
+        }
+    ],
+    "compile": [
+        {
+            "source": "src/native",
+            "type": "native"
+        },
+        {
+            "source": "src/java",
+            "type":"java"
+        }
+    ],
+    "additional": [
+        {
+            "source": "src/config.json",
+            "targetDir": "."
+        },
+        {
+            "source": "src/config.info.json",
+            "targetDir": "."
+        }
+    ]
+}
