@@ -1,5 +1,5 @@
 Callback.addCallback("GenerateCustomDimensionChunk", function(chunkX, chunkZ, random, dimensionId){
-    if(dimensionId==InfinityForest.id){
+    if(dimensionId==InfiniteForest.id){
 let coords = GenerationUtils.randomCoords(chunkX, chunkZ, 64, 120);                  
     if(Math.random() < 0.4){
     coords = GenerationUtils.findSurface(coords.x, coords.y, coords.z);                  
@@ -10,7 +10,7 @@ if(World.getBlock(coords.x,coords.y+1,coords.z).id === 0 && GenerationUtils.canS
 }}}})
 
 Callback.addCallback("GenerateCustomDimensionChunk", function(chunkX, chunkZ, random, dimensionId){
-    if(dimensionId==InfinityForest.id){
+    if(dimensionId==InfiniteForest.id){
 let coords = GenerationUtils.randomCoords(chunkX, chunkZ, 64, 120);                  
     if(Math.random() < 0.6){
     coords = GenerationUtils.findSurface(coords.x, coords.y, coords.z);                  
@@ -45,7 +45,7 @@ World.setBlock(coords.x,coords.y+4,coords.z-1,18,0);
 }}}})
 
 Callback.addCallback("GenerateCustomDimensionChunk", function(chunkX, chunkZ, random, dimensionId){
-    if(dimensionId==InfinityForest.id){
+    if(dimensionId==InfiniteForest.id){
 let coords = GenerationUtils.randomCoords(chunkX, chunkZ, 64, 120);                  
     if(Math.random() < 0.6){
     coords = GenerationUtils.findSurface(coords.x, coords.y, coords.z);                  
@@ -81,7 +81,7 @@ World.setBlock(coords.x,coords.y+3,coords.z-1,18,2);
 
 
 Callback.addCallback("GenerateCustomDimensionChunk", function(chunkX, chunkZ, random, dimensionId){
-    if(dimensionId==InfinityForest.id){
+    if(dimensionId==InfiniteForest.id){
 let coords = GenerationUtils.randomCoords(chunkX, chunkZ, 64, 120);                  
     if(Math.random() < 0.4){
     coords = GenerationUtils.findSurface(coords.x, coords.y, coords.z);                  

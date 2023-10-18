@@ -1,0 +1,49 @@
+Translation.addTranslation("Bark Eucalyptus", {
+    ru: "Обтёсанный эвкалипт",
+  });
+
+  Translation.addTranslation("Bark Pink Log", {
+    ru: "Обтёсанное розовое дерево",
+  });
+
+  Translation.addTranslation("Pink Wood", { ru: "Розовое Дерево" });
+
+  Translation.addTranslation("Pinks planks", { ru: "Доски из розового дерева" });
+
+  Translation.addTranslation("Eucalyptus planks", { ru: "§aДоски эвкалипта" });
+
+  Translation.addTranslation("Eucalyptus hewn", { ru: "§aКора эвкалипта" });
+
+  Translation.addTranslation("Pink hewn", { ru: "Кора розового дерева" });
+
+  Translation.addTranslation("Dungeon old brick", {
+    ru: "Кирпич древнего сооружения",
+  });
+
+  Translation.addTranslation("Dungeon print active brick", {
+    ru: "Кирпич древнего сооружения с магической пробуждённой печатью",
+  });
+
+  Translation.addTranslation("Dungeon print deactive brick", {
+    ru: "Кирпич древнего сооружения с магической печатью",
+  });
+
+  Translation.addTranslation("Blue crystal", {
+    ru: "§9Ледяной кристалл",
+    en: "§9Ice crystal",
+  });
+
+  Translation.addTranslation("Orange crystal", {
+    ru: "§6Огненный кристалл",
+    en: "§6",
+  });
+
+  Translation.addTranslation("Flame crystal", {
+    ru: "§6Пылающий §9кристалл",
+    en: "§6Flaming §9crystal",
+  });
+
+  Translation.addTranslation("Flame description",{ru: "§6Я погасну лишь тогда,когда\n последний огонёк погаснет,и лист\n последний,что стремился к жизни больше всех,умрёт.",
+en: "§6I will go out only when the\nlast light goes out, and the last leaf,\nthat aspired to life the most will die"})
+
+Translation.addTranslation("Castle print", { ru: "§6Выражение печати" });

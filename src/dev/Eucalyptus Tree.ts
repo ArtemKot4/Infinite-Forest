@@ -1,5 +1,5 @@
 Callback.addCallback("GenerateCustomDimensionChunk", function(chunkX, chunkZ, random, dimensionId){
-    if(dimensionId==InfinityForest.id){
+    if(dimensionId==InfiniteForest.id){
 let coords = GenerationUtils.randomCoords(chunkX, chunkZ, 64, 120);                  
     if(Math.random() < 0.2){
     coords = GenerationUtils.findSurface(coords.x, coords.y, coords.z);                  

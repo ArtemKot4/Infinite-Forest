@@ -15,11 +15,13 @@
 		"webpack"
 	],
 	"include": [
+		"translations.ts",
 		"blocks and items.ts",
 		"dimension.ts",
 		"structure.ts",
 		"Eucalyptus Tree.ts",
-		"Pink Tree and oak & birch.ts"
+		"Pink Tree and oak & birch.ts",
+		"core.ts"
 	],
 	"files": [
 		"C:\\Users\\\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\\Desktop\\\u0418\u0433\u0440\u044b\\HORIZON MODDING KERNEL\\Infinite Forest\\toolchain\\declarations\\android-declarations.d.ts",
@@ -34,9 +36,9 @@
 		"C:\\Users\\\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\\Desktop\\\u0418\u0433\u0440\u044b\\HORIZON MODDING KERNEL\\Infinite Forest\\toolchain\\declarations\\DungeonUtility.d.ts",
 		"C:\\Users\\\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\\Desktop\\\u0418\u0433\u0440\u044b\\HORIZON MODDING KERNEL\\Infinite Forest\\toolchain\\declarations\\energy-net.d.ts",
 		"C:\\Users\\\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\\Desktop\\\u0418\u0433\u0440\u044b\\HORIZON MODDING KERNEL\\Infinite Forest\\toolchain\\declarations\\Futurepack.d.ts",
+		"C:\\Users\\\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\\Desktop\\\u0418\u0433\u0440\u044b\\HORIZON MODDING KERNEL\\Infinite Forest\\toolchain\\declarations\\ItemAnimHelper.d.ts",
 		"C:\\Users\\\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\\Desktop\\\u0418\u0433\u0440\u044b\\HORIZON MODDING KERNEL\\Infinite Forest\\toolchain\\declarations\\RecipeViewer.d.ts",
 		"C:\\Users\\\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\\Desktop\\\u0418\u0433\u0440\u044b\\HORIZON MODDING KERNEL\\Infinite Forest\\toolchain\\declarations\\RenderUtil.d.ts",
-		"C:\\Users\\\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\\Desktop\\\u0418\u0433\u0440\u044b\\HORIZON MODDING KERNEL\\Infinite Forest\\toolchain\\declarations\\ScriptStory.d.ts",
 		"C:\\Users\\\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\\Desktop\\\u0418\u0433\u0440\u044b\\HORIZON MODDING KERNEL\\Infinite Forest\\toolchain\\declarations\\SoundAPI.d.ts",
 		"C:\\Users\\\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\\Desktop\\\u0418\u0433\u0440\u044b\\HORIZON MODDING KERNEL\\Infinite Forest\\toolchain\\declarations\\StorageInterface.d.ts",
 		"C:\\Users\\\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\\Desktop\\\u0418\u0433\u0440\u044b\\HORIZON MODDING KERNEL\\Infinite Forest\\toolchain\\declarations\\TileRender.d.ts",
