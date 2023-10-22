@@ -1,25 +1,12 @@
 IMPORT("SoundAPI");
 
-const Mistical = new Sound("Light.ogg");
-const Opening = new Sound("Opening.ogg");
-
-var BLOCK_TYPE_FIRE = Block.createSpecialType({
-  lightlevel: 8,
-  rendertype: 91,
-  sound: "grass",
-});
-var BLOCK_TYPE_PRINT = Block.createSpecialType({
-  lightlevel: 10,
-  sound: "glass",
-  destroytime: -1,
-});
 IDRegistry.genBlockID("fironia");
 Block.createBlock(
   "fironia",
   [{ name: "Fironia", texture: [["fironia", 0]], inCreative: true }],
   BLOCK_TYPE_FIRE
 );
-Translation.addTranslation("Fironia", { ru: "§6Пылающий огнецвет" });
+
 
 var render1 = new ICRender.Model();
 var model1 = BlockRenderer.createModel();
@@ -271,120 +258,7 @@ ToolAPI.registerBlockMaterial(
   4
 );
 
-IDRegistry.genItemID("blueCrystal");
-Item.createItem("blueCrystal", "Blue crystal", { name: "blue_crystal" });
 
-
-IDRegistry.genItemID("orangeCrystal");
-Item.createItem("orangeCrystal", "Orange crystal", { name: "orange_crystal" });
-
-IDRegistry.genItemID("flameCrystal");
-Item.createItem("flameCrystal", "Flame Crystal", { name: "orange_crystal" });
-
-
-IAHelper.makeAdvancedAnim(ItemID.flameCrystal,"flame_crystal",2,[1,2,3,4])
-
-Item.registerNameOverrideFunction(
-  ItemID.flameCrystal,
-  function (item, translation, name) {
-    var players = Network.getConnectedPlayers();
-    for (var i in players) {
-      if (Entity.getSneaking(players[i])) {
-        return (
-          Translation.translate(name) +
-          "\n" +
-          Translation.translate(
-            "Flame description"
-          )
-        );
-      }
-    }
-  }
-);
-
-
-
-Recipes.addShaped(
-  { id: ItemID.blueCrystal, count: 1, data: 0 },
-  ["ldl", "lsl", "ddd"],
-  ["d", 264, -1, "d", 3, -1, "l", 18, -1, "s", 6, -1]
-);
-
-IDRegistry.genItemID("parchment_gold");
-Item.createItem("parchment_gold", "Castle print", { name: "parchment_gold" });
-
-
-IDRegistry.genItemID("parchment_lazuli");
-Item.createItem("parchment_lazuli", "Castle print", { name: "parchment_blue" });
-
-Callback.addCallback(
-  "ItemUse",
-  function (coords, item, block, isExter, player) {
-    if (item.id == ItemID.blueCrystal) {
-      Dimensions.transfer(player, InfiniteForest.id);
-    }
-    if (item.id == ItemID.orangeCrystal) {
-      Dimensions.transfer(player, 0);
-    }
-    if (
-      item.id == ItemID.parchment_gold &&
-      block.id == BlockID.dungeon_print_bricks_deactive
-    ) {
-      var region = BlockSource.getDefaultForActor(player);
-      if (
-        region.getBlockId(coords.x, coords.y - 1, coords.z) ==
-          BlockID.dungeon_print_bricks_deactive &&
-        region.getBlockId(coords.x, coords.y, coords.z) ==
-          BlockID.dungeon_print_bricks_deactive &&
-        region.getBlockId(coords.x, coords.y + 1, coords.z) ==
-          BlockID.dungeon_print_bricks_deactive &&
-        region.getBlockId(coords.x + 1, coords.y, coords.z) ==
-          BlockID.dungeon_print_bricks_deactive &&
-        region.getBlockId(coords.x - 1, coords.y, coords.z) ==
-          BlockID.dungeon_print_bricks_deactive
-      ) {
-        region.setBlock(
-          coords.x,
-          coords.y,
-          coords.z,
-          BlockID.dungeon_print_bricks_active,
-          0
-        );
-
-        Mistical.play();
-      }
-    }
-
-    if (
-      item.id == ItemID.parchment_lazuli &&
-      block.id == BlockID.dungeon_print_bricks_deactive
-    ) {
-      var region = BlockSource.getDefaultForActor(player);
-      if (
-        region.getBlockId(coords.x, coords.y - 1, coords.z) ==
-          BlockID.dungeon_print_bricks_deactive &&
-        region.getBlockId(coords.x, coords.y, coords.z) ==
-          BlockID.dungeon_print_bricks_deactive &&
-        region.getBlockId(coords.x, coords.y + 1, coords.z) ==
-          BlockID.dungeon_print_bricks_deactive &&
-        region.getBlockId(coords.x + 1, coords.y, coords.z) ==
-          BlockID.dungeon_print_bricks_deactive &&
-        region.getBlockId(coords.x - 1, coords.y, coords.z) ==
-          BlockID.dungeon_print_bricks_deactive
-      ) {
-        region.setBlock(
-          coords.x,
-          coords.y,
-          coords.z,
-          BlockID.dungeon_print_bricks_active_1,
-          0
-        );
-
-        Mistical.play();
-      }
-    }
-  }
-);
 
 TileEntity.registerPrototype(BlockID.dungeon_print_bricks_active, {
   defaultValues: { onemessage: 0 },
@@ -551,3 +425,4 @@ TileEntity.registerPrototype(BlockID.dungeon_print_bricks_active_1, {
 
   // }
 });
+

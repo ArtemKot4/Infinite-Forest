@@ -16,12 +16,19 @@
 	],
 	"include": [
 		"translations.ts",
-		"blocks and items.ts",
+		"core.ts",
+		"particles.ts",
+		"items.ts",
+		"blocks.ts",
 		"dimension.ts",
+		"items/crystals.ts",
+		"infinite_table.ts",
 		"structure.ts",
 		"Eucalyptus Tree.ts",
 		"Pink Tree and oak & birch.ts",
-		"core.ts"
+		"core/callbacks/tick.ts",
+		"core/callbacks/item_use.ts",
+		"recipes.ts"
 	],
 	"files": [
 		"C:\\Users\\\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\\Desktop\\\u0418\u0433\u0440\u044b\\HORIZON MODDING KERNEL\\Infinite Forest\\toolchain\\declarations\\android-declarations.d.ts",

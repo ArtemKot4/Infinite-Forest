@@ -1,18 +1,19 @@
-class Infinite {
-  protected dimension = InfiniteForest.id;
-  protected isForest(): boolean {
-    if (Player.getDimension() == this.dimension) {
-      return true;
-    }
-  }
-}
+// class Infinite {
+//   protected dimension = InfiniteForest.id;
+//   protected isForest(): boolean {
+//     if (Player.getDimension() == this.dimension) {
+//       return true;
+//     }
+//   }
+// }
 
-class Wood extends Infinite {
+class Wood //extends Infinite
+ {
   private name: string;
   private id: string;
   private texture: string;
   constructor( id: string,name: string, texture: string) {
-    super();
+    
     this.name = name;
     this.id = id;
     this.texture = texture;
@@ -117,4 +118,19 @@ class Wood extends Infinite {
   }
 }
 
-new Wood("eucalyptus","Eucalypt","eucalyptus")
+//new Wood("eucalyptus","Eucalypt","eucalyptus")
+
+
+const Mistical = new Sound("Light.ogg");
+const Opening = new Sound("Opening.ogg");
+
+var BLOCK_TYPE_FIRE = Block.createSpecialType({
+  lightlevel: 8,
+  rendertype: 91,
+  sound: "grass",
+});
+var BLOCK_TYPE_PRINT = Block.createSpecialType({
+  lightlevel: 10,
+  sound: "glass",
+  destroytime: -1,
+});

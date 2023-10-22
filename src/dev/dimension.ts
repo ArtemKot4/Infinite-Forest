@@ -1,41 +1,3 @@
-Network.addClientPacket("if.particle", function (packetData: any) {
-  Particles.addParticle(
-    packetData.p,
-    packetData.x,
-    packetData.y, 
-    packetData.z,
-    packetData.vx,
-    packetData.vy,
-    packetData.vz
-  );
-});
-
-function spawnParticle(type, x, y, z, vx, vy, vz, ax, ay?, az?) {
-  vx = vx || 0;
-  vy = vy || 0;
-  vz = vz || 0;
-  ax = ax || 0;
-  ay = ay || 0;
-  az = az || 0;
-  var players = Network.getConnectedPlayers();
-  for (var i in players) {
-    var client = Network.getClientForPlayer(players[i]);
-    if (client) {
-      client.send("if.particle", {
-        p: type,
-        x: x,
-        y: y,
-        z: z,
-        vx: vx,
-        vy: vy,
-        vz: vz,
-      });
-      /*  Debug.message("spawn particle");*/
-    } else {
-      Debug.message("[Error] Failed spawn particle");
-    }
-  }
-}
 
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -97,7 +59,7 @@ const UniqueGen = {
 
 var InfiniteForest = new Dimensions.CustomDimension("InfiniteForest", 75);
 
-//InfiniteForest.setFogColor(0, .6, .3);
+//InfiniteForest.setFogColor(-255, 26, 151);
 InfiniteForest.setSkyColor(0.4, 0.4, 0.5);
 
 let generator = Dimensions.newGenerator({
@@ -147,29 +109,6 @@ Callback.addCallback(
 
 //var Particles = ModAPI.requireGlobal("Particles");
 
-var glowworm = Particles.registerParticleType({
-  texture: "part_1",
-  render: 2,
-  size: [1, 3],
-  lifetime: [40, 100],
-
-  animators: {
-    alpha: { fadeIn: 0.4, fadeOut: 0.4 },
-    size: { fadeOut: 0.5, fadeIn: 0.2, start: 0, end: 0 },
-  },
-});
-var fire = Particles.registerParticleType({
-  texture: "part_1",
-  render: 2,
-  color: [1, 0.5, 0.5, 0.5],
-  size: [2, 4],
-  lifetime: [40, 100],
-
-  animators: {
-    alpha: { fadeIn: 0.4, fadeOut: 0.4 },
-    size: { fadeOut: 0.5, fadeIn: 0.2, start: 0, end: 0 },
-  },
-});
 
 function getSign(n) {
   if (n > 0) return 1;
@@ -221,21 +160,13 @@ function addFire(coords) {
   var yV = random(3, 5) / 600;
   var zV = xz.z / 80;
 
-  spawnParticle(fire, coords.x + x, coords.y + y, coords.z + z, xV, yV, zV, 0);
+  spawnParticle(glowworm, coords.x + x, coords.y + y, coords.z + z, xV, yV, zV, 0);
+  //fire
 }
 
-Callback.addCallback("LocalTick", function () {
-  let pos = Player.getPosition();
-  if (World.getThreadTime()%200&&Player.getDimension() == InfiniteForest.id) {
-    addGlowworm(pos);
-    for (var i = 0; i < 3; i++) {
-      addFire(pos);
-    }
-  }
- 
-});
 
-Callback.addCallback("LevelLoaded", function () {
+
+Callback.addCallback("LevelDisplayed", function () {
   if(Player.getDimension() == InfiniteForest.id){World.setWorldTime(13300);
     Commands.exec("/gamerule doDaylightCycle false")
   }else{
@@ -243,220 +174,3 @@ Callback.addCallback("LevelLoaded", function () {
     Commands.exec("/gamerule doDaylightCycle true")
   }
 })
-
-
-// Callback.addCallback("GenerateCustomDimensionChunk", function(chunkX, chunkZ, random, dimensionId, player) {
-//  if (dimensionId != InfiniteForest.id) return;
-//  UniqueGen.generateOreInDimension(VanillaBlockID.andesite, 0, chunkX, chunkZ, random, {
-//  veinCounts: 4,
-//  minY:2,
-//  maxY: 120,
-//  size: randomInt(4, 40),
-//  mode: true,
-//  check: [VanillaBlockID.stone]
-//  });
-// });
-
-// Callback.addCallback("GenerateCustomDimensionChunk", function(chunkX, chunkZ, random, dimensionId, player) {
-//  if (dimensionId != InfiniteForest.id) return;
-//  UniqueGen.generateOreInDimension(VanillaBlockID.diorite, 0, chunkX, chunkZ, random, {
-//  veinCounts: 4,
-//  minY:2,
-//  maxY: 120,
-//  size: randomInt(4, 40),
-//  mode: true,
-//  check: [VanillaBlockID.stone]
-//  });
-// });
-
-// Callback.addCallback("GenerateCustomDimensionChunk", function(chunkX, chunkZ, random, dimensionId, player) {
-//  if (dimensionId != InfiniteForest.id) return;
-//  UniqueGen.generateOreInDimension(VanillaBlockID.granite, 0, chunkX, chunkZ, random, {
-//  veinCounts: 4,
-//  minY:2,
-//  maxY: 120,
-//  size: randomInt(4, 40),
-//  mode: true,
-//  check: [VanillaBlockID.stone]
-//  });
-// });
-
-
-ModAPI.addAPICallback("ICore", function (api) {
-  Callback.addCallback(
-    "GenerateCustomDimensionChunk",
-    function (chunkX, chunkZ, random, dimensionId, player) {
-      if (dimensionId != InfiniteForest.id) return;
-      UniqueGen.generateOreInDimension(
-        BlockID.oreCopper,
-        0,
-        chunkX,
-        chunkZ,
-        random,
-        {
-          veinCounts: 3,
-          minY: 2,
-          maxY: 60,
-          size: randomInt(1, 9),
-          mode: true,
-          check: [VanillaBlockID.stone],
-        }
-      );
-
-      Callback.addCallback(
-        "GenerateCustomDimensionChunk",
-        function (chunkX, chunkZ, random, dimensionId, player) {
-          if (dimensionId != InfiniteForest.id) return;
-          UniqueGen.generateOreInDimension(
-            BlockID.oreTin,
-            0,
-            chunkX,
-            chunkZ,
-            random,
-            {
-              veinCounts: 3,
-              minY: 2,
-              maxY: 50,
-              size: randomInt(1, 6),
-              mode: true,
-              check: [VanillaBlockID.stone],
-            }
-          );
-        }
-      );
-
-      Callback.addCallback(
-        "GenerateCustomDimensionChunk",
-        function (chunkX, chunkZ, random, dimensionId, player) {
-          if (dimensionId != InfiniteForest.id) return;
-          UniqueGen.generateOreInDimension(
-            BlockID.oreSilver,
-            0,
-            chunkX,
-            chunkZ,
-            random,
-            {
-              veinCounts: 3,
-              minY: 2,
-              maxY: 40,
-              size: randomInt(1, 5),
-              mode: true,
-              check: [VanillaBlockID.stone],
-            }
-          );
-        }
-      );
-      Callback.addCallback(
-        "GenerateCustomDimensionChunk",
-        function (chunkX, chunkZ, random, dimensionId, player) {
-          if (dimensionId != InfiniteForest.id) return;
-          UniqueGen.generateOreInDimension(
-            BlockID.oreUranium,
-            0,
-            chunkX,
-            chunkZ,
-            random,
-            {
-              veinCounts: 2,
-              minY: 2,
-              maxY: 40,
-              size: randomInt(2, 4),
-              mode: true,
-              check: [VanillaBlockID.stone],
-            }
-          );
-        }
-      );
-
-      Callback.addCallback(
-        "GenerateCustomDimensionChunk",
-        function (chunkX, chunkZ, random, dimensionId, player) {
-          if (dimensionId != InfiniteForest.id) return;
-          UniqueGen.generateOreInDimension(
-            BlockID.oreIridium,
-            0,
-            chunkX,
-            chunkZ,
-            random,
-            {
-              veinCounts: 2,
-              minY: 2,
-              maxY: 40,
-              size: randomInt(2, 4),
-              mode: true,
-              check: [VanillaBlockID.stone],
-            }
-          );
-        }
-      );
-    }
-  );
-});
-
-ModAPI.addAPICallback("SpacesAPI", function (api) {
-  Callback.addCallback(
-    "GenerateCustomDimensionChunk",
-    function (chunkX, chunkZ, random, dimensionId, player) {
-      if (dimensionId != InfiniteForest.id) return;
-      UniqueGen.generateOreInDimension(
-        BlockID.ore_copper_sc,
-        0,
-        chunkX,
-        chunkZ,
-        random,
-        {
-          veinCounts: 3,
-          minY: 2,
-          maxY: 60,
-          size: randomInt(2, 7),
-          mode: true,
-          check: [VanillaBlockID.stone],
-        }
-      );
-    }
-  );
-
-  Callback.addCallback(
-    "GenerateCustomDimensionChunk",
-    function (chunkX, chunkZ, random, dimensionId, player) {
-      if (dimensionId != InfiniteForest.id) return;
-      UniqueGen.generateOreInDimension(
-        BlockID.ore_tin_sc,
-        0,
-        chunkX,
-        chunkZ,
-        random,
-        {
-          veinCounts: 3,
-          minY: 2,
-          maxY: 60,
-          size: randomInt(2, 4),
-          mode: true,
-          check: [VanillaBlockID.stone],
-        }
-      );
-    }
-  );
-
-  Callback.addCallback(
-    "GenerateCustomDimensionChunk",
-    function (chunkX, chunkZ, random, dimensionId, player) {
-      if (dimensionId != InfiniteForest.id) return;
-      UniqueGen.generateOreInDimension(
-        BlockID.ore_aluminum_sc,
-        0,
-        chunkX,
-        chunkZ,
-        random,
-        {
-          veinCounts: 3,
-          minY: 2,
-          maxY: 60,
-          size: randomInt(2, 7),
-          mode: true,
-          check: [VanillaBlockID.stone],
-        }
-      );
-    }
-  );
-});

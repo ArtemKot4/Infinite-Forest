@@ -1,9 +1,21 @@
+IMPORT("TileRender")
+IMPORT("BlockEngine")
+IMPORT("ItemAnimHelper")
+IMPORT("SoundAPI")
+IMPORT("RenderUtil")
+
+Translation.addTranslation("Fironia", { ru: "§6Пылающий огнецвет" });
+
 Translation.addTranslation("Bark Eucalyptus", {
     ru: "Обтёсанный эвкалипт",
   });
 
   Translation.addTranslation("Bark Pink Log", {
     ru: "Обтёсанное розовое дерево",
+  });
+
+  Translation.addTranslation("Infinite altar", {
+    ru: "Бесконечный алтарь",
   });
 
   Translation.addTranslation("Pink Wood", { ru: "Розовое Дерево" });
@@ -38,12 +50,25 @@ Translation.addTranslation("Bark Eucalyptus", {
     en: "§6",
   });
 
+
   Translation.addTranslation("Flame crystal", {
-    ru: "§6Пылающий §9кристалл",
-    en: "§6Flaming §9crystal",
+    ru: "Пылающий кристалл",
+    en: "Flame crystal",
   });
 
-  Translation.addTranslation("Flame description",{ru: "§6Я погасну лишь тогда,когда\n последний огонёк погаснет,и лист\n последний,что стремился к жизни больше всех,умрёт.",
-en: "§6I will go out only when the\nlast light goes out, and the last leaf,\nthat aspired to life the most will die"})
+  Translation.addTranslation("Void crystal", {
+    ru: "Опустошённый кристалл",
+    en: "Void crystal",
+  });
 
-Translation.addTranslation("Castle print", { ru: "§6Выражение печати" });
+
+  Translation.addTranslation("It burns", {
+    ru: "Обжигает",
+    en: "It burns",
+  });
+
+  
+//   Translation.addTranslation("Flame description",{ru: "Холодно",
+// en: "§6I will go out only when the\nlast light goes out, and the last leaf,\nthat aspired to life the most will die"})
+
+Translation.addTranslation("Castle print", { ru: "§6Грубое выражение печати" });
