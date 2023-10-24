@@ -107,6 +107,8 @@ Callback.addCallback(
   }
 );
 
+
+
 //var Particles = ModAPI.requireGlobal("Particles");
 
 
@@ -166,9 +168,10 @@ function addFire(coords) {
 
 
 
-Callback.addCallback("LevelDisplayed", function () {
+Callback.addCallback("CustomDimensionTransfer", function () {
   if(Player.getDimension() == InfiniteForest.id){World.setWorldTime(13300);
     Commands.exec("/gamerule doDaylightCycle false")
+    alert("It works!")
   }else{
     
     Commands.exec("/gamerule doDaylightCycle true")

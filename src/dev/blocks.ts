@@ -7,6 +7,9 @@ Block.createBlock(
   BLOCK_TYPE_FIRE
 );
 
+Block.setAnimateTickCallback(BlockID.fironia, function(x, y, z, id, data) {
+ Particles.addParticle(Native.ParticleType.flame,x+0.5,y+0.7,z+0.5,Math.random()/20,Math.random()/20,Math.random()/20)
+});
 
 var render1 = new ICRender.Model();
 var model1 = BlockRenderer.createModel();
@@ -16,9 +19,9 @@ entry.addBox(0, 0, 0, 0, 0, 0);
 BlockRenderer.setCustomCollisionShape(BlockID.fironia, -1, Fironiashape);
 
 render1.addEntry(model1);
-IDRegistry.genBlockID("eucalyptusLog");
+IDRegistry.genBlockID("eucalyptus_log");
 Block.createBlock(
-  "eucalyptusLog",
+  "eucalyptus_log",
   [
     {
       name: "Eucaluptus",
@@ -92,11 +95,11 @@ Block.createBlock("bark_pink", [
   },
 ]);
 
-Block.setDestroyTime(BlockID.eucalyptusLog, 0.4);
-ToolAPI.registerBlockMaterial(BlockID.eucalyptusLog, "wood");
+Block.setDestroyTime(BlockID.eucalyptus_log, 0.4);
+ToolAPI.registerBlockMaterial(BlockID.eucalyptus_log, "wood");
 Translation.addTranslation("Eucaluptus", { ru: "§aЭвкалипт" });
 Block.createBlock(
-  "pinkLog",
+  "pink_log",
   [
     {
       name: "Pink Wood",
@@ -137,33 +140,33 @@ Block.createBlock(
   ],
   "opaque"
 );
-Block.registerDropFunction("pinkLog", function (coords, blockID) {
-  return [[BlockID.pinkLog, 1, 0]];
+Block.registerDropFunction("pink_log", function (coords, blockID) {
+  return [[BlockID.pink_log, 1, 0]];
 });
 Recipes.addShaped(
   { id: BlockID.pink_planks, count: 4, data: 2 },
   ["vvv", "vlv", "vvv"],
-  ["l", BlockID.pinkLog, -1]
+  ["l", BlockID.pink_log, -1]
 );
 Recipes.addShaped(
   { id: BlockID.eucalyptus_planks, count: 4, data: 2 },
   ["vvv", "vlv", "vvv"],
-  ["l", BlockID.eucalyptusLog, -1]
+  ["l", BlockID.eucalyptus_log, -1]
 );
-Block.setDestroyTime(BlockID.pinkLog, 0.4);
-Block.setDestroyTime(BlockID.eucalyptusLog, 0.4);
-ToolAPI.registerBlockMaterial(BlockID.pinkLog, "wood");
+Block.setDestroyTime(BlockID.pink_log, 0.4);
+Block.setDestroyTime(BlockID.eucalyptus_log, 0.4);
+ToolAPI.registerBlockMaterial(BlockID.pink_log, "wood");
 
 Recipes.addShaped(
   { id: VanillaBlockID.chest, count: 4, data: 0 },
   ["bbb", "b b", "bbb"],
-  ["b", BlockID.eucalyptusLog, 0]
+  ["b", BlockID.eucalyptus_log, 0]
 );
 
 Recipes.addShaped(
   { id: VanillaBlockID.chest, count: 4, data: 0 },
   ["bbb", "b b", "bbb"],
-  ["b", BlockID.pinkLog, 0]
+  ["b", BlockID.pink_log, 0]
 );
 
 Recipes.addShaped(

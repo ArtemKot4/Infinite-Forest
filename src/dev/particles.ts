@@ -55,9 +55,9 @@ var glowworm = Particles.registerParticleType({
     texture: "flame",
     render: 2,
     size: [4, 5],
-    lifetime: [30, 30],
+    lifetime: [20, 15],
   
-    color: [205,141,14,1],
+    color: [253,156,0,1],
     animators: {
       alpha: { fadeIn: 0.4, fadeOut: 0.4 },
       size: { fadeOut: 0.5, fadeIn: 0.4, start: 0, end: 0 },
@@ -68,8 +68,8 @@ var glowworm = Particles.registerParticleType({
     texture: "flame",
     render: 2,
     size: [4, 5],
-    lifetime: [30, 30],
-    color: [54,86,180,1],
+    lifetime: [20, 15],
+    color: [0,84,255,1],
   
     animators: {
       alpha: { fadeIn: 0.4, fadeOut: 0.4 },
@@ -82,7 +82,7 @@ var glowworm = Particles.registerParticleType({
     render: 2,
    // color: [1, 0.5, 0.5, 0.5],
     size: [4,5],
-    lifetime: [30, 30],
+    lifetime: [20, 15],
   
     animators: {
       alpha: { fadeIn: 0.4, fadeOut: 0.4 },
