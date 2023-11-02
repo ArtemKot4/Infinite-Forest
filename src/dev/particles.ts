@@ -90,3 +90,16 @@ var glowworm = Particles.registerParticleType({
     },
   });
   
+  
+  var star = Particles.registerParticleType({
+    texture: "flame",
+    render: 0,
+    size: [8,9],
+    lifetime: [80, 100],
+  
+    animators: {
+    //  alpha: { fadeIn: 0.4, fadeOut: 0.4 },
+      size: { fadeOut: 0, fadeIn: 0, start: 1, end: 0 },
+    },
+  });
+  

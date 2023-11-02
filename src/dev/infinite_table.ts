@@ -22,34 +22,41 @@ Block.createBlock("infinite_altar", [
 model({}, BlockID.infinite_altar,0).setBlockModel(BlockID.infinite_altar)
 
 
+
+
 TileEntity.registerPrototype(BlockID.infinite_altar, {
   defaultValues: { white: false, blue: false, orange: false, isLock: false},
   useNetworkItemContainer: true,
+  getTile: function(){
+    
+  },
   tick: function () {
-    if(World.getThreadTime()%2==0){
-    if(this.data.blue==true){
-      Particles.addParticle(flame_blue,this.x+0.5,this.y+0.7,this.z+0.5, 0,0,0)
+    // if(World.getThreadTime()%2==0){
+     
+    // if(this.data.blue==true){
+    //   Particles.addParticle(flame_blue,this.x+0.5,this.y+0.7,this.z+0.5, 0,0,0)
       
-    }else if(this.data.orange==true){
-      Particles.addParticle(flame_orange,this.x+0.5,this.y+0.7,this.z+0.5, 0,0,0)
-    }else{
-      Particles.addParticle(flame_white,this.x+0.5,this.y+0.7,this.z+0.5, 0,0,0)
-    }
-      }},
+    // }else if(this.data.orange==true){
+    //   Particles.addParticle(flame_orange,this.x+0.5,this.y+0.7,this.z+0.5, 0,0,0)
+    // }else{
+    //   Particles.addParticle(flame_white,this.x+0.5,this.y+0.7,this.z+0.5, 0,0,0)
+    // }
+    //   }
+  },
       click: function(id,count,data,coords,player,extra){
-        var item = Entity.getCarriedItem(player)
-        if(item.id==ItemID.blue_crystal&&this.data.isLock==false){
-          this.data.blue=true;
-          this.data.isLock=true
-        }else if(item.id==ItemID.orange_crystal&&this.data.isLock==false){
-          this.data.orange=true;
-          this.data.isLock=true
-        }
-        if(Entity.getSneaking(player)==true){
-          this.data.isLock=false;
-          this.data.orange=false;
-          this.data.blue=false;
-        }
+        // var item = Entity.getCarriedItem(player)
+        // if(item.id==ItemID.blue_crystal&&this.data.isLock==false){
+        //   this.data.blue=true;
+        //   this.data.isLock=true
+        // }else if(item.id==ItemID.orange_crystal&&this.data.isLock==false){
+        //   this.data.orange=true;
+        //   this.data.isLock=true
+        // }
+        // if(Entity.getSneaking(player)==true){
+        //   this.data.isLock=false;
+        //   this.data.orange=false;
+        //   this.data.blue=false;
+        // }
       }
   
   

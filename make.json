@@ -1,10 +1,10 @@
 {
     "global": {
         "info": {
-            "name": "Quantum Industry",
-            "author": "Democracy modding party",
+            "name": "Infinite Forest",
+            "author": "Artem_",
             "version": "last",
-            "description": "Ideal unique industry mod for you",
+            "description": "Fire is burns",
             "icon": "src/mod_icon.png"
         },
         "api": "CoreEngine"
@@ -20,7 +20,7 @@
             "nativejs"
         ],
         "excludeFromRelease": [],
-        "pushTo": "storage/emulated/0/games/horizon/packs/Inner_Core_2/modpacks/coop-tech/mods/Quantum-Industry",
+        "pushTo": "storage/emulated/0/games/horizon/packs/Inner_Core_2/modpacks/coop-tech/mods/InfiniteForest",
         "ndkPath": null
     },
     "resources": [

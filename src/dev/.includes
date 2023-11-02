@@ -1,6 +1,10 @@
 translations.ts
+
+unique_gen.ts
+
 core.ts
 particles.ts
+core/starfall.ts
 items.ts
 blocks.ts
 dimension.ts
@@ -11,4 +15,5 @@ Eucalyptus Tree.ts
 Pink Tree and oak & birch.ts
 core/callbacks/tick.ts
 core/callbacks/item_use.ts
+core/callbacks/native_command.ts
 recipes.ts

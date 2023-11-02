@@ -5,17 +5,17 @@ IDRegistry.genItemID("orange_crystal");
 Item.createItem("orange_crystal", "Orange crystal", { name: "orange_crystal" },{stack: 1,isTech: false});
 
 IDRegistry.genItemID("flame_crystal");
-Item.createItem("flame_crystal", "Flame crystal", { name: "orange_crystal" },{stack: 1,isTech: true});
+Item.createItem("flame_crystal", "Flame crystal", { name: "flame_crystal" },{stack: 1,isTech: true});
 
 IDRegistry.genItemID("void_crystal");
 Item.createItem("void_crystal", "Void crystal", { name: "void_crystal" }, {stack: 1,isTech: true});
 
-IAHelper.makeAdvancedAnim(
-  ItemID.flame_crystal,
-  "flame_crystal",
-  2,
-  [1, 2, 3, 4]
-);
+// IAHelper.makeAdvancedAnim(
+//   ItemID.flame_crystal,
+//   "flame_crystal",
+//   2,
+//   [1, 2, 3, 4]
+// );
 
 function getCoords (): void {
   var players = Network.getConnectedPlayers();
@@ -63,11 +63,6 @@ Item.registerNameOverrideFunction(
        
       } else if (Entity.getDimension(Number(players)) == InfiniteForest.id) {
         return "§6" + Translation.translate(name);
-      }
-      if (Entity.getSneaking(Number(players))) {
-        return (
-          Translation.translate(name) + "\n" + Translation.translate("It burns")
-        );
       }
     }
   }

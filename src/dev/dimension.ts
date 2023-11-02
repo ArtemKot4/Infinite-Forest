@@ -3,59 +3,6 @@ function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-const UniqueGen = {
-  randomCoords: function (random, chunkX, chunkZ, minHeight, maxHeight,z?) {
-    minHeight = minHeight || 0;
-    maxHeight = maxHeight || 220;
-    return {
-      x: chunkX * 16 + random.nextInt(16),
-      y: random.nextInt(maxHeight - minHeight + 1) - minHeight,
-      z: (z = chunkZ * 16 + random.nextInt(16)),
-    };
-  },
-  generateOre: function (id, data, chunkX, chunkZ, random, params) {
-    for (let i = 0; i < params.veinCounts; i++) {
-      let coords = this.randomCoords(
-        random,
-        chunkX,
-        chunkZ,
-        params.minY,
-        params.maxY
-      );
-      GenerationUtils.generateOre(
-        coords.x,
-        coords.y,
-        coords.z,
-        id,
-        data,
-        params.size,
-        false,
-        random.nextInt()
-      );
-    }
-  },
-  generateOreInDimension: function (id, data, chunkX, chunkZ, random, params) {
-    for (let i = 0; i < params.veinCounts; i++) {
-      let coords = this.randomCoords(
-        random,
-        chunkX,
-        chunkZ,
-        params.minY,
-        params.maxY
-      );
-      GenerationUtils.generateOreCustom(
-        coords.x,
-        coords.y,
-        coords.z,
-        id,
-        data,
-        params.size,
-        params.mode,
-        params.check
-      );
-    }
-  },
-};
 
 var InfiniteForest = new Dimensions.CustomDimension("InfiniteForest", 75);
 
@@ -100,13 +47,27 @@ Callback.addCallback(
     coords = GenerationUtils.findSurface(coords.x, 128, coords.z);
     if (coords.y < 32) return;
     for (let i = 0; i < randomInt(2, 3); i++) {
-      if (BlockSource.getDefaultForActor(Player.getLocal()).getBlockId(coords.x, coords.y, coords.z) == 0) {
+      if (BlockSource.getDefaultForActor(Player.getLocal()).getBlockId(coords.x, coords.y+1, coords.z) == 0) {
         World.setBlock(place.x, place.y + 1, place.z, BlockID.fironia, 0);
       }
     }
   }
 );
 
+Callback.addCallback(
+  "GenerateCustomDimensionChunk",
+  function (chunkX, chunkZ, random, dimensionId, block, id, coords) {
+    if (dimensionId != InfiniteForest.id) return;
+    let place = GenerationUtils.randomCoords(chunkX, chunkZ);
+    coords = GenerationUtils.findSurface(coords.x, 128, coords.z);
+    if (coords.y < 32) return;
+    for (let i = 0; i < randomInt(2, 1); i++) {
+      if (BlockSource.getDefaultForActor(Player.getLocal()).getBlockId(coords.x, coords.y+1, coords.z) == 0) {
+        World.setBlock(place.x, place.y + 1, place.z, VanillaBlockID.tallgrass, 0);
+      }
+    }
+  }
+);
 
 
 //var Particles = ModAPI.requireGlobal("Particles");
@@ -169,9 +130,9 @@ function addFire(coords) {
 
 
 Callback.addCallback("CustomDimensionTransfer", function () {
-  if(Player.getDimension() == InfiniteForest.id){World.setWorldTime(13300);
+  if(Player.getDimension() == InfiniteForest.id){World.setWorldTime(13000);
     Commands.exec("/gamerule doDaylightCycle false")
-    alert("It works!")
+    
   }else{
     
     Commands.exec("/gamerule doDaylightCycle true")
