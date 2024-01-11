@@ -1,0 +1,10 @@
+{	"mirror_gradient:entity_alphatest_custom": {
+ 		"fragmentShader": "./mirror_gradient.fragment",
+ 		        "+states": [
+            "Blending",
+            "DisableCulling",
+        ],
+
+        "-defines": ["ALPHA_TEST"],
+ 	}
+ 	}

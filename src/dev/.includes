@@ -1,13 +1,13 @@
 translations.ts
 
 unique_gen.ts
-
+api/FItem.ts
 core.ts
 particles.ts
 core/starfall.ts
 items.ts
 blocks.ts
-dimension.ts
+dimension/if_base.ts
 items/crystals.ts
 infinite_table.ts
 structure.ts

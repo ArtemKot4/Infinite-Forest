@@ -1,0 +1,13 @@
+precision highp float;
+
+
+uniform vec3 resolution;
+uniform float time;
+uniform float startRandom;
+ void main(){
+
+ 	vec2 uv = resolution.xz + startRandom;
+
+
+	gl_FragColor = vec4(uv,cos(time/5.0),1);
+	}

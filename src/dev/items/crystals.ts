@@ -20,10 +20,10 @@ Item.createItem("void_crystal", "Void crystal", { name: "void_crystal" }, {stack
 function getCoords (): void {
   var players = Network.getConnectedPlayers();
 
-  for (var i in players) {
-   var position = Entity.getPosition(Number(players))
-    var a = []
-    a.push(position)
+  for (const i in players) {
+  const position = Entity.getPosition(Number(players))
+    const a = [];
+    a.push(position);
     Game.message(JSON.stringify(a))
     Game.message(JSON.stringify(position))
   }
