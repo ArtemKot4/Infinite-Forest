@@ -36,7 +36,7 @@ class FItem {
         ItemID[this.id],
         this.id,
         this.texture.length > 3 ? 
-        this.texture.length : 2,
+        this.texture.length / 2 : 2,
         this.texture
       );
   }
