@@ -16,7 +16,7 @@ class InfiniteAltar extends TileEntityBase {
   defaultValues = {};
   public onTick(): void {
     if(this.dimension == 75){
-      Particles.addParticle("spark", 0.5, 1.4, 0.5);
+     // Particles.addParticle("spark", 0.5, 1.4, 0.5);
     };
   }
 }

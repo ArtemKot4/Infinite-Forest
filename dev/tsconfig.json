@@ -1,0 +1,27 @@
+{
+	"extends": "..\\tsconfig.json",
+	"compilerOptions": {
+		"outFile": "C:\\Users\\\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\\Desktop\\\u0418\u0433\u0440\u044b\\HORIZON MODDING KERNEL\\Inner Core Mod Toolchain\\toolchain\\toolchain\\build\\toolchain-infinite-forest-ec409\\sources\\main.js"
+	},
+	"exclude": [],
+	"include": [
+		"translations.ts",
+		"unique_gen.ts",
+		"api/FItem.ts",
+		"core.ts",
+		"particles.ts",
+		"core/starfall.ts",
+		"items.ts",
+		"blocks.ts",
+		"dimension/if_base.ts",
+		"items/crystals.ts",
+		"infinite_table.ts",
+		"structure.ts",
+		"Eucalyptus Tree.ts",
+		"Pink Tree and oak & birch.ts",
+		"core/callbacks/tick.ts",
+		"core/callbacks/item_use.ts",
+		"core/callbacks/native_command.ts",
+		"recipes.ts"
+	]
+}
