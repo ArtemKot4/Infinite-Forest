@@ -4,7 +4,7 @@
 Класс FItem позволяет удобно и быстро создавать различные предметы.
 > Регистрация и параметры
 ```ts
-new FItem(id: string, stack?: number, name?: string, texture?: string, meta?: number, isTech?: boolean);
+new FItem(id: string, stack?: number, name?: string, texture?: string, meta?: number, isTech?: boolean): FItem;
 ```
 - **id** -- строковый идентификатор
 - **stack** -- количество предметов в стаке
@@ -19,7 +19,7 @@ new FItem("orange_crystal", 1);
 ***
 > Анимированный предмет
 ```ts
-new FItem(id: string, stack?: number, name?: string, [texture: string, frame: number, time: number?], meta?: number, isTech?: boolean);
+new FItem(id: string, stack?: number, name?: string, [texture: string, frame: number, time: number?], meta?: number, isTech?: boolean): FItem;
 ```
 - **id** -- строковый идентификатор
 - **stack** -- количество предметов в стаке
@@ -39,7 +39,7 @@ new FItem(id: string, stack?: number, name?: string, [texture: string, frame: nu
  Срабатывает, когда игрок берёт предмет в руку
  > Синтаксис
  ```ts
- getItemForHand(func: ()=>void);
+ getItemForHand(func: () => void): void;
  ```
  - **func** — функция, срабатывающая когда игрок берёт в руку предмет
  > Пример
@@ -49,6 +49,21 @@ new FItem(id: string, stack?: number, name?: string, [texture: string, frame: nu
  });
  ```
  ***
+  Функция **onUse** \
+  \
+  Срабатывает при использовании предмета
+  > Синтаксис
+ ```ts
+onUse(func: (coords: Callback.ItemUseCoordinates, item: ItemInstance, block: Tile) => void): void
+ ```
+ - **func** -- функция, срабатывающая при использовании предмета
+ > Пример
+ ```ts
+ new FItem("example").onUse((coords, item, block) => {
+  Game.message("Успешно!")
+ });
+  ```
+  ***
  Функция **info** \
  \
  Регистрирует описание для предмета, срабатывающее когда игрок использует shift

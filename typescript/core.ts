@@ -26,7 +26,12 @@ var BLOCK_TYPE_PRINT = Block.createSpecialType({
   sound: "glass",
   destroytime: -1,
 });
-
+/**
+ * Функция для получения массива с числами от min до max 
+ * @min первое число
+ * @max последнее число
+ * @возвращает [min, ... ,max]
+ */
 function range(min: int, max: int): int[] {
   const arr = [];
   for(let i = min; i <= max; i++){
@@ -36,7 +41,7 @@ return arr;
 
 }
 
-function getFour(id,player){
-  const block = blockSource.getDefaultForActor(player).getBlock();
+function getFour(id, coords, player){
+  const block = BlockSource.getDefaultForActor(player).getBlock(coords.x, coords.y, coords.z);
  // if()
 };

@@ -15,7 +15,7 @@
 	],
 	"sources": [
 		{
-			"source": "dev",
+			"source": "typescript",
 			"target": "main.js",
 			"type": "main",
 			"language": "typescript"
