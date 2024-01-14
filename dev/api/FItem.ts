@@ -60,7 +60,13 @@ class FItem {
   }
   public getItemForHand( func: () => void) {
     FItem.funcs.push({ item: this.id, func: func });
-  }
+  };
+  public onUse(func: (coords,item,block) => void): void {
+  Item.registerUseFunction(this.id, (coords, item, block) => {
+    func(coords, item, block);
+  })
+ }
+  
 }
 
 Translation.addTranslation("Info is locked", {

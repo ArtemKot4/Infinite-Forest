@@ -1,7 +1,7 @@
 
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+};
 
 
 var InfiniteForest = new Dimensions.CustomDimension("infinite_forest", 75);
