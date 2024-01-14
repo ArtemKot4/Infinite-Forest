@@ -1,8 +1,8 @@
 translations.ts
-
+core.ts
 unique_gen.ts
 api/FItem.ts
-core.ts
+
 particles.ts
 core/starfall.ts
 items.ts

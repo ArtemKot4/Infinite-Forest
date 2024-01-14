@@ -34,20 +34,17 @@ class FItem {
 })
   
    if(Array.isArray(this.texture) &&
-      this.texture.length > 1 ){
-        const anim = [];
-  this.texture.forEach((item, index, array)=>{
-     anim.push(item.replace(this.texture[0].slice(0,-1),""))
-};
+      this.texture.length > 1){
+        const texture = this.texture;
       IAHelper.makeAdvancedAnim(
         ItemID[this.id],
-        this.texture[0].slice(0,-2),
-        this.texture.length > 3 ? 
-        this.texture.length / 2 : 2,
-        anim
+        texture[0],
+        texture.length > 3 ? 
+        texture.length / 2 : 2,
+        range(texture[1], texture[2])
       );
   };
-
+}
   protected info(text: string, translation: {}): void {
     Translation.addTranslation(text, translation);
     Item.registerNameOverrideFunction(this.id, function (item, name) {

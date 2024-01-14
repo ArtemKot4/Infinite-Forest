@@ -26,3 +26,12 @@ var BLOCK_TYPE_PRINT = Block.createSpecialType({
   sound: "glass",
   destroytime: -1,
 });
+
+function range(min,max){
+  const arr = [];
+  for(let i = min; i <= max; i++){
+arrrr.push(i)
+}
+return arr; 
+
+}
