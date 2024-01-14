@@ -12,8 +12,7 @@ class FItem {
     this.meta = meta || 0;
     this.isTech = isTech || false;
     this.texture = texture || id;
-    this.name =
-      name || id;
+    this.name = name || id;
     this.create();
   }
 
@@ -30,16 +29,24 @@ class FItem {
       { stack: this.stack, isTech: this.isTech }
     );
   
-   (Array.isArray(this.texture) &&
-      this.texture.length > 1 ) &&
+  
+  
+})
+  
+   if(Array.isArray(this.texture) &&
+      this.texture.length > 1 ){
+        const anim = [];
+  this.texture.forEach((item, index, array)=>{
+     anim.push(item.replace(this.texture[0].slice(0,-1),""))
+};
       IAHelper.makeAdvancedAnim(
         ItemID[this.id],
-        this.id,
+        this.texture[0].slice(0,-2),
         this.texture.length > 3 ? 
         this.texture.length / 2 : 2,
-        this.texture
+        anim
       );
-  }
+  };
 
   protected info(text: string, translation: {}): void {
     Translation.addTranslation(text, translation);
@@ -56,7 +63,6 @@ class FItem {
       const item = Entity.getCarriedItem(Player.get()).id;
       (item == ItemID[ind.item] && World.getThreadTime() % 5 == 0) &&
         ind.func();
-      
     }
   }
   public getItemForHand(itemId: string, func: () => void) {

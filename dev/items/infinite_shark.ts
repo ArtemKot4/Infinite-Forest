@@ -1,0 +1,1 @@
+new FItem("infinite_shark",1, "Infinite shark", [])
