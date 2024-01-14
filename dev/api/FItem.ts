@@ -16,7 +16,11 @@ class FItem {
       name || id;
     this.create();
   }
-
+ public onUse(func: (coords,item,block) => void): void {
+  Item.registerUseFunction(this.id, (coords, item, block) => {
+    func(coords, item, block);
+  })
+ }
   public category(int: int): void {
     Item.setCategory(this.id, int);
   }

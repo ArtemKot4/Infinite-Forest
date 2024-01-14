@@ -1,12 +1,12 @@
 Callback.addCallback("ItemUse", (coords, item, block, isExter, player) => {
-  if (Entity.getSneaking(player)) {
-    if (item.id == ItemID.blue_crystal) {
-      Dimensions.transfer(player, InfiniteForest.id);
-    }
-    if (item.id == ItemID.orange_crystal) {
-      Dimensions.transfer(player, 0);
-    }
-  }
+  // if (Entity.getSneaking(player)) {
+  //   if (item.id == ItemID.blue_crystal) {
+  //     Dimensions.transfer(player, InfiniteForest.id);
+  //   }
+  //   if (item.id == ItemID.orange_crystal) {
+  //     Dimensions.transfer(player, 0);
+  //   }
+  // }
   if (item.id == VanillaItemID.stick) {
     var a = coords.relative;
     Particles.addParticle(star, a.x + 0.5, a.y + 0.7, a.z + 0.5, 0, -0.1, 0);
