@@ -27,10 +27,10 @@ var BLOCK_TYPE_PRINT = Block.createSpecialType({
   destroytime: -1,
 });
 
-function range(min,max){
+function range(min: int, max: int): int[] {
   const arr = [];
   for(let i = min; i <= max; i++){
-arrrr.push(i)
+arr.push(i)
 }
 return arr; 
 
