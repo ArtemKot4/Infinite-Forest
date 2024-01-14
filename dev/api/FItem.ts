@@ -3,7 +3,7 @@ class FItem {
   protected stack: int;
   protected meta: int;
   protected isTech: boolean;
-  protected texture: string;
+  protected texture: string | [string,int,int?];
   public name: string;
   public static funcs = [];
   constructor(id, stack?, name?, texture?, meta?, isTech?) {
@@ -29,19 +29,15 @@ class FItem {
       { stack: this.stack, isTech: this.isTech }
     );
   
-  
-  
-})
-  
    if(Array.isArray(this.texture) &&
       this.texture.length > 1){
         const texture = this.texture;
       IAHelper.makeAdvancedAnim(
         ItemID[this.id],
         texture[0],
-        texture.length > 3 ? 
-        texture.length / 2 : 2,
-        range(texture[1], texture[2])
+        texture.length > 2 ? 
+        texture[2] : 2,
+        range(1, texture[1])
       );
   };
 }
@@ -62,8 +58,8 @@ class FItem {
         ind.func();
     }
   }
-  public getItemForHand(itemId: string, func: () => void) {
-    FItem.funcs.push({ item: itemId, func: func });
+  public getItemForHand( func: () => void) {
+    FItem.funcs.push({ item: this.id, func: func });
   }
 }
 

@@ -35,3 +35,8 @@ arr.push(i)
 return arr; 
 
 }
+
+function getFour(id,player){
+  const block = blockSource.getDefaultForActor(player).getBlock();
+ // if()
+}
