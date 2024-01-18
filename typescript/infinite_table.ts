@@ -21,6 +21,13 @@ class InfiniteAltar extends TileEntityBase {
   }
 }
 
+const infinite_recipes = new WorkbenchRecipe();
+infinite_recipes.registry(ItemID["parchment_lazuli"], [
+  "abc",
+  "dhc",
+  "bca"], {
+a: 25, b: 7, c: 3, d: 9, h: 63,
+});
 
 
 TileEntity.registerPrototype(BlockID.infinite_table, new InfiniteAltar());

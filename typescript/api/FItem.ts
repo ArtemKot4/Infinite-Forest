@@ -48,14 +48,14 @@ class FItem {
     Item.registerNameOverrideFunction(this.id, function (item, name) {
       Entity.getSneaking(Player.get())
         ? name + "\n§7" + Translation.translate(text)
-        : name + "\n§7" + "Info is locked"; //! надпись требует переработки
+        : name + "\n§7" + "Info is locked"; //? надпись требует переработки
     });
   }
   public static onTick(): void {
     for (const i in FItem.funcs) {
       const ind = FItem.funcs[i];
       const item = Entity.getCarriedItem(Player.get()).id;
-      item == ItemID[ind.item] && World.getThreadTime() % 5 == 0 && ind.func(); //! механика требует переработки
+      item == ItemID[ind.item] && World.getThreadTime() % 5 == 0 && ind.func(); //? механика требует переработки
     }
   }
   public getItemForHand(func: () => void) {
