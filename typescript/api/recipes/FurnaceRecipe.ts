@@ -1,0 +1,3 @@
+class FurnaceRecipe extends Recipe {
+    
+}
