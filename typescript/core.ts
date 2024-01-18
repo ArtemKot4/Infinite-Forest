@@ -45,3 +45,5 @@ function getFour(id, coords, player){
   const block = BlockSource.getDefaultForActor(player).getBlock(coords.x, coords.y, coords.z);
  // if()
 };
+
+const MODELSDIR = __dir__+"assets/models/"

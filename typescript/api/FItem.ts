@@ -1,23 +1,24 @@
+type texture = string | [texture: string, frame: int, time?: int];
 class FItem {
   protected id: string;
-  protected stack: int;
-  protected meta: int;
-  protected isTech: boolean;
+  protected stack: int = 64;
+  protected meta: int = 0;
+  protected isTech: boolean = false;
   protected texture: string | [string, int, int?];
   protected name: string;
   public static funcs = [];
-  constructor(id: string, stack?: int, name?: string, texture?: string | [texture: string, frame: int, time?: int] , meta?: int, isTech?: boolean) {
+  constructor(id: string, stack?: int, name?: string, texture?: texture , meta?: int, isTech?: boolean) {
     this.id = id;
-    this.stack = stack || 64;
-    this.meta = meta || 0;
-    this.isTech = isTech || false;
+    this.stack = stack;
+    this.meta = meta;
+    this.isTech = isTech;
     this.texture = texture || id;
     this.name = name || id;
     this.create();
   }
 
   public category(int: int): void {
-    Item.setCategory(this.id, int);
+    Item.setCategory(this.id, int); //?
   }
 
   public create(): void {
@@ -47,14 +48,14 @@ class FItem {
     Item.registerNameOverrideFunction(this.id, function (item, name) {
       Entity.getSneaking(Player.get())
         ? name + "\n§7" + Translation.translate(text)
-        : name + "\n§7" + "Info is locked";
+        : name + "\n§7" + "Info is locked"; //! надпись требует переработки
     });
   }
   public static onTick(): void {
     for (const i in FItem.funcs) {
       const ind = FItem.funcs[i];
       const item = Entity.getCarriedItem(Player.get()).id;
-      item == ItemID[ind.item] && World.getThreadTime() % 5 == 0 && ind.func();
+      item == ItemID[ind.item] && World.getThreadTime() % 5 == 0 && ind.func(); //! механика требует переработки
     }
   }
   public getItemForHand(func: () => void) {

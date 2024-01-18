@@ -2,7 +2,12 @@ translations.ts
 core.ts
 unique_gen.ts
 api/FItem.ts
-
+api/AdvancedItem.ts
+api/Book.ts
+api/recipes/Recipe.ts
+api/recipes/FurnaceRecipe.ts
+api/recipes/WorkbenchRecipe.ts
+items/book.ts
 particles.ts
 core/starfall.ts
 items.ts 
