@@ -42,6 +42,11 @@ class FItem {
         range(1, texture[1])
       );
     }
+  };
+  public iconOverride(func: (item: ItemInstance, isModUi: boolean) => void, time): void {
+    Item.registerIconOverrideFunction(this.id, (item, isModUi) => {
+      if(World.getThreadTime() % time == 0) return func(item, isModUi);
+    })
   }
   public info(text: string, translation: {}): void {
     Translation.addTranslation(text, translation);
