@@ -47,3 +47,30 @@ function getFour(id, coords, player){
 };
 
 const MODELSDIR = __dir__+"assets/models/"
+
+
+//excludes functions of js
+
+const ObjectValues = function(obj) { 
+  return Object.keys(obj).map(function(v) { 
+  return obj[v] 
+  }) 
+ } 
+  
+ /**
+  * ObjectAssign -> реализация недостающего метода Object.assign
+  * @include объект для дополнения
+  * @objs объекты для слияния
+  * @возвращает include 
+  */
+ function ObjectAssign (include: {}, ...objs: {}[]){ 
+   for(const a in objs){
+  let ik = Object.keys(objs[a])
+  const kk = ObjectValues(objs[a]) 
+  for(const i in ik){ 
+  for(const k in kk) { 
+  include[ik[i]] = kk[i] 
+  } 
+  } }
+  return include 
+ }
