@@ -12,19 +12,11 @@ type category = "forest" | "base" | "steam";
 type page = number;
 
 abstract class Book {
-  static {
-    Game.message("Book is generated!");
-  }
-
-  private static page: page_recorder = { forest: {}, base: {}, steam: {} };
-  private static pages: Record<number, page_descriptor> = {
-    1: {
-      name: "Base",
-      text: "Learnings",
-      comment: "In this i must wrote need learns",
-      recipe: ["ds"],
-    },
-  };
+  private static BOOK_ITEM = new FItem("learning_book", 1, "Learning Book", [
+    "book",
+    6,
+  ]);
+  private static pages: page_recorder = { forest: {}, base: {}, steam: {} };
 
   public static addPage(
     category: category,
@@ -32,7 +24,7 @@ abstract class Book {
     text: string,
     comment: string,
     recipe: any[]
-  ) {
+  ): void {
     //let category;
     const pages = this.pages;
     const last = Object.keys(pages).length + 1;
@@ -42,26 +34,31 @@ abstract class Book {
       comment: comment,
       recipe: recipe,
     };
-  };
-  public static PagesUI = (content) => {
-    const GenericUI = new UI.Window({
-        //* Общий прототип каждой страницы
-    });
-     ObjectAssign(GenericUI, content);
-        return GenericUI;
-  };
+  }
+
+  public static PagesUI = (content?: Record<string, Object>) =>
+    content
+      ? new UI.Window(ObjectAssign(GenericUIDescriptor, content))
+      : new UI.Window(GenericUIDescriptor);
 
   public static setupPagesLogic(
     func: (page, index) => void,
     validation: UI.Window & category
-  ) {
+  ): void {
     const pages = this.pages[validation];
     for (const index in pages) {
       if (validation.isOpened()) func(pages[index], index);
     }
   }
-  public static onTick(): void {
-
+  public static onTick(): void {}
+  private static MainUI = this.PagesUI();
+  private static MainUIContainer = new UI.Container();
+  static {
+    Game.message("Book is generated!");
+    this.BOOK_ITEM.onUse((coords, item, block) => {
+      this.MainUIContainer.openAs(this.MainUI);
+      Game.message("Interface is opened?")
+    });
   }
 }
 
@@ -75,3 +72,6 @@ const addPages = (obj, category: category) => {
 };
 
 addPages(forest_pages, "forest");
+
+// const update: any = {update: Book.onTick()};
+// Updatable.addUpdatable(update);
