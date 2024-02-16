@@ -4,7 +4,11 @@ const GenericUIDescriptor: UI.WindowContent = {
       y: 0,
       width: 1000,
       height: 560,
+      scrollY: 860,
+      scrollX:  1300,
+
     },
+    
     drawing: [
       {
         type: "background",
@@ -12,19 +16,20 @@ const GenericUIDescriptor: UI.WindowContent = {
       },
       {
         type: "bitmap",
-        bitmap: "dialog_background",
-        scale: 2.6,
+        bitmap: "book.dialog_background",
+        scale: 2.4,
         x: 50,
-        y: 3,
+        y: 0,
+        
       },
     ],
     style: {
 
     },
     elements: {
-      heading: {
+      category: {
         type: "text",
-        x: 170,
+        x: 10,
         y: 10,
         text: Translation.translate(
           "Standart text of all page category headings"
@@ -34,10 +39,10 @@ const GenericUIDescriptor: UI.WindowContent = {
               alert("Контейнер закрыт!")
         }}
       },
-      heading_2: {
+      heading: {
         type: "text",
-        x: 120,
-        y: 50,
+        x: 500,
+        y: 10,
         text: Translation.translate(
           "Standart text of all page theme headings"
         ),
@@ -55,7 +60,22 @@ const GenericUIDescriptor: UI.WindowContent = {
         y: 90,
         text: Translation.translate("Its standart description of all pages"),
         multiline: true,
+      },
+      page: {type: "text", x: 850, y: 250, text: "page"},
+      array_left: {type: "button", x: 10, y: 500, clicker: {
+        onClick(position, container, tileEntity, window, canvas, scale) {
+          const data = Book.data;
+          if(data.page > 0) data.page -= 1;
       }
+    },
+      array_right: {type: "button", x: 450, y: 500, clicker: {
+        onClick(position, container, tileEntity, window, canvas, scale) {
+          const data = Book.data;
+        if(data.page < data.max) data.page += 1;
+        }
+      }
+    }
+  }
     }
   
   }

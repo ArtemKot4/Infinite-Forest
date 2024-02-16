@@ -7,12 +7,13 @@ Callback.addCallback("LocalTick", () => {
       addFire(pos);
     }
   }
-
+ if(World.getThreadTime() % 10 == 0) Book.onTick();
+ 
   if (
     World.getThreadTime() % 8 == 0 && Player.getDimension() != InfiniteForest.id
   ) {
    for(var c;c<7;c++){
     spawnStars(pos);
    }
-  }
+  };
 });

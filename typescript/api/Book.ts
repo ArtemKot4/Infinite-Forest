@@ -1,10 +1,11 @@
 type page_descriptor = {
-  name: string;
+  heading: string;
   text: string;
   comment: string;
   recipe?: any[];
 };
-type page_recorder = Record<category, Record<page, page_descriptor>>;
+type UIDataType = Record<"UIData", {ui: UI.Window, container: UI.Container}>;
+type page_recorder = Record<category, Record<page, page_descriptor>> | UIDataType;
 /**
  * Категории открытий в различных областях
  */
@@ -12,71 +13,122 @@ type category = "forest" | "base" | "steam";
 type page = number;
 
 abstract class Book {
-  private static BOOK_ITEM = new FItem("learning_book", 1, "Learning Book", "book_default");
+  private static BOOK_ITEM = new FItem(
+    "learning_book",
+    1,
+    "Learning Book",
+    "book_default"
+  );
   private static pages: page_recorder = { forest: {}, base: {}, steam: {} };
- 
-
+  public static data = {
+    page: 0,
+    max: 10,
+  };
   public static addPage(
     category: category,
-    name: string,
+    heading: string,
     text: string,
     comment: string,
-    recipe: any[]
+    ...element
   ): void {
     //let category;
     const pages = Book.pages;
     const last = Object.keys(pages).length + 1;
-    pages[category][last] = {
-      name: name,
-      text: text,
-      comment: comment,
-      recipe: recipe,
+    let result = null;
+    pages[category][last] = {};
+    const assign = (obj?) =>
+      ObjectAssign(
+        pages[category][last],
+        { heading: heading, text: text, comment: comment || "" },
+        obj
+      );
+
+    if (element) {
+      for (const i in element) {
+        const elementKeys = Number(i) == 0 ? "element_" + 1 : "element_" + i;
+        result = assign({ [elementKeys]: element[i] });
+      }
     };
+    return !!result ? result : assign();
   }
-
-  public static PagesUI = (content?: Record<string, Object>) =>
+  public static PagesUI = (category, content?: Record<string, Object>) => {
+    const category_ = Book.pages[category];
+    let GUI: UI.Window;
     content
-      ? new UI.Window(ObjectAssign(GenericUIDescriptor, content))
-      : new UI.Window(GenericUIDescriptor);
+      ? (GUI = new UI.Window(ObjectAssign(GenericUIDescriptor, content)))
+      : (GUI = new UI.Window(GenericUIDescriptor));
+    category_.UIData = { ui: GUI, container: new UI.Container() };
+  };
 
-      private static MainUI = Book.PagesUI();
-      private static MainUIContainer = new UI.Container();
+  private static MainUIContainer = new UI.Container();
 
   public static setupPagesLogic(
     func: (page, index) => void,
-    validation: UI.Window & category
+    category: category
   ): void {
-    const pages = Book.pages[validation];
-    for (const index in pages) {
-      if (validation.isOpened()) func(pages[index], index);
-    }
-  };
+    const pgs: UIDataType = Book.pages[category];
+    const validation = pgs.UIData;
+    Game.message("Сработало?");
 
-  public static onTick(): void {};
+    const data = Book.data;
+    data.max = Object.keys(pgs).length;
+    for (const index in pgs) {
+      Game.message(
+        "Book.data.page: " + data.page + "\n Book page number: " + index + "\nUi is Opened: " + validation.ui.isOpened() + 
+        "\ndata.page & Number(index) ->" + data.page + " : " + Number(index) 
+      );
+      if (
+        validation.ui.isOpened() == true &&
+        (data.page == 0 || data.page == Number(index)))
+       {
+       
+        func(pgs[index], index);
+        const text = validation.container.setText;
+        text("page", index);
+
+        text("comment", pgs[index].comment);
+
+        text("category", category);
+        text("heading", pgs[index].heading);
+        alert("Текст должен был поменяться!");
+      }
+    }
+  }
+
+  public static onTick(): void {
+    Book.setupPagesLogic(
+      (page, index) => {},
+      "base"
+    );
+  }
+  private static openCategoryUI(category: category): void {
+    const data = Book.pages[category].UIData;
+    if(!data) throw new Error("You need register Book.PagesUI(category) for open ui")
+    data.container.openAs(data.ui)
+  }
   private static visualByItem(): void {
-
-      Book.BOOK_ITEM.iconOverride((item, isModUi) => {
-     let data = item.data;
-     const ui = Book.MainUI.isOpened();
-     if(ui === true) {data < 13 ? data = data + 1 : null;
-       alert("Ui is opened for icon change") }
-      else { data > 0 ? data = data - 1 : null; };
-      Game.message("data: " + data)
-     return {name: "book_open", meta: data};
+    let data = 0;
+    Book.BOOK_ITEM.iconOverride((item, isModUi) => {
+      const ui: any = Book.pages["base"].UIData.container.isOpened();
+      if (ui === true) {
+        data < 13 ? (data = data + 1) : null;
+      } else {
+        data > 0 ? (data = data - 1) : null;
+      }
+      return { name: data > 0 ? "book_open" : "book_default", meta: data };
       //  }
-      }, 5)
-    }
+    }, 12);
+  }
 
   static {
     Game.message("Book is generated!");
     Book.BOOK_ITEM.onUse((coords, item, block) => {
       item.data = 0;
-      Game.message("onUse item.data: " + item.data)
-      Book.MainUIContainer.openAs(Book.MainUI);
-      Game.message("Interface is opened?");
+      Book.PagesUI("base");
+      Book.openCategoryUI("base")
+      Game.message(JSON.stringify(Book.data));
       Book.visualByItem();
     });
-    
   }
 }
 
@@ -93,3 +145,11 @@ addPages(forest_pages, "forest");
 
 // const update: any = {update: Book.onTick()};
 // Updatable.addUpdatable(update);
+Book.addPage("base", "Это первая страница base", "lala", "ahah", []);
+Book.addPage(
+  "base",
+  "Это вторая и самая мощная страница base",
+  "lalaaaaaa",
+  "ahah",
+  []
+);
