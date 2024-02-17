@@ -1,11 +1,15 @@
+type modifier = "keyboard";
+type text_descriptor = string | { text: string; modifier: modifier };
 type page_descriptor = {
-  heading: string;
-  text: string;
-  comment: string;
+  heading: text_descriptor;
+  text: text_descriptor;
+  comment: text_descriptor;
   recipe?: any[];
 };
-type UIDataType = Record<"UIData", {ui: UI.Window, container: UI.Container}>;
-type page_recorder = Record<category, Record<page, page_descriptor>> | UIDataType;
+type UIDataType = Record<"UIData", { ui: UI.Window; container: UI.Container }>;
+type page_recorder =
+  | Record<category, Record<page, page_descriptor>>
+  | UIDataType;
 /**
  * Категории открытий в различных областях
  */
@@ -19,7 +23,7 @@ abstract class Book {
     "Learning Book",
     "book_default"
   );
-  private static pages: page_recorder = { forest: {}, base: {}, steam: {} };
+  public static pages: page_recorder = { forest: {}, base: {}, steam: {} };
   public static data = {
     page: 0,
     max: 10,
@@ -33,7 +37,7 @@ abstract class Book {
   ): void {
     //let category;
     const pages = Book.pages;
-    const last = Object.keys(pages).length + 1;
+    const last = Object.keys(pages).length - 1;
     let result = null;
     pages[category][last] = {};
     const assign = (obj?) =>
@@ -48,17 +52,10 @@ abstract class Book {
         const elementKeys = Number(i) == 0 ? "element_" + 1 : "element_" + i;
         result = assign({ [elementKeys]: element[i] });
       }
-    };
+    }
     return !!result ? result : assign();
   }
-  public static PagesUI = (category, content?: Record<string, Object>) => {
-    const category_ = Book.pages[category];
-    let GUI: UI.Window;
-    content
-      ? (GUI = new UI.Window(ObjectAssign(GenericUIDescriptor, content)))
-      : (GUI = new UI.Window(GenericUIDescriptor));
-    category_.UIData = { ui: GUI, container: new UI.Container() };
-  };
+ 
 
   private static MainUIContainer = new UI.Container();
 
@@ -67,45 +64,52 @@ abstract class Book {
     category: category
   ): void {
     const pgs: UIDataType = Book.pages[category];
-    const validation = pgs.UIData;
+    const uidata = pgs.UIData;
     Game.message("Сработало?");
 
     const data = Book.data;
-    data.max = Object.keys(pgs).length;
+    data.max = Object.keys(pgs).length - 1;
     for (const index in pgs) {
       Game.message(
-        "Book.data.page: " + data.page + "\n Book page number: " + index + "\nUi is Opened: " + validation.ui.isOpened() + 
-        "\ndata.page & Number(index) ->" + data.page + " : " + Number(index) 
-      );
+        "Book.data.page: " +
+          data.page +
+          "\n Book page number: " +
+          index +
+          "\nUi is Opened: " +
+          uidata.container.isOpened() +
+          "\ndata.page & Number(index) ->" +
+          data.page +
+          " : " +
+          Number(index)
+      ); //TODO: DEBUG
       if (
-        validation.ui.isOpened() == true &&
-        (data.page == 0 || data.page == Number(index)))
-       {
-       
-        func(pgs[index], index);
-        const text = validation.container.setText;
+        uidata.container && 
+        uidata.container.isOpened() == true &&
+        (data.page == 0 || data.page == Number(index))
+      ) {
+
+
+        
+        const text = uidata.container.setText;
         text("page", index);
 
-        text("comment", pgs[index].comment);
+        text("comment", // data_text.comment || 
+        pgs[index].comment || "invalid");
 
         text("category", category);
-        text("heading", pgs[index].heading);
+        text("heading", //data_text.heading ||
+        pgs[index].heading || "invalid");
         alert("Текст должен был поменяться!");
+        return func(pgs[index], index);
       }
     }
   }
 
   public static onTick(): void {
-    Book.setupPagesLogic(
-      (page, index) => {},
-      "base"
-    );
+    Book.setupPagesLogic((page, index) => {
+    }, "base");
   }
-  private static openCategoryUI(category: category): void {
-    const data = Book.pages[category].UIData;
-    if(!data) throw new Error("You need register Book.PagesUI(category) for open ui")
-    data.container.openAs(data.ui)
-  }
+ 
   private static visualByItem(): void {
     let data = 0;
     Book.BOOK_ITEM.iconOverride((item, isModUi) => {
@@ -124,8 +128,10 @@ abstract class Book {
     Game.message("Book is generated!");
     Book.BOOK_ITEM.onUse((coords, item, block) => {
       item.data = 0;
-      Book.PagesUI("base");
-      Book.openCategoryUI("base")
+      new CategoryUI("base").open();
+      new CategoryUI("forest");
+      new CategoryUI("steam");
+    //  new CategoryUI("base");
       Game.message(JSON.stringify(Book.data));
       Book.visualByItem();
     });
