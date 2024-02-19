@@ -11,9 +11,9 @@
 		"unique_gen.ts",
 		"api/FItem.ts",
 		"api/AdvancedItem.ts",
-		"api/Book/CategoryUI.ts",
 		"api/Book/TextModifier.ts",
 		"api/Book/Book.ts",
+		"api/Book/CategoryUI.ts",
 		"api/recipes/Recipe.ts",
 		"api/recipes/FurnaceRecipe.ts",
 		"api/recipes/WorkbenchRecipe.ts",
@@ -29,9 +29,9 @@
 		"structure.ts",
 		"Eucalyptus Tree.ts",
 		"Pink Tree and oak & birch.ts",
-		"core/callbacks/tick.ts",
 		"core/callbacks/item_use.ts",
 		"core/callbacks/native_command.ts",
-		"recipes.ts"
+		"recipes.ts",
+		"core/callbacks/tick.ts"
 	]
 }

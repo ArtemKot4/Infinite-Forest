@@ -4,9 +4,11 @@ core.ts
 unique_gen.ts
 api/FItem.ts
 api/AdvancedItem.ts
-api/Book/CategoryUI.ts
+
 api/Book/TextModifier.ts
 api/Book/Book.ts
+api/Book/CategoryUI.ts
+
 api/recipes/Recipe.ts
 api/recipes/FurnaceRecipe.ts
 api/recipes/WorkbenchRecipe.ts

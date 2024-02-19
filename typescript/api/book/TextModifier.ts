@@ -1,34 +1,28 @@
 type modifier_func = (
-    container: UI.Container,
-    data: string,
-    index: universal,
-    key: string,
-    result: string,
-    ...any
-  ) => void;
+  container: UI.Container,
+  data: string,
+  index: universal,
+  key: string,
+  result: string,
+  ...any
+) => void;
 
 class TextModifier {
-  public name: string;
-  public func: Function;
-  public result: string = "";
-  constructor(
-    name,
-    logic: modifier_func
-  ) {
-    this.name = name;
-    this.func = logic;
+  public static data: {} = {};
+  constructor(name, logic: modifier_func) {
+    TextModifier.data[name] = { logic: logic, result: "" };
   }
-  setLogic(container, data, index, key) {
+  public static setModifier(container, data, index, key, modifier) {
     const data_ = data[index][key];
-    const modifier = data_["modifier"];
-    if (typeof data_ === "object" && modifier && modifier == this.name)
-      this.func(container, data_, index, key, this.result);
+    const modifier_ = data_["modifier"]; // {"1": {modifier: type}}
+    const ModifierData = TextModifier.data[modifier];
+    if (typeof data_ === "object" && modifier_ && modifier_ == ModifierData)
+      ModifierData.logic(container, data_, index, key, ModifierData.result);
   }
 }
 
-new TextModifier("slowly_typing",
- (container, data, index, key, result) => {
-  //data = data[index][key];
+new TextModifier("typewriter", (container, data, index, key, result) => {
+  //TODO: data = data[index][key];
   let separator = data.split("");
   if (separator.length > 0) result += separator[0];
   separator.shift();
