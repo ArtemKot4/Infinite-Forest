@@ -1,4 +1,4 @@
-type modifier = "keyboard";
+type modifier = "typewriter";
 type text_descriptor = string | { text: string; modifier: modifier };
 type page_descriptor = {
   heading: text_descriptor;

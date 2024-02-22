@@ -74,3 +74,20 @@ const ObjectValues = function(obj) {
   } }
   return include 
  }
+ 
+ /**
+ * Функция для постановки интервала выполнения чего-либо в тиках
+ * @func функция
+ * @time время в тиках
+ */ 
+ function setTickInterval(func: (...any) => any, time: int) {
+     const valid = true;
+     if(!valid) return;
+     if(World.getThreadTime()%time==0) {
+        return func();
+     };
+     this.resetInterval = function(): void {
+         valid = false;
+         return;
+     }
+ }

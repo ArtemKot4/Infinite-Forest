@@ -26,5 +26,8 @@ new TextModifier("typewriter", (container, data, index, key, result) => {
   let separator = data.split("");
   if (separator.length > 0) result += separator[0];
   separator.shift();
-  return container.setText(key, result);
+  const validate = separator.length > 0
+   ? result + "|" : result;
+  
+  return container.setText(key, validate);
 });
