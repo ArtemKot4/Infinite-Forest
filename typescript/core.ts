@@ -16,12 +16,13 @@ type name = string;
 const Mistical = new Sound("Light.ogg");
 const Opening = new Sound("Opening.ogg");
 
-var BLOCK_TYPE_FIRE = Block.createSpecialType({
+const BLOCK_TYPE_FIRE = Block.createSpecialType({
   lightlevel: 8,
   rendertype: 91,
   sound: "grass",
 });
-var BLOCK_TYPE_PRINT = Block.createSpecialType({
+
+const BLOCK_TYPE_PRINT = Block.createSpecialType({
   lightlevel: 10,
   sound: "glass",
   destroytime: -1,
@@ -81,7 +82,7 @@ const ObjectValues = function(obj) {
  * @time время в тиках
  */ 
  function setTickInterval(func: (...any) => any, time: int) {
-     const valid = true;
+     let valid = true;
      if(!valid) return;
      if(World.getThreadTime()%time==0) {
         return func();
