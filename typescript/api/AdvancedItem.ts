@@ -24,7 +24,7 @@ class AdvancedItem extends FItem {
   }
   public setModel(
     model: model_descriptor = { model: null, onHand: false },
-    texture,
+    texture?,
     data?,
     importParams?: import_params | null,
     material?
@@ -32,7 +32,7 @@ class AdvancedItem extends FItem {
     if (!model.model) return;
     const render = new RenderMesh();
     render.importFromFile(
-      MODELSDIR + model + ".obj",
+      MODELSDIR + model.model + ".obj",
       "obj",
       importParams || null
     );
@@ -40,13 +40,13 @@ class AdvancedItem extends FItem {
     model.onHand === true
       ? ItemModel.getForWithFallback(ItemID[this.id], data || 0).setHandModel(
           render,
-          MODELSDIR + (texture ?? model.model),
-          material || null
+          texture ?? model.model//MODELSDIR + (texture ?? model.model) + ".png",
+         // material || null
         )
       : ItemModel.getForWithFallback(ItemID[this.id], data || 0).setModel(
           render,
-          MODELSDIR + (texture ?? model.model),
-          material || null
+          texture ?? model.model//MODELSDIR + (texture ?? model.model) + ".png",
+         // material || null
         );
   };
 }

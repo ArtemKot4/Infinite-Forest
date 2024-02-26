@@ -60,7 +60,8 @@ class FItem {
     for (const i in FItem.funcs) {
       const ind = FItem.funcs[i];
       const item = Entity.getCarriedItem(Player.get()).id;
-      item == ItemID[ind.item] && World.getThreadTime() % 5 == 0 && ind.func(); //? механика требует переработки
+     if(item !== ItemID[ind.item] && World.getThreadTime() % 5 == 0) return;
+        return ind.func(); //? механика требует переработки
     }
   }
   public getItemForHand(func: () => void) {

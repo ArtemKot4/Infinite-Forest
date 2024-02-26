@@ -47,7 +47,7 @@ function getFour(id, coords, player){
  // if()
 };
 
-const MODELSDIR = __dir__+"assets/models/"
+const MODELSDIR: string = __dir__+"resources/models/"
 
 
 //excludes functions of js

@@ -44,40 +44,40 @@ abstract class Book {
 
     const data = Book.data;
     data.max = Object.keys(pgs).length;
-    for (const index in pgs) {
+
       const container = uidata.container;
 
       Game.message(
         "Book.data.page: " +
           data.page +
           "\n Book page number: " +
-          index +
+          data.page +
           "\nUi is Opened: " +
           uidata.container.isOpened() +
           "\ndata.page & Number(index) ->" +
           data.page +
           " : " +
-          Number(index)
+          Number(data.page)
       ); //TODO: DEBUG
 
       if (
         container &&
         container.isOpened() == true &&
-        (data.page == 0 || data.page == Number(index))
+        (data.page == 0 || data.page == Number(data.page))
       ) {
-        const ind = pgs[index];
+        const ind = pgs[data.page];
         const setup = (key) =>
           typeof ind[key] === "object" && ind[key]["modifier"]
             ? TextModifier.setModifier(
                 uidata.container,
                 ind[key],
-                index,
+                data.page,
                 key,
                 ind[key]["modifier"]
               )
             : ind[key];
 
-        container.setText("page", index);
+        container.setText("page", data.page);
 
         container.setText("comment", setup("comment"));
 
@@ -85,13 +85,14 @@ abstract class Book {
         container.setText("heading", setup("heading"));
 
         alert("Текст должен был поменяться!");
-        return func(pgs[index], index);
+        return func(pgs[data.page], data.page);
       }
     }
-  }
+  
 
   public static onTick(): void {
-    Book.setupPagesLogic((page, index) => {}, "base");
+    //TODO: работаю над зонтиком
+    //Book.setupPagesLogic((page, index) => {}, "base");
   }
 
   private static visualByItem(): void {

@@ -12,8 +12,5 @@ Callback.addCallback("LocalTick", () => {
   if (
     World.getThreadTime() % 8 == 0 && Player.getDimension() != InfiniteForest.id
   ) {
-   for(var c;c<7;c++){
-    spawnStars(pos);
-   }
   };
 });

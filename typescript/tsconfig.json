@@ -32,6 +32,7 @@
 		"core/callbacks/item_use.ts",
 		"core/callbacks/native_command.ts",
 		"recipes.ts",
+		"items/mushroom_umbrella.ts",
 		"core/callbacks/tick.ts"
 	]
 }

@@ -38,7 +38,7 @@ Network.addClientPacket("if.particle", function (packetData: any) {
   }
 
   
-var glowworm = Particles.registerParticleType({
+const glowworm = Particles.registerParticleType({
     texture: "part_1",
     render: 2,
     size: [1, 3],
@@ -51,20 +51,20 @@ var glowworm = Particles.registerParticleType({
   });
   
   
-  var flame_blue = Particles.registerParticleType({
-    texture: "flame",
+   const flame_blue = Particles.registerParticleType({
+    texture: "flame_blue",
     render: 2,
-    size: [4, 5],
-    lifetime: [20, 15],
+    size: [2, 3],
+    lifetime: [5, 15],
   
-    color: [253,156,0,1],
+   // color: [253,156,0,1],
     animators: {
       alpha: { fadeIn: 0.4, fadeOut: 0.4 },
       size: { fadeOut: 0.5, fadeIn: 0.4, start: 0, end: 0 },
     },
   });
   
-  var flame_orange = Particles.registerParticleType({
+  const flame_orange = Particles.registerParticleType({
     texture: "flame",
     render: 2,
     size: [4, 5],
@@ -77,7 +77,7 @@ var glowworm = Particles.registerParticleType({
     },
   });
   
-  var flame_white = Particles.registerParticleType({
+  const flame_white = Particles.registerParticleType({
     texture: "flame",
     render: 2,
    // color: [1, 0.5, 0.5, 0.5],
@@ -91,7 +91,7 @@ var glowworm = Particles.registerParticleType({
   });
   
   
-  var star = Particles.registerParticleType({
+  const star = Particles.registerParticleType({
     texture: "flame",
     render: 0,
     size: [8,9],
