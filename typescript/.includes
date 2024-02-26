@@ -16,6 +16,7 @@ items/book.ts
 particles.ts
 core/starfall.ts
 items.ts 
+items/mushroom_umbrella.ts
 items/infinite_shark.ts
 blocks.ts
 dimension/if_base.ts

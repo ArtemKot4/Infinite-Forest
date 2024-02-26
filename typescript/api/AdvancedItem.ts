@@ -37,15 +37,15 @@ class AdvancedItem extends FItem {
       importParams || null
     );
 
-    model.onHand == true
+    model.onHand === true
       ? ItemModel.getForWithFallback(ItemID[this.id], data || 0).setHandModel(
           render,
-          MODELSDIR + texture,
+          MODELSDIR + (texture ?? model.model),
           material || null
         )
       : ItemModel.getForWithFallback(ItemID[this.id], data || 0).setModel(
           render,
-          MODELSDIR + texture,
+          MODELSDIR + (texture ?? model.model),
           material || null
         );
   };
