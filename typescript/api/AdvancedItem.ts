@@ -6,46 +6,48 @@ type import_params = {
 };
 
 type model_descriptor = {
-  model: string | null;
-  onHand: boolean;
+  model: string | null,
+      texture?: string,
+      importParams?: import_params,
+      data?: int,
+  onHand?: boolean,
 };
 
 class AdvancedItem extends FItem {
-  public visual: {} = { model: null, texture: null, material: null };
+  constructor( id, stack?, name?, texture?, visual?: model_descriptor, meta?, isTech?);
+  constructor( id?, stack?, name?, texture?, meta?, isTech?);
   constructor(
     id: string,
     stack?: number,
     name?: string,
     texture?: texture,
+    visual?: model_descriptor,
     meta?: number,
     isTech?: boolean
   ) {
     super(id, stack, name, texture, meta, isTech);
+    if(typeof arguments[5] === "object" && visual) this.setModel(visual)
   }
   public setModel(
-    model: model_descriptor = { model: null, onHand: false },
-    texture?,
-    data?,
-    importParams?: import_params | null,
-    material?
-  ): boolean {
+    model
+  ): ItemModel {
     if (!model.model) return;
     const render = new RenderMesh();
     render.importFromFile(
       MODELSDIR + model.model + ".obj",
       "obj",
-      importParams || null
+      model.importParams || null
     );
-
-    model.onHand === true
-      ? ItemModel.getForWithFallback(ItemID[this.id], data || 0).setHandModel(
+    const texture = model.texture ?? model.model;
+  return !!model.onHand
+      ? ItemModel.getForWithFallback(ItemID[this.id], model.data || 0).setHandModel(
           render,
-          texture ?? model.model//MODELSDIR + (texture ?? model.model) + ".png",
+          texture
          // material || null
         )
-      : ItemModel.getForWithFallback(ItemID[this.id], data || 0).setModel(
+      : ItemModel.getForWithFallback(ItemID[this.id], model.data || 0).setModel(
           render,
-          texture ?? model.model//MODELSDIR + (texture ?? model.model) + ".png",
+          texture
          // material || null
         );
   };

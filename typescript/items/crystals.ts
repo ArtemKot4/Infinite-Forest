@@ -2,11 +2,8 @@
 new FItem("blue_crystal", 1);
 new FItem("orange_crystal");
 
-IDRegistry.genItemID("flame_crystal");
-Item.createItem("flame_crystal", "Flame crystal", { name: "flame_crystal" },{stack: 1,isTech: true});
-
 function getCoords (): void {
-  var players = Network.getConnectedPlayers();
+  const players = Network.getConnectedPlayers();
 
   for (const i in players) {
   const position = Entity.getPosition(Number(players))
@@ -16,3 +13,6 @@ function getCoords (): void {
     Game.message(JSON.stringify(position))
   }
 }
+
+new FItem("flame_dust");
+new FItem("ice_dust");

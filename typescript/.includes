@@ -2,7 +2,11 @@ another/GenericUIDescriptor.ts
 translations.ts
 core.ts
 unique_gen.ts
+
 api/FItem.ts
+api/FBlock.ts
+
+api/AdvancedBlock.ts
 api/AdvancedItem.ts
 
 api/Book/TextModifier.ts
@@ -12,13 +16,15 @@ api/Book/CategoryUI.ts
 api/recipes/Recipe.ts
 api/recipes/FurnaceRecipe.ts
 api/recipes/WorkbenchRecipe.ts
-items/book.ts
+
+
 particles.ts
 core/starfall.ts
-items.ts 
 
+items/book.ts
+items.ts 
 items/infinite_shark.ts
-blocks.ts
+
 dimension/if_base.ts
 items/crystals.ts
 infinite_table.ts
@@ -29,4 +35,8 @@ core/callbacks/item_use.ts
 core/callbacks/native_command.ts
 recipes.ts
 items/mushroom_umbrella.ts
+
+blocks/blocks.ts
+blocks/torch.ts
+
 core/callbacks/tick.ts

@@ -22,6 +22,14 @@ const BLOCK_TYPE_FIRE = Block.createSpecialType({
   sound: "grass",
 });
 
+const BLOCK_TYPE_TORCH = Block.createSpecialType({
+  lightlevel: 15
+});
+
+const BLOCK_TYPE_ICED_TORCH = Block.createSpecialType({
+  lightlevel: 6
+});
+
 const BLOCK_TYPE_PRINT = Block.createSpecialType({
   lightlevel: 10,
   sound: "glass",
@@ -48,7 +56,6 @@ function getFour(id, coords, player){
 };
 
 const MODELSDIR: string = __dir__+"resources/models/"
-
 
 //excludes functions of js
 
