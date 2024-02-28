@@ -39,5 +39,5 @@ items/mushroom_umbrella.ts
 blocks/blocks.ts
 blocks/torch.ts
 items/crystals.ts
-
+items/dusts.ts
 core/callbacks/tick.ts

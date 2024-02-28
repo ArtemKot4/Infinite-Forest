@@ -1,6 +1,6 @@
 class AdvancedBlock extends FBlock {
-    constructor(id: string, data: Block.BlockVariation[]);
-    constructor(id: string, data: Block.BlockVariation[], modelData: model_descriptor);
+    constructor(id: string, data);
+    constructor(id: string, data, modelData: model_descriptor);
   constructor(
     id: string,
     data: Block.BlockVariation[],
@@ -33,7 +33,9 @@ class AdvancedBlock extends FBlock {
       const region = BlockSource.getDefaultForActor(player);
       if (condition) return condition(coords, item, block, player, region);
       const place = coords.relative;
-     return region.setBlock(place.x, place.y, place.z, BlockID[this.id], data || 0);
+ 
+     return (region.setBlock(place.x, place.y, place.z, BlockID[this.id], data || 0),
+     TileEntity.addTileEntity(coords.x, coords.y, coords.z, region));
     });
   }
 }

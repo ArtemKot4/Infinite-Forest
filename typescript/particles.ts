@@ -73,9 +73,9 @@ const glowworm = Particles.registerParticleType({
   const flame_white = Particles.registerParticleType({
     texture: "flame",
     render: 2,
-   // color: [1, 0.5, 0.5, 0.5],
+    color: [165/255, 165/255, 165/255, 1],
     size: [6,9,],
-    lifetime: [20, 15],
+    lifetime: [30, 40],
   
     animators: {
       alpha: { fadeIn: 0.4, fadeOut: 0.4 },
@@ -98,8 +98,8 @@ const glowworm = Particles.registerParticleType({
   
   const smoke = Particles.registerParticleType({
     texture: "smoke",
-    render: 0,
-    size: [.3, .],
+    render: 1,
+    size: [2,3],
     lifetime: [80, 100],
    
     animators: {
@@ -108,3 +108,14 @@ const glowworm = Particles.registerParticleType({
     },
   });
   
+  const vanilla_rain = Particles.registerParticleType({
+    texture: "weather",
+    render: 2,
+    size: [3,4],
+    lifetime: [80, 100],
+   
+    animators: {
+    //  alpha: { fadeIn: 0.4, fadeOut: 0.4 },
+      size: { fadeOut: 0, fadeIn: 0, start: 1, end: 0 },
+    },
+  }); 

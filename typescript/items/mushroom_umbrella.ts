@@ -1,5 +1,5 @@
 const MushroomUmbrella = new AdvancedItem("mushroom_umbrella", 1, "Mushroom Umbrella",
- "mushroom_umbrella", {
+ "mushroom_umbrella_icon", {
     model: "mushroom_umbrella", importParams: {scale: [1.5, 1.5, 1.5], translate: [0.5, 0.5, 0.5],
         invertV: false, noRebuild: false },onHand: true, 
 });

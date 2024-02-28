@@ -110,7 +110,6 @@ function addGlowworm(coords) {
     xV,
     yV,
     zV,
-    0
   );
 }
 function addFire(coords) {
@@ -123,7 +122,7 @@ function addFire(coords) {
   var yV = random(3, 5) / 600;
   var zV = xz.z / 80;
 
-  spawnParticle(glowworm, coords.x + x, coords.y + y, coords.z + z, xV, yV, zV, 0);
+  spawnParticle(glowworm, coords.x + x, coords.y + y, coords.z + z, xV, yV, zV);
   //fire
 }
 

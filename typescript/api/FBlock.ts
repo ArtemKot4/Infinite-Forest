@@ -1,9 +1,10 @@
+
 class FBlock {
-    constructor(public id: string, data: Block.BlockVariation[]) {
+    constructor(public id: string, data) {
         IDRegistry.genBlockID(id);
         Block.createBlock(
             id,
-            data
+            data, data && data[0].data ? data[0].data : null
           );
         
     };
