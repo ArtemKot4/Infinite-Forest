@@ -87,6 +87,7 @@ torchDrop("iced", "ice");
 registerTorchVisualPrototype("eucalyptus_torch", () => {
     Game.message("Блок факела стоит, функция сработала")
   if (World.getThreadTime() % 5 == 0) {
+      for(let i = 0; i <= 3; i++){
       spawnParticle(
         flame_white,
         this.x + randomInt(0.1, 0.3),
@@ -96,7 +97,7 @@ registerTorchVisualPrototype("eucalyptus_torch", () => {
         0,
         0
       );
-      
+    };
       spawnParticle(
         EParticleType.DRIP_WATER,
         this.x + randomInt(0.1, 0.2),

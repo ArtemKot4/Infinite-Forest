@@ -81,7 +81,7 @@ const glowworm = Particles.registerParticleType({
       alpha: { fadeIn: 0.4, fadeOut: 0.4 },
       size: { fadeOut: 0.5, fadeIn: 0.4, start: 0, end: 0 },
     },
-  });
+  })
   
   
   const star = Particles.registerParticleType({
@@ -101,7 +101,7 @@ const glowworm = Particles.registerParticleType({
     render: 0,
     size: [.3, .],
     lifetime: [80, 100],
-  
+   
     animators: {
     //  alpha: { fadeIn: 0.4, fadeOut: 0.4 },
       size: { fadeOut: 0, fadeIn: 0, start: 1, end: 0 },
