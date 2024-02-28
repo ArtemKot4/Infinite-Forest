@@ -14,5 +14,21 @@ function getCoords (): void {
   }
 }
 
-new FItem("flame_dust");
-new FItem("ice_dust");
+const FlameDust = new FItem("flame_dust");
+const IceDust = new FItem("ice_dust");
+
+FlameDust.onUse((coords, item, block) => {
+  const minus = Entity.setCarriedItem//(player, item.id, item.count - 1, 0);
+  const region = BlockSource.getDefaultForActor(Player.get());
+ if(block.id === BlockID["eucalyptus_torch"]) { minus(Player.getLocal(), item.id, item.count - 1, 0);
+     region.setBlock(coords.x, coords.y, coords.z, BlockID["flamed_eucalyptus_torch"],0)
+ }
+});
+
+IceDust.onUse((coords, item, block) => {
+  const minus = Entity.setCarriedItem//(player, item.id, item.count - 1, 0);
+  const region = BlockSource.getDefaultForActor(Player.get());
+ if(block.id === BlockID["eucalyptus_torch"]) { minus(Player.getLocal(), item.id, item.count - 1, 0);
+     region.setBlock(coords.x, coords.y, coords.z, BlockID["iced_eucalyptus_torch"],0)
+ }
+})

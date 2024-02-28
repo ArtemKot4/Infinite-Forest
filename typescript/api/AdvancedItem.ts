@@ -14,8 +14,8 @@ type model_descriptor = {
 };
 
 class AdvancedItem extends FItem {
-  constructor( id, stack?, name?, texture?, visual?: model_descriptor, meta?, isTech?);
-  constructor( id?, stack?, name?, texture?, meta?, isTech?);
+  constructor( id: string, stack?: int, name?: string, texture?: string, visual?: model_descriptor, meta?: int, isTech?: boolean);
+  constructor( id: string, stack?: int, name?: string, texture?: string, meta?, isTech?);
   constructor(
     id: string,
     stack?: number,
@@ -26,17 +26,19 @@ class AdvancedItem extends FItem {
     isTech?: boolean
   ) {
     super(id, stack, name, texture, meta, isTech);
-    if(typeof arguments[5] === "object" && visual) this.setModel(visual)
+    if(typeof arguments[4] === "object") this.setModel(visual)
   }
   public setModel(
-    model
+    model: model_descriptor
   ): ItemModel {
+    if(!model.importParams) model.importParams = {translate: [0.5, 0, 0.5], scale: null, invertV: false, noRebuild: false}
+    if(model && model.importParams && !model.importParams.translate) model.importParams["translate"] = [0.5, 0, 0.5]
     if (!model.model) return;
     const render = new RenderMesh();
     render.importFromFile(
       MODELSDIR + model.model + ".obj",
       "obj",
-      model.importParams || null
+      model.importParams
     );
     const texture = model.texture ?? model.model;
   return !!model.onHand

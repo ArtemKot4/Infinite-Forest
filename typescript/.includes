@@ -26,7 +26,7 @@ items.ts
 items/infinite_shark.ts
 
 dimension/if_base.ts
-items/crystals.ts
+
 infinite_table.ts
 structure.ts
 Eucalyptus Tree.ts
@@ -38,5 +38,6 @@ items/mushroom_umbrella.ts
 
 blocks/blocks.ts
 blocks/torch.ts
+items/crystals.ts
 
 core/callbacks/tick.ts

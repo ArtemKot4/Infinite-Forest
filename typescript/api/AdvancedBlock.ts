@@ -13,6 +13,8 @@ class AdvancedBlock extends FBlock {
   public visual(data): void {
     const mesh = new RenderMesh();
     mesh.setBlockTexture(data.texture, 0);
+    if(!data.importParams) data.importParams = {translate: [0.5, 0, 0.5]}
+    if(data && data.importParams && !data.importParams.translate) data.importParams["translate"] = [0.5, 0, 0.5];
     mesh.importFromFile(
       MODELSDIR + data.model + ".obj",
       "obj",

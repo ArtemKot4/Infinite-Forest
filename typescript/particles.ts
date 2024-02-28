@@ -81,7 +81,7 @@ const glowworm = Particles.registerParticleType({
     texture: "flame",
     render: 2,
    // color: [1, 0.5, 0.5, 0.5],
-    size: [4,5],
+    size: [6,9,],
     lifetime: [20, 15],
   
     animators: {
