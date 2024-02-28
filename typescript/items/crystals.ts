@@ -20,9 +20,9 @@ const changeTorchSpecial = (special: "iced" | "flamed", coords}) => {
  if(block.id === BlockID["eucalyptus_torch"]) { minus(Player.getLocal(), item.id, item.count - 1, 0);
  const place = coords.relative;
  for(let i = 0; i <= 10; i++){
- spawnParticle(smoke, coords.x, coords.y + 0.8, coords.z, 0, 0.3, 0)
+ spawnParticle(smoke, coords.x, coords.y + 0.8, coords.z, 0, 0.3, 0); };
      region.setBlock(coords.x, coords.y, coords.z, BlockID[special + "_eucalyptus_torch"],0)
- }
+ 
  }
 }
  
