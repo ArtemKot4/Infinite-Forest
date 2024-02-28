@@ -8,7 +8,7 @@ var InfiniteForest = new Dimensions.CustomDimension("infinite_forest", 75);
 
 //InfiniteForest.setFogColor(-255, 26, 151);
 InfiniteForest.setSkyColor(0.4, 0.4, 0.5);
-
+InfiniteForest.setFogColor(0 / 255, 128 / 255, 0 / 255);
 const generator = Dimensions.newGenerator({
   layers: [
     {

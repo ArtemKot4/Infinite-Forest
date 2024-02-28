@@ -67,9 +67,9 @@ class FItem {
   public getItemForHand(func: () => void) {
     FItem.funcs.push({ item: this.id, func: func });
   }
-  public onUse(func: (coords: Callback.ItemUseCoordinates, item: ItemInstance, block: Tile) => void): void {
-    Item.registerUseFunction(this.id, (coords, item, block) => {
-      func(coords, item, block);
+  public onUse(func: (coords: Callback.ItemUseCoordinates, item: ItemInstance, block: Tile, player?: number) => void): void {
+    Item.registerUseFunction(this.id, (coords, item, block, player) => {
+      func(coords, item, block, player);
     });
   }
 }

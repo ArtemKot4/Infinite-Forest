@@ -85,7 +85,7 @@ TileEntity.registerPrototype(BlockID["eucalyptus_torch"], {
   useNetworkItemContainer: true,
  tick: function() {
  
-  if (World.getThreadTime() % 5 == 0) {
+  if (World.getThreadTime() % 5 == 0 && Player.getDimension() === InfiniteForest.id) {
       for(let i = 0; i <= 6; i++){
       spawnParticle(
         flame_white,

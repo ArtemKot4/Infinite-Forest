@@ -16,6 +16,7 @@
 		"api/Book/TextModifier.ts",
 		"api/Book/Book.ts",
 		"api/Book/CategoryUI.ts",
+		"api/Researchs.ts",
 		"api/recipes/Recipe.ts",
 		"api/recipes/FurnaceRecipe.ts",
 		"api/recipes/WorkbenchRecipe.ts",
@@ -37,6 +38,7 @@
 		"blocks/torch.ts",
 		"items/crystals.ts",
 		"items/dusts.ts",
+		"core/callbacks/level_displayed.ts",
 		"core/callbacks/tick.ts"
 	]
 }
