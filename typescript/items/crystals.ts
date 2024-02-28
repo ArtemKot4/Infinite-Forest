@@ -14,21 +14,24 @@ function getCoords (): void {
   }
 }
 
+const changeTorchSpecial = (special: "iced" | "flamed", coords}) => {
+    const minus = Entity.setCarriedItem;
+  const region = BlockSource.getDefaultForActor(Player.getLocal());
+ if(block.id === BlockID["eucalyptus_torch"]) { minus(Player.getLocal(), item.id, item.count - 1, 0);
+ const place = coords.relative;
+ spawnParticle(smoke, coords.x, coords.y + 0.8, coords.z, 0, 0.3, 0)
+     region.setBlock(coords.x, coords.y, coords.z, BlockID[special + "_eucalyptus_torch"],0)
+ }
+}
+
 const FlameDust = new FItem("flame_dust");
 const IceDust = new FItem("ice_dust");
 
 FlameDust.onUse((coords, item, block) => {
-  const minus = Entity.setCarriedItem//(player, item.id, item.count - 1, 0);
-  const region = BlockSource.getDefaultForActor(Player.get());
- if(block.id === BlockID["eucalyptus_torch"]) { minus(Player.getLocal(), item.id, item.count - 1, 0);
-     region.setBlock(coords.x, coords.y, coords.z, BlockID["flamed_eucalyptus_torch"],0)
- }
+  changeTorchSpecial("flamed", coords)
 });
 
+
 IceDust.onUse((coords, item, block) => {
-  const minus = Entity.setCarriedItem//(player, item.id, item.count - 1, 0);
-  const region = BlockSource.getDefaultForActor(Player.get());
- if(block.id === BlockID["eucalyptus_torch"]) { minus(Player.getLocal(), item.id, item.count - 1, 0);
-     region.setBlock(coords.x, coords.y, coords.z, BlockID["iced_eucalyptus_torch"],0)
- }
-})
+  changeTorchSpecial("iced", coords)
+});

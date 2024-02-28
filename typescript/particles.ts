@@ -10,17 +10,12 @@ Network.addClientPacket("if.particle", function (packetData: any) {
     );
   });
   
-  function spawnParticle(type, x, y, z, vx, vy, vz, ax, ay?, az?) {
-    vx = vx || 0;
-    vy = vy || 0;
-    vz = vz || 0;
-    ax = ax || 0;
-    ay = ay || 0;
-    az = az || 0;
-    var players = Network.getConnectedPlayers();
-    for (var i in players) {
-      var client = Network.getClientForPlayer(players[i]);
-      if (client) {
+  function spawnParticle(type, x, y, z, vx = 0, vy = 0, vz = 0) {
+    const players = Network.getConnectedPlayers();
+    for (const i in players) {
+      const client = Network.getClientForPlayer(players[i]);
+      if (!client) return;
+   
         client.send("if.particle", {
           p: type,
           x: x,
@@ -31,9 +26,7 @@ Network.addClientPacket("if.particle", function (packetData: any) {
           vz: vz,
         });
         /*  Debug.message("spawn particle");*/
-      } else {
-        Debug.message("[Error] Failed spawn particle");
-      }
+       
     }
   }
 
@@ -95,6 +88,18 @@ const glowworm = Particles.registerParticleType({
     texture: "flame",
     render: 0,
     size: [8,9],
+    lifetime: [80, 100],
+  
+    animators: {
+    //  alpha: { fadeIn: 0.4, fadeOut: 0.4 },
+      size: { fadeOut: 0, fadeIn: 0, start: 1, end: 0 },
+    },
+  });
+  
+  const smoke = Particles.registerParticleType({
+    texture: "smoke",
+    render: 0,
+    size: [.3, .],
     lifetime: [80, 100],
   
     animators: {

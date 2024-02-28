@@ -26,10 +26,11 @@ const torchDrop = (block, dust) =>
   );
 
 const registerTorchVisualPrototype = (id: string, tick: () => void) => {
-  TileEntity.registerPrototype(BlockID[id], {
-    tick() {
-      tick();
-    },
+ TileEntity.registerPrototype(BlockID[id], {
+     useNetworkItemContainer: true,
+    tick: function() {
+     return tick();
+    }
   });
 };
 
@@ -84,18 +85,19 @@ torchDrop("flamed", "flame");
 torchDrop("iced", "ice");
 
 registerTorchVisualPrototype("eucalyptus_torch", () => {
+    Game.message("Блок факела стоит, функция сработала")
   if (World.getThreadTime() % 5 == 0) {
-    return (
-      Particles.addParticle(
+      spawnParticle(
         flame_white,
-        this.x + randomInt(0.1, 0.4),
+        this.x + randomInt(0.1, 0.3),
         this.y + 2.5,
-        this.z + randomInt(0.1, 0.4),
+        this.z + randomInt(0.1, 0.3),
         0,
         0,
         0
-      ),
-      Particles.addParticle(
+      );
+      
+      spawnParticle(
         EParticleType.DRIP_WATER,
         this.x + randomInt(0.1, 0.2),
         this.y + 2.4,
@@ -104,6 +106,6 @@ registerTorchVisualPrototype("eucalyptus_torch", () => {
         -0.2,
         0
       )
-    );
+    
   }
 });
