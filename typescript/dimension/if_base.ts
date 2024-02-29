@@ -4,41 +4,6 @@ function randomInt(min, max) {
 };
 
 
-var InfiniteForest = new Dimensions.CustomDimension("infinite_forest", 75);
-
-//InfiniteForest.setFogColor(-255, 26, 151);
-InfiniteForest.setSkyColor(0.4, 0.4, 0.5);
-InfiniteForest.setFogColor(0 / 255, 128 / 255, 0 / 255);
-const generator = Dimensions.newGenerator({
-  layers: [
-    {
-      minY: 2,
-      maxY: 75,
-      yConversion: [[0, 0]],
-      material: { base: 9 },
-    },
-    {
-      minY: 0,
-      maxY: 82,
-      yConversion: [
-        [0.7, 1],
-        [1, -0.5],
-      ],
-      material: { base: 1, surface: { id: 3, data: 0, width: 3 }, cover: 2 },
-      noise: {
-        octaves: { count: 4, scale: 20 },
-      },
-    },
-    {
-      minY: 2,
-      maxY: 4,
-      yConversion: [[0.7, 1]],
-      material: { base: 7 },
-    },
-  ],
-});
-InfiniteForest.setGenerator(generator);
-
 Callback.addCallback(
   "GenerateCustomDimensionChunk",
   function (chunkX, chunkZ, random, dimensionId, block, id, coords) {
@@ -126,14 +91,33 @@ function addFire(coords) {
   //fire
 }
 
+const InventorySaver = {
+}
 
+const inventSaverFunc = (dimension, player) => { 
+  const saver = InventorySaver
+const actor = new PlayerActor(player);
+if(InventorySaver && !saver[player]){
+  InventorySaver[player] = {};
+   saver[player][dimension] = {items: []} } else
+   saver[player][dimension].items = [];
+for(let i = 0; i <= 35; i++){
+   saver[player].items.push(actor.getInventorySlot(i).id);
+   Game.message(JSON.stringify(saver[player][dimension]["items"]))
+   actor.setInventorySlot(i, 0, 0, 0, null)
+}; 
+};
 
-Callback.addCallback("CustomDimensionTransfer", function () {
-  if(Player.getDimension() == InfiniteForest.id){World.setWorldTime(13000);
+Callback.addCallback("PlayerChangedDimension", function (playerUid, from, to) {
+ 
+  if(Entity.getDimension(playerUid) == InfiniteForest.id){
+   inventSaverFunc(InfiniteForest.id, playerUid)
+    World.setWorldTime(42000);
     Commands.exec("/gamerule doDaylightCycle false")
     
-  }else{
-    
+  } else {
+    inventSaverFunc(EDimension.NORMAL, playerUid)
     Commands.exec("/gamerule doDaylightCycle true")
   }
 })
+

@@ -1,4 +1,4 @@
-Callback.addCallback("LevelLoaded", () => {
+Callback.addCallback("LevelDisplayed", () => {
     Recipes.addShaped(
         { id: ItemID.blueCrystal, count: 1, data: 0 },
         ["ldl", "lsl", "ddd"],

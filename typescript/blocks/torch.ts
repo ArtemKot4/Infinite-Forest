@@ -51,7 +51,7 @@ const FlamedTorch = new AdvancedBlock(
       name: "Flaming Eucalyptus Torch",
       texture: [["flaming_eucalyptus_torch", 0]],
       inCreative: true,
-      data: BLOCK_TYPE_TORCH
+      data: BLOCK_TYPE_TORCH,
     },
   ],
   {
@@ -67,7 +67,7 @@ const IcedTorch = new AdvancedBlock(
       name: "Iced Eucalyptus Torch",
       texture: [["iced_eucalyptus_torch", 0]],
       inCreative: true,
-      data: BLOCK_TYPE_ICED_TORCH
+      data: BLOCK_TYPE_ICED_TORCH,
     },
   ],
   {
@@ -83,35 +83,53 @@ torchDrop("iced", "ice");
 
 TileEntity.registerPrototype(BlockID["eucalyptus_torch"], {
   useNetworkItemContainer: true,
- tick: function() {
- 
-  if (World.getThreadTime() % 5 == 0 && Player.getDimension() === InfiniteForest.id) {
-      for(let i = 0; i <= 6; i++){
-      spawnParticle(
-        flame_white,
-        this.x + randomInt(0.3, 0.6),
-        this.y + 2.5,
-        this.z + randomInt(0.3, 0.6),
-        0,
-        0,
-        0
-      );
-      };
+  tick: function () {
+    this.sendPacket("spawnRain");
+  },
+  client: {
+    events: {
+      spawnRain: function () {
+        if (
+          World.getThreadTime() % 5 == 0 &&
+          Player.getDimension() === InfiniteForest.id
+        ) {
+          setTickInterval(
+            () =>
+              Particles.addParticle(
+                smoke,
+                this.x + 0.5,
+                this.y + 0.8,
+                this.z + 0.5,
+                randomInt(-0.02, 0.02),
+                0.1,
+                randomInt(-0.02, 0.02)
+              ),
+            65
+          );
+          for (let i = 0; i <= 6; i++) {
+            Particles.addParticle(
+              flame_white,
+              this.x + randomInt(0.3, 0.6),
+              this.y + 2.5,
+              this.z + randomInt(0.3, 0.6),
+              0,
+              0,
+              0
+            );
+          }
 
-      spawnParticle(
-        vanilla_rain,
-        this.x + randomInt(0.3, 0.6),
-        this.y + 2.1,
-        this.z + randomInt(0.3, 0.6),
-        0.01,
-        -0.2,
-        0.01
-      )
-    
-  }
- }
+          Particles.addParticle(
+            vanilla_rain,
+            this.x + randomInt(0.3, 0.6),
+            this.y + 2.1,
+            this.z + randomInt(0.3, 0.6),
+            0.01,
+            -0.2,
+            0.01
+          );
+        }
+      },
+    },
+  },
 });
 
-Block.setAnimateTickCallback(BlockID["eucalyptus_torch"], (x,y,z,id,data) => {
-  spawnParticle(smoke, 0.5, 0.8, 0.5, 0, 0.1, 0);
-})

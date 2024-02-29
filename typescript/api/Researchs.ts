@@ -1,12 +1,3 @@
-Network.addClientPacket("if.question", (packetData: { player; question }) => {
-  Game.message(
-    packetData.question || "Error! Underknown question"
-  );
-  const question = Researchs.player_data[packetData.player]["questions"];
-  if (question && question.includes(packetData.question)) return false;
-  question.push(packetData.question);
-});
-
 namespace Researchs {
   export const player_data = {};
   export function registerQuestion(

@@ -20,8 +20,8 @@ FlameDust.onUse((coords, item, block) => {
   
  const place = coords.relative;
  const region = BlockSource.getDefaultForActor(Player.getLocal());
-    return Entity.getSneaking(Player.getLocal()) ? 
-    region.setBlock(place.x, place.y+1, place.z, VanillaBlockID.fire , 0) : 
+    return Entity.getSneaking(Player.getLocal()) === true ? 
+    region.setBlock(place.x, place.y, place.z, VanillaBlockID.fire , 0) : 
     changeTorchSpecial(block, item, "flamed", coords);
 });
 
@@ -30,6 +30,6 @@ IceDust.onUse((coords, item, block, player) => {
  return changeTorchSpecial(block, item, "iced", coords),
  Researchs.registerQuestion(player, {question: "ice_dust_q", translations: {
   ru: "Невероятно! Она, заставила его светиться..? Я должен побольше узнать о пыли"
-}})
+}});
 });
 
