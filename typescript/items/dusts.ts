@@ -16,8 +16,8 @@ const changeTorchSpecial = (block, item, special: "iced" | "flamed", coords) => 
 const FlameDust = new FItem("flame_dust", 64, "Flame dust", ["flame_dust", 6]);
 const IceDust = new FItem("ice_dust", 64, "Ice dust", ["ice_dust", 11]);
 
-FlameDust.onUse((coords, item, block) => {
-  
+FlameDust.onUse((coords, item, block, player) => {
+ // Researchs.setupQuestion(player,"Интересно. Почему-то неведомый мне дождь старался погасить изготовленный мною, но стоило посыпать горящей пылью, и всё решилось...")
  const place = coords.relative;
  const region = BlockSource.getDefaultForActor(Player.getLocal());
     return Entity.getSneaking(Player.getLocal()) === true ? 
@@ -27,9 +27,7 @@ FlameDust.onUse((coords, item, block) => {
 
 
 IceDust.onUse((coords, item, block, player) => {
- return changeTorchSpecial(block, item, "iced", coords),
- Researchs.registerQuestion(player, {question: "ice_dust_q", translations: {
-  ru: "Невероятно! Она, заставила его светиться..? Я должен побольше узнать о пыли"
-}});
+ return changeTorchSpecial(block, item, "iced", coords)
+ //Researchs.setupQuestion(player,"Невероятно! Она, заставила его светиться..? Я должен побольше узнать о ледяной пыли")
 });
 

@@ -98,7 +98,7 @@ const inventSaverFunc = (dimension, player) => {
   const saver = InventorySaver
 const actor = new PlayerActor(player);
 if(InventorySaver && !saver[player]){
-  InventorySaver[player] = {};
+  saver[player] = {};
    saver[player][dimension] = {items: []} } else
    saver[player][dimension].items = [];
 for(let i = 0; i <= 35; i++){
