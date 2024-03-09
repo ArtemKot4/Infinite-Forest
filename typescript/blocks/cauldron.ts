@@ -21,63 +21,102 @@ namespace Cauldron {
     },
   });
 
+  export const recipes = {
+      data: {},
+      registry(obj: {
+          input, output, time
+      }): void {
+          const {input, output, time} = obj;
+          this.data[input] = {
+              input: input, output: output, time: time
+          });
+          if(!!obj || typeof obj !== "object") throw new Error("You must register recipe in object format!")
+      },
+      hasRecipe(obj: {input, output, result _timer, },container, data) {
+          const {input, output, result_timer} = obj;
+const slot = container.getSlot("slot").id;
+          if(input === slot) {
+              if(data.result_timer < result_timer)
+    {return data.result_timer++};
+    if(data.result_timer >= result_timer) {
+        container.setSlot("slot", output, 1, 0, null);
+        return true;
+    }
+          }
+      }
+  };
+  
   export class Worker extends TileEntityBase {
     useNetworkItemContainer: true;
-    AnimationB: Animation.Base;
-    AnimationI: Animation.Item;
     defaultValues = {
       boiling: false as boolean,
-      timer: 0 as number
+      timer: 0 as number,
+      AnimationI: new Animation.Item(this.x + 0.5, this.y + 1.5, this.z + 0.5),
+      AnimationB: new Animation.Base(this,x + 0.5, this.y + 0.5, this.z + 0.5)
     };
     public getScreenByName(): UI.StandartWindow {
       return GUI;
     }
-
+  
     onLoad(): void {
-      this.AnimationB = new Animation.Base(this.x, this.y, this.z);
-      this.AnimationI = new Animation.Item(
-        this.x + 0.5,
-        this.y + 1.5,
-        this.z + 0.5
-      );
-      this.AnimationI.setItemSize(1.5);
-    }
+      Game.message("Котёл прошёл инитиализацию!")
+    };
+    public decreaseItem(container, item, player) {
+      this.container.getSlot("slot"); 
+        container.setSlot("slot", item.id, 1, item.data, null);
+        Entity.setCarriedItem(player, item.id, item.count, item.data, null);
+        return this;
+    };
     onItemUse(
       coords: Callback.ItemUseCoordinates,
       item: ItemStack,
       player: number
     ): boolean {
       const slot = this.container.getSlot("slot");
+      const AnimationI = this.data.AnimationI;
       if (slot.count == 0) {
-        this.container.setSlot("slot", item.id, 1, 0);
-        Entity.setCarriedItem(player, item.id, item.count - 1, item.data, null);
+        
+        this.decreaseItem(container, item, player)
 
-        this.AnimationI.describeItem({
+        AnimationI.describeItem({
           id: slot.id,
           count: slot.count,
           data: slot.data,
         });
 
-        this.AnimationI.setItemRotation(this.x + 90, this.y, this.z);
-        this.AnimationI.load();
+         AnimationI.setItemRotation(this.x + 90, this.y, this.z);
+        
+        AnimationI.setItemSize(1.5);
+        
+        AnimationI.load();
+        
       } else if (slot.count > 0) {
-        this.AnimationI.destroy();
+        AnimationI.destroy();
+        
         Entity.setCarriedItem(player, slot.id, 1, 0, null),
           this.container.setSlot("slot", 0, 0, 0);
       }
       Game.message("Id of container: " + slot.id);
 
       return true;
-    }
+    };
     onTick(): void {
+        const {timer, boiling, AnimationI} = this.data;
+        const {x, y, z} = this;
       if (World.getThreadTime() % 60 == 0) {
-        this.AnimationI.setPos(this.x, (this.y += 0.1), this.z);
+          if(!boiling) {
+               timer < 20 ? timer++;       boiling = true }
+        
         Game.message("its test tick");
-      }
+      };
+ if(boiling && World.getThreadTime()%5==0) { 
+      AnimationI.setPos(x, (y != this.y - 0.4 ?  y -= 0.1 : y += 0.1), z);
+        AnimationI.setItemRotation(this.x, ( y < 120 ? y++ : y--), z);
+       Game.message("Котёл закипел") }
     }
     onUnload(): void {
-      this.AnimationB.destroy();
-      this.AnimationI.destroy();
+      this.data.AnimationB.destroy();
+      this.data.AnimationI.destroy();
     }
   }
   TileEntity.registerPrototype(BlockID["iron_cauldron"], new Worker());
