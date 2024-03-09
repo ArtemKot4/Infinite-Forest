@@ -1,10 +1,11 @@
 
 const InfiniteForest = new Dimensions.CustomDimension("infinite_forest", 75);
-
+const InfiniteForestBiome = new CustomBiome("infinite_forest")
 InfiniteForest.setHasSkyLight(false);
 InfiniteForest.setSkyColor(21 / 255, 96 / 255, 189 / 255);
 InfiniteForest.setFogColor(0 / 255, 128 / 255, 0 / 255);
 const generator = Dimensions.newGenerator({
+  biome: InfiniteForestBiome.id,
   layers: [
     {
       minY: 2,

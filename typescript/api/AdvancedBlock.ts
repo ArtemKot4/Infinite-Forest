@@ -1,4 +1,7 @@
 class AdvancedBlock extends FBlock {
+  public mesh: RenderMesh;
+  public render: ICRender.Model;
+  private modelData;
     constructor(id: string, data);
     constructor(id: string, data, modelData: model_descriptor);
   constructor(
@@ -7,11 +10,15 @@ class AdvancedBlock extends FBlock {
     modelData?: model_descriptor
   ) {
     super(id, data);
-    if (modelData) this.visual(modelData);
+    this.modelData = modelData || null;
   }
 
-  public visual(data): void {
-    const mesh = new RenderMesh();
+  public visual(): void {
+    const data = this.modelData
+    this.mesh = new RenderMesh();
+    this.render = new ICRender.Model();
+    const render = this.render;
+    const mesh = this.mesh;
     mesh.setBlockTexture(data.texture, 0);
     if(!data.importParams) data.importParams = {translate: [0.5, 0, 0.5]}
     if(data && data.importParams && !data.importParams.translate) data.importParams["translate"] = [0.5, 0, 0.5];
@@ -20,7 +27,7 @@ class AdvancedBlock extends FBlock {
       "obj",
       data.importParams || null
     );
-    const render = new ICRender.Model();
+    
     render.addEntry(new BlockRenderer.Model(mesh));
     return BlockRenderer.setStaticICRender(BlockID[this.id], 0, render);
   }
@@ -37,5 +44,8 @@ class AdvancedBlock extends FBlock {
      return (region.setBlock(place.x, place.y, place.z, BlockID[this.id], data || 0),
      TileEntity.addTileEntity(coords.x, coords.y, coords.z, region));
     });
+  };
+  public registerTile(prototype): void {
+    return TileEntity.registerPrototype(BlockID[this.id], prototype)
   }
 }

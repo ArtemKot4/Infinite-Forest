@@ -43,6 +43,7 @@ const UnlitTorch = new AdvancedBlock(
     texture: "eucalyptus_torch",
   }
 );
+UnlitTorch.visual();
 
 const FlamedTorch = new AdvancedBlock(
   "flamed_eucalyptus_torch",
@@ -58,7 +59,7 @@ const FlamedTorch = new AdvancedBlock(
     model: "eucalyptus_torch",
     texture: "flamed_eucalyptus_torch",
   }
-);
+).visual();
 
 const IcedTorch = new AdvancedBlock(
   "iced_eucalyptus_torch",
@@ -74,7 +75,7 @@ const IcedTorch = new AdvancedBlock(
     model: "eucalyptus_torch",
     texture: "iced_eucalyptus_torch",
   }
-);
+).visual();
 
 UnlitTorch.placer("eucalyptus_torch");
 
