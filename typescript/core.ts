@@ -102,3 +102,6 @@ const ObjectValues = function(obj) {
          return;
      }
  }
+
+const tick = time => World.getThreadTime() % time == 0;
+const sec = sec => tick(20 * sec);

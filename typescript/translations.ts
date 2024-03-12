@@ -4,6 +4,10 @@ IMPORT("ItemAnimHelper");
 IMPORT("SoundAPI");
 IMPORT("RenderUtil");
 
+Translation.addTranslation("Iron cauldron", {
+  ru: "Железный котёл"
+ })
+
 Translation.addTranslation("Fironia", { ru: "§6Пылающий огнецвет" });
 
 Translation.addTranslation("Bark Eucalyptus", {
