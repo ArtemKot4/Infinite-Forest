@@ -17,12 +17,14 @@ namespace Cauldron {
 
   const content = { elements: {} };
 
-  for (let i = 1; i <= 9; i++) {
+  for (let i = 0; i < 9; i++) {
     content.elements["slot_" + i] = {
       type: "slot",
     };
   }
+
   alert(JSON.stringify(content));
+
   export const GUI = new UI.StandardWindow(content);
 
   export const recipes = {
@@ -59,82 +61,99 @@ namespace Cauldron {
       timer: 0 as number,
       AnimationI: [],
       AnimationB: new Animation.Base(this.x + 0.5, this.y + 0.5, this.z + 0.5),
+      selected_slot: 0,
     };
     onLoad(): void {
-      Game.message("Котёл прошёл инитиализацию!");
+     const animation = new Animation.Item(this.x + 0.5, this.y + 1.2, this.z + 0.5);
+     animation.setItemSize(0.2)
+     animation.setItemRotation(this.x + 0.90, this.y, this.z)
+      for (let i = 0; i < 9; i++) {
+        this.data.AnimationI.push(
+         animation
+        );
+      }
+      Game.message("Котёл прошёл инитиализацию! " + this.data.AnimationI);
     }
-    public decreaseItem(container, item, player) {
-      this.container.getSlot("slot");
-      container.setSlot("slot", item.id, 1, item.data, null);
-      Entity.setCarriedItem(player, item.id, item.count, item.data, null);
-      return this;
+    private decreaseItem(
+      container: ItemContainer,
+      item: ItemStack,
+      player: int
+    ) {
+      const select = this.data.selected_slot;
+      const count_validate = item.count <= 5 ? item.count : 1;
+      this.container.getSlot("slot_" + select);
+      return (
+        container.setSlot(
+          "slot_" + select,
+          item.id,
+          count_validate,
+          item.data,
+          null
+        ),
+        Entity.setCarriedItem(player, item.id, item.count - count_validate, item.data, null)
+      );
     }
+
     onItemUse(
       coords: Callback.ItemUseCoordinates,
       item: ItemStack,
       player: number
     ): boolean {
-      for (let i = 1; i <= 9; i++) {
-        const slot = this.container.getSlot("slot_" + i);
-        const AnimationI = this.data.AnimationI as Animation.Item[];
-        const length = AnimationI.length - 1;
-        if (slot.count == 0) {
-          this.decreaseItem(this.container, item, player);
-          AnimationI.push(
-            new Animation.Item(this.x + 0.5, this.y + 1.5, this.z + 0.5)
-          );
-
-          AnimationI[length].describeItem({
-            id: item.id,
-            count: item.count,
-            data: item.data,
-          });
-
-          AnimationI[length].setItemRotation(this.x + 0.90, this.y, this.z);
-
-           AnimationI[length].setItemSize(1.5);
-
-          AnimationI[length].load();
-          return;
-        } else if (slot.count > 0) {
-          alert("Anim destroy: count item > 0")
-          AnimationI[length].destroy();
-          AnimationI.shift();
-          Entity.setCarriedItem(player, slot.id, 1, 0, null),
-            this.container.setSlot("slot_" + i, 0, 0, 0);
-          return;
-        }
-
-        Game.message("Id of container: " + slot.id);
+      const select = this.data.selected_slot as number;
+      const slot = this.container.getSlot("slot_" + select);
+      const animation = this.data.AnimationI[select] as Animation.Item;
+      if (slot.count == 0 && item.id != 0) {
+        this.decreaseItem(this.container, item, player);
+        animation.describeItem({
+          id: item.id,
+          count: slot.count,
+          data: item.data,
+        });
+        animation.load();
+        alert(
+          "Только что предмет: " + slot.id + "; был зачислен в слот: " + select
+        );
+        this.data.selected_slot <= 7 ? this.data.selected_slot++ : null;
+      } else if (slot.count > 0 && item.id == 0) {
+        Entity.setCarriedItem(player, slot.id, slot.count, slot.data, null);
+        this.container.setSlot("slot_" + select, 0, 0, 0);
+        alert("Только что слот " + select + "был очищен");
+        animation.destroy()
+        this.data.selected_slot > 0 ? this.data.selected_slot-- : null;
       }
       return true;
     }
 
     onTick(): void {
-      let { timer, boiling, AnimationI } = this.data;
-      let { x, y, z } = this;
+      const timer = this.data.timer;
+      const boiling = this.data.boiling;
+      
       if (sec(3)) {
-        if (!boiling && timer < 20) {
+        if (!boiling && timer < 10) {
           Game.message(String("timer value: " + timer));
-          timer++
+          this.data.timer++;
         }
-      } else if (timer == 20) { 
-       Game.message("boiling = true"), (boiling = true) };
+      } else if (timer == 10) {
+        Game.message("boiling = true"), (this.data.boiling = true), (this.data.timer = 11);
+      }
       if (boiling && tick(5)) {
         Game.message("Котёл закипел");
-        for (const i in AnimationI) {
-          AnimationI[i].setPos(
-            x,
-            y != this.y - 0.4 ? (y -= 0.1) : (y += 0.1),
-            z
+        for (const i in this.data.AnimationI) {
+          const AnimationI = this.data.AnimationI[i] as Animation.Item;
+          AnimationI.setPos(
+            this.x,
+            this.y != this.y - 0.4 ? (this.y -= 0.1) : (this.y += 0.1),
+            this.z
           );
-          AnimationI[i].setItemRotation(this.x, y < 120 ? y++ : y--, z);
+          AnimationI.setItemRotation(this.x + 0.1, this.y < 0.12 ? (this.y += 0.1) : this.y -= 0.1, this.z);
         }
       }
     }
-    onUnload(): void {
+    destroyBlock(): void {
       this.data.AnimationB.destroy();
-      this.data.AnimationI.destroy();
+      for (const i in this.data.AnimationI) {
+        this.data.AnimationI[i].destroy();
+      }
     }
   }
 

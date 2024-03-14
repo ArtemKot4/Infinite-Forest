@@ -16,3 +16,4 @@ output
 *.icmod
 .vscode
 
+tsconfig.json
