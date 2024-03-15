@@ -63,7 +63,10 @@ namespace Cauldron {
       AnimationB: new Animation.Base(this.x + 0.5, this.y + 0.5, this.z + 0.5),
       selected_slot: 0,
     };
-    onLoad(): void {
+    getScreenName(player: number, coords: Callback.ItemUseCoordinates): any {
+      return GUI
+    }
+   created(): void {
      const animation = new Animation.Item(this.x + 0.5, this.y + 1.2, this.z + 0.5);
      animation.setItemSize(0.2)
      animation.setItemRotation(this.x + 0.90, this.y, this.z)
@@ -72,7 +75,7 @@ namespace Cauldron {
          animation
         );
       }
-      Game.message("Котёл прошёл инитиализацию! " + this.data.AnimationI);
+      Game.message("Котёл прошёл инитиализацию! " + JSON.stringify(this.data.AnimationI));
     }
     private decreaseItem(
       container: ItemContainer,
@@ -99,6 +102,7 @@ namespace Cauldron {
       item: ItemStack,
       player: number
     ): boolean {
+      this.container.close()
       const select = this.data.selected_slot as number;
       const slot = this.container.getSlot("slot_" + select);
       const animation = this.data.AnimationI[select] as Animation.Item;
@@ -109,6 +113,7 @@ namespace Cauldron {
           count: slot.count,
           data: item.data,
         });
+        animation.refresh()
         animation.load();
         alert(
           "Только что предмет: " + slot.id + "; был зачислен в слот: " + select
@@ -118,7 +123,11 @@ namespace Cauldron {
         Entity.setCarriedItem(player, slot.id, slot.count, slot.data, null);
         this.container.setSlot("slot_" + select, 0, 0, 0);
         alert("Только что слот " + select + "был очищен");
-        animation.destroy()
+        animation.describeItem({
+          id: 0
+        }
+        )
+        animation.refresh()
         this.data.selected_slot > 0 ? this.data.selected_slot-- : null;
       }
       return true;
@@ -136,16 +145,17 @@ namespace Cauldron {
       } else if (timer == 10) {
         Game.message("boiling = true"), (this.data.boiling = true), (this.data.timer = 11);
       }
-      if (boiling && tick(5)) {
+      if (boiling && tick(10) ) {
         Game.message("Котёл закипел");
         for (const i in this.data.AnimationI) {
           const AnimationI = this.data.AnimationI[i] as Animation.Item;
-          AnimationI.setPos(
-            this.x,
-            this.y != this.y - 0.4 ? (this.y -= 0.1) : (this.y += 0.1),
-            this.z
-          );
-          AnimationI.setItemRotation(this.x + 0.1, this.y < 0.12 ? (this.y += 0.1) : this.y -= 0.1, this.z);
+          // AnimationI.setPos(
+          //   this.x,
+          //   this.y != this.y - 0.4 ? (this.y -= 0.1) : (this.y += 0.1),
+          //   this.z
+          // );
+
+         AnimationI.setItemRotation(this.x + 0.1, this.y < 0.20 ? (this.y += 0.1) : this.y -= 0.1, this.z + 0.1);
         }
       }
     }
@@ -154,6 +164,7 @@ namespace Cauldron {
       for (const i in this.data.AnimationI) {
         this.data.AnimationI[i].destroy();
       }
+      this.data.AnimationI = [];
     }
   }
 
