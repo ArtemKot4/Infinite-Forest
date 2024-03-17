@@ -39,6 +39,7 @@
 		"blocks/blocks.ts",
 		"blocks/torch.ts",
 		"blocks/cauldron.ts",
+		"blocks/mark.ts",
 		"items/crystals.ts",
 		"items/dusts.ts",
 		"core/callbacks/native_command.ts",

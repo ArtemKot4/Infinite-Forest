@@ -54,30 +54,24 @@ namespace Cauldron {
     },
   };
 
-  export class Worker extends TileEntityBase {
-    useNetworkItemContainer: true;
+  export const WATERMESH = new RenderMesh();
+  WATERMESH.addVertex(-6/16, 20/16, -6/16);
+WATERMESH.addVertex(6/16, 20/16, -6/16);
+WATERMESH.addVertex(-6/16, 20/16, 6/16);
+
+WATERMESH.addVertex(6/16, 20/16, -6/16);
+WATERMESH.addVertex(-6/16, 20/16, 6/16);
+WATERMESH.addVertex(6/16, 20/16 , 6/16);
+
+  export class CauldronBase extends TileEntityBase {
     defaultValues = {
       boiling: false as boolean,
       timer: 0 as number,
-      AnimationI: [],
       AnimationB: new Animation.Base(this.x + 0.5, this.y + 0.5, this.z + 0.5),
       selected_slot: 0,
     };
-    getScreenName(player: number, coords: Callback.ItemUseCoordinates): any {
-      return GUI
-    }
-   created(): void {
-     const animation = new Animation.Item(this.x + 0.5, this.y + 1.2, this.z + 0.5);
-     animation.setItemSize(0.2)
-     animation.setItemRotation(this.x + 0.90, this.y, this.z)
-      for (let i = 0; i < 9; i++) {
-        this.data.AnimationI.push(
-         animation
-        );
-      }
-      Game.message("Котёл прошёл инитиализацию! " + JSON.stringify(this.data.AnimationI));
-    }
-    private decreaseItem(
+
+    protected decreaseItem(
       container: ItemContainer,
       item: ItemStack,
       player: int
@@ -97,15 +91,46 @@ namespace Cauldron {
       );
     }
 
+  };
+
+  export class Worker extends CauldronBase {
+    useNetworkItemContainer: true;
+    getScreenName(player: number, coords: Callback.ItemUseCoordinates): any {
+      return GUI
+    };
+    
+   created(): void {
+      for (let i = 0; i < 9; i++) {
+       
+        this.data["animation_"+i] = new Animation.Item(this.x + 0.5, this.y + 1.2, this.z + 0.5);
+        const data = this.data["animation_" + i] as Animation.Item
+        data.setItemSize(0.2)
+        data.setItemRotation(this.x + 0.90, this.y, this.z);
+        Game.message("Котёл прошёл инициализацию! " + JSON.stringify(this.data["animation_"+i]));
+      }
+      
+    }
+   
+
     onItemUse(
       coords: Callback.ItemUseCoordinates,
       item: ItemStack,
       player: number
     ): boolean {
       this.container.close()
+      const water_anim = this.data.AnimationB as Animation.Base
       const select = this.data.selected_slot as number;
       const slot = this.container.getSlot("slot_" + select);
-      const animation = this.data.AnimationI[select] as Animation.Item;
+      const animation = this.data["animation_"+select] as Animation.Item;
+      if(item.id === VanillaItemID.water_bucket) {
+  
+        water_anim.describe({
+          mesh: WATERMESH
+        });
+        water_anim.load();
+        return;
+      };
+      
       if (slot.count == 0 && item.id != 0) {
         this.decreaseItem(this.container, item, player);
         animation.describeItem({
@@ -113,7 +138,7 @@ namespace Cauldron {
           count: slot.count,
           data: item.data,
         });
-        animation.refresh()
+
         animation.load();
         alert(
           "Только что предмет: " + slot.id + "; был зачислен в слот: " + select
@@ -127,7 +152,7 @@ namespace Cauldron {
           id: 0
         }
         )
-        animation.refresh()
+        animation.load();
         this.data.selected_slot > 0 ? this.data.selected_slot-- : null;
       }
       return true;
@@ -147,24 +172,20 @@ namespace Cauldron {
       }
       if (boiling && tick(10) ) {
         Game.message("Котёл закипел");
-        for (const i in this.data.AnimationI) {
-          const AnimationI = this.data.AnimationI[i] as Animation.Item;
-          // AnimationI.setPos(
-          //   this.x,
-          //   this.y != this.y - 0.4 ? (this.y -= 0.1) : (this.y += 0.1),
-          //   this.z
-          // );
-
-         AnimationI.setItemRotation(this.x + 0.1, this.y < 0.20 ? (this.y += 0.1) : this.y -= 0.1, this.z + 0.1);
+        for (let i = 0; i <= 8; i++) {
+          const animation = this.data["animation_"+i]
+        
+  if(this.container.getSlot("slot_" + i).count > 0) 
+         animation.setItemRotation(this.x + 0.1, this.y + Math.PI, this.z + 0.1);
+         animation.refresh();
         }
-      }
+       }
     }
     destroyBlock(): void {
       this.data.AnimationB.destroy();
-      for (const i in this.data.AnimationI) {
-        this.data.AnimationI[i].destroy();
+      for (let i = 0; i <= 8; i++) {
+        this.data["animation_"+i].destroy();
       }
-      this.data.AnimationI = [];
     }
   }
 
