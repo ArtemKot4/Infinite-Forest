@@ -8,6 +8,12 @@ Translation.addTranslation("Iron cauldron", {
   ru: "Железный котёл"
  })
 
+ Translation.addTranslation("Salt", {
+  ru: "Блок соли",
+  en: "Block of salt"
+ })
+
+
 Translation.addTranslation("Fironia", { ru: "§6Пылающий огнецвет" });
 
 Translation.addTranslation("Bark Eucalyptus", {

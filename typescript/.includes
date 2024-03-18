@@ -26,7 +26,7 @@ items.ts
 items/infinite_shark.ts
 
 dimension/dimension.ts
-dimension/if_base.ts
+dimension/forest.ts
 dimension/vanilla_items.ts
 infinite_table.ts
 structure.ts

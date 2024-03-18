@@ -176,7 +176,7 @@ WATERMESH.addVertex(6/16, 20/16 , 6/16);
           const animation = this.data["animation_"+i]
         
   if(this.container.getSlot("slot_" + i).count > 0) 
-         animation.setItemRotation(this.x + 0.1, this.y + Math.PI, this.z + 0.1);
+         animation.setItemRotation(0, 0.1, 0);
          animation.refresh();
         }
        }

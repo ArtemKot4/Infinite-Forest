@@ -231,170 +231,72 @@ ToolAPI.registerBlockMaterial(
 );
 
 
+new FBlock("salt", [{
+  name: "Salt",
+  texture: [["salt", 0]],
+  inCreative: true
+}]);
 
-TileEntity.registerPrototype(BlockID.dungeon_print_bricks_active, {
-  defaultValues: { onemessage: 0 },
-  useNetworkItemContainer: true,
-  tick: function () {
-    Opening.play();
-    if (World.getThreadTime() % 60 == 0) {
-      this.blockSource.destroyBlock(this.x, this.y, this.z, false);
-      this.blockSource.destroyBlock(this.x, this.y - 1, this.z, false);
-      this.blockSource.destroyBlock(this.x, this.y + 1, this.z, false);
-      this.blockSource.destroyBlock(this.x + 1, this.y - 1, this.z, false);
-      this.blockSource.destroyBlock(this.x + 1, this.y + 1, this.z, false);
-      this.blockSource.destroyBlock(this.x + 1, this.y, this.z, false);
+type tree = 'cherry' | 'eucalyptus' | 'pink';
+class Wood {
+  public static registerLog(type: tree) {
+    const name = (type + "_log")
+    new FBlock(name, [
+    {
+      name,
+      texture: [
+        [type, 0],
+        [type, 0],
+        [type, 1],
+        [type, 1],
+        [type, 1],
+        [type, 1],
+      ],
+      inCreative: true,
+    },
+    {
+      name,
+      texture: [
+        [type, 1],
+        [type, 1],
+        [type, 1],
+        [type, 1],
+        [type, 0],
+        [type, 0],
+      ],
+      inCreative: false,
+    },
+    {
+      name,
+      texture: [
+        [type, 1],
+        [type, 1],
+        [type, 0],
+        [type, 0],
+        [type, 1],
+        [type, 1],
+      ],
+      inCreative: false,
+    },
+  ],
+  );
+  Wood.placeLogBySide(BlockID[name])
+};
+  private static placeLogBySide (type) {
 
-      this.blockSource.setBlock(
-        this.x - 1,
-        this.y - 1,
-        this.z - 1,
-        BlockID.dungeon_print_bricks_deactive,
-        0
-      );
-      this.blockSource.setBlock(
-        this.x - 1,
-        this.y - 1,
-        this.z - 2,
-        BlockID.dungeon_print_bricks_deactive,
-        0
-      );
-      this.blockSource.setBlock(
-        this.x - 1,
-        this.y,
-        this.z - 1,
-        BlockID.dungeon_print_bricks_active_1,
-        0
-      );
-      this.blockSource.setBlock(
-        this.x - 1,
-        this.y,
-        this.z - 2,
-        BlockID.dungeon_print_bricks_deactive,
-        0
-      );
-      this.blockSource.setBlock(
-        this.x - 1,
-        this.y + 1,
-        this.z - 1,
-        BlockID.dungeon_print_bricks_deactive,
-        0
-      );
-      this.blockSource.setBlock(
-        this.x - 1,
-        this.y + 1,
-        this.z - 2,
-        BlockID.dungeon_print_bricks_deactive,
-        0
-      );
+    const hasSide = (coords: Callback.ItemUseCoordinates, side: EBlockSide, region: BlockSource, type) => {
+      if(coords.side != side) return;
+      const place = coords.relative
+      region.setBlock(place.x, place.y, place.z, type, side)
+    };
 
-      if (this.data.onemessage == 0) {
-        Game.message("§9Вы можете идти");
-        this.data.onemessage += 1;
-      }
-    }
-  },
-  // destroy: function (id,count,data,coords,block){
+    Block.registerPlaceFunctionForID(type, (coords, item, block, player, region) => {
+      hasSide(coords, EBlockSide.EAST, region, type);
+      hasSide(coords, EBlockSide.SOUTH, region, type);
+      hasSide(coords, EBlockSide.WEST, region, type);
+      hasSide(coords, EBlockSide.NORTH, region, type)
+    })
+  }
+};
 
-  // }
-});
-
-TileEntity.registerPrototype(BlockID.dungeon_print_bricks_active_1, {
-  defaultValues: { onemessage: 0 },
-  useNetworkItemContainer: true,
-  tick: function () {
-    Opening.play();
-    if (World.getThreadTime() % 60 == 0) {
-      this.blockSource.destroyBlock(this.x, this.y, this.z, false);
-      this.blockSource.destroyBlock(this.x, this.y - 1, this.z, false);
-      this.blockSource.destroyBlock(this.x, this.y + 1, this.z, false);
-      this.blockSource.destroyBlock(this.x, this.y - 1, this.z + 1, false);
-      this.blockSource.destroyBlock(this.x, this.y + 1, this.z + 1, false);
-      this.blockSource.destroyBlock(this.x, this.y, this.z + 1, false);
-      this.blockSource.destroyBlock(this.x, this.y - 1, this.z - 1, false);
-      this.blockSource.destroyBlock(this.x, this.y + 1, this.z - 1, false);
-      this.blockSource.destroyBlock(this.x, this.y, this.z - 1, false);
-
-      this.blockSource.setBlock(
-        this.x,
-        this.y,
-        this.z + 1,
-        BlockID.dungeon_print_bricks_deactive,
-        0
-      );
-
-      this.blockSource.setBlock(
-        this.x,
-        this.y - 1,
-        this.z + 1,
-        BlockID.dungeon_print_bricks_deactive,
-        0
-      );
-
-      this.blockSource.setBlock(
-        this.x,
-        this.y + 1,
-        this.z + 1,
-        BlockID.dungeon_print_bricks_deactive,
-        0
-      );
-
-      this.blockSource.setBlock(
-        this.x + 1,
-        this.y - 1,
-        this.z + 1,
-        BlockID.dungeon_print_bricks_deactive,
-        0
-      );
-
-      this.blockSource.setBlock(
-        this.x + 1,
-        this.y + 1,
-        this.z + 1,
-        BlockID.dungeon_print_bricks_deactive,
-        0
-      );
-
-      this.blockSource.setBlock(
-        this.x + 1,
-        this.y,
-        this.z + 1,
-        BlockID.dungeon_print_bricks_active,
-        0
-      );
-
-      this.blockSource.setBlock(
-        this.x + 2,
-        this.y - 1,
-        this.z + 1,
-        BlockID.dungeon_print_bricks_deactive,
-        0
-      );
-
-      this.blockSource.setBlock(
-        this.x + 2,
-        this.y + 1,
-        this.z + 1,
-        BlockID.dungeon_print_bricks_deactive,
-        0
-      );
-
-      this.blockSource.setBlock(
-        this.x + 2,
-        this.y,
-        this.z + 1,
-        BlockID.dungeon_print_bricks_deactive,
-        0
-      );
-
-      if (this.data.onemessage == 0) {
-        Game.message("§9Вы можете идти");
-        this.data.onemessage += 1;
-      }
-    }
-  },
-  // destroy: function (id,count,data,coords,block,id){
-
-  // }
-});
-
+Wood.registerLog("cherry")
