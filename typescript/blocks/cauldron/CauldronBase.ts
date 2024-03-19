@@ -37,8 +37,8 @@ namespace Cauldron {
     protected setItemFromSlot(animation, player, slot) {
       return (
         Entity.setCarriedItem(player, slot.id, slot.count, slot.data, null),
-        this.container.setSlot("slot_" + this.data.selected_slot, 0, 0, 0),
-        alert("Только что слот " + this.data.selected_slot + "был очищен"),
+        this.container.setSlot(slot, 0, 0, 0),
+        alert("Только что слот " + String(slot) + "был очищен"),
         animation.describeItem({
           id: 0,
         }),
@@ -52,7 +52,8 @@ namespace Cauldron {
          return Entity.damageEntity(player, 1),
           Game.tipMessage(Native.Color.AQUA + Translation.translate("Its hot!"))
     };
-    protected setItemToSlot(animation, player, item, slot) {
+    protected setItemToSlot(animation: Animation.Item, player, item, slot) {
+      const size = hasBlock(item.id) ? 0.1 : 0.4;
       return (
         this.decreaseItem(this.container, item, player),
         animation.describeItem({
@@ -60,6 +61,8 @@ namespace Cauldron {
           count: slot.count,
           data: item.data,
         }),
+        //animation.setPos(randomInt(0.1, 0.9), 1.2, randomInt(0.1, 0.9)),
+        animation.setItemSizeAndRotation(size, randomInt(0.1, 0.9), randomInt(0.1, 0.9), .90 ),
         animation.load(),
         alert(
           "Только что предмет: " +
@@ -70,24 +73,26 @@ namespace Cauldron {
         this.data.selected_slot <= 7 ? this.data.selected_slot++ : null
       );
     };
-    protected rotateItems (animation) {
+    protected rotateItems (animation: Animation.Item) {
       //@ts-ignore
  if(!this.rotation) alert("NON ROTATION")
       //@ts-ignore
-     const x = this.rotation.x < 0.180 ? this.rotation.x+=0.1 : this.rotation.x -= 0.10;
+     const x = this.rotation.x < 0.170 ? this.rotation.x + 0.01 : this.rotation.x - 0.1
      //@ts-ignore
-      const y = this.rotation.y < 0.37 ? this.rotation.y+=0.1 : this.rotation.y-= 0.10;
+      const y = this.rotation.y < 0.150 ? this.rotation.y + 0.01 : this.rotation.y - 0.1
        //@ts-ignore
-      const z = this.rotation.z < 0.100 ? this.rotation.z +=0.1 : this.rotation.z -= 0.10;
+      const z = this.rotation.z < 0.90 ? this.rotation.z + 0.01 : this.rotation.z - 0.1
 
-      return animation.setItemRotation(x, y, z);
+      return animation.setItemRotation(x, y, z),
+      animation.refresh()
+    
     };
-    protected hasBoiling = () => {
-        //@ts-ignore
+    protected hasBoiling() {
+      
          return (this.data.boiling && this.data.water) === true; }
 
   damageUp(y) {
-    if(Entity.getPosition(Player.get()).y === y + 1 && this.hasBoiling()) {
+    if(Entity.getPosition(Player.get()).y === y + 1) {
          CauldronBase.damageByBoiling(Player.get())
     } 
   }

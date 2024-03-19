@@ -4,18 +4,16 @@ export class Worker extends CauldronBase {
     getScreenName(player: number, coords: Callback.ItemUseCoordinates): any {
       return GUI;
     }
-    rotation = {x: 0, y: 0, z: 0};
+   
     created(): void {
-
+      //@ts-ignore
+      this.rotation = {x: 0, y: 0, z: 0};
       for (let i = 0; i < 9; i++) {
         this.data["animation_" + i] = new Animation.Item(
           this.x + 0.5,
           this.y + 1.2,
           this.z + 0.5
         );
-        const data = this.data["animation_" + i] as Animation.Item;
-        data.setItemSize(0.2);
-        data.setItemRotation(this.x + 0.9, this.y, this.z);
       }
     }
 
@@ -28,19 +26,20 @@ export class Worker extends CauldronBase {
       this.container.close();
       const select = this.data.selected_slot as number;
       const slot = this.container.getSlot("slot_" + select);
-      const slot_0 = this.container.getSlot("slot_0").id;
+      const slot_minus = this.container.getSlot("slot_" + (select - 1)).id;
       const animation = this.data["animation_" + select] as Animation.Item;
 
-      if(this.hasBoiling()) Worker.damageByBoiling(player)
+      if(this.hasBoiling()) return Worker.damageByBoiling(player)
       
-      if (slot_0 === EPlants.ELECTRIC_MUSHROOM && item.id === 0) {
+      if (slot_minus === EPlants.ELECTRIC_MUSHROOM && item.id === 0) {
         return electric_damage(player);
      
       };
 
       if (item.id === VanillaItemID.water_bucket) {
+        Entity.setCarriedItem(player, VanillaItemID.bucket, 1, 0, null)
         //@ts-ignore
-        const render = this.water_render = new Animation.Base(this.x, this.y + 0.2, this.z);
+        const render = this.water_render = new Animation.Base(this.x + 0.5, this.y + 1.1, this.z + 0.5);
   
         render.describe({
           mesh: WATERMESH
@@ -51,21 +50,24 @@ export class Worker extends CauldronBase {
         return;
       }
 
+      if(!!!this.data.water) return nonWaterDialog();
+
       if (slot.count == 0 && item.id != 0) {
         return this.setItemToSlot(animation, player, item, slot);
       };
-      if (slot.count > 0 && item.id == 0) {
-        return this.setItemFromSlot(animation, player, slot);
+      if (slot_minus.count > 0 && item.id === 0) {
+        alert("DEBUG: GET ITEM BACK")
+        return this.setItemFromSlot(animation, player, slot_minus);
       };
       
     }
 
     onTick(): void {
       const timer = this.data.timer;
-      const boiling = this.data.boiling;
 
       if (sec(3)) {
-        if (!this.hasBoiling() && timer < 10) {
+        if ((!this.data.boiling && !!this.data.water) && timer < 10) {
+          this.damageUp(this.y)
           Game.message(String("timer value: " + timer));
           this.data.timer++;
         }
@@ -76,12 +78,14 @@ export class Worker extends CauldronBase {
           (this.data.timer = 11);
       }
       if (this.hasBoiling() && tick(3)) {
-        Game.message("Котёл закипел");
+      
         for (let i = 0; i <= 8; i++) {
           const animation = this.data["animation_" + i];
 
           if (this.container.getSlot("slot_" + i).count > 0) {
-            this.rotateItems(animation); }
+            this.rotateItems(animation),
+          onBurn(this) 
+        }
         }
       }
     }
@@ -94,6 +98,5 @@ export class Worker extends CauldronBase {
   }
 
   TileEntity.registerPrototype(BlockID["iron_cauldron"], new Worker());
-  //  BLOCK.registerTile(new Worker());
- 
+
 }

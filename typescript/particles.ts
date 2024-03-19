@@ -119,3 +119,28 @@ const glowworm = Particles.registerParticleType({
       size: { fadeOut: 0, fadeIn: 0, start: 1, end: 0 },
     },
   }); 
+
+  const cauldron_bubble = Particles.registerParticleType({
+    texture: "bubble_cauldron",
+    render: 2,
+    size: [0.7, 1.2],
+    lifetime: [5, 10],
+
+    animators: {
+
+        size: { fadeOut: 0, fadeIn: 0, start: 0.6, end: 0 },
+      },
+  });
+
+
+  enum EParticles {
+    GLOWWORM = glowworm,
+    FLAME_BLUE = flame_blue,
+    FLAME_ORANGE = flame_orange,
+    FLAME_WHITE = flame_white,
+    STAR = star,
+    SMOKE = smoke,
+    VANILLA_RAIN = vanilla_rain,
+    CAULDRON_BUBBLE = cauldron_bubble,
+    CAULDRON_SMOKE = null
+  }

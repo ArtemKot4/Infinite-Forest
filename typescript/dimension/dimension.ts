@@ -35,8 +35,10 @@ const generator = Dimensions.newGenerator({
 });
 InfiniteForest.setGenerator(generator);
 
+interface IPlantDesc {coords: Vector, place: Vector, id: number, random: [number, number]};
+
 class Forest {
-  public static setupPlant (obj: {coords: Vector, place: Vector, id: number, random: [number, number]}) {
+  public static setupPlant (obj: IPlantDesc) {
     const {coords, place, id, random} = obj
     for (let i = 0; i < randomInt(random[0], random[1]); i++) {
       if (BlockSource.getDefaultForActor(Player.getLocal()).getBlockId(coords.x, coords.y+1, coords.z) == 0) {

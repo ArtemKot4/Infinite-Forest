@@ -90,3 +90,15 @@ Translation.addTranslation("Castle print", { ru: "§6Грубое выражен
 
 Translation.addTranslation("Player teleported to Infinite forest", { ru: "Игрок перенесён в бесконечный лес" });
 Translation.addTranslation("Player teleported to overworld", { ru: "Игрок перенесён в обычный мир" });
+
+Translation.addTranslation("You really think that it good idea?", {
+  ru: "Ты правда думаешь что это хорошая идея?"
+})
+
+Translation.addTranslation("Whats the point of that?", {
+  ru: "Какой в этом смысл?"
+})
+
+Translation.addTranslation("Thats now how it works :)", {
+  ru: "Это не так работает :)"
+})

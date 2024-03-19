@@ -53,11 +53,32 @@ namespace Cauldron {
     };
   
     export const WATERMESH = new RenderMesh();
-    WATERMESH.addVertex(-6 / 16, 20 / 16, -6 / 16);
-    WATERMESH.addVertex(6 / 16, 20 / 16, -6 / 16);
-    WATERMESH.addVertex(-6 / 16, 20 / 16, 6 / 16);
+    WATERMESH.addVertex(-6 / 16, 0, -6 / 16);
+    WATERMESH.addVertex(5 / 16, 0, -6 / 16);
+    WATERMESH.addVertex(-6 / 16, 0, 5 / 16);
   
-    WATERMESH.addVertex(6 / 16, 20 / 16, -6 / 16);
-    WATERMESH.addVertex(-6 / 16, 20 / 16, 6 / 16);
-    WATERMESH.addVertex(6 / 16, 20 / 16, 6 / 16);
-}  
+    WATERMESH.addVertex(5 / 16, 0, -6 / 16);
+    WATERMESH.addVertex(-6 / 16, 0, 5 / 16);
+    WATERMESH.addVertex(5 / 16, 0, 5 / 16); //z 6 / 16
+    export function onBurn(that) {
+      const x = randomInt(0.01, 0.06);
+      const z = randomInt(0.01, 0.08);
+      return (
+      spawnParticle(EParticles.CAULDRON_BUBBLE, that.x + x, that.y + 1.1, that.z + z, 0, 0.05, 0 ),
+      spawnParticle(EParticles.CAULDRON_BUBBLE, that.x + x, that.y + 1.1, that.z + z, 0, 0.05, 0 ),
+      spawnParticle(EParticles.CAULDRON_BUBBLE, that.x + x, that.y + 1.1, that.z + z, 0, 0.05, 0 )
+      )
+    };
+
+    export function nonWaterDialog() {
+      const random = randomInt(1, 3);
+      let desc = "";
+      switch (random) {
+        case 3: desc = "You really think that it good idea?"; break;
+        case 2: desc = "Whats the point of that?"; break;
+        case 1: desc = "Thats now how it works :)"; break;
+      }
+      Game.tipMessage(Native.Color.GOLD + Native.Color.UNDERLINE + Translation.translate(desc))
+    }
+};
+
