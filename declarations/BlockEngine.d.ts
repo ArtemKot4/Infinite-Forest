@@ -1886,7 +1886,7 @@ declare abstract class TileEntityBase implements TileEntity {
      * Called when player uses some item on a TileEntity. Replaces "click" function.
      * @returns true if should prevent opening UI.
     */
-    onItemUse(coords: Callback.ItemUseCoordinates, item: ItemStack, player: number): boolean;
+    onItemUse(coords: Callback.ItemUseCoordinates, item: ItemStack, player: number): any //TODO: было boolean;
     private _clickPrevented;
     /**
      * Prevents all actions on click

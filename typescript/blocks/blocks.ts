@@ -1,24 +1,6 @@
 IMPORT("SoundAPI");
 
-IDRegistry.genBlockID("fironia");
-Block.createBlock(
-  "fironia",
-  [{ name: "Fironia", texture: [["fironia", 0]], inCreative: true }],
-  BLOCK_TYPE_FIRE
-);
 
-Block.setAnimateTickCallback(BlockID.fironia, function(x, y, z, id, data) {
- Particles.addParticle(Native.ParticleType.flame,x+0.5,y+0.7,z+0.5,Math.random()/20,Math.random()/20,Math.random()/20)
-});
-
-var render1 = new ICRender.Model();
-var model1 = BlockRenderer.createModel();
-var Fironiashape = new ICRender.CollisionShape();
-var entry = Fironiashape.addEntry();
-entry.addBox(0, 0, 0, 0, 0, 0);
-BlockRenderer.setCustomCollisionShape(BlockID.fironia, -1, Fironiashape);
-
-render1.addEntry(model1);
 IDRegistry.genBlockID("eucalyptus_log");
 Block.createBlock(
   "eucalyptus_log",

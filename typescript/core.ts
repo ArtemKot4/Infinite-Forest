@@ -22,6 +22,18 @@ const BLOCK_TYPE_FIRE = Block.createSpecialType({
   sound: "grass",
 });
 
+const BLOCK_TYPE_ELECTRIC = Block.createSpecialType({
+  lightlevel: 3,
+  rendertype: 91,
+  sound: "grass",
+});
+
+const BLOCK_TYPE_PLANT = Block.createSpecialType({
+  rendertype: 91,
+  sound: "grass",
+
+})
+
 const BLOCK_TYPE_TORCH = Block.createSpecialType({
   lightlevel: 15
 });

@@ -8,6 +8,14 @@ Translation.addTranslation("Iron cauldron", {
   ru: "Железный котёл"
  })
 
+ Translation.addTranslation("Electric pain!", {
+  ru: "Электро-больно!"
+ });
+
+ Translation.addTranslation("Its hot!", {
+  ru: "Горячо!"
+ })
+
  Translation.addTranslation("Salt", {
   ru: "Блок соли",
   en: "Block of salt"

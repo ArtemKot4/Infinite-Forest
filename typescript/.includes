@@ -39,8 +39,11 @@ items/mushroom_umbrella.ts
 
 blocks/blocks.ts
 blocks/torch.ts
-blocks/cauldron.ts 
+blocks/cauldron/base.ts
+blocks/cauldron/CauldronBase.ts
+blocks/cauldron/Worker.ts
 blocks/mark.ts
+blocks/plants.ts
 items/crystals.ts
 items/dusts.ts
 core/callbacks/native_command.ts
