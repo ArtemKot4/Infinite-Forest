@@ -42,7 +42,8 @@ export class Worker extends CauldronBase {
         const render = this.water_render = new Animation.Base(this.x + 0.5, this.y + 1.1, this.z + 0.5);
   
         render.describe({
-          mesh: WATERMESH
+          mesh: WATERMESH,
+          skin: "terrain-atlas/water/water_0.png"
         });
     
         render.load();
@@ -64,8 +65,17 @@ export class Worker extends CauldronBase {
 
     onTick(): void {
       const timer = this.data.timer;
-
       if (sec(3)) {
+        if(!!this.data.water) {
+          //@ts-ignore
+           this.water_render.describe({
+            mesh: WATERMESH,
+            skin: "terrain-atlas/water/water_" + randomInt(0, 10) + ".png"
+          });
+          //@ts-ignore
+          Game.message("Текстурка воды произвела описание: " + this.water_render)
+        };
+
         if ((!this.data.boiling && !!this.data.water) && timer < 10) {
           this.damageUp(this.y)
           Game.message(String("timer value: " + timer));

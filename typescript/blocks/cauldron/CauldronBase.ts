@@ -61,7 +61,7 @@ namespace Cauldron {
           count: slot.count,
           data: item.data,
         }),
-        //animation.setPos(randomInt(0.1, 0.9), 1.2, randomInt(0.1, 0.9)),
+        animation.setPos(this.x + randomInt(0.1, 0.9), this.y, this.z + randomInt(0.1, 0.9)),
         animation.setItemSizeAndRotation(size, randomInt(0.1, 0.9), randomInt(0.1, 0.9), .90 ),
         animation.load(),
         alert(
