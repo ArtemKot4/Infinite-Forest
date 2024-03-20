@@ -53,13 +53,13 @@ namespace Cauldron {
     };
   
     export const WATERMESH = new RenderMesh();
-    WATERMESH.addVertex(-6 / 16, 0, -6 / 16);
-    WATERMESH.addVertex(5 / 16, 0, -6 / 16);
-    WATERMESH.addVertex(-6 / 16, 0, 5 / 16);
+    WATERMESH.addVertex(-6 / 16, 0, -6 / 16, 0, 0);
+    WATERMESH.addVertex(6 / 16, 0, -6 / 16, 1, 0);
+    WATERMESH.addVertex(-6 / 16, 0, 6 / 16, 0, 1);
   
-    WATERMESH.addVertex(5 / 16, 0, -6 / 16);
-    WATERMESH.addVertex(-6 / 16, 0, 5 / 16);
-    WATERMESH.addVertex(5 / 16, 0, 5 / 16); //z 6 / 16
+    WATERMESH.addVertex(6 / 16, 0, -6 / 16, 1, 0);
+    WATERMESH.addVertex(-6 / 16, 0, 6 / 16, 0, 1)
+    WATERMESH.addVertex(6 / 16, 0, 6 / 16, 1, 1); //z 6 / 16
     export function onBurn(that) {
       const x = randomInt(0.01, 0.06);
       const z = randomInt(0.01, 0.08);

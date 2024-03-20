@@ -28,6 +28,9 @@ items/infinite_shark.ts
 dimension/dimension.ts
 dimension/forest.ts
 dimension/vanilla_items.ts
+dimension/green_moon.ts
+dimension/InfiniteTick.ts
+
 infinite_table.ts
 structure.ts
 Eucalyptus Tree.ts
