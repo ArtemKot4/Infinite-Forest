@@ -16,7 +16,7 @@ api/Researchs.ts
 api/recipes/Recipe.ts
 api/recipes/FurnaceRecipe.ts
 api/recipes/WorkbenchRecipe.ts
-
+api/MultiBlock.ts
 
 particles.ts
 core/starfall.ts
@@ -42,9 +42,21 @@ items/mushroom_umbrella.ts
 
 blocks/blocks.ts
 blocks/torch.ts
+
+blocks/mill/base.ts
+blocks/mill/receiver.ts
+blocks/mill/blades.ts
+blocks/mill/main_block.ts
+
 blocks/cauldron/base.ts
 blocks/cauldron/CauldronBase.ts
 blocks/cauldron/Worker.ts
+
+
+
+
+
+
 blocks/mark.ts
 blocks/plants.ts
 items/crystals.ts

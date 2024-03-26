@@ -101,4 +101,24 @@ Translation.addTranslation("Whats the point of that?", {
 
 Translation.addTranslation("Thats now how it works :)", {
   ru: "Это не так работает :)"
-})
+});
+
+Translation.addTranslation("If you don't stop, i must crash game", {
+  ru: "Если ты не остановишься, я буду вынужден крашнуть игру"
+});
+
+Translation.addTranslation("You need to pour water in caludron", {
+  ru: "Для котла нужна вода"
+});
+
+Translation.addTranslation("Stop!", {
+  ru: "Остановись!"
+});
+
+Translation.addTranslation("So little distance!", {
+  ru: "Недостаточно расстояния!"
+});
+
+Translation.addTranslation("You need a blades station!", {
+  ru: "Вам нужна станция!"
+});

@@ -1,4 +1,4 @@
-function randomInt(min, max) {
+function randomInt(min: int, max: int) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
@@ -96,7 +96,6 @@ let time = 0;
 
 Callback.addCallback("PlayerChangedDimension", function (playerUid, from, to) {
   if (Entity.getDimension(playerUid) == InfiniteForest.id) {
-  Updatable.addLocalUpdatable(InfiniteTick())
   time = World.getWorldTime();
     World.setWorldTime(42000);
     Commands.exec("/gamerule doDaylightCycle false");

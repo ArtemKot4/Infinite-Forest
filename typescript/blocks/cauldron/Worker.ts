@@ -6,8 +6,7 @@ export class Worker extends CauldronBase {
     }
    
     created(): void {
-      //@ts-ignore
-      this.rotation = {x: 0, y: 0, z: 0};
+
       for (let i = 0; i < 9; i++) {
         this.data["animation_" + i] = new Animation.Item(
           this.x + 0.5,
@@ -43,7 +42,8 @@ export class Worker extends CauldronBase {
   
         render.describe({
           mesh: WATERMESH,
-          skin: "terrain-atlas/water/water_0.png"
+          skin: "terrain-atlas/water/water_0.png",
+          material: "translurency"
         });
     
         render.load();
@@ -51,7 +51,7 @@ export class Worker extends CauldronBase {
         return;
       }
 
-      if(!!!this.data.water) return nonWaterDialog();
+      if(!!!this.data.water) return nonWaterDialog(player);
 
       if (slot.count == 0 && item.id != 0) {
         return this.setItemToSlot(animation, player, item, slot);
@@ -65,16 +65,16 @@ export class Worker extends CauldronBase {
 
     onTick(): void {
       const timer = this.data.timer;
+      if(!!this.data.water) {
+        for (let i = 0; i <= 8; i++) {
+          const animation = this.data["animation_" + i];
+
+          if (this.container.getSlot("slot_" + i).count > 0) {
+             this.rotateItems(animation)
+        }
+        }
+      }
       if (sec(3)) {
-        if(!!this.data.water) {
-          //@ts-ignore
-           this.water_render.describe({
-            mesh: WATERMESH,
-            skin: "terrain-atlas/water/water_" + randomInt(0, 10) + ".png"
-          });
-          //@ts-ignore
-          Game.message("Текстурка воды произвела описание: " + this.water_render)
-        };
 
         if ((!this.data.boiling && !!this.data.water) && timer < 10) {
           this.damageUp(this.y)
@@ -88,15 +88,8 @@ export class Worker extends CauldronBase {
           (this.data.timer = 11);
       }
       if (this.hasBoiling() && tick(3)) {
-      
-        for (let i = 0; i <= 8; i++) {
-          const animation = this.data["animation_" + i];
-
-          if (this.container.getSlot("slot_" + i).count > 0) {
-            this.rotateItems(animation),
-          onBurn(this) 
-        }
-        }
+        onBurn(this) 
+        
       }
     }
     destroyBlock(): void {

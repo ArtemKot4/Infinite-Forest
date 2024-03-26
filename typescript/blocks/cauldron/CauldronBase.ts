@@ -61,10 +61,11 @@ namespace Cauldron {
           count: slot.count,
           data: item.data,
         }),
-        animation.setPos(this.x + randomInt(0.1, 0.9), this.y, this.z + randomInt(0.1, 0.9)),
-        animation.setItemSizeAndRotation(size, randomInt(0.1, 0.9), randomInt(0.1, 0.9), .90 ),
+        animation.setPos(this.x + 0.5 + randomInt(0.0001, 0.0004), this.y + 1.2, this.z + 0.5
+        ),
+        animation.setItemSizeAndRotation(size, randomInt(0.1, 0.9), randomInt(0.1, 0.9), Math.PI / 2 ),
         animation.load(),
-        alert(
+        Game.message(
           "Только что предмет: " +
             slot.id +
             "; был зачислен в слот: " +
@@ -74,17 +75,11 @@ namespace Cauldron {
       );
     };
     protected rotateItems (animation: Animation.Item) {
-      //@ts-ignore
- if(!this.rotation) alert("NON ROTATION")
-      //@ts-ignore
-     const x = this.rotation.x < 0.170 ? this.rotation.x + 0.01 : this.rotation.x - 0.1
-     //@ts-ignore
-      const y = this.rotation.y < 0.150 ? this.rotation.y + 0.01 : this.rotation.y - 0.1
-       //@ts-ignore
-      const z = this.rotation.z < 0.90 ? this.rotation.z + 0.01 : this.rotation.z - 0.1
-
-      return animation.setItemRotation(x, y, z),
-      animation.refresh()
+      const coord = (value1: int, value2: int) => !!this.data.boiling ? value1 : value2
+   animation.transform().rotate(coord(0.008, 0.003),
+    coord(0.006, 0.001),
+     randomInt(0.001, 0.003));
+      animation.refresh();
     
     };
     protected hasBoiling() {

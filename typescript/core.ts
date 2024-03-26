@@ -118,5 +118,12 @@ const ObjectValues = function(obj) {
 const tick = time => World.getThreadTime() % time == 0;
 const sec = sec => tick(20 * sec);
 
-const hasBlock = (id) => id < 255 && id > 8192
-const hasItem = (id) => id > 255 && id < 8192
+const hasBlock = (id) => id < 255 && id > 8192;
+const hasItem = (id) => id > 255 && id < 8192;
+
+const VMath = {
+  randomValue: function (...values): any {
+    const random = values[Math.floor(Math.random() * values.length)];
+    return random;
+  },
+};
