@@ -3,8 +3,8 @@ namespace Mill {
     {
       name: "Mill main block",
       texture: [
-        ["pinkWood", 1],
-        ["pinkWood", 1],
+        ["pink_log", 1],
+        ["pink_log", 1],
         ["mill_main_block", 0],
         ["mill_main_block", 0],
         ["mill_main_block", 1],
@@ -13,6 +13,7 @@ namespace Mill {
       inCreative: true,
     },
   ]);
+
 
   export const BLADES_STATION = new FBlock("mill_blades_station", [
     {
@@ -42,5 +43,11 @@ namespace Mill {
     RECEIVER = BlockID["mill_receiver"],
     BLADES = BlockID["mill_blades"],
     BLADES_STATION = BlockID["mill_blades_station"],
-  }
+  };
+
+  Block.setDestroyLevelForID(EMillID.MAIN_BLOCK, EDestroyLevel.IRON);
+  Block.setDestroyLevelForID(EMillID.BLADES_STATION, EDestroyLevel.STONE);
+  Block.setDestroyLevelForID(EMillID.RECEIVER, EDestroyLevel.IRON);
+  Block.setDestroyLevelForID(EMillID.BLADES, EDestroyLevel.WOOD);
+
 }

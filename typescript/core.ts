@@ -130,3 +130,11 @@ const VMath = {
     return gradus * Math.PI / 180
   }
 };
+
+enum EDestroyLevel {
+  HAND = 0,
+  WOOD = 1,
+  STONE = 2,
+  IRON = 3,
+  DIAMOND = 4
+}

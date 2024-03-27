@@ -62,6 +62,7 @@ class FItem {
       const item = Entity.getCarriedItem(Player.get()).id;
      if(item !== ItemID[ind.item] && World.getThreadTime() % 5 == 0) return;
         return ind.func(); //? механика требует переработки
+        //Временно заморожено в callbacks/tick
     }
   }
   public getItemForHand(func: () => void) {

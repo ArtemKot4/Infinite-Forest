@@ -14,6 +14,7 @@ namespace Cauldron {
     }
   );
   BLOCK.visual();
+    Block.setDestroyLevel("iron_cauldron", EDestroyLevel.IRON);
 
   const content = { elements: {} };
 
