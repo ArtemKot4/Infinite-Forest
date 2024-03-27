@@ -11,7 +11,7 @@ type int = number;
 type universal = string | number;
 type name = string;
 
-
+const AIR = 0;
 
 const Mistical = new Sound("Light.ogg");
 const Opening = new Sound("Opening.ogg");

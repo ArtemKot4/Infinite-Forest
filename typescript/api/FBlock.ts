@@ -18,7 +18,7 @@ class FBlock {
 
     public static destroyByMessage(message, blockSource: BlockSource, that): void {
        return ( blockSource.destroyBlock(that.x, that.y, that.z, true),
-        Particles.addParticle(EParticleType.CRIT, that.x, that.y, that.z, 0, 0.1, 0),
+        Particles.addParticle(EParticleType.CRIT, that.x, that.y, that.z, 0.03, 0.1, 0.03),
         Game.tipMessage(Native.Color.RED + Translation.translate(message))
        )
       }
