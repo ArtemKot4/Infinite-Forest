@@ -15,7 +15,7 @@ class Main extends MultiBlock {
       return 0
     }
   public onTick(): void {
-    if(World.getThreadTime() % 20 * 10 === 0){
+    if(World.getThreadTime() % 300 === 0){
       const y = this.getBlockByHeight(50, EMillID.BLADES_STATION)
       Game.message("высота станции над " + y)
       if(!!this.getBlockByHeight(50, EMillID.BLADES_STATION)) {

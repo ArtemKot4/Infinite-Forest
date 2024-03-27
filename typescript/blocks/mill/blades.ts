@@ -100,9 +100,19 @@ namespace Mill {
       }
     }
     init(): void {
-      const y = this.blockSource.getBlockId(this.x, this.y, this.z + 1) === EMillID.BLADES_STATION ? 180 : 0
       this.destroyIfCondition();
       this.researchBlocksToBottom();
+      const getStation = (x, z) => this.getBlock(x, this.y, z, EMillID.BLADES_STATION);
+      const y = !getStation(this.x, this.z + 1) &&
+      !getStation(this.x, this.z - 1) ?
+      (!getStation(this.x + 1, this.z) ? 90 : -90) :
+       !getStation(this.x, this.z + 1) ? 180 : 0;
+       //@ts-ignore
+          this.coords = {
+            x: y === 90 || y === -90 ? this.data.speed : 0,
+            z: y === 180 || y === 0 ? this.data.speed : 0
+          }
+
       //@ts-ignore
       const animation = (this.animation = generateBlades(this, 0, y, 0));
       animation.load();
@@ -114,7 +124,8 @@ namespace Mill {
       //@ts-ignore
       const animation = this.animation as Animation.Base;
       animation.load();
-      animation.transform().rotate(0, 0, this.data.speed);
+      //@ts-ignore
+      animation.transform().rotate(this.coords.x, 0, this.coords.z );
       animation.refresh();
     }
     destroy(): boolean {

@@ -41,8 +41,8 @@ class Wood {
   private registerPlanksSlabs() {
     const type = this.type;
     const name = type + "_planks";
- //@ts-ignore
-    BlockRegistry.createSlabs(name + "_slabs", BlockID[name + "_slabs"], [
+
+    BlockRegistry.createSlabs(name + "_slabs", name, [
         { name: name + "_slabs", texture: [[name, 0]], inCreative: true },
       ]);
 
@@ -60,8 +60,8 @@ class Wood {
       Block.setDestroyTime(BlockID[name], 0.4);
       ToolAPI.registerBlockMaterial(BlockID[name], "wood");
 
-    this.registerPlanksSlabs();
-    this.registerPlanksStairs();
+    //this.registerPlanksSlabs();
+    //this.registerPlanksStairs();
 
     }
   
