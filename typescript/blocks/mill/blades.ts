@@ -1,8 +1,31 @@
 namespace Mill {
+
+  export function generateBlades(that, x: int = 0, y: int = 0, z: int = 0) {
+    const mesh = new RenderMesh();
+    mesh.importFromFile(MODELSDIR + "mill_blades.obj", "obj", {
+      scale: [2.5, 2.5, 2.5],
+      invertV: false,
+      noRebuild: false,
+    });
+      mesh.rotate(VMath.radian(x), VMath.radian(y), VMath.radian(z))
+    //@ts-ignore
+    const animation = new Animation.Base(
+      that.x + 0.5,
+      that.y + 0.5,
+      that.z + 0.5
+    );
+    animation.describe({
+      mesh,
+      skin: "terrain-atlas/mill/mill_blades.png",
+    });
+    return animation;
+  };
+
+
   class Blades extends MultiBlock {
     public defaultValues = {
       work: false,
-      speed: 0.001,
+      speed: 0,
     };
     public actionStation(x, z) {
 
@@ -30,7 +53,8 @@ namespace Mill {
       };
 
   Game.message("что возвращает actionStation" + !!this.actionStation)
-      if(!!!this.actionStation(this.x, this.z + 1) ?? !!!this.actionStation(this.x, this.z - 1) ) {
+      if(!!!this.actionStation(this.x, this.z + 1) ?? 
+      !!!this.actionStation(this.x, this.z - 1) ) {
 
         return FBlock.destroyByMessage(
           "You need a blades station!",
@@ -55,23 +79,8 @@ namespace Mill {
     init(): void {
       this.destroyIfCondition();
       this.researchBlocksToBottom();
-      const mesh = new RenderMesh();
-      mesh.importFromFile(MODELSDIR + "mill_blades.obj", "obj", {
-        scale: [2.5, 2.5, 2.5],
-        invertV: false,
-        noRebuild: false,
-      });
-
       //@ts-ignore
-      const animation = (this.animation = new Animation.Base(
-        this.x + 0.5,
-        this.y + 0.5,
-        this.z + 0.5
-      ));
-      animation.describe({
-        mesh,
-        skin: "terrain-atlas/mill/mill_blades.png",
-      });
+      const animation = this.animation = generateBlades(this);
       animation.load();
     }
 
@@ -92,7 +101,8 @@ namespace Mill {
       //@ts-ignore
       this.animation = null;
       return false;
-    }
+    };
+
   }
 
   TileEntity.registerPrototype(EMillID.BLADES, new Blades());

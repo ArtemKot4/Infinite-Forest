@@ -126,4 +126,7 @@ const VMath = {
     const random = values[Math.floor(Math.random() * values.length)];
     return random;
   },
+  radian(gradus: int): int {
+    return gradus * Math.PI / 180
+  }
 };

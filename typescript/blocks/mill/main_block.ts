@@ -7,8 +7,9 @@ class Main extends MultiBlock {
        converter: false        
     };
     public getBlockByHeight (height, id) {
-        for(let i = 1; i < height; i++)
-        return this.getBlockByTile(this.x, this.y + i, this.z, id);
+        for(let i = 1; i < height; i++) {
+        return this.getBlock(this.x, this.y + i, this.z, id);
+        }
     }
   public onTick(): void {
       if(this.getBlockByHeight(9, EMillID.BLADES_STATION)) {
