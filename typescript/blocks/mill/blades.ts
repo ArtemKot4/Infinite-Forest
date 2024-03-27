@@ -2,9 +2,18 @@ namespace Mill {
   class Blades extends MultiBlock {
     public defaultValues = {
       work: false,
-      speed: 15,
+      speed: 0.001,
     };
+    public actionStation(x, z) {
+
+      return this.blockSource.getBlockId(
+        x,
+        this.y,
+        z) === EMillID.BLADES_STATION
+    };
+
     public destroyIfCondition() {
+      
       let height = [];
       //block checks for place if condition is do not valid
       for (let i = 1; i <= 5; i++) {
@@ -20,32 +29,17 @@ namespace Mill {
         );
       };
 
+  Game.message("что возвращает actionStation" + !!this.actionStation)
+      if(!!!this.actionStation(this.x, this.z + 1) ?? !!!this.actionStation(this.x, this.z - 1) ) {
 
-      if (
-        this.blockSource.getBlockId(
-          this.x,
-          this.y,
-          this.z - 1)
-      ){
-
-        if(
-          this.blockSource.getBlockId(
-          this.x,
-          this.y,
-          this.z + 1) !== EMillID.BLADES_STATION
-      ) {
         return FBlock.destroyByMessage(
           "You need a blades station!",
           this.blockSource,
           this
         );
+
       }
-        return FBlock.destroyByMessage(
-          "You need a blades station!",
-          this.blockSource,
-          this
-        );
-      }
+       
     }
 
     researchBlocksToBottom() {
