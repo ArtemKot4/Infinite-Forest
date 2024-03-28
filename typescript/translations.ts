@@ -122,3 +122,7 @@ Translation.addTranslation("So little distance!", {
 Translation.addTranslation("You need a blades station!", {
   ru: "Вам нужна станция!"
 });
+
+Translation.addTranslation("You need a station", {
+  ru: "Вам необходима станция"
+});

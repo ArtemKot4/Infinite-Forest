@@ -1,4 +1,5 @@
-// Callback.addCallback("LocalTick", () => {
+// Callback.addCallback("LocalTick", () => { 
+// })
 //   FItem.onTick();
 //   let pos = Player.getPosition();
 //   if (Player.getDimension() == InfiniteForest.id) {

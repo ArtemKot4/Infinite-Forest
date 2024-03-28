@@ -45,6 +45,7 @@
 		"blocks/mill/base.ts",
 		"blocks/mill/receiver.ts",
 		"blocks/mill/blades_station.ts",
+		"blocks/mill/blades_renders.ts",
 		"blocks/mill/blades.ts",
 		"blocks/mill/main_block.ts",
 		"blocks/cauldron/base.ts",
@@ -57,6 +58,7 @@
 		"core/callbacks/native_command.ts",
 		"core/callbacks/level_displayed.ts",
 		"core/callbacks/dimension_loaded.ts",
+		"core/callbacks/native_gui_changed.ts",
 		"core/callbacks/tick.ts"
 	]
 }

@@ -1,38 +1,34 @@
-namespace Mill { 
-
-class Main extends MultiBlock {
+namespace Mill {
+  class Main extends MultiBlock {
     public defaultValues = {
-       electric: false,
-       wind: false,
-       converter: false        
+      electric: false,
+      wind: false,
+      converter: false,
     };
-    public getBlockByHeight (height, id): any {
-        for(let i = 1; i < height; i++) {
-        if(this.getBlock(this.x, this.y + i, this.z, id)) {
-          return i
-        }
-        }
-      return 0
-    }
-  public onTick(): void {
-    if(World.getThreadTime() % 300 === 0){
-      const y = this.getBlockByHeight(50, EMillID.BLADES_STATION)
-      Game.message("высота станции над " + y)
-      if(!!this.getBlockByHeight(50, EMillID.BLADES_STATION)) {
-this.getBlockDatas(this.x, y, this.z, "power")
+    public onTick(): void {}
+    public onItemUse(
+      coords: Callback.ItemUseCoordinates,
+      item: ItemStack,
+      player: number
+    ) {
+      const y = this.getBlockByHeight(50, EMillID.BLADES_STATION);
+
+      if (!this.getBlock(this.x, this.y + y, this.z, EMillID.BLADES_STATION)) {
+        return Game.tipMessage(
+          Native.Color.GREEN + Translation.translate("You need a station")
+        );
       }
+      this.setBlockDatas(this.x, this.y + y, this.z, "power", true);
+    };
+
+    destroy(): boolean {
+      const y = this.getBlockByHeight(50, EMillID.BLADES_STATION);
+      if(this.getBlock(this.x, this.y + y, this.z, EMillID.BLADES_STATION)) {
+        this.setBlockDatas(this.x, this.y + y, this.z, "power", false);
       };
+      return false
     }
-      public onItemUse(coords: Callback.ItemUseCoordinates, item: ItemStack, player: number) {
-        const y = this.getBlockByHeight(50, EMillID.BLADES_STATION);
-        this.setBlockDatas(this.x, y, this.z, "power", true)
-        Game.message(this.getBlockDatas(this.x, y, this.z, "power"))
-      
-      };
+  }
 
-
-}
-
-TileEntity.registerPrototype(EMillID.MAIN_BLOCK, new Main())
-
+  TileEntity.registerPrototype(EMillID.MAIN_BLOCK, new Main());
 }

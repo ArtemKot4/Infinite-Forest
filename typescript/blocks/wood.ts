@@ -20,6 +20,7 @@ class Wood {
             [name, 1],
             [name, 1],
           ],
+          inCreative: true
         },
       ]);
   

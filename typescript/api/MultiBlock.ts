@@ -4,15 +4,22 @@ class MultiBlock extends TileEntityBase {
         return this.blockSource.getBlockId(x, y, z) === id
     };
     public getBlockDatas(x: int, y: int, z: int, value) {
-        if(TileEntity.getTileEntity(x, y, z)) {
-        return TileEntity.getTileEntity(x, y, z, this.blockSource)["data"][value];
-        } else {
-            Game.message("Извините, но tile entity не найден для получения данных")
-        }
+        
+        return TileEntity.getTileEntity(x, y, z) &&
+        TileEntity.getTileEntity(x, y, z, this.blockSource)["data"][value];
+
     };
     public setBlockDatas(x, y, z, value, data) {
       if(TileEntity.getTileEntity(x, y, z, this.blockSource)) {
         return TileEntity.getTileEntity(x, y, z, this.blockSource)["data"][value] = data
       }
+    };
+    public getBlockByHeight(height, id): int {
+      for (let i = 1; i < height; i++) {
+        if (this.getBlock(this.x, this.y + i, this.z, id)) {
+          return i;
+        }
+      }
+      return 0;
     }
 };
