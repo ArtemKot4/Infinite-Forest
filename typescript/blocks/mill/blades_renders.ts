@@ -21,7 +21,7 @@ namespace Mill {
         //model
         const model = ItemModel.getForWithFallback(EMillID.BLADES, 0);
         const mesh = bladeMesh({ scale: [0.5, 0.5, 0.5],
-          translate: [0.8, 1, 0.7],invertV: false, noRebuild: false });
+          translate: [0.5, 0.8, 0.7],invertV: false, noRebuild: false });
         mesh.rotate(0, VMath.radian(30), 0);
     
     
@@ -32,9 +32,9 @@ namespace Mill {
     
       })();
     
-      export function generateBlades(that, x: int = 0, y: int = 0, z: int = 0) { 
+      export function generateBlades(that, x: int = 0, y: int = 0, z: int = 0, scale: int) { 
         const mesh = bladeMesh({
-          scale: [2.5, 2.5, 2.5],
+          scale: [scale, scale, scale],
           invertV: false,
           noRebuild: false,
         });

@@ -35,7 +35,7 @@ const UnlitTorch = new AdvancedBlock(
     {
       name: "Eucalyptus Torch",
       texture: [["eucalyptus_torch", 0]],
-      inCreative: true,
+      inCreative: false,
     },
   ],
   {
@@ -51,7 +51,7 @@ const FlamedTorch = new AdvancedBlock(
     {
       name: "Flaming Eucalyptus Torch",
       texture: [["flaming_eucalyptus_torch", 0]],
-      inCreative: true,
+      inCreative: false,
       data: BLOCK_TYPE_TORCH,
     },
   ],
@@ -67,7 +67,7 @@ const IcedTorch = new AdvancedBlock(
     {
       name: "Iced Eucalyptus Torch",
       texture: [["iced_eucalyptus_torch", 0]],
-      inCreative: true,
+      inCreative: false,
       data: BLOCK_TYPE_ICED_TORCH,
     },
   ],
@@ -133,4 +133,15 @@ TileEntity.registerPrototype(BlockID["eucalyptus_torch"], {
     },
   },
 });
+
+Block.setAnimateTickCallback(BlockID["flamed_eucalyptus_torch"], (x, y, z, id, data) => {
+  Entity.spawn(x, y, z, EEntityType.LIGHTNING_BOLT);
+  const blockSource = BlockSource.getDefaultForActor(Player.getLocal());
+  (() => {blockSource.setBlock(x, y, z, BlockID["eucalyptus_torch"], 0);
+  TileEntity.addTileEntity(x, y, z, blockSource);
+  Game.message("Тайл: " + TileEntity.getTileEntity(x, y, z, blockSource))
+})()
+
+
+})
 

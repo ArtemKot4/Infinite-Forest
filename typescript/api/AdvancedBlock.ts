@@ -40,9 +40,10 @@ class AdvancedBlock extends FBlock {
       const region = BlockSource.getDefaultForActor(player);
       if (condition) return condition(coords, item, block, player, region);
       const place = coords.relative;
- 
+   if(region.getBlockId(coords.x, coords.y - 1, coords.z) === AIR) return;
+   //если воздух, то ставить нельзя
      return (region.setBlock(place.x, place.y, place.z, BlockID[this.id], data || 0),
-     TileEntity.addTileEntity(coords.x, coords.y, coords.z, region));
+     TileEntity.addTileEntity(place.x, place.y, place.z, region));
     });
   };
   public registerTile(prototype): void {

@@ -44,6 +44,8 @@ Translation.addTranslation("Mill blades", {
   en: "§aMill blades"
 });
 
+Translation.addTranslation("eucalyptus_log", { ru: "§2Эвкалипт" });
+
 Translation.addTranslation("pink_log", { ru: "§dРозовое Дерево" });
 
 Translation.addTranslation("pink_planks", { ru: "§dДоски из розового дерева" });

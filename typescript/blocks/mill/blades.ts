@@ -5,6 +5,7 @@ namespace Mill {
     public defaultValues = {
       work: false,
       speed: 0,
+      height: 0
     };
     public actionStation(x, z) {
 
@@ -13,14 +14,15 @@ namespace Mill {
       );
     }
 
-    public destroyIfCondition() {
+    public destroyIfCondition(animation: Animation.Base) {
 
-      const dialog = () => FBlock.destroyByMessage(
-        "You need a blades station!",
+      const dialog = (message) => { FBlock.destroyByMessage(
+        message,
         this.blockSource,
         this
       );
-      
+      animation.destroy();
+      }
    //block checks for place if condition is do not valid
       let height = [];
    
@@ -31,11 +33,7 @@ namespace Mill {
       };
 
       if (height.length < 5) {
-        return FBlock.destroyByMessage(
-          "So little distance!",
-          this.blockSource,
-          this
-        );
+        return dialog("So little distance!")
       }
 
 
@@ -45,13 +43,15 @@ namespace Mill {
         if(!!this.actionStation(this.x, this.z - 1)) return;
         if(!!this.actionStation(this.x + 1, this.z)) return;
         if(!!this.actionStation(this.x - 1, this.z)) return;
-        return dialog();
+        return dialog("You need a blades station!");
       }
-    }
+    };
+
     researchBlocksToBottom() {
-      for (let i = 1; i <= 15; i++) {
+      for (let i = 1; i <= 50; i++) {
         if (this.blockSource.getBlockId(this.x, this.y - i, this.z) === AIR) {
-          i < 10 ? (this.data.speed += 0.001) : (this.data.speed += 0.01);
+          i < 20 ? (this.data.speed += 0.001) : (this.data.speed += 0.005);
+          this.data.height += 1;
         } else {
           break;
           return;
@@ -60,7 +60,7 @@ namespace Mill {
     };
 
     init(): void {
-      this.destroyIfCondition();
+
       this.researchBlocksToBottom();
       const getStation = (x, z) => this.getBlock(x, this.y, z, EMillID.BLADES_STATION);
       const y = !getStation(this.x, this.z + 1) &&
@@ -72,10 +72,14 @@ namespace Mill {
             x: y === 90 || y === -90 ? this.data.speed : 0,
             z: y === 180 || y === 0 ? this.data.speed : 0
           }
-
-      //@ts-ignore
-      const animation = (this.animation = generateBlades(this, 0, y, 0));
+  const height = this.data.height
+const size = height < 15 ? 2.5 : height / 6.7
+//было height < 20 ? 2.5 : height / 7
+            //@ts-ignore
+      const animation = (this.animation = generateBlades(this, 0, y, 0,
+       size));
       animation.load();
+      this.destroyIfCondition(animation);
     }
 
     onTick(): void {
@@ -91,11 +95,14 @@ namespace Mill {
       animation.refresh();
       }
 
-      if(World.getThreadTime()% 60 === 0) {
+      if(World.getThreadTime() % 60 === 0) {
         this.data.speed = 0;
+        this.data.height = 0;
         this.researchBlocksToBottom();
       };
-
+           if(World.getThreadTime() % 2 === 0 && Entity.getPosition(Player.getLocal()).x === this.x + 1) {
+            Entity.addVelocity(Player.getLocal(), 0, 0.1, 0);
+           }
     }
     destroy(): boolean {
       //@ts-ignore
@@ -111,10 +118,10 @@ namespace Mill {
     //@ts-ignore
     const coords_ = this.coords;
     animation.load();
-    animation.transform().rotate(coords_.x, 0, coords_.z, );
+    this.data.height < 30 && animation.transform().rotate(coords_.x / 5, 0, coords_.z / 5, );
     animation.refresh();
       } else {
-      bladesHurt(player);
+      bladesHurt(player, this.data.height);
       };
   };
   }

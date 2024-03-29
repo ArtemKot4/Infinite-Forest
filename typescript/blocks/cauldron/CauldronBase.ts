@@ -53,7 +53,8 @@ namespace Cauldron {
           Game.tipMessage(Native.Color.AQUA + Translation.translate("Its hot!"))
     };
     protected setItemToSlot(animation: Animation.Item, player, item, slot) {
-      const size = hasBlock(item.id) ? 0.06 : 0.2;
+      const size = hasBlock(item.id) ? 0.2 : 0.5;
+      //0.5 было 0.3
       return (
         this.decreaseItem(this.container, item, player),
         animation.describeItem({

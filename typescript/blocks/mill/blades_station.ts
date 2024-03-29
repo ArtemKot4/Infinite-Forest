@@ -11,6 +11,8 @@ namespace Mill {
         this.setupWorkToBlades(this.x, this.z - 1);
         this.setupWorkToBlades(this.x, this.z + 1);
       };
+
+      if(!!this.data.power) Mushroom.particle(this, 1.1)
     
     }
 

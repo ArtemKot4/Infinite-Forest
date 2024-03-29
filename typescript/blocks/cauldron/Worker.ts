@@ -36,7 +36,8 @@ namespace Cauldron {
       }
 
       if (item.id === VanillaItemID.water_bucket) {
-        Entity.setCarriedItem(player, VanillaItemID.bucket, 1, 0, null);
+        
+      
         //@ts-ignore
         const render = (this.water_render = new Animation.Base(
           this.x + 0.5,
@@ -52,7 +53,9 @@ namespace Cauldron {
 
         render.load();
         this.data.water = true;
-        return;
+        if(Game.getGameMode() === EGameMode.CREATIVE) return;
+        Entity.setCarriedItem(player, VanillaItemID.bucket, 1, 0, null);
+         return;
       }
 
       if (!!!this.data.water) return nonWaterDialog(player);

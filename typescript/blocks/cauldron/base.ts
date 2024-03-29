@@ -26,9 +26,13 @@ namespace Cauldron {
 
   export const GUI = new UI.StandardWindow(content);
 
-  export function itemMorph(animation, container, name, slot) {
-    const IDBlock = VMath.randomValue(VanillaBlockID.gravel, VanillaBlockID.dirt, BlockID.eucalyptus_log, BlockID.pink_log);
-    const IDItem = VMath.randomValue(VanillaBlockID.seagrass, VanillaBlockID.grass, VanillaBlockID.red_mushroom, VanillaBlockID.brown_mushroom)
+  export function itemMorph(animation: Animation.Item, container, name, slot) {
+    const size = hasBlock(slot.id) ? 0.2 : 0.3;
+    const IDBlock = VMath.randomValue(VanillaBlockID.gravel, VanillaBlockID.dirt, 
+      BlockID.eucalyptus_log, BlockID.pink_log);
+
+    const IDItem = VMath.randomValue(VanillaBlockID.seagrass, VanillaBlockID.grass, 
+      VanillaBlockID.red_mushroom, VanillaBlockID.brown_mushroom)
     container.setSlot(
       name,
       hasBlock(slot.id) ? IDBlock : IDItem,
@@ -40,7 +44,9 @@ namespace Cauldron {
       id: slot.id,
       count: slot.count,
       data: slot.data,
-    })
+    });
+    animation.setItemSize(size);
+    animation.refresh();
   }
 
   export const recipes = {
@@ -85,7 +91,7 @@ namespace Cauldron {
         EParticles.CAULDRON_BUBBLE,
         that.x - x,
         that.y + 1.1,
-        that.z,
+        that.z + 0.4,
         0,
         0.02,
         0
@@ -94,7 +100,7 @@ namespace Cauldron {
         EParticles.CAULDRON_BUBBLE,
         that.x + x,
         that.y + 1.1,
-        that.z,
+        that.z + 0.5,
         0,
         0.02,
         0
@@ -103,7 +109,7 @@ namespace Cauldron {
         EParticles.CAULDRON_BUBBLE,
         that.x + x,
         that.y + 1.1,
-        that.z,
+        that.z + 0.6,
         0,
         0.02,
         0

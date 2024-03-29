@@ -50,10 +50,11 @@ namespace Mill {
   Block.setDestroyLevelForID(EMillID.RECEIVER, EDestroyLevel.IRON);
   Block.setDestroyLevelForID(EMillID.BLADES, EDestroyLevel.WOOD);
 
-  export function bladesHurt(player) {
+  export function bladesHurt(player, height) {
     if(Game.getGameMode() === EGameMode.CREATIVE) return;
-    Entity.damageEntity(player, 3);
-    Game.tipMessage(Native.Color.RED + Translation.translate("It harts!"))
+    const color_validation = height < 20 ? Native.Color.GREEN : height < 35 ? Native.Color.RED : Native.Color.DARK_RED;
+    Entity.damageEntity(player, height / 2.7);
+    Game.tipMessage(color_validation + Translation.translate("It harts!"))
   }; 
 
   
