@@ -7,8 +7,8 @@ const changeTorchSpecial = (block, item, special: "iced" | "flamed", coords) => 
  spawnParticle(smoke, coords.x+ 0.5, coords.y + 0.8, coords.z + 0.5,
    0, 0.1, 0); };
      region.setBlock(coords.x, coords.y, coords.z, BlockID[special + "_eucalyptus_torch"],0)
-      Game.message(JSON.stringify(TileEntity.addTileEntity(coords.relative.x,
-         coords.relative.y, coords.relative.z, region)));
+      Game.message(JSON.stringify(TileEntity.addTileEntity(coords.x,
+         coords.y, coords.z, region)));
  };
  
 }

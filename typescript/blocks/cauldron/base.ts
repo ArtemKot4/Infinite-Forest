@@ -26,6 +26,23 @@ namespace Cauldron {
 
   export const GUI = new UI.StandardWindow(content);
 
+  export function itemMorph(animation, container, name, slot) {
+    const IDBlock = VMath.randomValue(VanillaBlockID.gravel, VanillaBlockID.dirt, BlockID.eucalyptus_log, BlockID.pink_log);
+    const IDItem = VMath.randomValue(VanillaBlockID.seagrass, VanillaBlockID.grass, VanillaBlockID.red_mushroom, VanillaBlockID.brown_mushroom)
+    container.setSlot(
+      name,
+      hasBlock(slot.id) ? IDBlock : IDItem,
+      slot.count,
+      slot.data,
+      null
+    );
+    animation.describeItem({
+      id: slot.id,
+      count: slot.count,
+      data: slot.data,
+    })
+  }
+
   export const recipes = {
     data: {},
     registry(obj: { input; output; time }): void {
@@ -63,13 +80,12 @@ namespace Cauldron {
   WATERMESH.addVertex(6 / 16, 0, 6 / 16, 1, 1); //z 6 / 16
   export function onBurn(that) {
     const x = randomInt(0.01, 0.02);
-    const z = randomInt(-0.02, 0.02);
     return (
       spawnParticle(
         EParticles.CAULDRON_BUBBLE,
-        that.x + x,
+        that.x - x,
         that.y + 1.1,
-        that.z + z,
+        that.z,
         0,
         0.02,
         0
@@ -78,7 +94,7 @@ namespace Cauldron {
         EParticles.CAULDRON_BUBBLE,
         that.x + x,
         that.y + 1.1,
-        that.z + z,
+        that.z,
         0,
         0.02,
         0
@@ -87,7 +103,7 @@ namespace Cauldron {
         EParticles.CAULDRON_BUBBLE,
         that.x + x,
         that.y + 1.1,
-        that.z + z,
+        that.z,
         0,
         0.02,
         0

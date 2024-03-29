@@ -8,6 +8,7 @@ class FBlock {
           );
         
     };
+
     public static createWithRotation(id, data) {
         IDRegistry.genBlockID(id);
         Block.createBlockWithRotation(

@@ -9,7 +9,7 @@ Translation.addTranslation("Iron cauldron", {
  })
 
  Translation.addTranslation("Electric pain!", {
-  ru: "Электро-больно!"
+  ru: "Бьёт током!"
  });
 
  Translation.addTranslation("Its hot!", {
@@ -24,58 +24,49 @@ Translation.addTranslation("Iron cauldron", {
 
 Translation.addTranslation("Fironia", { ru: "§6Пылающий огнецвет" });
 
-Translation.addTranslation("Bark Eucalyptus", {
-  ru: "Обтёсанный эвкалипт",
-});
 
 Translation.addTranslation("Bark Pink Log", {
   ru: "Обтёсанное розовое дерево",
 });
 
-Translation.addTranslation("Infinite altar", {
-  ru: "Бесконечный алтарь",
+Translation.addTranslation("Mill main block", {
+  ru: "§aКонтрольный блок мельницы",
+  en: "§aMill main block"
 });
 
-Translation.addTranslation("Pink Wood", { ru: "Розовое Дерево" });
-
-Translation.addTranslation("Pinks planks", { ru: "Доски из розового дерева" });
-
-Translation.addTranslation("Eucalyptus planks", { ru: "§aДоски эвкалипта" });
-
-Translation.addTranslation("Eucalyptus hewn", { ru: "§aКора эвкалипта" });
-
-Translation.addTranslation("Pink hewn", { ru: "Кора розового дерева" });
-
-Translation.addTranslation("Dungeon old brick", {
-  ru: "Кирпич древнего сооружения",
+Translation.addTranslation("Mill blades station", {
+  ru: "§2Станция для установки лопастей",
+  en: "§aMill blades station"
 });
 
-Translation.addTranslation("Dungeon print active brick", {
-  ru: "Кирпич древнего сооружения с магической пробуждённой печатью",
+Translation.addTranslation("Mill blades", {
+  ru: "§aЛопасти мельницы",
+  en: "§aMill blades"
 });
 
-Translation.addTranslation("Dungeon print deactive brick", {
-  ru: "Кирпич древнего сооружения с магической печатью",
-});
+Translation.addTranslation("pink_log", { ru: "§dРозовое Дерево" });
 
-Translation.addTranslation("Blue crystal", {
+Translation.addTranslation("pink_planks", { ru: "§dДоски из розового дерева" });
+
+Translation.addTranslation("eucalyptus_planks", { ru: "§2Доски эвкалипта" });
+
+Translation.addTranslation("eucalyptus_bark", { ru: "§2Кора эвкалипта" });
+
+Translation.addTranslation("eucalyptus_hewn", { ru: "§2Обтёсанный эвкалипт" });
+
+Translation.addTranslation("pink_hewn", { ru: "§2Обтёсанное розовое дерево" });
+
+Translation.addTranslation("pink_bark", { ru: "§dКора розового дерева" });
+
+
+Translation.addTranslation("blue_crystal", {
   ru: "§9Ледяной кристалл",
   en: "§9Ice crystal",
 });
 
-Translation.addTranslation("Orange crystal", {
+Translation.addTranslation("orange_crystal", {
   ru: "§6Огненный кристалл",
-  en: "§6",
-});
-
-Translation.addTranslation("Flame crystal", {
-  ru: "Пылающий кристалл",
-  en: "Flame crystal",
-});
-
-Translation.addTranslation("Void crystal", {
-  ru: "Опустошённый кристалл",
-  en: "Void crystal",
+  en: "§6Flame crystal",
 });
 
 Translation.addTranslation("It burns", {
@@ -125,4 +116,8 @@ Translation.addTranslation("You need a blades station!", {
 
 Translation.addTranslation("You need a station", {
   ru: "Вам необходима станция"
+});
+
+Translation.addTranslation("It harts!", {
+  ru: "Это больно!"
 });

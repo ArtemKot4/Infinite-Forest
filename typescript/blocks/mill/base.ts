@@ -50,4 +50,12 @@ namespace Mill {
   Block.setDestroyLevelForID(EMillID.RECEIVER, EDestroyLevel.IRON);
   Block.setDestroyLevelForID(EMillID.BLADES, EDestroyLevel.WOOD);
 
+  export function bladesHurt(player) {
+    if(Game.getGameMode() === EGameMode.CREATIVE) return;
+    Entity.damageEntity(player, 3);
+    Game.tipMessage(Native.Color.RED + Translation.translate("It harts!"))
+  }; 
+
+  
+
 }

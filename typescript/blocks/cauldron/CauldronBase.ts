@@ -53,7 +53,7 @@ namespace Cauldron {
           Game.tipMessage(Native.Color.AQUA + Translation.translate("Its hot!"))
     };
     protected setItemToSlot(animation: Animation.Item, player, item, slot) {
-      const size = hasBlock(item.id) ? 0.1 : 0.4;
+      const size = hasBlock(item.id) ? 0.02 : 0.4;
       return (
         this.decreaseItem(this.container, item, player),
         animation.describeItem({
@@ -61,24 +61,16 @@ namespace Cauldron {
           count: slot.count,
           data: item.data,
         }),
-        animation.setPos(this.x + 0.5 + randomInt(0.0001, 0.0004), this.y + 1.2, this.z + 0.5
-        ),
-        animation.setItemSizeAndRotation(size, randomInt(0.1, 0.9), randomInt(0.1, 0.9), Math.PI / 2 ),
+        animation.setItemSizeAndRotation(size, randomInt(0.1, 0.9), randomInt(0.1, 0.9), randomInt(85, 105) ),
         animation.load(),
-        Game.message(
-          "Только что предмет: " +
-            slot.id +
-            "; был зачислен в слот: " +
-            this.data.selected_slot
-        ),
         this.data.selected_slot <= 7 ? this.data.selected_slot++ : null
       );
     };
     protected rotateItems (animation: Animation.Item) {
       const coord = (value1: int, value2: int) => !!this.data.boiling ? value1 : value2
-   animation.transform().rotate(coord(0.008, 0.003),
-    coord(0.006, 0.001),
-     randomInt(0.001, 0.003));
+   animation.transform().rotate(coord(0.009, 0.004),
+    coord(0.003, 0.002),
+     0);
       animation.refresh();
     
     };

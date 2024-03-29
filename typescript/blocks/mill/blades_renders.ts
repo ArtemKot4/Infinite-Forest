@@ -12,8 +12,15 @@ namespace Mill {
       };
     
       (() => {
+        //collision
+      
+        // const shape = new ICRender.CollisionShape();
+        // shape.addEntry().addBox(8/16, 17/16, -8/16, -24/16, -16/16, -8/16)
+        // const render = new BlockRenderer.setCustomCollisionShape(EMillID.BLADES, 0, shape)
+
+        //model
         const model = ItemModel.getForWithFallback(EMillID.BLADES, 0);
-        const mesh = bladeMesh({ scale: [0.7, 0.7, 0.7],
+        const mesh = bladeMesh({ scale: [0.6, 0.6, 0.6],
           translate: [1, 1, 0.5],invertV: false, noRebuild: false });
         mesh.rotate(0, VMath.radian(30), 0);
     

@@ -28,7 +28,8 @@ namespace Mill {
         if (this.blockSource.getBlockId(this.x, this.y - i, this.z) === AIR) {
           height.push(0);
         }
-      }
+      };
+
       if (height.length < 5) {
         return FBlock.destroyByMessage(
           "So little distance!",
@@ -44,10 +45,9 @@ namespace Mill {
         if(!!this.actionStation(this.x, this.z - 1)) return;
         if(!!this.actionStation(this.x + 1, this.z)) return;
         if(!!this.actionStation(this.x - 1, this.z)) return;
-        return dialog()
+        return dialog();
       }
     }
-
     researchBlocksToBottom() {
       for (let i = 1; i <= 15; i++) {
         if (this.blockSource.getBlockId(this.x, this.y - i, this.z) === AIR) {
@@ -57,7 +57,8 @@ namespace Mill {
           return;
         }
       }
-    }
+    };
+
     init(): void {
       this.destroyIfCondition();
       this.researchBlocksToBottom();
@@ -102,7 +103,20 @@ namespace Mill {
       //@ts-ignore
       this.animation = null;
       return false;
-    }
+    };
+
+  onItemUse(coords: Callback.ItemUseCoordinates, item: ItemStack, player: number) {
+    if(!!!this.data.work){ //@ts-ignore
+    const animation = this.animation as Animation.Base;
+    //@ts-ignore
+    const coords_ = this.coords;
+    animation.load();
+    animation.transform().rotate(coords_.x, 0, coords_.z, );
+    animation.refresh();
+      } else {
+      bladesHurt(player);
+      };
+  };
   }
 
   TileEntity.registerPrototype(EMillID.BLADES, new Blades());
