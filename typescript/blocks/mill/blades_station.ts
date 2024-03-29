@@ -17,7 +17,6 @@ namespace Mill {
     setupWorkToBlades(x, z) {
       if (!this.getBlock(x, this.y, z, EMillID.BLADES)) return;
       this.setBlockDatas(x, this.y, z, "work", this.data.power);
-      alert(this.getBlockDatas(x, this.y, z, "work"));
     }
     public destroyIfPlaced(x, z) {
       if (!this.getBlock(x, this.y, z, EMillID.BLADES)) return;

@@ -20,12 +20,12 @@ class Wood {
         {
           name,
           texture: [
-            [texture, 0],
-            [texture, 0],
-            [texture, 0],
-            [texture, 0],
-            [texture, 0],
-            [texture, 0],
+            [texture, 1],
+            [texture, 1],
+            [texture, 1],
+            [texture, 1],
+            [texture, 1],
+            [texture, 1],
           ],
           inCreative: true
         },
@@ -152,7 +152,7 @@ class Wood {
   }
   
   const CHERRY = new Wood("cherry");
-  CHERRY.registerLog();
+  // CHERRY.registerLog();
   
   const EUCALYPTUS = new Wood("eucalyptus");
   EUCALYPTUS.registerBark();
