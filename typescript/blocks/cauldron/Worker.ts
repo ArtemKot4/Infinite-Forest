@@ -24,6 +24,12 @@ namespace Cauldron {
       player: number
     ): any {
       this.container.close();
+
+              //for debug
+              for(let i = 0; i <=8; i++) {
+                Game.message("slot_" + i + ": " + this.container.getSlot("slot_" + i).id);
+              }
+              
       const select = this.data.selected_slot as number;
       const slot = this.container.getSlot("slot_" + select);
       const slot_minus = this.container.getSlot("slot_" + (select - 1)).id;
@@ -53,9 +59,12 @@ namespace Cauldron {
 
         render.load();
         this.data.water = true;
+        
+
+        
         if(Game.getGameMode() === EGameMode.CREATIVE) return;
         Entity.setCarriedItem(player, VanillaItemID.bucket, 1, 0, null);
-         return;
+
       }
 
       if (!!!this.data.water) return nonWaterDialog(player);
@@ -68,7 +77,7 @@ namespace Cauldron {
         return this.setItemFromSlot(animation, player, slot_minus);
       }
     }
-
+          
     onTick(): void {
       const timer = this.data.timer;
       if (!!this.data.water) {
@@ -107,6 +116,11 @@ namespace Cauldron {
       }
       if (this.hasBoiling() && tick(3)) {
         onBurn(this);
+
+        for(const index in recipes.data) {
+        this.setupRecipes(index)
+        };
+
       }
     }
     destroyBlock(): void {

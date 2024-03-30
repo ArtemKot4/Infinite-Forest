@@ -49,32 +49,34 @@ namespace Cauldron {
     animation.refresh();
   }
 
+
+  export interface IRecipesData {
+    result: int, input_0: int, input_1?: int, input_2?: int,
+    input_3?: int,input_4?: int,input_5?: int,input_6?: int,input_7?: int,input_8?: int,
+  }
+
   export const recipes = {
-    data: {},
-    registry(obj: { input; output; time }): void {
-      const { input, output, time } = obj;
-      this.data[input] = {
-        input: input,
-        output: output,
-        time: time,
-      };
-      if (!!obj || typeof obj !== "object")
-        throw new Error("You must register recipe in object format!");
+    data: [],
+    registry(obj: IRecipesData, time: int): void {
+        obj.input_1 || 0;
+        obj.input_2 || 0;
+        obj.input_3 || 0;
+        obj.input_4 || 0;
+        obj.input_5 || 0;
+        obj.input_6 || 0;
+        obj.input_7 || 0;
+        obj.input_8 || 0;
+    this.data.push(ObjectAssign(obj, {time}));
     },
-    hasRecipe(obj: { input; output; result_timer }, container, data) {
-      const { input, output, result_timer } = obj;
-      const slot = container.getSlot("slot").id;
-      if (input === slot) {
-        if (data.result_timer < result_timer) {
-          return data.result_timer++;
-        }
-        if (data.result_timer >= result_timer) {
-          container.setSlot("slot", output, 1, 0, null);
-          return true;
-        }
-      }
-    },
+    hasRecipe(container: ItemContainer, slot: string, id: int) {
+        if(container.getSlot(slot).id !== id) return false;
+             return true;       
+  },
   };
+
+recipes.registry({
+  result: VanillaItemID.apple, input_0: VanillaItemID.golden_apple
+}, 10);
 
   export const WATERMESH = new RenderMesh();
   WATERMESH.addVertex(-6 / 16, 0, -6 / 16, 0, 0);

@@ -71,7 +71,7 @@ namespace Mill {
           ? 180
           : 0;
       //@ts-ignore
-      this.coords = {
+     if(!!!this.coords) this.coords = {
         x: y === 90 || y === -90 ? this.data.speed : 0,
         z: y === 180 || y === 0 ? this.data.speed : 0,
       };
@@ -100,7 +100,7 @@ namespace Mill {
         spawnParticle(
           EParticleType.CRIT,
           this.x + 0.5,
-          this.y + 0.75,
+          this.y + 0.55,
           this.z + 0.5,
           Math.random() / 20,
           Math.random() / 20,
