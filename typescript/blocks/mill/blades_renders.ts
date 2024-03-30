@@ -4,7 +4,8 @@ namespace Mill {
         translate?: [int, int, int]
         invertV: false;
         noRebuild: false;
-      }
+      };
+
       export function bladeMesh(importParams: importParams) {
         const mesh = new RenderMesh();
         mesh.importFromFile(MODELSDIR + "mill_blades.obj", "obj", importParams);
@@ -20,8 +21,10 @@ namespace Mill {
 
         //model
         const model = ItemModel.getForWithFallback(EMillID.BLADES, 0);
-        const mesh = bladeMesh({ scale: [0.5, 0.5, 0.5],
+        const mesh = new RenderMesh();
+        mesh.importFromFile(MODELSDIR + "mill_blades_item.obj", "obj", { scale: [0.55, 0.55, 0.55],
           translate: [0.5, 0.8, 0.7],invertV: false, noRebuild: false });
+        
         mesh.rotate(0, VMath.radian(30), 0);
     
     
