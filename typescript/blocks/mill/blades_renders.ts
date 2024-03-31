@@ -6,9 +6,9 @@ namespace Mill {
         noRebuild: false;
       };
 
-      export function bladeMesh(importParams: importParams) {
+      export function bladeMesh(model: string, importParams: importParams) {
         const mesh = new RenderMesh();
-        mesh.importFromFile(MODELSDIR + "mill_blades.obj", "obj", importParams);
+        mesh.importFromFile(MODELSDIR + model +".obj", "obj", importParams);
         return mesh;
       };
     
@@ -20,7 +20,7 @@ namespace Mill {
         // const render = new BlockRenderer.setCustomCollisionShape(EMillID.BLADES, 0, shape)
 
         //model
-        const model = ItemModel.getForWithFallback(EMillID.BLADES, 0);
+        const model = ItemModel.getForWithFallback(EMillID.EUCALYPTUS_BLADES, 0);
         const mesh = new RenderMesh();
         mesh.importFromFile(MODELSDIR + "mill_blades_item.obj", "obj", { scale: [0.55, 0.55, 0.55],
           translate: [0.5, 0.8, 0.7],invertV: false, noRebuild: false });
@@ -35,8 +35,10 @@ namespace Mill {
     
       })();
     
-      export function generateBlades(that, x: int = 0, y: int = 0, z: int = 0, scale: int) { 
-        const mesh = bladeMesh({
+      export function generateBlades(that, x: int = 0, y: int = 0, z: int = 0,
+         model: string, texture: string,
+         scale: int) { 
+        const mesh = bladeMesh( model, {
           scale: [scale, scale, scale],
           invertV: false,
           noRebuild: false,
@@ -50,7 +52,7 @@ namespace Mill {
         );
         animation.describe({
           mesh,
-          skin: "terrain-atlas/mill/mill_blades.png",
+          skin: "terrain-atlas/mill/"+ model + ".png",
         });
         animation.setBlocklightMode()
         return animation;

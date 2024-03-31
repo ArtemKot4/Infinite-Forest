@@ -1,4 +1,5 @@
 namespace Mill {
+
   export const MAIN_BLOCK = new FBlock.createWithRotation("mill_main_block", [
     {
       name: "Mill main block",
@@ -23,7 +24,7 @@ namespace Mill {
     },
   ]);
 
-  export const BLADES = new FBlock.createWithRotation("mill_blades", [
+  export const EUCALYPTUS_BLADES = new FBlock.createWithRotation("eucalyptus_mill_blades", [
     {
       name: "Mill blades",
       texture: [
@@ -41,14 +42,15 @@ namespace Mill {
   export enum EMillID {
     MAIN_BLOCK = BlockID["mill_main_block"],
     RECEIVER = BlockID["mill_receiver"],
-    BLADES = BlockID["mill_blades"],
+    EUCALYPTUS_BLADES = BlockID["eucalyptus_mill_blades"],
+    PINK_BLADES = BlockID["pink_mill_blades"],
     BLADES_STATION = BlockID["mill_blades_station"],
   };
 
   Block.setDestroyLevelForID(EMillID.MAIN_BLOCK, EDestroyLevel.IRON);
   Block.setDestroyLevelForID(EMillID.BLADES_STATION, EDestroyLevel.STONE);
   Block.setDestroyLevelForID(EMillID.RECEIVER, EDestroyLevel.IRON);
-  Block.setDestroyLevelForID(EMillID.BLADES, EDestroyLevel.WOOD);
+  Block.setDestroyLevelForID(EMillID.EUCALYPTUS_BLADES, EDestroyLevel.WOOD);
 
   export function bladesHurt(player, height) {
     if(Game.getGameMode() === EGameMode.CREATIVE) return;

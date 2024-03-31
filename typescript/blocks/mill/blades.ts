@@ -1,5 +1,19 @@
 namespace Mill {
+
+  export interface ModelData  {
+    model: string,
+    texture: string
+  };
+
   class Blades extends MultiBlock {
+
+    public modelData: ModelData;
+
+    constructor(modelData: ModelData) {
+      super();
+        this.modelData = modelData
+    };
+
     public defaultValues = {
       work: false,
       speed: 0,
@@ -47,7 +61,8 @@ namespace Mill {
     researchBlocksToBottom() {
       for (let i = 1; i <= 50; i++) {
         if (this.blockSource.getBlockId(this.x, this.y - i, this.z) === AIR) {
-        if(!!!this.data.speed) i < 20 ? (this.data.speed += 0.001) : (this.data.speed += 0.005);
+        //if(!!!this.data.speed) 
+        i < 20 ? (this.data.speed += 0.001) : (this.data.speed += 0.005);
           this.data.height += 1;
         } else {
           break;
@@ -83,6 +98,8 @@ namespace Mill {
         0,
         y,
         0,
+        this.modelData.model,
+        this.modelData.texture,
         this.data.size
       ));
       animation.load();
@@ -100,7 +117,7 @@ namespace Mill {
         spawnParticle(
           EParticleType.CRIT,
           this.x + 0.5,
-          this.y + 0.45,
+          this.y + 0.5,
           this.z + 0.5,
           Math.random() / 20,
           Math.random() / 20,
@@ -133,7 +150,7 @@ namespace Mill {
         const coords_ = this.coords;
         animation.load();
         this.data.height < 30 &&
-          animation.transform().rotate(coords_.x / 5, 0, coords_.z / 5);
+          animation.transform().rotate(coords_.x, 0, coords_.z);
         animation.refresh();
       } else {
         bladesHurt(player, this.data.height);
@@ -141,5 +158,8 @@ namespace Mill {
     }
   }
 
-  TileEntity.registerPrototype(EMillID.BLADES, new Blades());
+  TileEntity.registerPrototype(EMillID.EUCALYPTUS_BLADES, new Blades({
+    model: "mill_blades",
+    texture: "mill_blades"
+  }));
 }

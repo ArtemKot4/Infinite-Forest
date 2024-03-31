@@ -172,9 +172,9 @@ ModAPI.addAPICallback("WoodModel", (api: any) => {
   const ModelType = api.ModelType;
 
   const setupModel = (id: string) => {
-    WoodModel.registerBlock(BlockID[id], 0, ModelType.wood_0);
-    WoodModel.registerBlock(BlockID[id], 1, ModelType.wood_1);
-    WoodModel.registerBlock(BlockID[id], 2, ModelType.wood_2);
+    WoodModel.registerBlock(BlockID[id], 0, ModelType.WOOD_0);
+    WoodModel.registerBlock(BlockID[id], 1, ModelType.WOOD_1);
+    WoodModel.registerBlock(BlockID[id], 2, ModelType.WOOD_2);
 
     WoodModel.setLightOpacity(BlockID[id], 0);
     WoodModel.setRenderLayer(BlockID[id], 1);
