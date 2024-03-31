@@ -47,7 +47,7 @@ namespace Mill {
     researchBlocksToBottom() {
       for (let i = 1; i <= 50; i++) {
         if (this.blockSource.getBlockId(this.x, this.y - i, this.z) === AIR) {
-          i < 20 ? (this.data.speed += 0.001) : (this.data.speed += 0.005);
+        if(!!!this.data.speed) i < 20 ? (this.data.speed += 0.001) : (this.data.speed += 0.005);
           this.data.height += 1;
         } else {
           break;
@@ -71,7 +71,7 @@ namespace Mill {
           ? 180
           : 0;
       //@ts-ignore
-     if(!!!this.coords) this.coords = {
+       this.coords = {
         x: y === 90 || y === -90 ? this.data.speed : 0,
         z: y === 180 || y === 0 ? this.data.speed : 0,
       };
@@ -100,7 +100,7 @@ namespace Mill {
         spawnParticle(
           EParticleType.CRIT,
           this.x + 0.5,
-          this.y + 0.55,
+          this.y + 0.45,
           this.z + 0.5,
           Math.random() / 20,
           Math.random() / 20,

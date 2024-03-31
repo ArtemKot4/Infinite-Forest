@@ -70,7 +70,8 @@ namespace Cauldron {
     },
     hasRecipe(container: ItemContainer, slot: string, id: int) {
         if(container.getSlot(slot).id !== id) return false;
-             return true;       
+             return true;  
+
   },
   };
 

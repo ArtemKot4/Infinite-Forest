@@ -3,8 +3,8 @@ namespace Mill {
     {
       name: "Mill main block",
       texture: [
-        ["pink_log", 1],
-        ["pink_log", 1],
+        ["mill_main_block", 0],
+        ["mill_main_block", 0],
         ["mill_main_block", 0],
         ["mill_main_block", 0],
         ["mill_main_block", 1],
