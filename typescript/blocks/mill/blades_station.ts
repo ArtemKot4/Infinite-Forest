@@ -3,7 +3,17 @@ namespace Mill {
   export const BLADES = [
     EMillID.EUCALYPTUS_BLADES,
     EMillID.PINK_BLADES
-  ]
+  ];
+
+  (() => { 
+  const model = BlockRenderer.createModel();
+  model.addBox(0/16, 0/16, 0/16, 16/16, 16/16, 16/16, 
+  "mill_blades_station", 0);
+  model.addBox(0.1875, 1, 0.1875, 0.8125, 1.0625, 0.8125, "mill_blades_station_display", 0);
+  BlockRenderer.setStaticICRender(EMillID.BLADES_STATION, -1, new ICRender.Model(model));
+  })();
+
+
 
   class BladesStation extends MultiBlock {
     public defaultValues = {
@@ -15,8 +25,10 @@ namespace Mill {
       const mesh = (this.mesh = generateNumberMesh(this));
       //@ts-ignore
       const animation = (this.animation =
-      new Animation.Base(this.x + 0.5, this.y + 1.1, this.z + 0.5));
-      //@ts-ignore
+      new Animation.Base(this.x + 0.5, this.y + 1.11, this.z + 0.5));
+
+      animation.setIgnoreLightMode();
+            //@ts-ignore
         animation.describe({mesh: this.mesh, skin: "font/number_" + this.data?.level || 0 + ".png"});
 
       animation.load();
@@ -67,7 +79,7 @@ namespace Mill {
         //@ts-ignore
         animation.describe({mesh: this.mesh, skin: texture});
         animation.load();
-        Particles.addParticle(EParticleType.FLAME, this.x + 0.5, this.y + 1.1, this.z + 0.5, 0, 0.03, 0);
+        Particles.addParticle(EParticles.ELECTRIC, this.x + 0.5, this.y + 1.1, this.z + 0.5, 0, 0.03, 0);
         return;
       };
       //@ts-ignore
