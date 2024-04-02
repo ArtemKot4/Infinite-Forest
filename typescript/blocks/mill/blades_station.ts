@@ -8,14 +8,16 @@ namespace Mill {
   class BladesStation extends MultiBlock {
     public defaultValues = {
       power: false,
-      mesh: generateNumberMesh(this),
-      level: randomInt(0, 9)
+      level: 1
     };
     init(): void {
       //@ts-ignore
+      const mesh = (this.mesh = generateNumberMesh(this));
+      //@ts-ignore
       const animation = (this.animation =
-      new Animation.Base(this.x, this.y + 1.1, this.z));
-        animation.describe({mesh: this.data.mesh, skin: "font/number_" + this.data.level + ".png"});
+      new Animation.Base(this.x + 0.5, this.y + 1.1, this.z + 0.5));
+      //@ts-ignore
+        animation.describe({mesh: this.mesh, skin: "font/number_" + this.data?.level || 0 + ".png"});
 
       animation.load();
     }
@@ -51,20 +53,26 @@ namespace Mill {
       this.destroyIfPlaced(this.x - 1, this.z);
       this.destroyIfPlaced(this.x, this.z + 1);
       this.destroyIfPlaced(this.x, this.z - 1);
+      //@ts-ignore
+      this.animation.destroy()
       return false;
     };
 
     public onItemUse(coords: Callback.ItemUseCoordinates, item: ItemStack, player: number) {
-      if(Entity.getSneaking(player)) {
-        Game.message("Уровень" + this.data.level)
+      if(Entity.getSneaking(player) === true) {
         this.data.level < 9 ? this.data.level++ : this.data.level = 0;
         const texture = "font/number_" + this.data.level + ".png";
         //@ts-ignore
         const animation = this.animation as Animation.Base;
-        animation.describe({mesh: this.data.mesh, skin: texture});
+        //@ts-ignore
+        animation.describe({mesh: this.mesh, skin: texture});
         animation.load();
-        Particles.addParticle(EParticleType.CRIT, this.x + 0.5, this.y + 1.1, this.z + 0.5, 0, 0.03, 0);
-      }
+        Particles.addParticle(EParticleType.FLAME, this.x + 0.5, this.y + 1.1, this.z + 0.5, 0, 0.03, 0);
+        return;
+      };
+      //@ts-ignore
+      this.animation.destroy();
+      return;
     }
   }
 
