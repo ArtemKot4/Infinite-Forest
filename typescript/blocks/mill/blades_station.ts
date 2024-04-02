@@ -57,7 +57,7 @@ namespace Mill {
     public onItemUse(coords: Callback.ItemUseCoordinates, item: ItemStack, player: number) {
       if(Entity.getSneaking(player)) {
         Game.message("Уровень" + this.data.level)
-        this.data.level > 9 ? this.data.level++ : this.data.level = 0;
+        this.data.level < 9 ? this.data.level++ : this.data.level = 0;
         const texture = "font/number_" + this.data.level + ".png";
         //@ts-ignore
         const animation = this.animation as Animation.Base;
