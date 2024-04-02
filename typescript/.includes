@@ -64,6 +64,9 @@ blocks/mark.ts
 blocks/plants.ts
 items/crystals.ts
 items/dusts.ts
+
+dimension/plants_generation.ts
+
 core/callbacks/native_command.ts
 core/callbacks/level_displayed.ts
 core/callbacks/dimension_loaded.ts

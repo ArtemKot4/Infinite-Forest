@@ -8,7 +8,17 @@ namespace Mill {
   class BladesStation extends MultiBlock {
     public defaultValues = {
       power: false,
+      mesh: generateNumberMesh(this),
+      level: randomInt(0, 9)
     };
+    init(): void {
+      //@ts-ignore
+      const animation = (this.animation =
+      new Animation.Base(this.x, this.y + 1.1, this.z));
+        animation.describe({mesh: this.data.mesh, skin: "font/number_" + this.data.level + ".png"});
+
+      animation.load();
+    }
     onTick(): void {
 
       if (World.getThreadTime() % 200 === 0) {
@@ -42,6 +52,18 @@ namespace Mill {
       this.destroyIfPlaced(this.x, this.z + 1);
       this.destroyIfPlaced(this.x, this.z - 1);
       return false;
+    };
+
+    public onItemUse(coords: Callback.ItemUseCoordinates, item: ItemStack, player: number) {
+      if(Entity.getSneaking(player)) {
+        Game.message("Уровень" + this.data.level)
+        this.data.level > 9 ? this.data.level++ : this.data.level = 0;
+        const texture = "font/number_" + this.data.level + ".png";
+        //@ts-ignore
+        const animation = this.animation as Animation.Base;
+        animation.describe({mesh: this.data.mesh, skin: texture});
+        animation.load();
+      }
     }
   }
 

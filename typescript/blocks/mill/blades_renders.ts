@@ -56,5 +56,19 @@ namespace Mill {
         });
         animation.setBlocklightMode()
         return animation;
+      };
+
+      export function generateNumberMesh(that): RenderMesh {
+        const mesh = new RenderMesh();
+
+        mesh.addVertex(3/16, 0, 3/16, 0, 0);
+        mesh.addVertex( -4/16, 0, -4/16, 1, 0)
+        mesh.addVertex(3/16, 0, -4/16, 0, 1);
+
+        mesh.addVertex(3/16, 0, 3/16, 1, 0);
+        mesh.addVertex(-4/16, 0, -4/16, 0, 1);
+        mesh.addVertex(-4/16, 0, 3, 1, 1);
+
+        return mesh
       }
 }
