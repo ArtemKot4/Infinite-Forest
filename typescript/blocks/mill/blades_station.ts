@@ -25,7 +25,7 @@ namespace Mill {
       const mesh = (this.mesh = generateNumberMesh(this));
       //@ts-ignore
       const animation = (this.animation =
-      new Animation.Base(this.x + 0.5, this.y + 1.11, this.z + 0.5));
+      new Animation.Base(this.x + 0.5, this.y + 1.105, this.z + 0.5));
 
       animation.setIgnoreLightMode();
             //@ts-ignore

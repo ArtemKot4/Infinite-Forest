@@ -69,7 +69,7 @@ namespace Mill {
         mesh.addVertex(-4 / 16, 0, 4 / 16, 0, 1);
         mesh.addVertex(4 / 16, 0, 4 / 16, 1, 1); 
 
-           mesh.scale(0.5, 0.5, 0.5);
+           mesh.scale(0.3, 0.3, 0.3);
            
 
         return mesh
