@@ -10,6 +10,7 @@ namespace Mill {
   model.addBox(0/16, 0/16, 0/16, 16/16, 16/16, 16/16, 
   "mill_blades_station", 0);
   model.addBox(0.1875, 1, 0.1875, 0.8125, 1.0625, 0.8125, "mill_blades_station_display", 0);
+  model.addBox( 0.1875, 1.0500, 0.1875, 0.8125, 1.09375, 0.8125, "mill_blades_station_display_glass", 0);
   BlockRenderer.setStaticICRender(EMillID.BLADES_STATION, -1, new ICRender.Model(model));
   })();
 
@@ -79,8 +80,10 @@ namespace Mill {
         //@ts-ignore
         animation.describe({mesh: this.mesh, skin: texture});
         animation.load();
-        Particles.addParticle(EParticles.ELECTRIC, this.x + 0.5, this.y + 1.1, this.z + 0.5, 0, 0.03, 0);
+
+     Mushroom.particle(this, 1.1);
         return;
+
       };
       //@ts-ignore
       this.animation.destroy();
