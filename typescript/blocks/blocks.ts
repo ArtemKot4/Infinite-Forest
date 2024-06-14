@@ -6,8 +6,8 @@ new FBlock("salt", [
     texture: [["salt", 0]],
     inCreative: true,
   },
-]);
+]).create();
 
-Block.setDestroyLevel("salt", EDestroyLevel.WOOD);
+Block.setDestroyLevel("salt", MiningLevel.STONE);
 
 type tree = "cherry" | "eucalyptus" | "pink";

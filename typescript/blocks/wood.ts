@@ -15,7 +15,7 @@ class Wood {
     const name = type + "_bark";
     const texture = type + "_log";
 
-    new FBlock.createWithRotation(name, [
+    new FBlock(name, [
       {
         name,
         texture: [
@@ -28,7 +28,7 @@ class Wood {
         ],
         inCreative: true,
       },
-    ]);
+    ]).createWithRotation();
 
     Block.setDestroyTime(BlockID[name], 0.4);
     ToolAPI.registerBlockMaterial(BlockID[name], "wood");
@@ -50,7 +50,7 @@ class Wood {
         ],
         inCreative: true,
       },
-    ]);
+    ]).create();
 
     Block.setDestroyTime(BlockID[name], 0.4);
     ToolAPI.registerBlockMaterial(BlockID[name], "wood");
@@ -95,7 +95,7 @@ class Wood {
     const name = type + "_planks";
     new FBlock(type + "_planks", [
       { name: name, texture: [[name, 0]], inCreative: true },
-    ]);
+    ]).create();
 
     Block.setDestroyTime(BlockID[name], 0.4);
     ToolAPI.registerBlockMaterial(BlockID[name], "wood");
@@ -107,7 +107,7 @@ class Wood {
   public registerLog() {
     const type = this.type;
     const name = type + "_log";
-    FBlock.createWithRotation(name, [
+   new FBlock(name, [
       {
         name,
         texture: [
@@ -144,7 +144,7 @@ class Wood {
         ],
         inCreative: false,
       },
-    ]);
+    ]).createWithRotation();
 
     Block.setDestroyTime(BlockID[name], 0.4);
     ToolAPI.registerBlockMaterial(BlockID[name], "wood");

@@ -9,9 +9,8 @@ namespace Plants {
         name: id,
         texture: [[texture, 0]],
         inCreative: true,
-        data: type,
       },
-    ]);
+    ], type).create();
     const render = new ICRender.Model();
     const model = BlockRenderer.createModel();
     const shape = new ICRender.CollisionShape();
@@ -98,12 +97,6 @@ class Mushroom extends TileEntityBase {
     );
   };
   public electicityChain(x, z) {
-    const get = (x: int, z: int) => this.blockSource.getBlockId(x, this.y, z) === EPlants.ELECTRIC_MUSHROOM;
-     for(let i; i < 10; i++) {
-      // if(get) {
-      //   Particles.addParticle(EParticles.ELECTRIC, x, this.y + 0.4, z);
-      // }
-     }
   }
   onTick(): void {
     if(World.getThreadTime() % 10 === 0){

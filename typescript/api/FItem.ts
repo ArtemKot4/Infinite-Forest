@@ -32,7 +32,6 @@ class FItem {
       },
       { stack: this.stack, isTech: this.isTech }
     );
-
     if (Array.isArray(this.texture) && this.texture.length > 1) {
       const texture = this.texture;
       IAHelper.makeAdvancedAnim(
@@ -43,11 +42,6 @@ class FItem {
       );
     }
   };
-  public iconOverride(func: (item: ItemInstance, isModUi: boolean) => void, time): void {
-    Item.registerIconOverrideFunction(this.id, (item, isModUi) => {
-      if(World.getThreadTime() % time == 0) return func(item, isModUi);
-    })
-  }
   public info(text: string, translation: {}): void {
     Translation.addTranslation(text, translation);
     Item.registerNameOverrideFunction(this.id, function (item, name) {
@@ -56,22 +50,52 @@ class FItem {
         : name + "\n§7" + "Info is locked"; //? надпись требует переработки
     });
   }
-  public static onTick(): void {
-    for (const i in FItem.funcs) {
-      const ind = FItem.funcs[i];
-      const item = Entity.getCarriedItem(Player.get()).id;
-     if(item !== ItemID[ind.item] && World.getThreadTime() % 5 == 0) return;
-        return ind.func(); //? механика требует переработки
-        //Временно заморожено в callbacks/tick
-    }
+  protected model(model, import_params) {
+    const mesh = new RenderMesh();
+    mesh.importFromFile(
+      MODELSDIR + model + ".obj",
+      "obj",
+      import_params || null
+    );
+    return mesh;
   }
-  public getItemForHand(func: () => void) {
-    FItem.funcs.push({ item: this.id, func: func });
+
+  public setHandModel(model_name: string, texture: string, import_params?) {
+    const model = ItemModel.getForWithFallback(ItemID[this.id], 0);
+    model.setHandModel(
+      this.model(model_name, import_params),
+      "models/" + texture
+    );
+
   }
-  public onUse(func: (coords: Callback.ItemUseCoordinates, item: ItemInstance, block: Tile, player?: number) => void): void {
-    Item.registerUseFunction(this.id, (coords, item, block, player) => {
-      func(coords, item, block, player);
-    });
+  public setItemModel(model_name: string, texture: string, import_params?) {
+    const model = ItemModel.getForWithFallback(ItemID[this.id], 0);
+    model.setModel(
+      this.model(model, import_params),
+      "models/" + texture
+    );
+
+  }
+  public setInventoryModel(
+    model_name: string,
+    texture: string,
+    import_params?: {},
+    rotation: [int, int, int] = [0, 0, 0]
+  ) {
+    const mesh = this.model(model_name, import_params) as RenderMesh;
+    mesh.rotate(
+     rotation[0],
+     rotation[1],
+     rotation[2]
+    );
+   const model = ItemModel.getForWithFallback(ItemID[this.id], 0);
+   model.setUiModel(mesh, "models/" + texture);
+  };
+  public getID(): int {
+    return ItemID[this.id];
+  }
+  public onUse(func: Callback.ItemUseLocalFunction): void {
+    Item.registerUseFunction(this.id, func);
   }
 }
 

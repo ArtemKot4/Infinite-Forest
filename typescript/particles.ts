@@ -99,7 +99,7 @@ const glowworm = Particles.registerParticleType({
   const smoke = Particles.registerParticleType({
     texture: "smoke",
     render: 1,
-    size: [2,3],
+    size: [0.5,1],
     lifetime: [80, 100],
    
     animators: {
