@@ -43,33 +43,7 @@ const glowworm = Particles.registerParticleType({
     },
   });
   
-  
-   const flame_blue = Particles.registerParticleType({
-    texture: "flame_blue",
-    render: 2,
-    size: [2, 3],
-    lifetime: [5, 15],
-  
-   // color: [253,156,0,1],
-    animators: {
-      alpha: { fadeIn: 0.4, fadeOut: 0.4 },
-      size: { fadeOut: 0.5, fadeIn: 0.4, start: 0, end: 0 },
-    },
-  });
-  
-  const flame_orange = Particles.registerParticleType({
-    texture: "flame",
-    render: 2,
-    size: [4, 5],
-    lifetime: [20, 15],
-    color: [0,84,255,1],
-  
-    animators: {
-      alpha: { fadeIn: 0.4, fadeOut: 0.4 },
-      size: { fadeOut: 0.5, fadeIn: 0.4, start: 0, end: 0 },
-    },
-  });
-  
+
   const flame_white = Particles.registerParticleType({
     texture: "flame",
     render: 2,
@@ -147,8 +121,6 @@ const glowworm = Particles.registerParticleType({
 
   enum EParticles {
     GLOWWORM = glowworm,
-    FLAME_BLUE = flame_blue,
-    FLAME_ORANGE = flame_orange,
     FLAME_WHITE = flame_white,
     STAR = star,
     SMOKE = smoke,

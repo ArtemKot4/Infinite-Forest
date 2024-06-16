@@ -80,7 +80,7 @@ class Torch {
 const FLAME_TORCH = new Torch("flame", "flame_dust");
 const ICE_TORCH = new Torch("ice", "ice_dust");
 
-class UnlitTorchTile extends TileEntityBase {
+abstract class CursedLightning {
   public static clouds(x: int, y: int, z: int, player: int) {
     for (let i = 0; i <= 6; i++) {
       ForestParticle.send(
@@ -100,12 +100,35 @@ class UnlitTorchTile extends TileEntityBase {
       vanilla_rain,
       x + randomInt(0.3, 0.6),
       y + 2.1,
-      z + randomInt(0.3, 0.6),
+      z + randomInt(0.3, 0.5),
       0.01,
       -speed,
       0.01,
       player
     );
+  }
+  public static send(coords: Vector, speed: int, player: int) {
+    CursedLightning.clouds(coords.x, coords.y, coords.z, player);
+    CursedLightning.rain(coords.x, coords.y, coords.z, player, speed);
+  }
+}
+
+class UnlitTorchTile extends TileEntityBase {
+  public static scaled(x, y, z, speed: int, player: int) {
+    const vectors = [
+      [x + 1, y, z],
+      [x - 1, y, z],
+      [x, y, z - 1],
+      [x, y, z + 1],
+      [x - 1, y, z + 1],
+      [x + 1, y, z - 1],
+    ];
+    for (const vector of vectors) {
+      return (
+        CursedLightning.clouds(vector[0], vector[1], vector[2], player),
+        CursedLightning.rain(vector[0], vector[1], vector[2], player, speed)
+      );
+    }
   }
 
   onTick(): void {
@@ -114,35 +137,23 @@ class UnlitTorchTile extends TileEntityBase {
       const lightlevel = this.blockSource.getLightLevel(this.x, this.y, this.z);
       const speed = lightlevel < 4 ? 0.2 : lightlevel / 35;
 
-      UnlitTorchTile.clouds(this.x, this.y, this.z, Player.getLocal());
-      UnlitTorchTile.rain(this.x, this.y, this.z, Player.getLocal(), speed);
-      if (lightlevel >= 3) {
-        const vectors = [
-          [this.x + 1, this.y, this.z],
-          [this.x - 1, this.y, this.z],
-          [this.x, this.y, this.z - 1],
-          [this.x, this.y, this.z + 1],
-          [this.x - 1, this.y, this.z + 1],
-          [this.x + 1, this.y, this.z - 1],
-        ];
-        for (const vector of vectors) {
-          return (
-            UnlitTorchTile.clouds(
-              vector[0],
-              vector[1],
-              vector[2],
-              Player.getLocal()
-            ),
-            UnlitTorchTile.rain(
-              vector[0],
-              vector[1],
-              vector[2],
-              Player.getLocal(),
-              speed
-            )
-          );
+      // const entities = this.blockSource.listEntitiesInAABB(
+      //   this.x - 20,
+      //   this.y - 20,
+      //   this.y - 20,
+      //   this.x + 20,
+      //   this.y + 20,
+      //   this.z + 20,
+      //   EEntityType.PLAYER,
+      //   false
+      // );
+      // for (const entity of entities) {
+        CursedLightning.clouds(this.x, this.y, this.z, Player.getLocal());
+        CursedLightning.rain(this.x, this.y, this.z, Player.getLocal(), speed);
+        if (lightlevel >= 3) {
+          UnlitTorchTile.scaled(this.x, this.y, this.z, speed, Player.getLocal());
         }
-      }
+     // }
     }
   }
   static {

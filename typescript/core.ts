@@ -10,7 +10,7 @@ const Mistical = new Sound("Light.ogg");
 const Opening = new Sound("Opening.ogg");
 
 const BLOCK_TYPE_FIRE = Block.createSpecialType({
-  lightlevel: 8,
+  lightlevel: 5,
   rendertype: 91,
   sound: "grass",
 });

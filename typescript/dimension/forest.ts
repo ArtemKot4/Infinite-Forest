@@ -96,12 +96,77 @@ let time = 0;
 
 Callback.addCallback("PlayerChangedDimension", function (playerUid, from, to) {
   if (Entity.getDimension(playerUid) == InfiniteForest.id) {
-  time = World.getWorldTime();
+    time = World.getWorldTime();
     World.setWorldTime(42000);
     Commands.exec("/gamerule doDaylightCycle false");
   } else {
-   // inventSaverFunc(EDimension.NORMAL, playerUid);
+    // inventSaverFunc(EDimension.NORMAL, playerUid);
     Commands.exec("/gamerule doDaylightCycle true");
     World.setWorldTime(time);
   }
 });
+
+Callback.addCallback(
+  "GenerateCustomDimensionChunk",
+  function (chunkX, chunkZ, random, dimensionId) {
+    if (dimensionId !== InfiniteForest.id) return;
+
+    let coords = GenerationUtils.randomCoords(chunkX, chunkZ);
+    coords = GenerationUtils.findSurface(coords.x, 127, coords.z);
+    if (coords.y < 33) return;
+    if (Math.random() < 0.9) {
+      for (let i = 0; i < 24; i++) {
+        if (
+          World.getBlockID(coords.x, coords.y, coords.z) ===
+            VanillaBlockID.grass &&
+          World.getBlockID(coords.x, coords.y + 1, coords.z) !==
+            VanillaBlockID.water
+        ) {
+          if (Math.random() < 0.7) {
+            World.setBlock(
+              coords.x,
+              coords.y + 1,
+              coords.z,
+              VanillaBlockID.tallgrass,
+              0
+            );
+          } else {
+            World.setBlock(
+              coords.x,
+              coords.y + 1,
+              coords.z,
+              BlockID["fironia"],
+              0
+            );
+          }
+        }
+      }
+    }
+
+    if (Math.random() < 0.8) {
+      for (let i = 0; i < 16; i++) {
+        if (
+          World.getBlockID(coords.x + i, coords.y, coords.z) ===
+            VanillaBlockID.water &&
+          World.getBlockID(coords.x - i, coords.y, coords.z) ===
+            VanillaBlockID.water
+        ) {
+          World.setBlock(
+            coords.x + i,
+            coords.y,
+            coords.z,
+            VanillaBlockID.ice,
+            0
+          );
+          World.setBlock(
+            coords.x - i,
+            coords.y,
+            coords.z,
+            VanillaBlockID.ice,
+            0
+          );
+        }
+      }
+    }
+  }
+);

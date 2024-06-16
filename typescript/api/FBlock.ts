@@ -61,7 +61,7 @@ class FBlock {
     mesh.setBlockTexture(obj.texture ?? obj.model, 0);
     const render = new ICRender.Model();
     render.addEntry(new BlockRenderer.Model(mesh));
-    BlockRenderer.setStaticICRender(BlockID[this.id], data, render);
+    BlockRenderer.setStaticICRender(BlockID[this.id], data || 0, render);
     return this;
   }
 

@@ -44,13 +44,13 @@ items/mushroom_umbrella.ts
 blocks/wood.ts
 blocks/blocks.ts
 blocks/torch.ts
-
-blocks/mill/base.ts
-blocks/mill/receiver.ts
-blocks/mill/blades_station.ts
-blocks/mill/blades_renders.ts
-blocks/mill/blades.ts
-blocks/mill/main_block.ts
+blocks/bottle.ts
+; blocks/mill/base.ts
+; blocks/mill/receiver.ts
+; blocks/mill/blades_station.ts
+; blocks/mill/blades_renders.ts
+; blocks/mill/blades.ts
+; blocks/mill/main_block.ts
 
 blocks/Cauldron.ts
 ; blocks/cauldron/base.ts
