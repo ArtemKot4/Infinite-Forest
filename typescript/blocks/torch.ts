@@ -61,7 +61,7 @@ class Torch {
     );
     for (let i = 0; i <= 6; i++) {
       Particles.addParticle(
-        EParticles.SMOKE,
+        EForestParticle.SMOKE,
         coords.x + 0.5,
         coords.y + 0.8,
         coords.z + 0.5,
@@ -199,71 +199,6 @@ Block.setAnimateTickCallback(
   }
 );
 
-/*
-TileEntity.registerPrototype(BlockID["eucalyptus_torch"], {
-  useNetworkItemContainer: true,
-  tick: function () {
-    this.sendPacket("spawnRain");
-  },
-  client: {
-    events: {
-      spawnRain: function () {
-        if (
-          World.getThreadTime() % 5 == 0 &&
-          Player.getDimension() === InfiniteForest.id
-        ) {
-          setTickInterval(
-            () =>
-              Particles.addParticle(
-                smoke,
-                this.x + 0.5,
-                this.y + 0.8,
-                this.z + 0.5,
-                randomInt(-0.02, 0.02),
-                0.1,
-                randomInt(-0.02, 0.02)
-              ),
-            65
-          );
-          for (let i = 0; i <= 6; i++) {
-            Particles.addParticle(
-              flame_white,
-              this.x + randomInt(0.3, 0.6),
-              this.y + 2.5,
-              this.z + randomInt(0.3, 0.6),
-              0,
-              0,
-              0
-            );
-          }
-
-          Particles.addParticle(
-            vanilla_rain,
-            this.x + randomInt(0.3, 0.6),
-            this.y + 2.1,
-            this.z + randomInt(0.3, 0.6),
-            0.01,
-            -0.2,
-            0.01
-          );
-        }
-      },
-    },
-  },
-});
-*/
-
-// const entities = this.blockSource.listEntitiesInAABB(
-//   this.x - 10,
-//   this.y - 10,
-//   this.y - 10,
-//   this.x + 10,
-//   this.y + 10,
-//   this.z + 10,
-//   EEntityType.PLAYER,
-//   false
-// );
-// for(const ent of entities) {
-// UnlitTorchTile.clouds(this.x, this.y, this.z, ent);
-// UnlitTorchTile.rain(this.x, this.y, this.z, ent);
-// }
+breakBlockIfAir(BlockID["eucalyptus_torch"]);
+breakBlockIfAir(BlockID["flame_eucalyptus_torch"]);
+breakBlockIfAir(BlockID["ice_eucalyptus_torch"]);

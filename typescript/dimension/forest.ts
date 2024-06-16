@@ -46,7 +46,8 @@ function getMinDistance(min, max) {
   } else {
     return getMinDistance(min, max);
   }
-}
+};
+
 function addGlowworm(coords) {
   var xz = getMinDistance(10, 30);
   var x = xz.x;
@@ -57,7 +58,7 @@ function addGlowworm(coords) {
   var yV = random(3, 5) / 600;
   var zV = xz.z / 80;
 
-  spawnParticle(glowworm, coords.x + x, coords.y + y, coords.z + z, xV, yV, zV);
+  ForestParticle.send(glowworm, coords.x + x, coords.y + y, coords.z + z, xV, yV, zV, Player.getLocal());
 }
 function addFire(coords) {
   var xz = getMinDistance(30, 80);
@@ -69,7 +70,7 @@ function addFire(coords) {
   var yV = random(3, 5) / 600;
   var zV = xz.z / 80;
 
-  spawnParticle(glowworm, coords.x + x, coords.y + y, coords.z + z, xV, yV, zV);
+  ForestParticle.send(glowworm, coords.x + x, coords.y + y, coords.z + z, xV, yV, zV, Player.getLocal());
   //fire
 }
 
@@ -114,15 +115,15 @@ Callback.addCallback(
     let coords = GenerationUtils.randomCoords(chunkX, chunkZ);
     coords = GenerationUtils.findSurface(coords.x, 127, coords.z);
     if (coords.y < 33) return;
-    if (Math.random() < 0.9) {
-      for (let i = 0; i < 24; i++) {
+    if (Math.random() < 0.99) {
+      for (let i = 0; i < 64; i++) {
         if (
           World.getBlockID(coords.x, coords.y, coords.z) ===
             VanillaBlockID.grass &&
           World.getBlockID(coords.x, coords.y + 1, coords.z) !==
             VanillaBlockID.water
         ) {
-          if (Math.random() < 0.7) {
+          if (Math.random() < 0.9) {
             World.setBlock(
               coords.x,
               coords.y + 1,
@@ -139,32 +140,6 @@ Callback.addCallback(
               0
             );
           }
-        }
-      }
-    }
-
-    if (Math.random() < 0.8) {
-      for (let i = 0; i < 16; i++) {
-        if (
-          World.getBlockID(coords.x + i, coords.y, coords.z) ===
-            VanillaBlockID.water &&
-          World.getBlockID(coords.x - i, coords.y, coords.z) ===
-            VanillaBlockID.water
-        ) {
-          World.setBlock(
-            coords.x + i,
-            coords.y,
-            coords.z,
-            VanillaBlockID.ice,
-            0
-          );
-          World.setBlock(
-            coords.x - i,
-            coords.y,
-            coords.z,
-            VanillaBlockID.ice,
-            0
-          );
         }
       }
     }

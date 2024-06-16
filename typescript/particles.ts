@@ -9,26 +9,6 @@ Network.addClientPacket("if.particle", function (packetData: any) {
       packetData.vz
     );
   });
-  
-  function spawnParticle(type, x, y, z, vx = 0, vy = 0, vz = 0) {
-    const players = Network.getConnectedPlayers();
-    for (const i in players) {
-      const client = Network.getClientForPlayer(players[i]);
-      if (!client) return;
-   
-        client.send("if.particle", {
-          p: type,
-          x: x,
-          y: y,
-          z: z,
-          vx: vx,
-          vy: vy,
-          vz: vz,
-        });
-        /*  Debug.message("spawn particle");*/
-       
-    }
-  }
 
   
 const glowworm = Particles.registerParticleType({
@@ -119,7 +99,7 @@ const glowworm = Particles.registerParticleType({
   });
 
 
-  enum EParticles {
+  enum EForestParticle {
     GLOWWORM = glowworm,
     FLAME_WHITE = flame_white,
     STAR = star,

@@ -144,19 +144,10 @@ Network.addClientPacket(
   }
 );
 
-class ForestParticle {
-  public static send(
-    type: int,
-    x: int,
-    y: int,
-    z: int,
-    vx: int,
-    vy: int,
-    vz: int,
-    player
-  ) {
-    const client = Network.getClientForPlayer(player);
-    if (!client) return;
-    client.send("infinite_forest.particles", { type, x, y, z, vx, vy, vz });
-  }
+function breakBlockIfAir(id: int) {
+  Block.registerNeighbourChangeFunctionForID(id, (coords, block, changedCoords, region) => {
+    if(region.getBlockId(coords.x, coords.y - 1, coords.z) === 0 && block.data === 0) {
+      region.destroyBlock(coords.x, coords.y, coords.z, true);
+    }
+  })
 }
