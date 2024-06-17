@@ -38,27 +38,15 @@ class Bottle extends TileEntityBase {
       y + 0.4,
       z + 0.5,
       0,
-      0.025,
+      0.01,
       0,
       player
     );
-  }
-  public onTick(): void {
+  };
+  public clientTick(): void {
     if (World.getThreadTime() % 20 === 0) {
-      // const entities = this.blockSource.listEntitiesInAABB(this.x - 20, this.y - 20, this.z - 20, this.x + 20, this.y + 20, this.z + 20, EEntityType.PLAYER, false);
-      // for(const entity of entities) {
-      ForestParticle.send(
-        EForestParticle.GLOWWORM,
-        this.x + 0.5,
-        this.y + 0.4,
-        this.z + 0.5,
-        0.001,
-        0.001,
-        0.001,
-        Player.getLocal() //!
-      );
-      //   };
-    }
+      Particles.addParticle(EForestParticle.GLOWWORM, this.x + 0.5, this.y + 0.4, this.z + 0.5, 0.001, 0.001, 0.001);
+      }
   }
   static {
     BlockRegistry.setSoundType(BlockID["bottle"], "glass");

@@ -40,9 +40,12 @@ Plants.registry("electric_mushroom", "electric_mushroom", BLOCK_TYPE_ELECTRIC);
 
 Plants.registry("fironia", "fironia", BLOCK_TYPE_FIRE);
 
+Plants.registry("ice_flower", "ice_flower");
+
 enum EForestPlants {
   ELECTRIC_MUSHROOM = BlockID["electric_mushroom"],
   FIRONIA = BlockID["fironia"],
+  ICE_FLOWER = BlockID["ice_flower"]
 }
 
 Block.setTempDestroyTime(EForestPlants.ELECTRIC_MUSHROOM, 20 * 60);

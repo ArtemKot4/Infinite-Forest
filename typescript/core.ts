@@ -17,13 +17,22 @@ const BLOCK_TYPE_FIRE = Block.createSpecialType({
 
 const BLOCK_TYPE_ELECTRIC = Block.createSpecialType({
   lightlevel: 3,
-  rendertype: 91,
-  sound: "grass",
+  renderlayer: 3,
+  translucency: 0,
+  lightopacity: 0,
+  destroytime: 0, 
+  rendertype: 1,
+  sound: "grass"
+
 });
 
 const BLOCK_TYPE_PLANT = Block.createSpecialType({
-  rendertype: 91,
-  sound: "grass",
+  renderlayer: 3,
+  translucency: 0,
+  lightopacity: 0,
+  destroytime: 0, 
+  rendertype: 1,
+  sound: "grass"
 });
 
 const BLOCK_TYPE_TORCH = Block.createSpecialType({

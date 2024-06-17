@@ -47,16 +47,6 @@ interface IPlantDesc {
   random: [number, number];
 }
 
-class Forest {
-  public static setupPlant(obj: IPlantDesc) {
-    const { coords, place, id, random } = obj;
-    // for (let i = 0; i < randomInt(random[0], random[1]); i++) {
-    //  if (BlockSource.getDefaultForActor(Player.getLocal()).getBlock(coords.x, coords.y+1, coords.z).id === VanillaBlockID.air) {
-    // World.setBlock(place.x, place.y + 1, place.z, id, 0);
-    // }
-    // }
-  }
-}
 
 /*
 
