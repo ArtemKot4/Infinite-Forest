@@ -16,9 +16,9 @@ const EMPTY_BOTTLE = new FBlock("bottle", [
 
 const FULL_BOTTLE = new FBlock("fireflies_bottle", [
   {
-    name: "block.infinite_forest.bottle",
+    name: "block.infinite_forest.fireflies_bottle",
     texture: [["glass", 0]],
-    inCreative: false,
+    inCreative: true,
   },
 ])
   .create()
@@ -31,7 +31,18 @@ const FULL_BOTTLE = new FBlock("fireflies_bottle", [
   );
 
 class Bottle extends TileEntityBase {
-  public static projectileBreak(id: int) {}
+  public static destroyParticles(x: int, y: int, z: int, player: int) {
+    return ForestParticle.send(
+      EForestParticle.GLOWWORM,
+      x + 0.5,
+      y + 0.4,
+      z + 0.5,
+      0,
+      0.025,
+      0,
+      player
+    );
+  }
   public onTick(): void {
     if (World.getThreadTime() % 20 === 0) {
       // const entities = this.blockSource.listEntitiesInAABB(this.x - 20, this.y - 20, this.z - 20, this.x + 20, this.y + 20, this.z + 20, EEntityType.PLAYER, false);
@@ -56,18 +67,8 @@ class Bottle extends TileEntityBase {
     Projectiles.breakBlock(BlockID["bottle"]);
     Projectiles.breakBlock(
       BlockID["fireflies_bottle"],
-      (x, y, z, block, region) => {
-        ForestParticle.send(
-          EForestParticle.GLOWWORM,
-          x + 0.5,
-          y + 0.4,
-          z + 0.5,
-          0,
-          0.05,
-          0,
-          Player.getLocal() //!
-        );
-      }
+      (x, y, z, block, region) =>
+        Bottle.destroyParticles(x, y, z, Player.getLocal()) //!
     );
     TileEntity.registerPrototype(BlockID["fireflies_bottle"], new Bottle());
   }
@@ -84,6 +85,7 @@ Block.setRandomTickCallback(BlockID["bottle"], (x, y, z, id, data, region) => {
   region.destroyBlock(x, y + 1, z, false);
   if (Math.random() < 0.5) {
     region.destroyBlock(x, y, z, false);
+    region.explode(x, y, z, 0.1, false);
     if (Plants.block_list.includes(region.getBlockId(x, y - 1, z))) {
       region.setBlock(x, y - 1, z, VanillaBlockID.podzol, 0);
     }

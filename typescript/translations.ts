@@ -108,18 +108,16 @@ Translation.addTranslation("Stop!", {
   ru: "Остановись!"
 });
 
-Translation.addTranslation("So little distance!", {
-  ru: "Недостаточно расстояния!"
-});
-
-Translation.addTranslation("You need a blades station!", {
-  ru: "Вам нужна станция!"
-});
-
-Translation.addTranslation("You need a station", {
-  ru: "Вам необходима станция"
-});
-
 Translation.addTranslation("It harts!", {
   ru: "Это больно!"
 });
+
+Translation.addTranslation("block.infinite_forest.bottle", {
+  ru: "Пустая банка",
+  en: "Empty bottle"
+});
+
+Translation.addTranslation("block.infinite_forest.fireflies_bottle", {
+  ru: Native.Color.YELLOW + "Банка со светлячками",
+  en: Native.Color.YELLOW + "Fireflies bottle"
+})

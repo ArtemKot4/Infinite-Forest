@@ -46,7 +46,7 @@ function getMinDistance(min, max) {
   } else {
     return getMinDistance(min, max);
   }
-};
+}
 
 function addGlowworm(coords) {
   var xz = getMinDistance(10, 30);
@@ -58,7 +58,16 @@ function addGlowworm(coords) {
   var yV = random(3, 5) / 600;
   var zV = xz.z / 80;
 
-  ForestParticle.send(glowworm, coords.x + x, coords.y + y, coords.z + z, xV, yV, zV, Player.getLocal());
+  ForestParticle.send(
+    glowworm,
+    coords.x + x,
+    coords.y + y,
+    coords.z + z,
+    xV,
+    yV,
+    zV,
+    Player.getLocal()
+  );
 }
 function addFire(coords) {
   var xz = getMinDistance(30, 80);
@@ -70,28 +79,18 @@ function addFire(coords) {
   var yV = random(3, 5) / 600;
   var zV = xz.z / 80;
 
-  ForestParticle.send(glowworm, coords.x + x, coords.y + y, coords.z + z, xV, yV, zV, Player.getLocal());
+  ForestParticle.send(
+    glowworm,
+    coords.x + x,
+    coords.y + y,
+    coords.z + z,
+    xV,
+    yV,
+    zV,
+    Player.getLocal()
+  );
   //fire
 }
-
-const InventorySaver = {};
-
-const inventSaverFunc = (dimension, player) => {
-  const actor = new PlayerActor(player);
-  if (InventorySaver && !InventorySaver[player]) {
-    ObjectAssign(InventorySaver, {
-      [player]: { [dimension]: { items: [] } },
-    });
-    alert(JSON.stringify(InventorySaver));
-    for (let i = 0; i <= 35; i++) {
-      InventorySaver[player][dimension]["items"].push(
-        actor.getInventorySlot(i).id
-      );
-      alert(JSON.stringify(InventorySaver));
-      actor.setInventorySlot(i, 0, 0, 0, null);
-    }
-  }
-};
 
 let time = 0;
 
@@ -107,41 +106,72 @@ Callback.addCallback("PlayerChangedDimension", function (playerUid, from, to) {
   }
 });
 
-Callback.addCallback(
-  "GenerateCustomDimensionChunk",
-  function (chunkX, chunkZ, random, dimensionId) {
-    if (dimensionId !== InfiniteForest.id) return;
-
-    let coords = GenerationUtils.randomCoords(chunkX, chunkZ);
-    coords = GenerationUtils.findSurface(coords.x, 127, coords.z);
-    if (coords.y < 33) return;
-    if (Math.random() < 0.99) {
-      for (let i = 0; i < 64; i++) {
-        if (
-          World.getBlockID(coords.x, coords.y, coords.z) ===
-            VanillaBlockID.grass &&
-          World.getBlockID(coords.x, coords.y + 1, coords.z) !==
-            VanillaBlockID.water
-        ) {
-          if (Math.random() < 0.9) {
-            World.setBlock(
-              coords.x,
-              coords.y + 1,
-              coords.z,
-              VanillaBlockID.tallgrass,
-              0
-            );
-          } else {
-            World.setBlock(
-              coords.x,
-              coords.y + 1,
-              coords.z,
-              BlockID["fironia"],
-              0
-            );
-          }
-        }
+namespace Plants {
+  export function generate(coords: Vector, count: int, id: int, data?: int) {
+    for (let i = 0; i <= count; i++) {
+      if (
+        World.getBlockID(coords.x, coords.y, coords.z) ===
+          VanillaBlockID.grass &&
+        World.getBlockID(coords.x, coords.y + 1, coords.z) !==
+          VanillaTileID.water
+      ) {
+        return World.setBlock(coords.x, coords.y + 1, coords.z, id, data || 0);
       }
     }
   }
-);
+}
+
+namespace ForestGeneration {
+  Callback.addCallback(
+    "GenerateCustomDimensionChunk",
+    function (chunkX, chunkZ, random, dimensionId) {
+      if (dimensionId !== InfiniteForest.id) return;
+      var coords = GenerationUtils.randomCoords(chunkX, chunkZ);
+      coords = GenerationUtils.findSurface(coords.x, 127, coords.z);
+      if (coords.y < 33) return;
+      for (var i = 0; i < 24; i++) {
+        if (Math.random() < 0.99) {
+          Plants.generate(coords, 24, VanillaBlockID.tallgrass);
+        }
+        if (Math.random() < 0.9) {
+          Plants.generate(coords, 2, VanillaBlockID.double_plant);
+        }
+        if (Math.random() < 0.9) {
+          Plants.generate(coords, 8, VanillaBlockID.double_plant, 2);
+        }
+        if (Math.random() < 0.7) {
+          Plants.generate(coords, 6, EForestPlants.FIRONIA);
+        }
+
+        if (Math.random() < 0.9) {
+          Plants.generate(coords, 6, VanillaBlockID.yellow_flower);
+        }
+        if (Math.random() < 0.9) {
+          Plants.generate(coords, 6, VanillaBlockID.red_flower);
+        }
+        if (Math.random() < 0.9) {
+          Plants.generate(coords, 16, VanillaBlockID.tallgrass, 2);
+        }
+      /*  if (Math.random() < 0.98) {
+          for (let i = 0; i <= 16; ) {
+            if (
+              World.getBlockID(coords.x, coords.y, coords.z) ===
+                VanillaBlockID.grass &&
+              World.getBlockID(coords.x, coords.y + 1, coords.z) ===
+                VanillaBlockID.water &&
+              World.getBlockID(coords.x, coords.y + 2, coords.z) === 0
+            ) {
+              World.setBlock(
+                coords.x,
+                coords.y + 1,
+                coords.z,
+                VanillaBlockID.waterlily,
+                0
+              );
+            }
+          }
+        } */
+      }
+    }
+  );
+}
