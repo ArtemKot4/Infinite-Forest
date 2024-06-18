@@ -121,3 +121,16 @@ Translation.addTranslation("block.infinite_forest.fireflies_bottle", {
   ru: Native.Color.YELLOW + "Банка со светлячками",
   en: Native.Color.YELLOW + "Fireflies bottle"
 })
+
+Translation.addTranslation("block.infinite_forest.flame_vine", {
+  ru: Native.Color.GREEN + "Горячий стебель",
+  en: Native.Color.GREEN + "Flame vine"
+});
+
+Translation.addTranslation("block.infinite_forest.flame_vine_top", {
+  ru: Native.Color.GOLD + "Горячий плод",
+  en: Native.Color.GOLD + "Flame vine top"
+});
+
+
+

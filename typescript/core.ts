@@ -10,29 +10,35 @@ const Mistical = new Sound("Light.ogg");
 const Opening = new Sound("Opening.ogg");
 
 const BLOCK_TYPE_FIRE = Block.createSpecialType({
+  solid: false,
   lightlevel: 5,
-  rendertype: 91,
+  rendertype: 1,
+  translucency: 0,
+  lightopacity: 0,
+  destroytime: 0,
+  renderlayer: 3,
   sound: "grass",
 });
 
 const BLOCK_TYPE_ELECTRIC = Block.createSpecialType({
+  solid: false,
   lightlevel: 3,
   renderlayer: 3,
   translucency: 0,
   lightopacity: 0,
-  destroytime: 0, 
+  destroytime: 0,
   rendertype: 1,
-  sound: "grass"
-
+  sound: "grass",
 });
 
 const BLOCK_TYPE_PLANT = Block.createSpecialType({
+  solid: false,
   renderlayer: 3,
   translucency: 0,
   lightopacity: 0,
-  destroytime: 0, 
+  destroytime: 0,
   rendertype: 1,
-  sound: "grass"
+  sound: "grass",
 });
 
 const BLOCK_TYPE_TORCH = Block.createSpecialType({
@@ -118,10 +124,12 @@ function setTickInterval(func: (...any) => any, time: int) {
 const tick = (time) => World.getThreadTime() % time == 0;
 const sec = (sec) => tick(20 * sec);
 
-const VMath = {
-  randomValue: function (...values): any {
-    const random = values[Math.floor(Math.random() * values.length)];
-    return random;
+const MathHelper = {
+  randomValue(...values: any[]): any {
+    return values[Math.floor(Math.random() * values.length)];
+  },
+  randomValueFromArray<T>(values: T[]): T {
+    return values[Math.floor(Math.random() * values.length)];
   },
   radian(gradus: int): int {
     return (gradus * Math.PI) / 180;
@@ -154,9 +162,15 @@ Network.addClientPacket(
 );
 
 function breakBlockIfAir(id: int) {
-  Block.registerNeighbourChangeFunctionForID(id, (coords, block, changedCoords, region) => {
-    if(region.getBlockId(coords.x, coords.y - 1, coords.z) === 0 && block.data === 0) {
-      region.destroyBlock(coords.x, coords.y, coords.z, true);
+  Block.registerNeighbourChangeFunctionForID(
+    id,
+    (coords, block, changedCoords, region) => {
+      if (
+        region.getBlockId(coords.x, coords.y - 1, coords.z) === 0 &&
+        block.data === 0
+      ) {
+        region.destroyBlock(coords.x, coords.y, coords.z, true);
+      }
     }
-  })
+  );
 }

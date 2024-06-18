@@ -94,27 +94,113 @@ namespace Plants {
 }
 
 namespace ForestGeneration {
-  Callback.addCallback(
-    "GenerateCustomDimensionChunk",
-    function (chunkX, chunkZ, random, dimensionId) {
-      if (dimensionId !== InfiniteForest.id) return;
-      let underwater_block = VMath.randomValue(
-        VanillaBlockID.gravel,
-        VanillaBlockID.sand,
-        VanillaBlockID.clay,
-        VanillaBlockID.dirt
-      );
-      for (let i = 0; i <= 256; i++) {
-        let coords = GenerationUtils.randomCoords(chunkX, chunkZ);
-        coords = GenerationUtils.findSurface(coords.x, 127, coords.z);
+  export function generatePlants(chunkX: number, chunkZ: number) {
+    for (let i = 0; i <= 24; i++) {
+      let coords = GenerationUtils.randomCoords(chunkX, chunkZ);
+      coords = GenerationUtils.findSurface(coords.x, 127, coords.z);
+      if (coords.y > 54) {
+        if (Math.random() > 0.94) {
+          Plants.generate(coords, VanillaBlockID.tallgrass);
+        }
+        if (Math.random() > 0.9) {
+          for (let i = 0; i <= 16; i++) {
+            Plants.generate(coords, VanillaBlockID.double_plant);
+          }
+        }
+        if (Math.random() > 0.9) {
+          for (let i = 0; i <= 16; i++) {
+            Plants.generate(coords, VanillaBlockID.double_plant, 1);
+          }
+        }
+        if (Math.random() > 0.8) {
+          for (let i = 0; i <= 8; i++) {
+            Plants.generate(coords, VanillaBlockID.tallgrass, 2);
+          }
+        }
 
-        if (
-          coords.y <= 54 &&
-          World.getBlockID(coords.x, coords.y, coords.z) ===
-            VanillaBlockID.grass
-        ) {
-          World.setBlock(coords.x, coords.y, coords.z, underwater_block, 0);
-          if (underwater_block === VanillaBlockID.dirt && Math.random() < 0.1) {
+        if (Math.random() > 0.8) {
+          for (let i = 0; i <= 8; i++) {
+            Plants.generate(coords, VanillaBlockID.yellow_flower);
+          }
+        }
+        if (Math.random() > 0.8) {
+          for (let i = 0; i <= 8; i++) {
+            Plants.generate(coords, VanillaBlockID.red_flower);
+          }
+        }
+      }
+    }
+  }
+
+  export function generateGroundCavesBlock(chunkX: number, chunkZ: number) {
+    const cavesBlock_1 = MathHelper.randomValue(
+      VanillaBlockID.cobblestone,
+      VanillaBlockID.gravel,
+      VanillaBlockID.mossy_cobblestone
+    );
+    const cavesBlock_2 = MathHelper.randomValue(
+      VanillaBlockID.lapis_ore,
+      VanillaBlockID.coal_ore,
+      VanillaBlockID.air,
+      VanillaBlockID.dirt,
+      VanillaBlockID.magma
+    );
+    for (let i = 0; i < 64; i++) {
+      let coords = GenerationUtils.randomCoords(chunkX, chunkZ);
+      coords = GenerationUtils.findSurface(coords.x, 127, coords.z);
+      if (
+        coords.y >= 45 &&
+        World.getBlockID(coords.x, coords.y, coords.z) === VanillaBlockID.stone
+      ) {
+        if (Math.random() < 0.5) {
+          World.setBlock(coords.x, coords.y, coords.z, cavesBlock_1, 0);
+        } else {
+          World.setBlock(coords.x, coords.y, coords.z, cavesBlock_2, 0);
+          if (cavesBlock_2 === VanillaBlockID.magma) {
+           if(Math.random() < 0.4) { World.setBlock(
+              coords.x,
+              coords.y + 1,
+              coords.z,
+              EForestPlants.FIRONIA,
+              0
+            );
+            return;
+          };
+          if(Math.random() < 0.2) {
+            Plants.plantFlameVine(coords, randomInt(1, 16));
+            return;
+          };
+        }
+      }
+    }
+  }
+}
+
+  export function generateWaterUndeground(chunkX: number, chunkZ: number) {
+    const list = [
+      VanillaBlockID.gravel,
+      VanillaBlockID.sand,
+      VanillaBlockID.clay,
+      VanillaBlockID.dirt,
+    ];
+    const underwater_block_1 = MathHelper.randomValueFromArray(list);
+    const underwater_block_2 = MathHelper.randomValueFromArray(list);
+
+    for (let i = 0; i <= 512; i++) {
+      let coords = GenerationUtils.randomCoords(chunkX, chunkZ);
+      coords = GenerationUtils.findSurface(coords.x, 127, coords.z);
+
+      if (
+        coords.y <= 54 &&
+        World.getBlockID(coords.x, coords.y, coords.z) ===
+          VanillaBlockID.grass
+      ) {
+        if (Math.random() < 0.94) {
+          World.setBlock(coords.x, coords.y, coords.z, underwater_block_1, 0);
+          if (
+            underwater_block_1 === VanillaBlockID.dirt &&
+            Math.random() < 0.1
+          ) {
             World.setBlock(
               coords.x,
               coords.y + 1,
@@ -123,7 +209,12 @@ namespace ForestGeneration {
               0
             );
           }
-          if (underwater_block === VanillaBlockID.sand && Math.random() < 0.01) {
+        } else {
+          World.setBlock(coords.x, coords.y, coords.z, underwater_block_2, 0);
+          if (
+            underwater_block_2 === VanillaBlockID.sand &&
+            Math.random() < 0.01
+          ) {
             World.setBlock(
               coords.x,
               coords.y + 1,
@@ -134,144 +225,95 @@ namespace ForestGeneration {
           }
         }
       }
-      let cavesBlock_1 = VMath.randomValue(
-        VanillaBlockID.cobblestone,
-        VanillaBlockID.gravel,
-        VanillaBlockID.mossy_cobblestone
+    }
+  };
+  export function generateBlocksInsteadGrass(chunkX: number, chunkZ: number) {
+    if (Math.random() < 0.01) {
+      const block = MathHelper.randomValue(
+        VanillaBlockID.podzol,
+        VanillaBlockID.leaves,
+        VanillaBlockID.leaves2,
+        VanillaBlockID.ice,
+        VanillaBlockID.mossy_cobblestone,
+        VanillaBlockID.vine,
+        VanillaBlockID.mycelium,
+        VanillaBlockID.stone,
+        VanillaBlockID.gravel
       );
-      let cavesBlock_2 = VMath.randomValue(
-        VanillaBlockID.lapis_ore,
-        VanillaBlockID.coal_ore,
-        VanillaBlockID.air,
-        VanillaBlockID.dirt,
-        VanillaBlockID.magma
-      );
-      for (let i = 0; i < 24; i++) {
+      for (let i = 0; i <= 128; i++) {
         let coords = GenerationUtils.randomCoords(chunkX, chunkZ);
         coords = GenerationUtils.findSurface(coords.x, 127, coords.z);
+        if (coords.y <= 54) return;
         if (
-          coords.y >= 45 &&
           World.getBlockID(coords.x, coords.y, coords.z) ===
-            VanillaBlockID.stone
+          VanillaBlockID.grass
         ) {
-          if (Math.random() < 0.5) {
-            World.setBlock(coords.x, coords.y, coords.z, cavesBlock_1, 0);
-          } else {
-            World.setBlock(coords.x, coords.y, coords.z, cavesBlock_2, 0);
-            if (cavesBlock_2 === VanillaBlockID.magma && Math.random() < 0.7) {
+          if (block === VanillaBlockID.mycelium && Math.random() < 0.15) {
+            const mushroom = MathHelper.randomValue(
+              VanillaBlockID.red_mushroom,
+              VanillaBlockID.brown_mushroom,
+              EForestPlants.ELECTRIC_MUSHROOM
+            );
+            World.setBlock(coords.x, coords.y + 1, coords.z, mushroom, 0);
+          }
+          if (block === VanillaBlockID.ice && Math.random() < 0.05) {
+            World.setBlock(
+              coords.x,
+              coords.y + 1,
+              coords.z,
+              EForestPlants.ICE_FLOWER,
+              0
+            );
+          }
+          if (block === VanillaBlockID.podzol && Math.random() < 0.1) {
+   
               World.setBlock(
                 coords.x,
                 coords.y + 1,
                 coords.z,
-                EForestPlants.FIRONIA,
-                0
+                VanillaBlockID.sweet_berry_bush,
+                randomInt(1, 4)
               );
-            }
+            
           }
         }
+        World.setBlock(coords.x, coords.y, coords.z, block, 0);
       }
-      for (let i = 0; i <= 24; i++) {
+  }
+}
+
+  Callback.addCallback(
+    "GenerateCustomDimensionChunk",
+    function (chunkX, chunkZ, random, dimensionId) {
+      if (dimensionId !== InfiniteForest.id) return;
+        generateWaterUndeground(chunkX, chunkZ);
+        generatePlants(chunkX, chunkZ);
+        generateGroundCavesBlock(chunkX, chunkZ);
+        generateBlocksInsteadGrass(chunkX, chunkZ)
+      }
+        
+  );
+    
+    }
+   
+/* //!
+      for (let i = 0; i <= 3; i++) {
         let coords = GenerationUtils.randomCoords(chunkX, chunkZ);
         coords = GenerationUtils.findSurface(coords.x, 127, coords.z);
         if (coords.y > 54) {
-          if (Math.random() > 0.94) {
-            Plants.generate(coords, VanillaBlockID.tallgrass);
-          }
-          if (Math.random() > 0.9) {
-            for (let i = 0; i <= 16; i++) {
-              Plants.generate(coords, VanillaBlockID.double_plant);
-            }
-          }
-          if (Math.random() > 0.9) {
-            for (let i = 0; i <= 16; i++) {
-              Plants.generate(coords, VanillaBlockID.double_plant, 1);
-            }
-          }
           if (Math.random() > 0.8) {
-            for (let i = 0; i <= 8; i++) {
-              Plants.generate(coords, VanillaBlockID.tallgrass, 2);
-            }
+            Plants.generate(coords, EForestPlants.FIRONIA);
           }
-
-          if (Math.random() > 0.8) {
-            for (let i = 0; i <= 8; i++) {
-              Plants.generate(coords, VanillaBlockID.yellow_flower);
-            }
+          if (Math.random() > 0.4) {
+            Plants.generate(coords, EForestPlants.ELECTRIC_MUSHROOM);
           }
-          if (Math.random() > 0.8) {
-            for (let i = 0; i <= 8; i++) {
-              Plants.generate(coords, VanillaBlockID.red_flower);
-            }
+          if (Math.random() > 0.1) {
+            Plants.generate(coords, EForestPlants.ICE_FLOWER);
           }
         }
       }
-      // for (let i = 0; i <= 3; i++) {
-      //   let coords = GenerationUtils.randomCoords(chunkX, chunkZ);
-      //   coords = GenerationUtils.findSurface(coords.x, 127, coords.z);
-      //   if (coords.y > 54) {
-      //     if (Math.random() > 0.8) {
-      //       Plants.generate(coords, EForestPlants.FIRONIA);
-      //     }
-      //     if (Math.random() > 0.4) {
-      //       Plants.generate(coords, EForestPlants.ELECTRIC_MUSHROOM);
-      //     }
-      //     if (Math.random() > 0.1) {
-      //       Plants.generate(coords, EForestPlants.ICE_FLOWER);
-      //     }
-      //   }
-      // }
 
-      if (Math.random() < 0.1) {
-        const block = VMath.randomValue(
-          VanillaBlockID.podzol,
-          VanillaBlockID.leaves,
-          VanillaBlockID.leaves2,
-          VanillaBlockID.ice,
-          VanillaBlockID.mossy_cobblestone,
-          VanillaBlockID.vine,
-          VanillaBlockID.mycelium,
-          VanillaBlockID.stone,
-          VanillaBlockID.gravel
-        );
-        for (let i = 0; i <= 128; i++) {
-          let coords = GenerationUtils.randomCoords(chunkX, chunkZ);
-          coords = GenerationUtils.findSurface(coords.x, 127, coords.z);
-          if (coords.y <= 54) return;
-          if (
-            World.getBlockID(coords.x, coords.y, coords.z) ===
-            VanillaBlockID.grass
-          ) {
-            if (block === VanillaBlockID.mycelium && Math.random() > 0.1) {
-              const mushroom = VMath.randomValue(
-                VanillaBlockID.red_mushroom,
-                VanillaBlockID.brown_mushroom,
-                EForestPlants.ELECTRIC_MUSHROOM
-              );
-              World.setBlock(coords.x, coords.y + 1, coords.z, mushroom, 0);
-            }
-            if (block === VanillaBlockID.ice && Math.random() < 0.25) {
-              World.setBlock(
-                coords.x,
-                coords.y + 1,
-                coords.z,
-                EForestPlants.ICE_FLOWER,
-                0
-              );
-            };
-            if (block === VanillaBlockID.podzol && Math.random() > 0.4) {
-              if (Math.random() > 0.1) {
-                World.setBlock(
-                  coords.x,
-                  coords.y + 1,
-                  coords.z,
-                  VanillaBlockID.sweet_berry_bush,
-                  randomInt(1, 4)
-                );
-              }
-            }
-          }
-          World.setBlock(coords.x, coords.y, coords.z, block, 0);
-        }
+     
 
         if (Math.random() < 0.1) {
           for (let i = 0; i <= 16; i++) {
@@ -282,7 +324,7 @@ namespace ForestGeneration {
               World.getBlockID(coords.x, coords.y, coords.z) !==
                 VanillaBlockID.grass
             ) {
-              const ice = VMath.randomValue(
+              const ice = MathHelper.randomValue(
                 VanillaBlockID.ice,
                 VanillaBlockID.blue_ice,
                 VanillaBlockID.packed_ice,
@@ -293,7 +335,7 @@ namespace ForestGeneration {
           }
         }
 
-        /*  if (Math.random() < 0.98) {
+          if (Math.random() < 0.98) {
           for (let i = 0; i <= 16; ) {
             if (
               World.getBlockID(coords.x, coords.y, coords.z) ===
@@ -312,7 +354,3 @@ namespace ForestGeneration {
             }
           }
         } */
-      }
-    }
-  );
-};
