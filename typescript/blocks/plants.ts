@@ -40,7 +40,7 @@ Plants.registry("electric_mushroom", "electric_mushroom", BLOCK_TYPE_ELECTRIC);
 
 Plants.registry("fironia", "fironia", BLOCK_TYPE_FIRE);
 
-Plants.registry("ice_flower", "ice_flower");
+Plants.registry("ice_flower", "ice_flower", BLOCK_TYPE_FIRE);
 
 enum EForestPlants {
   ELECTRIC_MUSHROOM = BlockID["electric_mushroom"],
@@ -131,3 +131,15 @@ class Mushroom extends TileEntityBase {
 };
 
 TileEntity.registerPrototype(EForestPlants.ELECTRIC_MUSHROOM, new Mushroom());
+
+Block.setRandomTickCallback(VanillaBlockID.brown_mushroom, (x, y, z, id, data) => {
+  const region = BlockSource.getDefaultForDimension(InfiniteForest.id);
+  if(!region) return;
+  if(World.getWeather().rain === 1 && region.getLightLevel(x, y, z) >= 10) {
+   region.spawnEntity(x, y, z, EEntityType.LIGHTNING_BOLT);
+   region.explode(x, y, z, 0, false);
+   TileEntity.destroyTileEntityAtCoords(x, y, z, region)
+   region.setBlock(x, y, z, EForestPlants.ELECTRIC_MUSHROOM, 0);
+   TileEntity.addTileEntity(x, y, z, region);
+  }
+});
