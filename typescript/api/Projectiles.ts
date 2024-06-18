@@ -14,7 +14,7 @@ abstract class Projectiles {
 }
 
 Callback.addCallback("ProjectileHit", function (projectile, item, target) {
-  if (Entity.getType(projectile) === Native.EntityType.SNOWBALL) return;
+  if (Entity.getType(projectile) === Native.EntityType.SNOWBALL || Entity.getType(projectile) === Native.EntityType.EGG) return;
   const region = BlockSource.getDefaultForActor(projectile);
   for (const block of Projectiles.list) {
     if (

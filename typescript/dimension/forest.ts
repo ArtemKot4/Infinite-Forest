@@ -145,7 +145,7 @@ namespace ForestGeneration {
       VanillaBlockID.dirt,
       VanillaBlockID.magma
     );
-    for (let i = 0; i < 64; i++) {
+    for (let i = 0; i < 128; i++) {
       let coords = GenerationUtils.randomCoords(chunkX, chunkZ);
       coords = GenerationUtils.findSurface(coords.x, 127, coords.z);
       if (
@@ -189,9 +189,8 @@ namespace ForestGeneration {
     for (let i = 0; i <= 512; i++) {
       let coords = GenerationUtils.randomCoords(chunkX, chunkZ);
       coords = GenerationUtils.findSurface(coords.x, 127, coords.z);
-
       if (
-        coords.y <= 54 &&
+        coords.y <= 53 &&
         World.getBlockID(coords.x, coords.y, coords.z) ===
           VanillaBlockID.grass
       ) {
@@ -211,18 +210,7 @@ namespace ForestGeneration {
           }
         } else {
           World.setBlock(coords.x, coords.y, coords.z, underwater_block_2, 0);
-          if (
-            underwater_block_2 === VanillaBlockID.sand &&
-            Math.random() < 0.01
-          ) {
-            World.setBlock(
-              coords.x,
-              coords.y + 1,
-              coords.z,
-              VanillaBlockID.deadbush,
-              0
-            );
-          }
+         
         }
       }
     }
@@ -240,7 +228,7 @@ namespace ForestGeneration {
         VanillaBlockID.stone,
         VanillaBlockID.gravel
       );
-      for (let i = 0; i <= 128; i++) {
+      for (let i = 0; i <= 64; i++) {
         let coords = GenerationUtils.randomCoords(chunkX, chunkZ);
         coords = GenerationUtils.findSurface(coords.x, 127, coords.z);
         if (coords.y <= 54) return;
@@ -282,6 +270,29 @@ namespace ForestGeneration {
   }
 }
 
+export function generateBeaches(chunkX: int, chunkZ: int) {
+  const block = [VanillaBlockID.sand, VanillaBlockID.clay, VanillaBlockID.gravel];
+  const random =  MathHelper.randomValueFromArray(block);
+  const coordsX = chunkX * 16;
+const coordsZ = chunkZ * 16;
+   for(let gs = 0; gs < 16; gs++) {
+ if(World.getBlockID(coordsX + gs, 54, coordsZ + gs) === VanillaBlockID.grass) {
+World.setBlock(coordsX + gs, 54, coordsZ + gs, random, 0);
+if (
+  random === VanillaBlockID.sand &&
+  Math.random() < 0.05
+) {
+  World.setBlock(
+    coordsX + gs, 54, coordsZ + gs,
+    VanillaBlockID.deadbush,
+    0
+  );
+}
+    }
+
+};
+}
+
   Callback.addCallback(
     "GenerateCustomDimensionChunk",
     function (chunkX, chunkZ, random, dimensionId) {
@@ -290,6 +301,8 @@ namespace ForestGeneration {
         generatePlants(chunkX, chunkZ);
         generateGroundCavesBlock(chunkX, chunkZ);
         generateBlocksInsteadGrass(chunkX, chunkZ)
+        
+ 
       }
         
   );
