@@ -84,3 +84,16 @@ Block.setRandomTickCallback(BlockID["bottle"], (x, y, z, id, data, region) => {
   region.setBlock(x, y, z, BlockID["fireflies_bottle"], 0);
   TileEntity.addTileEntity(x, y, z, region);
 });
+
+function destroyBottle(coords: Vector, block: Tile, changedCoords: Vector, region: BlockSource) {
+ if(region.getBlockId(coords.x, coords.y - 1, coords.z) === 0) {
+  if(region.getBlockId(coords.x, coords.y + 1, coords.z) === 0) {
+    region.destroyBlock(coords.x, coords.y, coords.z, true);
+    return;
+  };
+  region.destroyBlock(coords.x, coords.y, coords.z, true);
+ }
+}
+
+Block.registerNeighbourChangeFunctionForID(BlockID["bottle"], destroyBottle)
+Block.registerNeighbourChangeFunctionForID(BlockID["fireflies_bottle"], destroyBottle)
