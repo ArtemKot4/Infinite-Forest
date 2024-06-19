@@ -166,8 +166,8 @@ namespace ForestGeneration {
             );
             return;
           };
-          if(Math.random() < 0.2) {
-            Plants.plantFlameVine(coords, randomInt(1, 16));
+          if(Math.random() < 0.6) {
+            Plants.plantVine(FLAME_VINE, coords, randomInt(1, 24));
             return;
           };
         }
@@ -300,8 +300,8 @@ if (
         generateWaterUndeground(chunkX, chunkZ);
         generatePlants(chunkX, chunkZ);
         generateGroundCavesBlock(chunkX, chunkZ);
-        generateBlocksInsteadGrass(chunkX, chunkZ)
-        
+        generateBlocksInsteadGrass(chunkX, chunkZ);
+        generateBeaches(chunkX, chunkZ);
  
       }
         

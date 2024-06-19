@@ -31,7 +31,8 @@ namespace Plants {
       BlockRenderer.setCustomCollisionShape(BlockID[id], -1, shape);
       render.addEntry(model);
     }
-    export function plantFlameVine(
+    export function plantVine(
+      vine: Vine,
       coords: Vector,
       size: int,
       region: BlockSource | typeof World = World
@@ -42,7 +43,7 @@ namespace Plants {
           coords.x,
           coords.y + i,
           coords.z,
-          BlockID["flame_vine"],
+          BlockID[vine.id],
           0
         );
       }
@@ -50,7 +51,7 @@ namespace Plants {
         coords.x,
         coords.y + i,
         coords.z,
-        BlockID["flame_vine_top"],
+        BlockID[vine.id + "_top"],
         0
       );
     }
