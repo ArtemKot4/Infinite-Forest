@@ -4,13 +4,16 @@ interface IVineDescriptor {
 }
 
 class Vine {
-  public readonly whitelist_blocks: int[];
+  public readonly whitelist_blocks: int[] = [];
+  public readonly grow_height_limit: number = 200;
   constructor(
     public readonly id: string,
     descriptor: IVineDescriptor,
-    whitelist: int[] = [VanillaBlockID.grass]
+    whitelist: int[] = [VanillaBlockID.grass],
+    grow_height_limit: number = 200
   ) {
     this.whitelist_blocks = whitelist.concat([BlockID[id]]);
+    this.grow_height_limit = grow_height_limit;
     const top_id = id + "_top";
     Plants.registry(
       id,
@@ -126,7 +129,7 @@ class Vine {
     data: int,
     region: BlockSource
   ) {
-    if (region.getBlockId(x, y + 1, z) === 0 && y < 200) {
+    if (region.getBlockId(x, y + 1, z) === 0 && y < this.grow_height_limit) {
       if (y >= 199) {
         region.setBlock(x, y + 1, z, BlockID[this.id + "_top"], 0);
         return;
@@ -148,17 +151,16 @@ class Vine {
     for (let i = 0; i <= this.detectStems(region, { x: x, y: y, z: z }); i++) {
       region.destroyBlock(x, y - i, z, true);
     }
-  };
-  public static generateOn(height: int, coords: Vector, vine: Vine, region: BlockSource | typeof World = World) {
+  }
+  public static generateOn(
+    height: int,
+    coords: Vector,
+    vine: Vine,
+    region: BlockSource | typeof World = World
+  ) {
     let i = 1;
     for (i; i < height; i++) {
-      region.setBlock(
-        coords.x,
-        coords.y + i,
-        coords.z,
-        BlockID[vine.id],
-        0
-      );
+      region.setBlock(coords.x, coords.y + i, coords.z, BlockID[vine.id], 0);
     }
     region.setBlock(
       coords.x,
@@ -188,3 +190,50 @@ Block.setAnimateTickCallback(BlockID["flame_vine"], (x, y, z, id, data) => {
     return fireParticle(x, y, z);
   }
 });
+
+const PRICKLY_VINE = new Vine(
+  "prickly_vine",
+  {
+    base: { texture: "prickly_vine", block_type: BLOCK_TYPE_PLANT },
+    top: { texture: "prickly_vine_top", block_type: BLOCK_TYPE_PLANT },
+  },
+  [VanillaBlockID.magma, VanillaBlockID.grass]
+);
+
+function pricklyDamage(blockCoords: Vector, block: Tile, entity: number) {
+  if (Entity.getType(entity) === Native.EntityType.ITEM) {
+    Entity.remove(entity);
+    return;
+  }
+  const player = new PlayerActor(entity);
+  if (player.isValid() && player.getGameMode() === EGameMode.CREATIVE) {
+    return;
+  }
+  const pos = Entity.getPosition(entity);
+  if (Math.random() < 0.3) {
+    for (let i = 0; i <= 8; i++) {
+      ForestParticle.send(
+        EForestParticle.POISON,
+        entity + parseInt("0." + randomInt(2, 6)),
+        entity + 0.5,
+        entity - parseInt("0." + randomInt(2, 6)),
+        0,
+        -0.05,
+        0,
+        entity
+      );
+    }
+  }
+  return Entity.addEffect(entity, EPotionEffect.POISON, 1, 20, false, false);
+}
+
+Block.registerEntityInsideFunctionForID(BlockID["prickly_vine"], pricklyDamage);
+Block.registerEntityInsideFunctionForID(
+  BlockID["prickly_vine_top"],
+  pricklyDamage
+);
+Block.registerEntityStepOnFunctionForID(BlockID["prickly_vine"], pricklyDamage);
+Block.registerEntityStepOnFunctionForID(
+  BlockID["prickly_vine_top"],
+  pricklyDamage
+);

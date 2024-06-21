@@ -11,6 +11,11 @@ api/MultiBlock.ts
 api/Projectiles.ts
 api/ForestParticle.ts
 
+api/amulet/AmuletUI.ts
+api/amulet/AmuletBag.ts
+api/amulet/AmuletTicking.ts
+api/amulet/Amulet.ts
+
 particles.ts
 core/starfall.ts
 

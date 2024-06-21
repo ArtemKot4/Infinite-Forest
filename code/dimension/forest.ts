@@ -176,7 +176,7 @@ namespace ForestGeneration {
   }
 }
 
-  export function generateWaterUndeground(chunkX: number, chunkZ: number) {
+  export function generateWaterUnderground(chunkX: number, chunkZ: number) {
     const list = [
       VanillaBlockID.gravel,
       VanillaBlockID.sand,
@@ -297,7 +297,7 @@ if (
     "GenerateCustomDimensionChunk",
     function (chunkX, chunkZ, random, dimensionId) {
       if (dimensionId !== InfiniteForest.id) return;
-        generateWaterUndeground(chunkX, chunkZ);
+        generateWaterUnderground(chunkX, chunkZ);
         generatePlants(chunkX, chunkZ);
         generateGroundCavesBlock(chunkX, chunkZ);
         generateBlocksInsteadGrass(chunkX, chunkZ);

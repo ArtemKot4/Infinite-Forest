@@ -98,6 +98,18 @@ const glowworm = Particles.registerParticleType({
       },
   });
 
+  const poison = Particles.registerParticleType({
+    texture: "poison",
+    render: 0,
+    size: [0.1, 0.2],
+    lifetime: [5, 10],
+
+    animators: {
+
+        size: { fadeOut: 0, fadeIn: 0, start: 0.6, end: 0 },
+      },
+  });
+
 
   enum EForestParticle {
     GLOWWORM = glowworm,
@@ -107,5 +119,6 @@ const glowworm = Particles.registerParticleType({
     VANILLA_RAIN = vanilla_rain,
     CAULDRON_BUBBLE = cauldron_bubble,
     CAULDRON_SMOKE = null,
-    ELECTRIC = electric
+    ELECTRIC = electric,
+    POISON = poison
   }
