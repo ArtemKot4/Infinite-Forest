@@ -22,25 +22,46 @@ class Vine {
       descriptor.top.texture,
       descriptor.top.block_type || null
     );
-    Block.registerPlaceFunctionForID(BlockID[id], this.placeVine);
-    Block.registerPlaceFunctionForID(BlockID[top_id], this.placeVineTop);
-    Block.registerNeighbourChangeFunctionForID(BlockID[id], this.updateVine);
-    Block.registerNeighbourChangeFunction(BlockID[top_id], this.updateVineTop);
-    Block.setRandomTickCallback(BlockID[id], this.growing);
+    Block.registerPlaceFunctionForID(BlockID[id], this.placeVine.bind(this));
+    Block.registerPlaceFunctionForID(
+      BlockID[top_id],
+      this.placeVineTop.bind(this)
+    );
+    Block.registerNeighbourChangeFunctionForID(
+      BlockID[id],
+      this.updateVine.bind(this)
+    );
+    Block.registerNeighbourChangeFunction(
+      BlockID[top_id],
+      this.updateVineTop.bind(this)
+    );
+    Block.setRandomTickCallback(BlockID[id], this.growing.bind(this));
     Projectiles.breakBlock(BlockID[id]);
-    Projectiles.detect(BlockID[top_id], this.projectileBreakFull);
+    Projectiles.detect(BlockID[top_id], this.projectileBreakFull.bind(this));
   }
-  protected placeVine(coords: Callback.ItemUseCoordinates, item: ItemInstance, block: Tile, player: int, region: BlockSource) {
+  protected placeVine(
+    coords: Callback.ItemUseCoordinates,
+    item: ItemInstance,
+    block: Tile,
+    player: int,
+    region: BlockSource
+  ) {
     if (
-      this.whitelist_blocks.indexOf(
+      this.whitelist_blocks.includes(
         region.getBlockId(coords.x, coords.y, coords.z)
-      ) > -1 &&
+      ) &&
       region.getBlockId(coords.x, coords.y + 1, coords.z) === 0
     ) {
       region.setBlock(coords.x, coords.y + 1, coords.z, BlockID[this.id], 0);
     }
   }
-  protected placeVineTop(coords: Callback.ItemUseCoordinates, item: ItemInstance, block: Tile, player: int, region: BlockSource) {
+  protected placeVineTop(
+    coords: Callback.ItemUseCoordinates,
+    item: ItemInstance,
+    block: Tile,
+    player: int,
+    region: BlockSource
+  ) {
     if (
       region.getBlockId(coords.x, coords.y, coords.z) === BlockID[this.id] &&
       region.getBlockId(coords.x, coords.y + 1, coords.z) === 0
@@ -55,11 +76,16 @@ class Vine {
     }
   }
 
-  protected updateVine(coords: Callback.ItemUseCoordinates, block: Tile, changedCoords: Vector, region: BlockSource) {
+  protected updateVine(
+    coords: Callback.ItemUseCoordinates,
+    block: Tile,
+    changedCoords: Vector,
+    region: BlockSource
+  ) {
     if (
-      this.whitelist_blocks.indexOf(
+      this.whitelist_blocks.includes(
         region.getBlockId(coords.x, coords.y - 1, coords.z)
-      ) > -1
+      ) === false
     ) {
       region.destroyBlock(coords.x, coords.y, coords.z, true);
     }
@@ -73,7 +99,12 @@ class Vine {
     }
     return end;
   }
-  protected updateVineTop(coords: Callback.ItemUseCoordinates, block: Tile, changedCoords: Vector, region: BlockSource) {
+  protected updateVineTop(
+    coords: Callback.ItemUseCoordinates,
+    block: Tile,
+    changedCoords: Vector,
+    region: BlockSource
+  ) {
     if (
       region.getBlockId(coords.x, coords.y - 1, coords.z) !== BlockID[this.id]
     ) {
@@ -87,7 +118,14 @@ class Vine {
     }
   }
 
-  protected growing(x: int, y: int, z: int, id: number, data: int, region: BlockSource) {
+  protected growing(
+    x: int,
+    y: int,
+    z: int,
+    id: number,
+    data: int,
+    region: BlockSource
+  ) {
     if (region.getBlockId(x, y + 1, z) === 0 && y < 200) {
       if (y >= 199) {
         region.setBlock(x, y + 1, z, BlockID[this.id + "_top"], 0);
@@ -110,6 +148,25 @@ class Vine {
     for (let i = 0; i <= this.detectStems(region, { x: x, y: y, z: z }); i++) {
       region.destroyBlock(x, y - i, z, true);
     }
+  };
+  public static generateOn(height: int, coords: Vector, vine: Vine, region: BlockSource | typeof World = World) {
+    let i = 1;
+    for (i; i < height; i++) {
+      region.setBlock(
+        coords.x,
+        coords.y + i,
+        coords.z,
+        BlockID[vine.id],
+        0
+      );
+    }
+    region.setBlock(
+      coords.x,
+      coords.y + i,
+      coords.z,
+      BlockID[vine.id + "_top"],
+      0
+    );
   }
 }
 

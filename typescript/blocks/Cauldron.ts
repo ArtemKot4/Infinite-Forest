@@ -12,7 +12,7 @@ class Caulron extends TileEntityBase {
   public animation: Animation.Base;
   public item_animations: Animation.Item[];
   public static TIMER_MAX = 250;
-  public static CURRENT_SLOT_MAX;
+  public static CURRENT_SLOT_MAX = 9;
   public defaultValues = {
     current_slot: 0,
     boiling: false,

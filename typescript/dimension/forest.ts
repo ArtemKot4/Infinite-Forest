@@ -167,7 +167,7 @@ namespace ForestGeneration {
             return;
           };
           if(Math.random() < 0.6) {
-            Plants.plantVine(FLAME_VINE, coords, randomInt(1, 24));
+           Vine.generateOn(randomInt(3, 24), coords, FLAME_VINE);
             return;
           };
         }

@@ -31,30 +31,6 @@ namespace Plants {
       BlockRenderer.setCustomCollisionShape(BlockID[id], -1, shape);
       render.addEntry(model);
     }
-    export function plantVine(
-      vine: Vine,
-      coords: Vector,
-      size: int,
-      region: BlockSource | typeof World = World
-    ) {
-      let i = 1;
-      for (i; i < size; i++) {
-        region.setBlock(
-          coords.x,
-          coords.y + i,
-          coords.z,
-          BlockID[vine.id],
-          0
-        );
-      }
-      region.setBlock(
-        coords.x,
-        coords.y + i,
-        coords.z,
-        BlockID[vine.id + "_top"],
-        0
-      );
-    }
   }
 
   function fireParticle(x, y, z) {
