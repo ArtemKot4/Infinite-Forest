@@ -1,6 +1,6 @@
 class AmuletUI {
   public readonly container = new UI.Container();
-  public UI = new UI.Window({
+  public static UI = new UI.Window({
     drawing: [
       {
         type: "background",

@@ -9,7 +9,7 @@ class AmuletBag {
             AmuletBag.list[player] = new AmuletUI();
         };
         const list = AmuletBag.list[player];
-        list.container.openAs(list.UI);
+        list.container.openAs(AmuletUI.UI);
         Updatable.addUpdatable({
             update() {
                 

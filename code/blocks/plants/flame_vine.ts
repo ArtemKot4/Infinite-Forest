@@ -201,6 +201,7 @@ const PRICKLY_VINE = new Vine(
 );
 
 function pricklyDamage(blockCoords: Vector, block: Tile, entity: number) {
+  if(Math.random() < 0.5) return;
   if (Entity.getType(entity) === Native.EntityType.ITEM) {
     Entity.remove(entity);
     return;
@@ -224,7 +225,7 @@ function pricklyDamage(blockCoords: Vector, block: Tile, entity: number) {
       );
     }
   }
-  return Entity.addEffect(entity, EPotionEffect.POISON, 1, 20, false, false);
+  return Entity.addEffect(entity, EPotionEffect.POISON, 1, 60, false, false);
 }
 
 Block.registerEntityInsideFunctionForID(BlockID["prickly_vine"], pricklyDamage);
