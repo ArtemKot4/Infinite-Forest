@@ -9,6 +9,10 @@ const InfiniteTick = () => {
       for (let i = 0; i < 3; i++) {
         addFire(pos);
       }
+      if (World.getThreadTime() % 20 === 0) {
+       Curses.COLD.onTick(Player.getLocal()); 
+       return;
+      }
     },
   };
 };

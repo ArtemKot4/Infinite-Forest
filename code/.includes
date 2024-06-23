@@ -42,7 +42,7 @@ blocks/plants/Plants.ts
 blocks/plants/fironia.ts
 blocks/plants/ice_flower.ts
 blocks/plants/electric_mushroom.ts
-blocks/plants/flame_vine.ts
+blocks/plants/Vine.ts
 ; blocks/mill/base.ts
 ; blocks/mill/receiver.ts
 ; blocks/mill/blades_station.ts
@@ -68,7 +68,7 @@ items/dusts.ts
 dimension/dimension.ts
 dimension/forest.ts
 dimension/vanilla_items.ts
-
+dimension/Curse.ts
 dimension/InfiniteTick.ts
 
 dimension/plants_generation.ts
