@@ -21,7 +21,7 @@ class Amulet {
   public drawUIElement() {
     AmuletUI.UI.content.elements[this.name + "_button"] = {
         type: "button",
-        scale: 1.5,
+        scale: 4.5,
         x: this.slot.x,
         y: this.slot.y,
         bitmap: "amulet_button",
@@ -29,9 +29,9 @@ class Amulet {
     };
     AmuletUI.UI.content.drawing.push({
         type: "bitmap",
-        x: this.slot.x * 1.5,
-        y: this.slot.y * 0.5,
-        scale: 2,
+        x: this.slot.x * 0.5,
+        y: this.slot.y * 1.5,
+        scale: 2.5,
         bitmap: this.texture
     })
   };
