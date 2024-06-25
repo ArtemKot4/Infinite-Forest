@@ -1,19 +1,24 @@
 class AmuletBag {
-    public static list: Record<int, AmuletUI> = {};
-    public static readonly ITEM: FItem = new FItem("amulet_bag", 1);
-    constructor() {
-        Item.registerUseFunctionForID(AmuletBag.ITEM.getID(), this.onUse)
-    };
-    public onUse(coords: Callback.ItemUseCoordinates, item: ItemInstance, block: Tile, player: number) {
-        if(AmuletBag.list[player] === undefined) {
-            AmuletBag.list[player] = new AmuletUI();
-        };
-        const list = AmuletBag.list[player];
-        list.container.openAs(AmuletUI.UI);
+  public static list: Record<int, AmuletUI> = {};
+  public static readonly ITEM: FItem = new FItem("amulet_bag", 1);
+  static {
+    Item.registerNoTargetUseFunction(AmuletBag.ITEM.getID(), AmuletBag.onUse);
+  }
+  public static onUse(item: ItemInstance, player: number) {
+    const amulet_list = AmuletUI.detectAmulets(player);
+    for (let list of amulet_list) {
+      if (list.logic !== undefined) {
         Updatable.addUpdatable({
-            update() {
-                
-            },
-        })
+          update: function () {
+            return list.logic(player);
+          },
+        });
+      };
+      if(list.detect !== undefined) {
+        list.detect(player);
+      }
     }
+    alert("Сработало!");
+    return AmuletUI.openFor(player);
+  }
 }

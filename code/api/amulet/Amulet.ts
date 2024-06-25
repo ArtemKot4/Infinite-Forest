@@ -3,8 +3,9 @@ interface IAmuletUIPosition {
     y: int,
 };
 
+type amulet_list = {id: int, name: string, texture: string, logic?: (player: int) => void, detect?: (player: int) => void}
 class Amulet {
-    public static list: Record<string, int>[] = []
+    public static list: amulet_list[] = []
   public ITEM: FItem;
   constructor(public name: string, public texture: string, public slot: IAmuletUIPosition) {
     this.ITEM = new FItem(
@@ -15,7 +16,7 @@ class Amulet {
       0
     );
     this.drawUIElement();
-    Amulet.list.push({[name]: this.ITEM.getID()});
+    Amulet.list.push({id: this.ITEM.getID(), name: name, texture: texture});
   };
   public drawUIElement() {
     AmuletUI.UI.content.elements[this.name + "_button"] = {
@@ -32,5 +33,11 @@ class Amulet {
         y: this.slot.y * 0.5,
         bitmap: this.texture
     })
+  };
+  public setLogic(logic: (player: int) => void) {
+    Amulet.list[Amulet.list.length - 1].logic = logic;
+  };
+  public onDetect(logic: (player: int) => void) {
+    Amulet.list[Amulet.list.length - 1].detect = logic;
   }
 }
