@@ -21,7 +21,7 @@ class Amulet {
   public drawUIElement() {
     AmuletUI.UI.content.elements[this.name + "_button"] = {
         type: "button",
-        scale: 2,
+        scale: 1.5,
         x: this.slot.x,
         y: this.slot.y,
         bitmap: "amulet_button",
@@ -31,6 +31,7 @@ class Amulet {
         type: "bitmap",
         x: this.slot.x * 1.5,
         y: this.slot.y * 0.5,
+        scale: 2,
         bitmap: this.texture
     })
   };
@@ -40,4 +41,11 @@ class Amulet {
   public onDetect(logic: (player: int) => void) {
     Amulet.list[Amulet.list.length - 1].detect = logic;
   }
+}
+
+namespace Amulets {
+  export const FLUFFY = new Amulet("fluffy_amulet", "fluffy_amulet", {
+  x: 100,
+  y: 20,  
+  })
 }

@@ -42,23 +42,10 @@ abstract class AmuletUI {
   public static openFor(player: int) {
     const container = (AmuletUI.container_list[player] ??= new UI.Container());
     const amulet_list = AmuletUI.detectAmulets(player);
-    if (amulet_list.length !== 0) {
       const content = Object.assign({}, AmuletUI.content, {
         drawing: AmuletUI.redraw(amulet_list, player),
       });
       AmuletUI.UI.setContent(content);
-    } else {
-      const drawing = AmuletUI.content.drawing.map((v) => {
-        if (v.type === "bitmap") {
-          return Object.assign(v, { bitmap: "amulet_lock" });
-        }
-        return v;
-      });
-      AmuletUI.UI.setContent(
-        Object.assign({}, AmuletUI.content, { drawing: drawing })
-      );
-    }
-
     container.openAs(AmuletUI.UI);
   }
 }
