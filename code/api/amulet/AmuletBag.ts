@@ -7,13 +7,6 @@ class AmuletBag {
   public static onUse(item: ItemInstance, player: number) {
     const amulet_list = AmuletUI.detectAmulets(player);
     for (let list of amulet_list) {
-      if (list.logic !== undefined) {
-        Updatable.addUpdatable({
-          update: function () {
-            return list.logic(player);
-          },
-        });
-      };
       if(list.detect !== undefined) {
         list.detect(player);
       }

@@ -9,7 +9,15 @@ abstract class AmuletUI {
         color: android.graphics.Color.argb(128, 128, 128, 128)
       },
     ],
-    elements: {},
+    elements: {
+      "close_button": {
+        type: "closeButton",
+        x: 10,
+        y: 10,
+        scale: 3,
+        bitmap: "close_button"
+      }
+    },
   };
 
   public static UI = new UI.Window(AmuletUI.content as UI.WindowContent);
@@ -42,7 +50,7 @@ abstract class AmuletUI {
   public static openFor(player: int) {
     const container = (AmuletUI.container_list[player] ??= new UI.Container());
     const amulet_list = AmuletUI.detectAmulets(player);
-      const content = Object.assign({}, AmuletUI.content, {
+      const content = Object.assign({}, AmuletUI.UI.getContent(), {
         drawing: AmuletUI.redraw(amulet_list, player),
       });
       AmuletUI.UI.setContent(content);
