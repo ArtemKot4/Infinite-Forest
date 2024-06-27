@@ -6,17 +6,17 @@ abstract class AmuletUI {
     drawing: [
       {
         type: "background",
-        color: android.graphics.Color.argb(128, 128, 128, 128)
+        color: android.graphics.Color.argb(128, 128, 128, 128),
       },
     ],
     elements: {
-      "close_button": {
+      close_button: {
         type: "closeButton",
         x: 10,
         y: 10,
         scale: 3,
-        bitmap: "close_button"
-      }
+        bitmap: "close_button",
+      },
     },
   };
 
@@ -38,22 +38,43 @@ abstract class AmuletUI {
   }
 
   public static redraw(amulet_list: amulet_list[], player: int) {
-    return AmuletUI.content.drawing.map((v) => {
-      if (v.type !== "bitmap") return v;
+    const element_list = {};
+    for (const i in AmuletUI.UI.content.elements) {
+      const element = AmuletUI.UI.content.elements[i];
       for (const list of amulet_list) {
-        if (v.bitmap === list.texture) return v;
+        if (element.type === "slot") {
+          Game.message("i: " + i + " | list.texture + foreground: " + list.texture + "_foreground");
+          if (i === list.texture + "_foreground") {
+            element.source = new ItemStack(list.id, 1, 0);
+            element.bitmap = "unknown";
+            break;
+          } else {
+            element.source = new ItemStack();
+            element.bitmap = "amulet_lock";
+          }
+        }
       }
-      return Object.assign(v, { bitmap: "amulet_lock" }) satisfies UIImage;
-    });
+      element_list[i] = element;
+    }
+    return element_list;
   }
 
   public static openFor(player: int) {
     const container = (AmuletUI.container_list[player] ??= new UI.Container());
     const amulet_list = AmuletUI.detectAmulets(player);
-      const content = Object.assign({}, AmuletUI.UI.getContent(), {
-        drawing: AmuletUI.redraw(amulet_list, player),
-      });
-      AmuletUI.UI.setContent(content);
+    const content = Object.assign({}, AmuletUI.UI.getContent(), {
+      elements: this.redraw(amulet_list, player),
+    });
+    AmuletUI.UI.setContent(content);
+    AmuletUI.UI.forceRefresh();
     container.openAs(AmuletUI.UI);
   }
 }
+
+// return AmuletUI.content.drawing.map((v) => {
+//   if (v.type !== "bitmap") return v;
+//   for (const list of amulet_list) {
+//     if (v.bitmap === list.texture) return v;
+//   }
+//   return Object.assign(v, { bitmap: "amulet_lock" }) satisfies UIImage;
+// });
