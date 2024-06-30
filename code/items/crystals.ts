@@ -4,6 +4,7 @@ type dimension = int;
 abstract class TransferCrystal {
   private constructor() {}
   public static worldList: Record<player, dimension>;
+  public static worldBlacklist: EDimension[] = [EDimension.END, EDimension.NETHER]
   public static itemBlacklist: int[] = [
     VanillaBlockID.netherite_block,
     VanillaItemID.netherite_ingot,
@@ -23,7 +24,8 @@ abstract class TransferCrystal {
   public static readonly ORANGE = new FItem("orange_crystal");
   public static transferEvent(player: int, dimension: int) {
     const entity = new PlayerEntity(player);
-    if(entity.getDimension() !== dimension && Entity.getSneaking(player) === true ) {
+    const currentWorld = entity.getDimension();
+    if(currentWorld !== dimension && !TransferCrystal.worldBlacklist.includes(currentWorld) && Entity.getSneaking(player) === true ) {
     entity.decreaseCarriedItem(1);
     Dimensions.transfer(player, dimension);
     }
