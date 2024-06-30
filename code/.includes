@@ -55,6 +55,7 @@ blocks/Cauldron.ts
 ; blocks/cauldron/CauldronBase.ts
 ; blocks/cauldron/Worker.ts
 
+blocks/TransferStorage.ts
 
 
 

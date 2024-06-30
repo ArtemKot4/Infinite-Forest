@@ -1,5 +1,6 @@
 const InfiniteTick = () => {
   return {
+    ticker: 1000,
     update(): void {
       let pos = Player.getPosition();
       if (Player.getDimension() !== InfiniteForest.id) {
@@ -10,7 +11,7 @@ const InfiniteTick = () => {
         addFire(pos);
       }
       if (World.getThreadTime() % 20 === 0) {
-       Curses.COLD.onTick(Player.getLocal()); 
+       Curses.COLD.onTick(this.ticker, Player.getLocal()); 
        return;
       }
     },

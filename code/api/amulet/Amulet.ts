@@ -28,32 +28,14 @@ class Amulet {
     this.drawAll();
     Amulet.list.push({ id: this.ITEM.getID(), name: name, texture: texture });
   }
-  public drawButton() {
-    const logic = this.logic || null;
-    AmuletUI.UI.content.elements[this.name + "_button"] = {
-      type: "button",
+  public drawBackgroundButton() {
+    AmuletUI.UI.content.drawing.push({
+      type: "bitmap",
       scale: 4,
       x: this.slot.x,
       y: this.slot.y,
       bitmap: "amulet_button",
-      clicker: {
-        onLongClick(position, container, tileEntity, window, canvas, scale) {
-          const button = AmuletUI.UI.content.elements[this.name + "_button"];
-          if (button.bitmap === "amulet_button") {
-            button.bitmap = "amulet_button_pressed";
-            AmuletUI.UI.forceRefresh()
-            alert("click on");
-            if (!!logic) {
-              return logic(Player.getLocal());
-            }
-          } else {
-            button.bitmap = "amulet_button";
-            AmuletUI.UI.forceRefresh()
-            alert("click off");
-          }
-        },
-      },
-    };
+    });
   }
   public drawForegroundButton() {
     AmuletUI.UI.content.elements[this.texture + "_foreground"] = {
@@ -62,11 +44,19 @@ class Amulet {
       x: this.slot.x * 1.5,
       y: this.slot.y * 0.25,
       scale: 4,
-      visual: true
+      visual: true,
+      clicker: {
+        onClick(
+          position: Vector,
+          container: com.zhekasmirnov.innercore.api.mod.ui.container.UiAbstractContainer
+        ) {
+
+        },
+      },
     };
   }
   public drawAll() {
-    this.drawButton();
+    this.drawBackgroundButton();
     this.drawForegroundButton();
   }
   public setLogic(logic: (player: int) => void) {
@@ -85,5 +75,5 @@ namespace Amulets {
   FLUFFY.setLogic((player) => {
     alert(`я нажата!${player}`);
   });
-  FLUFFY.onDetect((player) => alert("Найден!"))
+  FLUFFY.onDetect((player) => alert("Найден!"));
 }

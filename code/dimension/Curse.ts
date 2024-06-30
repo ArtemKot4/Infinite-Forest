@@ -1,8 +1,8 @@
 abstract class Curse {
   private static curse_list: string[] = [];
   public readonly player_list: int[] = [];
-  public onTick(player): void {
-    if (this.player_list.includes(player)) return;
+  public onTick(...args): void {
+    if (this.player_list.includes(args[0])) return;
   }
   public name: string;
   constructor() {
@@ -15,21 +15,25 @@ class ColdCurse extends Curse {
     drawing: [
       {
         type: "background",
-        color: android.graphics.Color.argb(0, 0, 0, 0)
+        color: android.graphics.Color.argb(0, 0, 0, 0),
       },
       {
         type: "bitmap",
         x: -5,
         y: -22.5,
         bitmap: "screen_cold",
-        scale: 3.6
+        scale: 3.6,
       },
     ],
   });
-  public onTick(player): void {
+  public onTick(ticker: int, player: int): void {
     if (this.player_list.includes(player)) return;
     const pos = Entity.getPosition(player);
     if (pos.y > 185) {
+      if (ColdCurse.UI.isOpened() && ticker > 2) {
+        ticker--;
+        ColdCurse.UI.layout.setAlpha(1 / ticker);
+      }
       if (new PlayerActor(player).getGameMode() !== EGameMode.CREATIVE) {
         Entity.damageEntity(player, 5);
         Entity.addEffect(
@@ -43,7 +47,10 @@ class ColdCurse extends Curse {
       }
       ColdCurse.UI.isOpened() === false && ColdCurse.UI.open();
     } else {
-      ColdCurse.UI.isOpened() && ColdCurse.UI.close();
+      const isOpened = ColdCurse.UI.isOpened() === true;
+      isOpened && ColdCurse.UI.layout.setAlpha(1);
+      isOpened && ColdCurse.UI.close();
+      ticker = 1000;
     }
   }
   static {

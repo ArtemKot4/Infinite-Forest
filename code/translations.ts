@@ -134,7 +134,12 @@ Translation.addTranslation("block.infinite_forest.flame_vine_top", {
 
 
 Translation.addTranslation("message.infinite_forest.crystal_transfer_blacklist", {
-  ru: "Извините, но для перехода в бесконечный лес у вас не должно быть следующих вещей в инвентаре: ",
-  en: "Sorry, but for transfer in infinite forest you must not contain items: "
+  ru: "Следующие вещи были убраны в сундук: ",
+  en: "It is items can be contain in chest: "
+});
+
+Translation.addTranslation("message.infinite_forest.alien_storage", {
+  ru: "Извините, но это не ваши вещи!",
+  en: "Sorry, but it is do not your items!"
 });
 

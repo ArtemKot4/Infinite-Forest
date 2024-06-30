@@ -3,6 +3,7 @@ type dimension = int;
 
 abstract class TransferCrystal {
   private constructor() {}
+  public static storage: TransferStorage = new TransferStorage("infinite_transfer_storage");
   public static worldList: Record<player, dimension>;
   public static worldBlacklist: EDimension[] = [EDimension.END, EDimension.NETHER]
   public static itemBlacklist: int[] = [
@@ -34,10 +35,12 @@ abstract class TransferCrystal {
     const client = Network.getClientForPlayer(player);
     const actor = new PlayerActor(player);
     const result: string[] = [];
+    const list: ItemInstance[] = [];
     for (let i = 0; i <= 35; i++) {
       const item = actor.getInventorySlot(i);
       if (TransferCrystal.itemBlacklist.includes(item.id)) {
         result.push(Translation.translate(Item.getName(item.id, item.data)));
+        list.push(item);
       }
     }
     if (result.length <= 0) return true;
@@ -58,14 +61,18 @@ abstract class TransferCrystal {
           "\n"
         );
       }
-      return false;
+      return list;
     }
   }
   static {
     TransferCrystal.BLUE.onUse((coords, item, block, player) => {
-      if (TransferCrystal.validateBlacklist(player)) {
-        return TransferCrystal.transferEvent(player, InfiniteForest.id);
+      const list = TransferCrystal.validateBlacklist(player);
+      if(list instanceof Array) {
+        TransferCrystal.storage.place(new Vector3(coords.x, coords.y + 1, coords.z), player, list);
       }
+       TransferCrystal.transferEvent(player, InfiniteForest.id);
+       return;
+      
     });
     TransferCrystal.ORANGE.onUse((coords, item, block, player) =>
       TransferCrystal.transferEvent(
