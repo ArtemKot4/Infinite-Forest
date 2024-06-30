@@ -133,4 +133,8 @@ Translation.addTranslation("block.infinite_forest.flame_vine_top", {
 });
 
 
+Translation.addTranslation("message.infinite_forest.crystal_transfer_blacklist", {
+  ru: "Извините, но для перехода в бесконечный лес у вас не должно быть следующих вещей в инвентаре: ",
+  en: "Sorry, but for transfer in infinite forest you must not contain items: "
+});
 

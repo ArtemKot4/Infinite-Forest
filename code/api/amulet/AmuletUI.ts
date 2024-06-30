@@ -38,36 +38,28 @@ abstract class AmuletUI {
   }
 
   public static redraw(amulet_list: amulet_list[], player: int) {
-    const element_list = {};
     for (const i in AmuletUI.UI.content.elements) {
       const element = AmuletUI.UI.content.elements[i];
-      for (const list of amulet_list) {
-        if (element.type === "slot") {
-          Game.message("i: " + i + " | list.texture + foreground: " + list.texture + "_foreground");
-          if (i === list.texture + "_foreground") {
+      if (element.type === "slot") {
+        element.bitmap = "amulet_lock";
+        element.source = new ItemStack();
+        for (const list of amulet_list) {
+          if (i == list.texture + "_foreground") {
             element.source = new ItemStack(list.id, 1, 0);
             element.bitmap = "unknown";
             break;
-          } else {
-            element.source = new ItemStack();
-            element.bitmap = "amulet_lock";
           }
         }
       }
-      element_list[i] = element;
+      AmuletUI.UI.forceRefresh();
     }
-    return element_list;
   }
-
   public static openFor(player: int) {
     const container = (AmuletUI.container_list[player] ??= new UI.Container());
-    const amulet_list = AmuletUI.detectAmulets(player);
-    const content = Object.assign({}, AmuletUI.UI.getContent(), {
-      elements: this.redraw(amulet_list, player),
-    });
-    AmuletUI.UI.setContent(content);
-    AmuletUI.UI.forceRefresh();
+    const amulet_list: amulet_list[] = AmuletUI.detectAmulets(player);
+    this.redraw(amulet_list, player);
     container.openAs(AmuletUI.UI);
+    AmuletUI.UI.forceRefresh();
   }
 }
 

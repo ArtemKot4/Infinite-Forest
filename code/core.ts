@@ -69,60 +69,12 @@ function range(min: int, max: int): int[] {
   return arr;
 }
 
-function getFour(id, coords, player) {
-  const block = BlockSource.getDefaultForActor(player).getBlock(
-    coords.x,
-    coords.y,
-    coords.z
-  );
-  // if()
-}
+
 
 /**
  * __ dir __ + resources/models/
  */
 const MODELSDIR: string = __dir__ + "resources/assets/models/";
-
-//excludes functions of js
-
-const ObjectValues = function (obj) {
-  return Object.keys(obj).map(function (v) {
-    return obj[v];
-  });
-};
-
-/**
- * ObjectAssign -> реализация недостающего метода Object.assign
- * @include объект для дополнения
- * @objs объекты для слияния
- * @возвращает include
- */
-function ObjectAssign(include: {}, ...objs: {}[]) {
-  for (const a in objs) {
-    let ik = Object.keys(objs[a]);
-    const kk = ObjectValues(objs[a]);
-    for (const i in ik) {
-      for (const k in kk) {
-        include[ik[i]] = kk[i];
-      }
-    }
-  }
-  return include;
-}
-
-/**
- * Функция для постановки интервала выполнения чего-либо в тиках
- * @func функция
- * @time время в тиках
- */
-function setTickInterval(func: (...any) => any, time: int) {
-  if (World.getThreadTime() % time == 0) {
-    return func();
-  }
-}
-
-const tick = (time) => World.getThreadTime() % time == 0;
-const sec = (sec) => tick(20 * sec);
 
 const MathHelper = {
   randomValue(...values: any[]): any {

@@ -38,6 +38,7 @@ const generator = Dimensions.newGenerator({
   },
 ],
 });
+
 InfiniteForest.setGenerator(generator);
 
 interface IPlantDesc {

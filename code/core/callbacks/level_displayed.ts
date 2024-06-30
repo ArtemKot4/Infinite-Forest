@@ -1,4 +1,5 @@
 Callback.addCallback("LevelDisplayed", () => {
+  for(let i = 0; i <= 15; i++) {
   Recipes.addShaped(
     { id: BlockID["bottle"], count: 1, data: 0 },
     ["aba", "aca", "aaa"],
@@ -11,17 +12,8 @@ Callback.addCallback("LevelDisplayed", () => {
       0,
       "c",
       VanillaBlockID.glass_pane,
-      0,
-    ],
-    (api, field, result, player) => {
-      if (Math.random() < 0.1) result.id = 0;
-      new WorldRegion(BlockSource.getDefaultForActor(player)).playSoundAtEntity(
-        player,
-        "glass",
-        0.4,
-        1
-      );
-      alert("!");
-    }
+      i,
+    ]
   );
+  }
 });

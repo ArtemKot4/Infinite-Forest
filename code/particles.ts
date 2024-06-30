@@ -1,16 +1,4 @@
-Network.addClientPacket("if.particle", function (packetData: any) {
-    Particles.addParticle(
-      packetData.p,
-      packetData.x,
-      packetData.y, 
-      packetData.z,
-      packetData.vx,
-      packetData.vy,
-      packetData.vz
-    );
-  });
 
-  
 const glowworm = Particles.registerParticleType({
     texture: "part_1",
     render: 2,

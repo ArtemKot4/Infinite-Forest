@@ -191,6 +191,7 @@ Block.setAnimateTickCallback(BlockID["flame_vine"], (x, y, z, id, data) => {
   }
 });
 
+/*
 const PRICKLY_VINE = new Vine(
   "prickly_vine",
   {
@@ -238,3 +239,4 @@ Block.registerEntityStepOnFunctionForID(
   BlockID["prickly_vine_top"],
   pricklyDamage
 );
+*/

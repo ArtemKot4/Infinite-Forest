@@ -7,6 +7,7 @@ type CustomProjectileFunc = (
 ) => void;
 
 abstract class Projectiles {
+  public static blacklist: Native.EntityType[] = [Native.EntityType.SNOWBALL, Native.EntityType.EGG];
   public static list: {
     block: int;
     func: CustomProjectileFunc;
@@ -22,10 +23,10 @@ abstract class Projectiles {
 
 Callback.addCallback("ProjectileHit", function (projectile, item, target) {
   if (
-    Entity.getType(projectile) === Native.EntityType.SNOWBALL ||
-    Entity.getType(projectile) === Native.EntityType.EGG
-  )
+    Projectiles.blacklist.includes(Entity.getType(projectile))
+  ) {
     return;
+  }
   const region = BlockSource.getDefaultForActor(projectile);
   for (const block of Projectiles.list) {
     if (
