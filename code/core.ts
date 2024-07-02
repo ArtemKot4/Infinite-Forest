@@ -77,7 +77,7 @@ function range(min: int, max: int): int[] {
 const MODELSDIR: string = __dir__ + "resources/assets/models/";
 
 const MathHelper = {
-  randomValue(...values: any[]): any {
+  randomValue<T>(...values: T[]): T {
     return values[Math.floor(Math.random() * values.length)];
   },
   randomValueFromArray<T>(values: T[]): T {

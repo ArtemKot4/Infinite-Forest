@@ -79,3 +79,6 @@ core/callbacks/level_displayed.ts
 core/callbacks/dimension_loaded.ts
 core/callbacks/native_gui_changed.ts
 core/callbacks/tick.ts
+
+another/archaeology/ArchaeologyBlock.ts
+another/archaeology/Archaeology.ts
