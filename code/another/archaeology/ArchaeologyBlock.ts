@@ -113,7 +113,7 @@ class ArchaeologyBlock {
   ) {
     const region = BlockSource.getDefaultForActor(player);
     if (block.data < 5) {
-      region.setBlock(coords.x, coords.y, coords.z, block.id, block.data + 1);
+      region.setBlock(coords.x, coords.y, coords.z, block.id, block.data++);
     }
     if (block.data === 5) {
       region.destroyBlock(coords.x, coords.y, coords.z, false);
