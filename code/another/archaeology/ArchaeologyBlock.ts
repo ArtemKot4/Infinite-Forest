@@ -16,16 +16,37 @@ class ArchaeologyBlock {
   > = new Map();
   constructor(public id: int) {
     Block.registerClickFunctionForID(id, this.clickLogic.bind(this));
+    this.setModelByData(1, 14);
+    this.setModelByData(2, 11);
+    this.setModelByData(3, 7);
+    this.setModelByData(4, 4);
+    this.setModelByData(5, 2);
   }
-  public registerDrop(stack: ItemStack, chance: chance = 50) {
-    this.dropList[chance].push(stack);
+  public setModelByData(data: int, height: int) {
+    const model = BlockRenderer.createModel();
+    const render = new ICRender.Model();
+    const shape = new ICRender.CollisionShape();
+    const entry = shape.addEntry();
+
+    model.addBox(0, 0, 0, 1, height / 16, 1, this.id, 0);
+    entry.addBox(0, 0, 0, 1, height / 16, 1);
+    render.addEntry(model);
+    return (
+      BlockRenderer.setCustomCollisionShape(this.id, data, shape),
+      BlockRenderer.setStaticICRender(this.id, data, render)
+    );
+  }
+  public registerDrop(stack: ItemStack | int, chance: chance = 50) {
+    this.dropList[chance].push(
+      stack instanceof ItemStack ? stack : new ItemStack(stack, 1, 0, null)
+    );
   }
   protected itemExists(coords: Callback.ItemUseCoordinates) {
     return this.itemStorage.has(coords) === true;
   }
   protected getItemFromChance(chance: chance) {
     if (Math.random() < chance) {
-      return MathHelper.randomValueFromArray(this.dropList[50]);
+      return MathHelper.randomValueFromArray(this.dropList[chance]);
     }
     return null;
   }
@@ -35,12 +56,15 @@ class ArchaeologyBlock {
     );
     const filtered = items.filter((v) => v !== null);
     const randomResult = MathHelper.randomValueFromArray(filtered);
-    return MathHelper.randomValue(new ItemStack(), randomResult);
+    return MathHelper.randomValue<ItemInstance>(
+      randomResult ?? new ItemStack()
+    );
   }
   protected createAnimation(block: Tile, coords: Callback.ItemUseCoordinates) {
     const pack = this.itemStorage.get(coords);
+    if(!pack) return;
     if (
-      pack.animation ||
+      pack.animation !== null ||
       block.data !== ArchaeologyBlock.ANIMATION_CREATE_VALID_DATA
     ) {
       return;
@@ -64,9 +88,7 @@ class ArchaeologyBlock {
     item: ItemInstance
   ) {
     Game.message(JSON.stringify(block));
-    if (block.data === 0) {
       this.itemStorage.set(coords, { item: item, animation: null });
-    }
   }
   protected takeItem(
     block: Tile,
@@ -84,6 +106,20 @@ class ArchaeologyBlock {
       this.itemStorage.delete(coords);
     }
   }
+  protected manipulateData(
+    coords: Callback.ItemUseCoordinates,
+    block: Tile,
+    player: int
+  ) {
+    const region = BlockSource.getDefaultForActor(player);
+    if (block.data < 5) {
+      region.setBlock(coords.x, coords.y, coords.z, block.id, block.data + 1);
+    }
+    if (block.data === 5) {
+      region.destroyBlock(coords.x, coords.y, coords.z, false);
+    }
+    return;
+  }
   protected clickLogic(
     coords: Callback.ItemUseCoordinates,
     item: ItemInstance,
@@ -96,6 +132,7 @@ class ArchaeologyBlock {
     }
     this.createAnimation(block, coords);
     this.takeItem(block, coords, player);
+    this.manipulateData(coords, block, player);
     return;
   }
 }
@@ -103,4 +140,5 @@ class ArchaeologyBlock {
 namespace ArchaeologyBlocks {
   export const SAND = new ArchaeologyBlock(VanillaBlockID.sand);
   SAND.registerDrop(new ItemStack(VanillaItemID.diamond, 1, 0), 65);
+  SAND.registerDrop(new ItemStack(VanillaItemID.gunpowder, 1, 0), 25);
 }
