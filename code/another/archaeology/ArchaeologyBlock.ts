@@ -10,7 +10,7 @@ class ArchaeologyBlock extends FBlock {
     25: [],
     65: [],
   };
-  protected itemStorage: Map<
+  public static itemStorage: Map<
     Vector,
     { item: ItemInstance; animation: Animation.Item }
   > = new Map();
@@ -32,7 +32,10 @@ class ArchaeologyBlock extends FBlock {
     this.createWithRotation();
     BlockRegistry.setSoundType(id, sound);
     Block.registerClickFunctionForID(this.getID(), this.clickLogic.bind(this));
-    Block.registerPlaceFunctionForID(this.getID(), this.place.bind({id: BlockID[id]}));
+    Block.registerPlaceFunctionForID(
+      this.getID(),
+      this.place.bind({ id: BlockID[id] })
+    );
     this.setModelByData(1, 14);
     this.setModelByData(2, 11);
     this.setModelByData(3, 7);
@@ -47,7 +50,7 @@ class ArchaeologyBlock extends FBlock {
     region: BlockSource
   ) {
     const rel = coords.relative;
-    return region.setBlock(rel.x, rel.y + 1, rel.z, this.id as unknown as int, 0);
+    return region.setBlock(rel.x, rel.y, rel.z, this.id as unknown as int, 0);
   }
   public setModelByData(data: int, height: int) {
     const model = BlockRenderer.createModel();
@@ -72,7 +75,7 @@ class ArchaeologyBlock extends FBlock {
     );
   }
   protected itemExists(coords: Callback.ItemUseCoordinates) {
-    return this.itemStorage.has(coords) === true;
+    return ArchaeologyBlock.itemStorage.has(coords) === true;
   }
   protected getItemFromChance(chance: chance): Nullable<ItemInstance> {
     if (Math.random() < chance) {
@@ -94,9 +97,10 @@ class ArchaeologyBlock extends FBlock {
     block: Tile,
     coords: Callback.ItemUseCoordinates
   ): void {
-    const pack = this.itemStorage.get(coords);
+    const pack = ArchaeologyBlock.itemStorage.get(coords);
     if (
-      pack && pack.animation ||
+      !pack ||
+      (pack && pack.animation !== null) ||
       block.data !== ArchaeologyBlock.ANIMATION_CREATE_VALID_DATA
     ) {
       return;
@@ -119,8 +123,8 @@ class ArchaeologyBlock extends FBlock {
     coords: Callback.ItemUseCoordinates,
     item: ItemInstance
   ): void {
-    this.itemStorage.set(coords, { item: item, animation: null });
-    Game.message(JSON.stringify(this.itemStorage.get(coords))); //TODO: DELETE DEBUG MESSAGE
+    ArchaeologyBlock.itemStorage.set(coords, { item: item, animation: null });
+    Game.message(JSON.stringify(ArchaeologyBlock.itemStorage.get(coords))); //TODO: DELETE DEBUG MESSAGE
   }
   protected takeItem(
     block: Tile,
@@ -129,13 +133,14 @@ class ArchaeologyBlock extends FBlock {
   ): void {
     if (block.data >= 4 && this.itemExists(coords)) {
       const entity = new PlayerEntity(player);
-      const pack = this.itemStorage.get(coords);
+      const pack = ArchaeologyBlock.itemStorage.get(coords);
       if (entity.getCarriedItem().isEmpty()) {
         entity.setCarriedItem(pack.item);
       } else {
         entity.addItemToInventory(pack.item);
       }
-      this.itemStorage.delete(coords);
+      pack.animation && pack.animation.destroy();
+      ArchaeologyBlock.itemStorage.delete(coords);
       return;
     }
   }
@@ -146,7 +151,13 @@ class ArchaeologyBlock extends FBlock {
   ): void {
     const region = BlockSource.getDefaultForActor(player);
     if (block.data < 5) {
-      return region.setBlock(coords.x, coords.y, coords.z, this.getID(), block.data+=1);
+      return region.setBlock(
+        coords.x,
+        coords.y,
+        coords.z,
+        this.getID(),
+        (block.data += 1)
+      );
     }
     if (block.data === 5) {
       return region.destroyBlock(coords.x, coords.y, coords.z, false);
@@ -159,14 +170,35 @@ class ArchaeologyBlock extends FBlock {
     player: number
   ): void {
     Game.message(JSON.stringify(block)); //TODO: DELETE DEBUG MESSAGE
+    if (Entity.getDimension(player) !== InfiniteForest.id) {
+      return;
+    }
+    if (
+      World.getWeather().rain === 0 &&
+      new PlayerActor(player).getGameMode() !== EGameMode.CREATIVE
+    ) {
+      BlockEngine.sendUnlocalizedMessage(
+        Network.getClientForPlayer(player),
+        Native.Color.GREEN,
+        Translation.translate(
+          "message.infinite_forest.archaeology_water_not_valid"
+        )
+      );
+      return;
+    }
     if (!this.itemExists(coords) && block.data === 0) {
       const instance = this.selectItem();
       this.addItemByCoordinates(block, coords, instance);
-    };
+    }
+    this.manipulateData(coords, block, player);
     this.createAnimation(block, coords);
     this.takeItem(block, coords, player);
-    this.manipulateData(coords, block, player);
     return;
+  }
+  static {
+    Callback.addCallback("DestroyBlock", (coords, block, player) => {
+      ArchaeologyBlock.itemStorage.get(coords)?.animation.destroy();
+    });
   }
 }
 

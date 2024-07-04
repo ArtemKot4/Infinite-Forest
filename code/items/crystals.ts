@@ -3,9 +3,14 @@ type dimension = int;
 
 abstract class TransferCrystal {
   private constructor() {}
-  public static storage: TransferStorage = new TransferStorage("infinite_transfer_storage");
+  public static storage: TransferStorage = new TransferStorage(
+    "infinite_transfer_storage"
+  );
   public static worldList: Record<player, dimension>;
-  public static worldBlacklist: EDimension[] = [EDimension.END, EDimension.NETHER]
+  public static worldBlacklist: EDimension[] = [
+    EDimension.END,
+    EDimension.NETHER,
+  ];
   public static itemBlacklist: int[] = [
     VanillaBlockID.netherite_block,
     VanillaItemID.netherite_ingot,
@@ -22,16 +27,21 @@ abstract class TransferCrystal {
     VanillaItemID.netherite_leggings,
   ];
   public static readonly BLUE = new FItem("blue_crystal", 1);
-  public static readonly ORANGE = new FItem("orange_crystal");
+  public static readonly ORANGE = new FItem("orange_crystal", 1);
   public static transferEvent(player: int, dimension: int) {
     const entity = new PlayerEntity(player);
     const currentWorld = entity.getDimension();
-    if(currentWorld !== dimension && !TransferCrystal.worldBlacklist.includes(currentWorld) && Entity.getSneaking(player) === true ) {
-    entity.decreaseCarriedItem(1);
-    Dimensions.transfer(player, dimension);
+    if (
+      currentWorld !== dimension &&
+      !TransferCrystal.worldBlacklist.includes(currentWorld) &&
+      Entity.getSneaking(player) === true
+    ) {
+      entity.getGameMode() !== EGameMode.CREATIVE &&
+        entity.decreaseCarriedItem(1);
+      Dimensions.transfer(player, dimension);
     }
   }
-  public static validateBlacklist(player) {
+  public static validateBlacklist(player): Nullable<ItemInstance[]> {
     const client = Network.getClientForPlayer(player);
     const actor = new PlayerActor(player);
     const result: string[] = [];
@@ -43,7 +53,7 @@ abstract class TransferCrystal {
         list.push(item);
       }
     }
-    if (result.length <= 0) return true;
+    if (result.length <= 0) return null;
     if (client) {
       BlockEngine.sendUnlocalizedMessage(
         client,
@@ -67,28 +77,34 @@ abstract class TransferCrystal {
   static {
     TransferCrystal.BLUE.onUse((coords, item, block, player) => {
       const list = TransferCrystal.validateBlacklist(player);
-      if(list instanceof Array) {
-        TransferCrystal.storage.place(new Vector3(coords.x, coords.y + 1, coords.z), player, list);
+      const name = Entity.getNameTag(player);
+      if (!!list && list instanceof Array) {
+        TransferCrystal.storage.place(
+          new Vector3(coords.x, coords.y + 1, coords.z),
+          player,
+          list
+        );
+        TransferCrystal.worldList[name] = Entity.getDimension(player);
       }
-       TransferCrystal.transferEvent(player, InfiniteForest.id);
-       return;
-      
+      TransferCrystal.transferEvent(player, InfiniteForest.id);
+      return;
     });
     TransferCrystal.ORANGE.onUse((coords, item, block, player) =>
       TransferCrystal.transferEvent(
         player,
-        (TransferCrystal.worldList[player] ??= EDimension.NORMAL)
+        TransferCrystal.worldList[Entity.getNameTag(player)] ??
+          EDimension.NORMAL
       )
     );
-    Saver.addSavesScope(
-      "infinite_forest.defaultDimension.list",
-      function read(scope) {
-        TransferCrystal.worldList = scope.worldList ??= {};
-      },
+    // Saver.addSavesScope(
+    //   "infinite_forest.defaultDimension.list",
+    //   function read(scope) {
+    //     TransferCrystal.worldList = scope.worldList || {};
+    //   },
 
-      function save() {
-        return { worldList: TransferCrystal.worldList };
-      }
-    );
+    //   function save() {
+    //     return { worldList: TransferCrystal.worldList };
+    //   }
+    // );
   }
 }

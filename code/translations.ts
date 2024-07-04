@@ -143,3 +143,8 @@ Translation.addTranslation("message.infinite_forest.alien_storage", {
   en: "Sorry, but it is do not your items!"
 });
 
+Translation.addTranslation("message.infinite_forest.archaeology_water_not_valid", {
+  ru: "Извините, но вы не можете рыться в сухом песке! Дождитесь дождя, и попробуйте снова",
+  en: "Sorry, but for checking sand you need a wait a rain!"
+});
+

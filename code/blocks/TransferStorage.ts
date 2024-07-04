@@ -25,14 +25,15 @@ class TransferStorage {
     }
     const region = BlockSource.getDefaultForActor(player);
     const name = Entity.getNameTag(player);
-    TransferStorage.storage[name] = items;
+
     region.setBlock(coords.x, coords.y, coords.z, this.BLOCK.getID(), 0);
     const actor = new PlayerActor(player);
     for (let i = 0; i <= 35; i++) {
-      if (items.includes(actor.getInventorySlot(i))) {
+      if (items.some((v) => v.id === actor.getInventorySlot(i).id)) {
         actor.setInventorySlot(i, 0, 0, 0, null);
       } 
-    }
+    };
+    TransferStorage.storage[name] = items;
   }
 
   public static destroyEvent(
@@ -45,19 +46,20 @@ class TransferStorage {
     }
     const name = Entity.getNameTag(player);
     const storage = TransferStorage.storage[name];
-    if (name in storage) {
+    if(storage !== undefined) {
       const actor = new PlayerActor(player);
       for (const item of storage) {
         actor.addItemToInventory(
-          item.id,
-          item.count,
-          item.data,
-          item.extra || null,
+          item?.id,
+          item?.count,
+          item?.data,
+          item?.extra || null,
           false
         );
       }
       delete TransferStorage.storage[name];
-    } else {
+    }
+     else {
       const client = Network.getClientForPlayer(player);
       Game.prevent();
       client &&
