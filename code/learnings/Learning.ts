@@ -1,27 +1,24 @@
 class Learning {
-  public static list: Record<string, string>;
-  public static shared_list: Record<string, Record<string, boolean>>
-  constructor(public name: string, public message: string) {
-    Learning.list[name] = message
-  }
-  public static send(name: string, player: int) {
-    // const tag = Entity.getNameTag(player);
-    // const list = Learning.shared_list?.[tag]?.[name] ?? false;
-    // if (list === true) return;
-    // Learning.shared_list[tag][name] = true;
-    // BlockEngine.sendUnlocalizedMessage(
-    //   Network.getClientForPlayer(player),
-    //   Native.Color.GRAY + Translation.translate(Learning.list[name])
-    // );
+  public static list: Record<name, name[]> = {};
+  constructor(public name: string, public message: string) {}
+  public send(player: int, color: Native.Color = Native.Color.GREEN) {
+    const client = Network.getClientForPlayer(player);
+    if (!client) return;
+    const name = Entity.getNameTag(player);
+    BlockEngine.sendUnlocalizedMessage(
+      client,
+      `<${player}> ${Translation.translate(
+        "learning.infinite_forest." + this.message
+      )}`
+    );
+    Learning.list[name].push(this.name);
   };
-  public static check(player: int, name: string) {
-    const tag = Entity.getNameTag(player);
-    return !!Learning.shared_list[tag][name];
+  public has(player: int) {
+    return Learning.list?.[Entity.getNameTag(player)].includes(this.name);
   };
-};
+}
 
-// new Learning("torch_cloud", "learning.infinite_forest.torch_cloud");
-
-// Translation.addTranslation("learning.infinite_forest.torch_cloud", {
-// ru: "Хм... И почему мои древесные огни, не могут просто загореться?"
-// })
+Callback.addCallback("LevelDisplayed", () => {
+  const name = Entity.getNameTag(Player.getLocal());
+  Learning.list[name] ??= [];
+});

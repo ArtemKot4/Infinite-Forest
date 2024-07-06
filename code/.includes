@@ -14,6 +14,7 @@ api/ForestParticle.ts
 api/amulet/AmuletUI.ts
 api/amulet/AmuletBag.ts
 api/amulet/AmuletTicking.ts
+api/amulet/AmuletButton.ts
 api/amulet/Amulet.ts
 
 core/PlayerHelper.ts
@@ -24,8 +25,6 @@ core/starfall.ts
 items/book.ts
 items.ts 
 items/infinite_shark.ts
-
-learnings/Learning.ts
 
 infinite_table.ts
 structure.ts
@@ -84,3 +83,10 @@ core/callbacks/tick.ts
 
 another/archaeology/ArchaeologyBlock.ts
 another/archaeology/Archaeology.ts
+
+
+learnings/Learning.ts
+learnings/BookUI.ts
+learnings/IPageDescriptor.ts
+learnings/BookPage.ts
+learnings/Book.ts

@@ -6,7 +6,7 @@ abstract class TransferCrystal {
   public static storage: TransferStorage = new TransferStorage(
     "infinite_transfer_storage"
   );
-  public static worldList: Record<player, dimension>;
+  public static worldList: Record<player, dimension> = {};
   public static worldBlacklist: EDimension[] = [
     EDimension.END,
     EDimension.NETHER,
@@ -98,15 +98,14 @@ abstract class TransferCrystal {
   static {
     TransferCrystal.BLUE.onUse(TransferCrystal.onUseBlue);
     TransferCrystal.ORANGE.onUse(TransferCrystal.onUseOrange);
-    // Saver.addSavesScope(
-    //   "infinite_forest.defaultDimension.list",
-    //   function read(scope) {
-    //     TransferCrystal.worldList = scope.worldList || {};
-    //   },
-
-    //   function save() {
-    //     return { worldList: TransferCrystal.worldList };
-    //   }
-    // );
+    Saver.addSavesScope(
+      "infinite_forest.defaultDimension.list",
+      function read(scope) {
+        TransferCrystal.worldList = scope.worldList || {};
+      },
+      function save() {
+        return { worldList: TransferCrystal.worldList };
+      }
+    );
   }
 }

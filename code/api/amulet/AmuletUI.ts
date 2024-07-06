@@ -37,7 +37,7 @@ abstract class AmuletUI {
     return list;
   }
 
-  public static redraw(amulet_list: amulet_list[], player: int) {
+  public static redraw(amulet_list: amulet_list[]) {
     for (const i in AmuletUI.UI.content.elements) {
       const element = AmuletUI.UI.content.elements[i];
       if (element.type === "slot") {
@@ -57,7 +57,7 @@ abstract class AmuletUI {
   public static openFor(player: int) {
     const container = (AmuletUI.container_list[player] ??= new UI.Container());
     const amulet_list: amulet_list[] = AmuletUI.detectAmulets(player);
-    this.redraw(amulet_list, player);
+    this.redraw(amulet_list);
     container.openAs(AmuletUI.UI);
     AmuletUI.UI.forceRefresh();
   }
