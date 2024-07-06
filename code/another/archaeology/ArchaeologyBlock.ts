@@ -99,8 +99,7 @@ class ArchaeologyBlock extends FBlock {
   ): void {
     const pack = ArchaeologyBlock.itemStorage.get(coords);
     if (
-      !pack ||
-      (pack && pack.animation !== null) ||
+      !!pack?.animation ||
       block.data !== ArchaeologyBlock.ANIMATION_CREATE_VALID_DATA
     ) {
       return;
@@ -186,7 +185,7 @@ class ArchaeologyBlock extends FBlock {
       );
       return;
     }
-    if (!this.itemExists(coords) && block.data === 0) {
+    if (block.data === 0) {
       const instance = this.selectItem();
       this.addItemByCoordinates(block, coords, instance);
     }
@@ -197,7 +196,7 @@ class ArchaeologyBlock extends FBlock {
   }
   static {
     Callback.addCallback("DestroyBlock", (coords, block, player) => {
-      ArchaeologyBlock.itemStorage.get(coords)?.animation.destroy();
+      ArchaeologyBlock.itemStorage.get(coords)?.animation?.destroy();
     });
   }
 }

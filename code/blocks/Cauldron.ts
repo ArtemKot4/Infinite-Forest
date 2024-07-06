@@ -12,27 +12,46 @@ class Caulron extends TileEntityBase {
   public animation: Animation.Base;
   public item_animations: Animation.Item[];
   public static TIMER_MAX = 250;
-  public static CURRENT_SLOT_MAX = 9;
+  public static SLOT_MAX = 9;
   public defaultValues = {
-    current_slot: 0,
     boiling: false,
     timer: 0,
   };
-  data: { current_slot: int; boiling: boolean; timer: int };
-  public currentSlotLogic(player: PlayerEntity) {
-    if (player.getCarriedItem().id === 0) {
-      if (Entity.getSneaking(player.getUid()) === false) {
-        this.data.current_slot < Caulron.CURRENT_SLOT_MAX &&
-          this.data.current_slot++;
-      } else {
-        this.data.current_slot > 0 && this.data.current_slot--;
+  data: { boiling: boolean; timer: int };
+  public getCurrentSlotName(): string {
+    for (let i = 0; i < Caulron.SLOT_MAX; i++) {
+      const slot = this.container.getSlot("slot_" + i);
+      if (slot.id !== 0) {
+        return "slot_" + (i === Caulron.SLOT_MAX ? Caulron.SLOT_MAX : i + 1);
       }
-    } else {
-      this.data.current_slot < Caulron.CURRENT_SLOT_MAX &&
-        this.data.current_slot++;
     }
-  };
-  public onItemUse(coords: Callback.ItemUseCoordinates, item: ItemStack, player: number) {
-      this.currentSlotLogic(new PlayerEntity(player));
+  }
+  public setCurrentSlot(instance: ItemInstance) {
+    const currentSlotName = this.getCurrentSlotName();
+    const currentSlot = this.container.getSlot(currentSlotName);
+    if (currentSlot.count + instance.count) return;
+    return this.container.setSlot(
+      currentSlotName,
+      instance.id,
+      currentSlot.count + instance.count,
+      instance.data,
+      instance.extra || null
+    );
+  }
+  getCurrentSlot(instance: ItemInstance) {
+    return this.container.getSlot(this.getCurrentSlotName());
+  }
+  public takeCurrentSlot(player: int): void {
+    const currentSlotName = this.getCurrentSlotName();
+    const currentSlot = this.container.getSlot(currentSlotName);
+    PlayerHelper.takeItemInstance(player, currentSlot);
+    this.setCurrentSlot(new ItemStack());
+  }
+  public onItemUse(
+    coords: Callback.ItemUseCoordinates,
+    item: ItemStack,
+    player: number
+  ) {
+    // this.currentSlotLogic(new PlayerEntity(player));
   }
 }

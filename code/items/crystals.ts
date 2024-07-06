@@ -73,29 +73,31 @@ abstract class TransferCrystal {
       }
       return list;
     }
+  };
+  public static onUseBlue(coords, item, block, player) {
+    const list = TransferCrystal.validateBlacklist(player);
+    const name = Entity.getNameTag(player);
+    if (!!list && list instanceof Array) {
+      TransferCrystal.storage.place(
+        new Vector3(coords.x, coords.y + 1, coords.z),
+        player,
+        list
+      );
+    }
+    TransferCrystal.worldList[name] = Entity.getDimension(player);
+    TransferCrystal.transferEvent(player, InfiniteForest.id);
+    return;
+  };
+  public static onUseOrange(coords, item, block, player) {
+    const name = Entity.getNameTag(player);
+    const takeDimension = (TransferCrystal.worldList[name] ??=
+      EDimension.NORMAL);
+    TransferCrystal.transferEvent(player, takeDimension);
+    return;
   }
   static {
-    TransferCrystal.BLUE.onUse((coords, item, block, player) => {
-      const list = TransferCrystal.validateBlacklist(player);
-      const name = Entity.getNameTag(player);
-      if (!!list && list instanceof Array) {
-        TransferCrystal.storage.place(
-          new Vector3(coords.x, coords.y + 1, coords.z),
-          player,
-          list
-        );
-        TransferCrystal.worldList[name] = Entity.getDimension(player);
-      }
-      TransferCrystal.transferEvent(player, InfiniteForest.id);
-      return;
-    });
-    TransferCrystal.ORANGE.onUse((coords, item, block, player) =>
-      TransferCrystal.transferEvent(
-        player,
-        TransferCrystal.worldList[Entity.getNameTag(player)] ??
-          EDimension.NORMAL
-      )
-    );
+    TransferCrystal.BLUE.onUse(TransferCrystal.onUseBlue);
+    TransferCrystal.ORANGE.onUse(TransferCrystal.onUseOrange);
     // Saver.addSavesScope(
     //   "infinite_forest.defaultDimension.list",
     //   function read(scope) {

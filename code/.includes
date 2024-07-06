@@ -16,6 +16,8 @@ api/amulet/AmuletBag.ts
 api/amulet/AmuletTicking.ts
 api/amulet/Amulet.ts
 
+core/PlayerHelper.ts
+
 particles.ts
 core/starfall.ts
 
