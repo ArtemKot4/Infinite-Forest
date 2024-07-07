@@ -13,6 +13,12 @@ class Learning {
     );
     Learning.list[name].push(this.name);
   };
+  public static sendReflection(player: int, name: string, message: string, ...learnings: Learning[]) {
+    for(const learning of learnings) {
+      if(learning.has(player) === false) return;
+    };
+    new Learning(name, message)
+  }
   public has(player: int) {
     return Learning.list?.[Entity.getNameTag(player)].includes(this.name);
   };

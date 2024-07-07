@@ -148,3 +148,7 @@ Translation.addTranslation("message.infinite_forest.archaeology_water_not_valid"
   en: "Sorry, but for checking sand you need a wait a rain!"
 });
 
+Translation.addTranslation("message.infinite_forest.reflection", {
+  ru: "У вас появилась новая почва для размышлений...",
+  en: "You have a new ground for reflections..."
+});
