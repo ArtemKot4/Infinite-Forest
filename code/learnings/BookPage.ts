@@ -118,12 +118,9 @@ class BookPage {
       ""
     );
     for (const dir of DIRS) {
-      const takeJSON = JSON.parse(FileTools.ReadText(dir.getAbsolutePath()));
-      for (const k in takeJSON) {
-        const description = takeJSON[k] as IPageDescriptor;
-        BookPage.resultPages[description.left.elements.title] =
-          BookPage.constructElementList(description);
-      }
+      const takeJSON = JSON.parse(FileTools.ReadText(dir.getAbsolutePath())) as IPageDescriptor;
+      BookPage.resultPages[takeJSON.left.elements.title] =
+      BookPage.constructElementList(takeJSON);
     }
     //TODO: description.directions write logic
   }

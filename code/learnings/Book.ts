@@ -2,8 +2,10 @@ class Book {
   public ITEM: FItem;
   constructor(id: string, texture: string = id) {
     this.ITEM = new FItem(id, 1, null, texture);
+    Item.registerNoTargetUseFunction(this.ITEM.getID(), this.onUse);
   };
-  onUse(coords: Callback.ItemUseCoordinates, item: ItemInstance, block: Tile, player: number) {
+  onUse(item: ItemInstance, player: number) {
+    return BookUI.openFor(player);
   }
 }
 

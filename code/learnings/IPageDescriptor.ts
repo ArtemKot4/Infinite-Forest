@@ -1,39 +1,39 @@
 type pageElements = {
   title: string;
-    subtitle?: string;
-    text: string;
+  subtitle?: string;
+  text: string;
 };
+
 type pageImage = {
   type: "item" | "default";
   x: int;
   y: int;
   scale: int;
   texture: string;
-}
-interface IPageContent {
-  elements: pageElements
+};
+
+type pageContent = {
+  elements: pageElements;
   images?: pageImage[];
 };
 
+type pageDirection = {
+  name: string;
+  texture: string;
+  content: pageContent;
+};
+
+
 interface IPageDescriptor {
-  left: IPageContent
-  right: IPageContent & {
+  left: pageContent;
+  /**
+   * directions can't be used if you use a right page
+   */
+  right: pageContent & {
     directions?: {
-      first: {
-        name: string;
-        texture: string;
-        text: string;
-      };
-      second?: {
-        name: string;
-        texture: string;
-        text: string;
-      };
-      third?: {
-        name: string;
-        texture: string;
-        text: string;
-      };
+      first: pageDirection;
+      second?: pageDirection;
+      third?: pageDirection;
     };
   };
-}
+};

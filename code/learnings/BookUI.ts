@@ -4,8 +4,12 @@ abstract class BookUI {
   protected static content = {
     drawing: [
       {
+        type: "background",
+        color: android.graphics.Color.argb(0, 0, 0, 0),
+      },
+      {
         type: "bitmap",
-        bitmap: "learning_book_background",
+        bitmap: "book.learning_book_background",
         x: UI.getScreenHeight() * 0.75,
         y: 5,
         scale: 3,
@@ -14,7 +18,7 @@ abstract class BookUI {
     elements: {
         "closeButton": {
             type: "closeButton",
-            x: UI.getScreenHeight() * 0.5,
+            x: UI.getScreenHeight() * 0.8,
             y: 10,
             scale: 3,
             bitmap: "close_button"
@@ -22,13 +26,13 @@ abstract class BookUI {
         "buttonRight": {
           type: "button",
           x: UI.getScreenHeight() * 0.75,
-          y: 100,
+          y: 350,
           scale: 3
         },
         "buttonLeft": {
           type: "button",
-          x:  UI.getScreenHeight() * 0.35,
-          y: 100,
+          x:  UI.getScreenHeight() * 1.75,
+          y: 350,
           scale: 3
         }
     }
@@ -38,4 +42,13 @@ abstract class BookUI {
     const concatedElements = Object.assign(BookUI.content.elements, elements);
     BookUI.UI.setContent(Object.assign({}, BookUI.content,concatedElements ) as UI.WindowContent)
   };
+  public static pagesList: Record<playerName, string[]> = {}
+  public static openFor(player: int) {
+    const name = Entity.getNameTag(player);
+    BookUI.setContent(BookPage.resultPages[(BookUI.pagesList[name] ??= ["book_title"])[0]]);
+    BookUI.UI.forceRefresh();
+    BookUI.UI.open();
+    Game.message(JSON.stringify(BookPage.resultPages));
+    Game.message(JSON.stringify(BookUI.pagesList[name]));
+  }
 }
