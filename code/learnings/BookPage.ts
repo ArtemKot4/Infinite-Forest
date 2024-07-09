@@ -119,9 +119,15 @@ class BookPage {
     );
     for (const dir of DIRS) {
       const takeJSON = JSON.parse(FileTools.ReadText(dir.getAbsolutePath())) as IPageDescriptor;
+      alert(JSON.stringify(takeJSON));
       BookPage.resultPages[takeJSON.left.elements.title] =
       BookPage.constructElementList(takeJSON);
     }
     //TODO: description.directions write logic
-  }
+  };
+
+  static {
+    BookPage.readFromJSON();
+  };
+  
 }
