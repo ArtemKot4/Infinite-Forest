@@ -29,7 +29,8 @@ class BookPage {
     elements[side + "Title"] = {
       type: "text",
       font: {
-        size: 30,
+        size: 30, 
+        color: android.graphics.Color.parseColor(Native.Color.DARK_GREEN) 
       },
       x: pos.title.x,
       y: pos.title.y,
@@ -39,43 +40,47 @@ class BookPage {
       type: "text",
       font: {
         size: 22.5,
+        color: android.graphics.Color.argb(1, 255, 255, 255)
       },
       x: pos.subtitle.x,
       y: pos.subtitle.y,
       text: BookPage.separateText(Translation.translate(description.subtitle)),
+    
     };
     elements[side + "Text"] = {
       type: "text",
       font: {
         size: 15,
+        color: android.graphics.Color.argb(1, 255, 255, 255)
       },
       x: pos.text.x,
       y: pos.text.y,
       text: BookPage.separateText(Translation.translate(description.text)),
-    };
-  }
+      multiline: true
+    }
+    ; 
+  } 
   public static constructElementList(description: IPageDescriptor) {
     const elements = {} as UI.ElementSet;
     BookPage.constructText(
       elements,
       description.left.elements,
       {
-        title: { x: UI.getScreenHeight() / 3.5, y: 10 },
-        subtitle: { x: UI.getScreenHeight() / 3.25, y: 25 },
-        text: { x: UI.getScreenHeight() / 3.5, y: 35 },
+        title: { x: UI.getScreenHeight() / 1.95, y: 60 },
+        subtitle: { x: UI.getScreenHeight() / 1.8, y: 100 },
+        text: { x: UI.getScreenHeight() / 1.95, y: 145 },
       },
       "left"
     );
-
     BookPage.constructText(
       elements,
-      description.left.elements,
+      description.right.elements,
       {
-        title: { x: UI.getScreenHeight() / 2.5, y: 10 },
-        subtitle: { x: UI.getScreenHeight() / 2.25, y: 25 },
-        text: { x: UI.getScreenHeight() / 2.5, y: 35 },
+        title: { x: UI.getScreenHeight() * 1.1, y: 60 },
+        subtitle: { x: UI.getScreenHeight() * 1.15, y: 100 },
+        text: { x: UI.getScreenHeight() * 1.1, y: 145 },
       },
-      "left"
+      "right"
     );
     BookPage.constructImage(elements, description.left.images);
     BookPage.constructImage(elements, description.right.images);
@@ -118,16 +123,16 @@ class BookPage {
       ""
     );
     for (const dir of DIRS) {
-      const takeJSON = JSON.parse(FileTools.ReadText(dir.getAbsolutePath())) as IPageDescriptor;
-      alert(JSON.stringify(takeJSON));
+      const takeJSON = JSON.parse(
+        FileTools.ReadText(dir.getAbsolutePath())
+      ) as IPageDescriptor;
       BookPage.resultPages[takeJSON.left.elements.title] =
-      BookPage.constructElementList(takeJSON);
+        BookPage.constructElementList(takeJSON);
     }
     //TODO: description.directions write logic
-  };
+  }
 
   static {
     BookPage.readFromJSON();
-  };
-  
+  }
 }

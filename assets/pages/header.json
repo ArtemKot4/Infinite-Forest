@@ -1,16 +1,16 @@
 {
     "left": {
     "elements": {
-        "title": "book_title",
-        "subtitle": "book_subtitle",
-        "text": "default_text"
+        "title": "main_title",
+        "subtitle": "main_subtitle",
+        "text": "main_text"
     }
  },
  "right": {
     "elements": {
-        "title": "book_title_base",
-        "subtitle": "book_subtitle_base",
-        "text": "default_text_base"
+        "title": "main_title_info",
+        "subtitle": "main_subtitle_info",
+        "text": "main_text_info"
     }
  } 
 }
