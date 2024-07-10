@@ -7,10 +7,18 @@ abstract class TransferCrystal {
     "infinite_transfer_storage"
   );
   public static worldList: Record<player, dimension> = {};
-  public static worldBlacklist: EDimension[] = [
+  protected static worldBlacklist: EDimension[] = [
     EDimension.END,
     EDimension.NETHER,
   ];
+  public static get getWorldBlacklist() {
+    return TransferCrystal.worldBlacklist
+  };
+  public static addToBlacklist(...worlds: int[]) {
+      for(const world of worlds) {
+        TransferCrystal.worldBlacklist.push(world);
+    }
+  }
   public static itemBlacklist: int[] = [
     VanillaBlockID.netherite_block,
     VanillaItemID.netherite_ingot,
@@ -31,11 +39,19 @@ abstract class TransferCrystal {
   public static transferEvent(player: int, dimension: int) {
     const entity = new PlayerEntity(player);
     const currentWorld = entity.getDimension();
-    if (
-      currentWorld !== dimension &&
-      !TransferCrystal.worldBlacklist.includes(currentWorld) &&
-      Entity.getSneaking(player) === true
-    ) {
+    if (TransferCrystal.worldBlacklist.includes(currentWorld)) {
+      const client = Network.getClientForPlayer(player);
+      client &&
+        BlockEngine.sendUnlocalizedMessage(
+          client,
+          Native.Color.RED +
+            Translation.translate(
+              "message.infinite_forest.transfer_world_wrong"
+            )
+        );
+        return;
+    };
+    if (currentWorld !== dimension && Entity.getSneaking(player) === true) {
       entity.getGameMode() !== EGameMode.CREATIVE &&
         entity.decreaseCarriedItem(1);
       Dimensions.transfer(player, dimension);
@@ -73,7 +89,7 @@ abstract class TransferCrystal {
       }
       return list;
     }
-  };
+  }
   public static onUseBlue(coords, item, block, player) {
     const list = TransferCrystal.validateBlacklist(player);
     const name = Entity.getNameTag(player);
@@ -87,7 +103,7 @@ abstract class TransferCrystal {
     TransferCrystal.worldList[name] = Entity.getDimension(player);
     TransferCrystal.transferEvent(player, InfiniteForest.id);
     return;
-  };
+  }
   public static onUseOrange(coords, item, block, player) {
     const name = Entity.getNameTag(player);
     const takeDimension = (TransferCrystal.worldList[name] ??=

@@ -5,64 +5,84 @@ abstract class BookUI {
     drawing: [
       {
         type: "background",
-        color: android.graphics.Color.argb(0, 0, 0, 0),
+        color: android.graphics.Color.argb(0.85, 102, 102, 102),
       },
       {
         type: "bitmap",
         bitmap: "book.learning_book_background",
-        x: UI.getScreenHeight() * 0.3,
-        y: 15,
-        scale: 1.5,
+        x: UI.getScreenHeight() / 3,
+        y: 30,
+        scale: 2,
       },
     ],
     elements: {
       closeButton: {
         type: "closeButton",
-        x: UI.getScreenHeight() / 2,
-        y: 65,
-        scale: 3,
+        x: UI.getScreenHeight() / 1.05,
+        y: 50,
+        scale: 2.8,
         bitmap: "close_button",
       },
       buttonRight: {
         type: "button",
         x: UI.getScreenHeight() * 1.5,
-        y: 250,
+        y: 365,
         scale: 3,
         bitmap: "book.right_button",
         bitmap2: "book.right_button_pressed",
-        clicker: {
-          onClick: BookUI.rightOnClick,
-        },
       },
       buttonLeft: {
         type: "button",
-        x: UI.getScreenHeight() / 2,
-        y: 250,
+        x: UI.getScreenHeight() / 1.75,
+        y: 365,
         scale: 3,
         bitmap: "book.left_button",
         bitmap2: "book.left_button_pressed",
-        clicker: {
-          onClick: BookUI.leftOnClick,
-        },
       },
+
       number1: {
         type: "text",
-        x: UI.getScreenHeight() / 1.5,
-        y: 300,
+        x: UI.getScreenHeight() / 1.25,
+        y: 365,
         font: {
           size: 15,
+          color: android.graphics.Color.DKGRAY
         },
-        text: "error 1",
+        text: ERROR_WARNING,
       },
       number2: {
         type: "text",
-        x: UI.getScreenHeight() * 1.5,
-        y: 300,
+        x: UI.getScreenHeight() * 1.75,
+        y: 365,
         font: {
           size: 15,
+          color: android.graphics.Color.DKGRAY
         },
-        text: "error 2",
+        text: ERROR_WARNING,
       },
+      /*
+       
+      number1: {
+        type: "text",
+        x: UI.getScreenHeight() / 1.2,
+        y: 365,
+        font: {
+          size: 15,
+          color: android.graphics.Color.DKGRAY
+        },
+        text: ERROR_WARNING,
+      },
+      number2: {
+        type: "text",
+        x: UI.getScreenHeight() * 1.4,
+        y: 365,
+        font: {
+          size: 15,
+          color: android.graphics.Color.DKGRAY
+        },
+        text: ERROR_WARNING,
+      }, 
+       */
     },
   } as UI.WindowContent;
   protected static drawPageNumbers() {
@@ -75,10 +95,12 @@ abstract class BookUI {
 
   protected static findPageIndex() {
     const playerName = Entity.getNameTag(Player.getLocal());
-    const content = BookUI.UI.getContent();
-    const findPageIndex = BookUI.pagesList[playerName].findIndex(
-      (v) => v === content.elements["leftTitle"].text
+    const findPageIndex = BookUI.pagesList[playerName].findIndex((v) =>
+      (BookUI.UI.content.elements["leftTitle"].text as string).includes(
+        Translation.translate(v)
+      )
     );
+    alert(BookUI.UI.content.elements["leftTitle"].text);
     return findPageIndex;
   }
 
@@ -86,9 +108,7 @@ abstract class BookUI {
     const name = Entity.getNameTag(Player.getLocal());
     if (BookUI.pagesList[name][index] !== undefined) {
       BookUI.setContent(
-        BookPage.resultPages[
-          (BookUI.pagesList[name] ??= ["main_title"])[index]
-        ]
+        BookPage.resultPages[(BookUI.pagesList[name] ??= ["main_title"])[index]]
       );
     }
   }
@@ -104,7 +124,7 @@ abstract class BookUI {
   ) {
     return BookUI.buttonFlip(BookUI.findPageIndex() - 1);
   }
-  protected static UI = new UI.Window(BookUI.content as UI.WindowContent);
+  public static UI = new UI.Window(BookUI.content as UI.WindowContent);
   public static setContent(elements: UI.ElementSet) {
     const concatedElements = Object.assign(BookUI.content.elements, elements);
     BookUI.UI.setContent(

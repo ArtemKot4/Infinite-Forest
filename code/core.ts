@@ -1,4 +1,11 @@
+IMPORT("TileRender");
+IMPORT("BlockEngine");
+IMPORT("ItemAnimHelper");
+IMPORT("SoundAPI");
+IMPORT("RenderUtil");
 IMPORT("BlockAnimator");
+
+const ERROR_WARNING = "Error! please send issue on https://github.com/Artem0n4/Infinite-Forest"
 
 type int = number;
 type universal = string | number;

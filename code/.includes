@@ -64,7 +64,7 @@ blocks/TransferStorage.ts
 
 
 
-items/crystals.ts
+items/TransferCrystal.ts
 items/dusts.ts
 
 dimension/dimension.ts

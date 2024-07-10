@@ -33,6 +33,7 @@ class ColdCurse extends Curse {
       if (ColdCurse.UI.isOpened() && ticker > 2) {
         ticker--;
         ColdCurse.UI.layout.setAlpha(1 / ticker);
+        ColdCurse.UI.forceRefresh()
       }
       if (new PlayerActor(player).getGameMode() !== EGameMode.CREATIVE) {
         Entity.damageEntity(player, 5);
@@ -49,6 +50,7 @@ class ColdCurse extends Curse {
     } else {
       const isOpened = ColdCurse.UI.isOpened() === true;
       isOpened && ColdCurse.UI.layout.setAlpha(1);
+      ColdCurse.UI.forceRefresh()
       isOpened && ColdCurse.UI.close();
       ticker = 1000;
     }

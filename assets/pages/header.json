@@ -11,6 +11,14 @@
         "title": "main_title_info",
         "subtitle": "main_subtitle_info",
         "text": "main_text_info"
-    }
+       
+    },
+    "images": [{
+        "type": "item",
+        "x": 700,
+        "y": 50,
+        "scale": 3,
+        "texture": "blue_crystal"
+    }]
  } 
 }

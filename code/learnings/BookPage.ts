@@ -14,8 +14,8 @@ class BookPage {
     let result = "";
     for (let i = 0; i < text.length; i++) {
       result += text[i];
-      if ((i + 1) % 60 === 0) {
-        result += "\n";
+      if ((i + 1) % 25 === 0) {
+        result += result[i] === " " ? "\n" : "-\n";
       }
     }
     return result;
@@ -26,40 +26,48 @@ class BookPage {
     pos: IPagePosition,
     side: "left" | "right"
   ) {
+    const translatedTitle = Translation.translate(description.title);
     elements[side + "Title"] = {
       type: "text",
       font: {
-        size: 30, 
-        color: android.graphics.Color.parseColor(Native.Color.DARK_GREEN) 
+        size: 20,
+        color: android.graphics.Color.parseColor("#00A416"),
       },
-      x: pos.title.x,
+      x:
+        pos.title.x +
+        (translatedTitle.length < 8 ? translatedTitle.length * 2.5 : 0),
       y: pos.title.y,
-      text: BookPage.separateText(Translation.translate(description.title)),
+      text: BookPage.separateText(translatedTitle),
     };
     elements[side + "Subtitle"] = {
       type: "text",
       font: {
-        size: 22.5,
-        color: android.graphics.Color.argb(1, 255, 255, 255)
+        size: 16.5,
+        color: android.graphics.Color.parseColor("#194D33"),
       },
       x: pos.subtitle.x,
       y: pos.subtitle.y,
       text: BookPage.separateText(Translation.translate(description.subtitle)),
-    
     };
     elements[side + "Text"] = {
       type: "text",
       font: {
-        size: 15,
-        color: android.graphics.Color.argb(1, 255, 255, 255)
+        size: 12.5,
+        color: android.graphics.Color.parseColor("#9E9E9E"),
       },
       x: pos.text.x,
       y: pos.text.y,
       text: BookPage.separateText(Translation.translate(description.text)),
-      multiline: true
+      multiline: true,
+      clicker: {
+        onLongClick(position, container, tileEntity, window, canvas, scale) { //TODO: DELETE
+           BookUI.UI.content.elements[side + "Text"].x = position.x;
+           BookUI.UI.content.elements[side + "Text"].y = position.y;
+           BookUI.UI.forceRefresh();
+      }
     }
-    ; 
-  } 
+  }
+}
   public static constructElementList(description: IPageDescriptor) {
     const elements = {} as UI.ElementSet;
     BookPage.constructText(
@@ -67,8 +75,8 @@ class BookPage {
       description.left.elements,
       {
         title: { x: UI.getScreenHeight() / 1.95, y: 60 },
-        subtitle: { x: UI.getScreenHeight() / 1.8, y: 100 },
-        text: { x: UI.getScreenHeight() / 1.95, y: 145 },
+        subtitle: { x: UI.getScreenHeight() / 1.8, y: 85 },
+        text: { x: UI.getScreenHeight() / 1.95, y: 110 },
       },
       "left"
     );
@@ -77,8 +85,8 @@ class BookPage {
       description.right.elements,
       {
         title: { x: UI.getScreenHeight() * 1.1, y: 60 },
-        subtitle: { x: UI.getScreenHeight() * 1.15, y: 100 },
-        text: { x: UI.getScreenHeight() * 1.1, y: 145 },
+        subtitle: { x: UI.getScreenHeight() * 1.15, y: 85 },
+        text: { x: UI.getScreenHeight() * 1.1, y: 110 },
       },
       "right"
     );
@@ -89,11 +97,12 @@ class BookPage {
   public static constructImage(elements: UI.ElementSet, images: pageImage[]) {
     if (images) {
       for (const image of images) {
+        alert(JSON.stringify(image));
         if (image.type === "default") {
           elements[image.texture] = {
             type: "image",
-            x: UI.getScreenHeight() * 0.75 + image.x,
-            y: 20 + image.y,
+            x: image.x,
+            y: 200 + image.y,
             bitmap: image.texture,
             scale: image.scale,
           };
@@ -106,8 +115,8 @@ class BookPage {
 
           elements[image.texture] = {
             type: "slot",
-            x: UI.getScreenHeight() * 0.75 + image.x,
-            y: 20 + image.y,
+            x: image.x,
+            y: 200 + image.y,
             bitmap: "unknown",
             scale: image.scale,
             visual: true,

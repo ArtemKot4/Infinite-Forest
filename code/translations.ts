@@ -1,8 +1,3 @@
-IMPORT("TileRender");
-IMPORT("BlockEngine");
-IMPORT("ItemAnimHelper");
-IMPORT("SoundAPI");
-IMPORT("RenderUtil");
 
 Translation.addTranslation("Iron cauldron", {
   ru: "Железный котёл",
@@ -67,8 +62,8 @@ Translation.addTranslation("orange_crystal", {
 });
 
 Translation.addTranslation("learning_book", {
-  ru: "Личный дневник",
-  en: "Personal diary",
+  ru: Native.Color.GREEN + "Дневник исследователя",
+  en: Native.Color.GREEN + "Diary of researcher",
 });
 
 Translation.addTranslation("It burns", {
@@ -80,29 +75,6 @@ Translation.addTranslation("It burns", {
 // en: "§6I will go out only when the\nlast light goes out, and the last leaf,\nthat aspired to life the most will die"})
 
 Translation.addTranslation("Castle print", { ru: "§6Грубое выражение печати" });
-
-Translation.addTranslation("Player teleported to Infinite forest", {
-  ru: "Игрок перенесён в бесконечный лес",
-});
-Translation.addTranslation("Player teleported to overworld", {
-  ru: "Игрок перенесён в обычный мир",
-});
-
-Translation.addTranslation("You really think that it good idea?", {
-  ru: "Ты правда думаешь что это хорошая идея?",
-});
-
-Translation.addTranslation("Whats the point of that?", {
-  ru: "Какой в этом смысл?",
-});
-
-Translation.addTranslation("Thats now how it works :)", {
-  ru: "Это не так работает :)",
-});
-
-Translation.addTranslation("If you don't stop, i must crash game", {
-  ru: "Если ты не остановишься, я буду вынужден крашнуть игру",
-});
 
 Translation.addTranslation("You need to pour water in caludron", {
   ru: "Для котла нужна вода",
@@ -167,7 +139,46 @@ Translation.addTranslation(
   }
 );
 
+
+Translation.addTranslation(
+  "message.infinite_forest.transfer_world_wrong",
+  {
+    ru: "Этот мир не подходит",
+    en: "It is world is not right",
+  }
+);
+
+
 Translation.addTranslation("message.infinite_forest.reflection", {
   ru: "У вас появилась новая почва для размышлений...",
   en: "You have a new ground for reflections...",
+});
+
+Translation.addTranslation("main_title", {
+  ru: "Начало",
+  en: "Beginning",
+});
+
+Translation.addTranslation("main_subtitle", {
+  ru: "Странное чувство",
+  en: "Strange feeling",
+});
+Translation.addTranslation("main_text", { 
+  ru: "«Перед вами будет простираться огромный лес, таящий в себе много неизведанного, а над вашей головой будут высочайшие деревья». Именно с этой мысли и начался мой день.", 
+  en: "«In front of you there will be an enormous forest, hiding many unknown things within itself, and above your head there will be the tallest trees». That was the thought that started my day.", 
+}); 
+
+Translation.addTranslation("main_title_info", { 
+  ru: "Новая цель", 
+  en: "First remember", 
+}); 
+
+Translation.addTranslation("main_subtitle_info", { 
+  ru: "Голубой кристалл", 
+  en: "Blue crystal", 
+}); 
+
+Translation.addTranslation("main_text_info", { 
+  ru: "Что-то мне подсказывает, что я что-то упускаю. Думаю, не помешало бы покопаться в шахте", 
+  en: "Something tells me I'm missing something. I think it wouldn't hurt to dig in the mine."
 });
