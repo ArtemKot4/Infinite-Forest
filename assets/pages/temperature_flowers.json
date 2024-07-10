@@ -1,0 +1,25 @@
+{
+  "left": {
+    "elements": {
+      "title": "temperature_flowers_title",
+      "subtitle": "temperature_flowers_subtitle",
+      "text": "temperature_flowers_text"
+    },
+    "images": [
+      {
+        "type": "item",
+        "x": 150,
+        "y": 50,
+        "scale": 3,
+        "texture": "fironia"
+      },
+      {
+        "type": "item",
+        "x": 250,
+        "y": 50,
+        "scale": 3,
+        "texture": "ice_flower"
+      }
+    ]
+  }
+}

@@ -5,7 +5,7 @@ abstract class BookUI {
     drawing: [
       {
         type: "background",
-        color: android.graphics.Color.argb(0.85, 102, 102, 102),
+        color: android.graphics.Color.argb(0.35, 102, 102, 102),
       },
       {
         type: "bitmap",
@@ -42,21 +42,21 @@ abstract class BookUI {
 
       number1: {
         type: "text",
-        x: UI.getScreenHeight() / 1.25,
+        x: UI.getScreenHeight() / 1.35,
         y: 365,
         font: {
           size: 15,
-          color: android.graphics.Color.DKGRAY
+          color: android.graphics.Color.WHITE
         },
         text: ERROR_WARNING,
       },
       number2: {
         type: "text",
-        x: UI.getScreenHeight() * 1.75,
+        x: UI.getScreenHeight() * 1.35,
         y: 365,
         font: {
           size: 15,
-          color: android.graphics.Color.DKGRAY
+          color: android.graphics.Color.WHITE
         },
         text: ERROR_WARNING,
       },

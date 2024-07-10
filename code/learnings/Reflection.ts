@@ -33,6 +33,7 @@ class Reflection {
         Translation.translate("message.infinite_forest.reflection")
     );
     Reflection.list[name].add(this.name);
+    (BookUI.pagesList[name] ??= ["main_title"]).push(this.bookPage)
   }
 }
 
@@ -40,7 +41,7 @@ namespace ReflectionList {
   export const TEMPERATURE_FLOWERS = new Reflection(
     "temperature_flowers",
     "temperature_flowers",
-    null,
+    "temperature_flowers_title",
     LearningList.FIRONIA,
     LearningList.ICE_FLOWER
   );

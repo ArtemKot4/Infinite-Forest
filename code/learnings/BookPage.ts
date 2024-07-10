@@ -26,6 +26,7 @@ class BookPage {
     pos: IPagePosition,
     side: "left" | "right"
   ) {
+    if (!description) return;
     const translatedTitle = Translation.translate(description.title);
     elements[side + "Title"] = {
       type: "text",
@@ -60,49 +61,69 @@ class BookPage {
       text: BookPage.separateText(Translation.translate(description.text)),
       multiline: true,
       clicker: {
-        onLongClick(position, container, tileEntity, window, canvas, scale) { //TODO: DELETE
-           BookUI.UI.content.elements[side + "Text"].x = position.x;
-           BookUI.UI.content.elements[side + "Text"].y = position.y;
-           BookUI.UI.forceRefresh();
-      }
-    }
+        onLongClick(position, container, tileEntity, window, canvas, scale) {
+          //TODO: DELETE
+          BookUI.UI.content.elements[side + "Text"].x = position.x;
+          BookUI.UI.content.elements[side + "Text"].y = position.y;
+          BookUI.UI.forceRefresh();
+        },
+      },
+    };
   }
-}
   public static constructElementList(description: IPageDescriptor) {
     const elements = {} as UI.ElementSet;
-    BookPage.constructText(
-      elements,
-      description.left.elements,
-      {
-        title: { x: UI.getScreenHeight() / 1.95, y: 60 },
-        subtitle: { x: UI.getScreenHeight() / 1.8, y: 85 },
-        text: { x: UI.getScreenHeight() / 1.95, y: 110 },
-      },
-      "left"
-    );
-    BookPage.constructText(
-      elements,
-      description.right.elements,
-      {
-        title: { x: UI.getScreenHeight() * 1.1, y: 60 },
-        subtitle: { x: UI.getScreenHeight() * 1.15, y: 85 },
-        text: { x: UI.getScreenHeight() * 1.1, y: 110 },
-      },
-      "right"
-    );
-    BookPage.constructImage(elements, description.left.images);
-    BookPage.constructImage(elements, description.right.images);
+    if (description.left) {
+      BookPage.constructText(
+        elements,
+        description.left.elements,
+        {
+          title: { x: UI.getScreenHeight() / 1.95, y: 60 },
+          subtitle: { x: UI.getScreenHeight() / 1.8, y: 85 },
+          text: { x: UI.getScreenHeight() / 1.95, y: 110 },
+        },
+        "left"
+      );
+      BookPage.constructImage(
+        elements,
+        description.left.images,
+        UI.getScreenHeight() / 3,
+        200
+      );
+    }
+    if (description.right) {
+      BookPage.constructText(
+        elements,
+        description.right.elements,
+        {
+          title: { x: UI.getScreenHeight() * 1.1, y: 60 },
+          subtitle: { x: UI.getScreenHeight() * 1.15, y: 85 },
+          text: { x: UI.getScreenHeight() * 1.1, y: 110 },
+        },
+        "right"
+      );
+      BookPage.constructImage(
+        elements,
+        description.right.images,
+        UI.getScreenHeight(),
+        200
+      );
+    }
+
     return elements;
   }
-  public static constructImage(elements: UI.ElementSet, images: pageImage[]) {
+  public static constructImage(
+    elements: UI.ElementSet,
+    images: pageImage[],
+    x: int,
+    y: int
+  ) {
     if (images) {
       for (const image of images) {
-        alert(JSON.stringify(image));
         if (image.type === "default") {
           elements[image.texture] = {
             type: "image",
-            x: image.x,
-            y: 200 + image.y,
+            x: x + image.x,
+            y: y + image.y,
             bitmap: image.texture,
             scale: image.scale,
           };
@@ -115,8 +136,8 @@ class BookPage {
 
           elements[image.texture] = {
             type: "slot",
-            x: image.x,
-            y: 200 + image.y,
+            x: x + image.x,
+            y: y + image.y,
             bitmap: "unknown",
             scale: image.scale,
             visual: true,
@@ -137,6 +158,7 @@ class BookPage {
       ) as IPageDescriptor;
       BookPage.resultPages[takeJSON.left.elements.title] =
         BookPage.constructElementList(takeJSON);
+      alert(JSON.stringify(BookPage.resultPages[takeJSON.left.elements.title]));
     }
     //TODO: description.directions write logic
   }
