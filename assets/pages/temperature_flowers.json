@@ -5,21 +5,12 @@
       "subtitle": "temperature_flowers_subtitle",
       "text": "temperature_flowers_text"
     },
-    "images": [
-      {
-        "type": "item",
-        "x": 150,
-        "y": 50,
-        "scale": 3,
-        "texture": "fironia"
-      },
-      {
-        "type": "item",
-        "x": 250,
-        "y": 50,
-        "scale": 3,
-        "texture": "ice_flower"
-      }
-    ]
-  }
+    "images": [{
+      "type": "default",
+      "x": 70,
+      "y": 20,
+      "scale": 1.6,
+      "texture": "mystical_castle_painting"
+  }]
+    }
 }

@@ -54,11 +54,10 @@ namespace LearningList {
   export const FIRE_UNLIT = new Learning("fire_unlit");
   export const FIRONIA = new Learning("fironia");
   export const ICE_FLOWER = new Learning("ice_flower");
+  export const ELECTRIC_MUSHROOM = new Learning("electric_mushroom")
 }
 
 Learning.sendByClick({ id: BlockID["fironia"], data: 0 }, LearningList.FIRONIA);
-Learning.sendByClick(
-  { id: BlockID["ice_flower"], data: 0 },
-  LearningList.ICE_FLOWER
-);
+Learning.sendByClick({ id: BlockID["ice_flower"], data: 0 }, LearningList.ICE_FLOWER);
 
+Learning.sendByClick({id: BlockID["electric_mushroom"], data: 0}, LearningList.ELECTRIC_MUSHROOM);

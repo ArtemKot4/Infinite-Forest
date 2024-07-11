@@ -143,7 +143,7 @@ namespace ForestGeneration {
       VanillaBlockID.coal_ore,
       VanillaBlockID.air,
       VanillaBlockID.dirt,
-      VanillaBlockID.magma
+      VanillaBlockID.red_sandstone
     );
     for (let i = 0; i < 128; i++) {
       let coords = GenerationUtils.randomCoords(chunkX, chunkZ);
@@ -156,7 +156,7 @@ namespace ForestGeneration {
           World.setBlock(coords.x, coords.y, coords.z, cavesBlock_1, 0);
         } else {
           World.setBlock(coords.x, coords.y, coords.z, cavesBlock_2, 0);
-          if (cavesBlock_2 === VanillaBlockID.magma) {
+          if (cavesBlock_2 === VanillaBlockID.red_sandstone) {
             if (Math.random() < 0.4) {
               World.setBlock(
                 coords.x,

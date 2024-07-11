@@ -16,7 +16,7 @@
     "images": [{
         "type": "default",
         "x": 45,
-        "y": 10,
+        "y": 85,
         "scale": 3.5,
         "texture": "crystal_cave_painting"
     }]

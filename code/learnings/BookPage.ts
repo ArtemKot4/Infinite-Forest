@@ -37,7 +37,7 @@ class BookPage {
       },
       x:
         pos.title.x +
-        (translatedTitle.length < 8 ? translatedTitle.length * 2.5 : 0),
+        (translatedTitle.length < 14 ? translatedTitle.length * 4.5 : 0),
       y: pos.title.y,
       text: BookPage.separateText(translatedTitle),
     };
@@ -115,13 +115,12 @@ class BookPage {
         },
         "left"
       );
-
       BookPage.constructImage(
         drawing,
         elements,
         description.left.images,
         UI.getScreenHeight() / 2.7,
-        200
+        120
       );
     }
     if (description.right) {
@@ -140,7 +139,7 @@ class BookPage {
         elements,
         description.right.images,
         UI.getScreenHeight(),
-        200
+        120
       );
     }
 
@@ -161,7 +160,6 @@ class BookPage {
       const content = BookPage.constructContent(takeJSON);
       BookPage.resultPages[takeJSON.left.elements.title] =
         {elements: content.elements, drawing: content.drawing};
-      alert(JSON.stringify(BookPage.resultPages[takeJSON.left.elements.title]));
     }
     //TODO: description.directions write logic
   }

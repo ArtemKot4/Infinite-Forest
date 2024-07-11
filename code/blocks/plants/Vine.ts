@@ -178,7 +178,7 @@ const FLAME_VINE = new Vine(
     base: { texture: "flame_vine", block_type: BLOCK_TYPE_PLANT },
     top: { texture: "flame_vine_top", block_type: BLOCK_TYPE_FIRE },
   },
-  [VanillaBlockID.magma, VanillaBlockID.grass]
+  [VanillaBlockID.red_sandstone, VanillaBlockID.grass]
 );
 
 Block.setAnimateTickCallback(BlockID["flame_vine_top"], (x, y, z, id, data) => {

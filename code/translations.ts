@@ -182,3 +182,22 @@ Translation.addTranslation("main_text_info", {
   ru: "Что-то мне подсказывает, что я что-то упускаю. Думаю, не помешало бы покопаться в шахте", 
   en: "Something tells me I'm missing something. I think it wouldn't hurt to dig in the mine."
 });
+
+
+Translation.addTranslation("temperature_flowers_title", { 
+  ru: "Лесные растения", 
+  en: "Forest plants", 
+}); 
+
+
+Translation.addTranslation("temperature_flowers_subtitle", { 
+  ru: "Обжигают", 
+  en: "Burn", 
+}); 
+
+
+Translation.addTranslation("temperature_flowers_text", { 
+  ru: "Я встретил их случайно, и все они очень непросты...", 
+  en: "I meet with there by random, and all there is a smart", 
+}); 
+

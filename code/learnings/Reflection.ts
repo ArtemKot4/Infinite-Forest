@@ -43,7 +43,8 @@ namespace ReflectionList {
     "temperature_flowers",
     "temperature_flowers_title",
     LearningList.FIRONIA,
-    LearningList.ICE_FLOWER
+    LearningList.ICE_FLOWER,
+    LearningList.ELECTRIC_MUSHROOM
   );
 }
 
