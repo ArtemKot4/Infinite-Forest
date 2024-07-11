@@ -1,11 +1,11 @@
 abstract class BookUI {
-  protected static pagesContent() {}
+  public static pagesList: Record<playerName, string[]> = {};
   protected constructor() {}
   protected static content = {
     drawing: [
       {
         type: "background",
-        color: android.graphics.Color.argb(0.35, 102, 102, 102),
+        color: android.graphics.Color.argb(38, 22, 22, 22),
       },
       {
         type: "bitmap",
@@ -46,7 +46,7 @@ abstract class BookUI {
         y: 365,
         font: {
           size: 15,
-          color: android.graphics.Color.WHITE
+          color: android.graphics.Color.WHITE,
         },
         text: ERROR_WARNING,
       },
@@ -56,33 +56,10 @@ abstract class BookUI {
         y: 365,
         font: {
           size: 15,
-          color: android.graphics.Color.WHITE
+          color: android.graphics.Color.WHITE,
         },
         text: ERROR_WARNING,
       },
-      /*
-       
-      number1: {
-        type: "text",
-        x: UI.getScreenHeight() / 1.2,
-        y: 365,
-        font: {
-          size: 15,
-          color: android.graphics.Color.DKGRAY
-        },
-        text: ERROR_WARNING,
-      },
-      number2: {
-        type: "text",
-        x: UI.getScreenHeight() * 1.4,
-        y: 365,
-        font: {
-          size: 15,
-          color: android.graphics.Color.DKGRAY
-        },
-        text: ERROR_WARNING,
-      }, 
-       */
     },
   } as UI.WindowContent;
   protected static drawPageNumbers() {
@@ -106,10 +83,13 @@ abstract class BookUI {
 
   protected static buttonFlip(index: int) {
     const name = Entity.getNameTag(Player.getLocal());
-    if (BookUI.pagesList[name][index] !== undefined) {
-      BookUI.setContent(
-        BookPage.resultPages[(BookUI.pagesList[name] ??= ["main_title"])[index]]
-      );
+    alert(BookUI.pagesList[name][index] + " | " + BookUI.pagesList[name]); //TODO: DELETE
+    if (BookUI.pagesList[name][index]) {
+      const content =
+        BookPage.resultPages[
+          BookUI.pagesList?.[name][index]
+        ];
+     return BookUI.setContent(content);
     }
   }
   protected static rightOnClick(
@@ -125,20 +105,26 @@ abstract class BookUI {
     return BookUI.buttonFlip(BookUI.findPageIndex() - 1);
   }
   public static UI = new UI.Window(BookUI.content as UI.WindowContent);
-  public static setContent(elements: UI.ElementSet) {
-    const concatedElements = Object.assign(BookUI.content.elements, elements);
+  public static setContent(content: {elements: UI.ElementSet, drawing: UI.DrawingSet}) {
+    const concatedElements = Object.assign(BookUI.content.elements, content.elements);
+    const concatedDrawings = BookUI.content.drawing.concat(content.drawing);
     BookUI.UI.setContent(
-      Object.assign({}, BookUI.content, concatedElements) as UI.WindowContent
+      Object.assign(
+        {},
+        BookUI.content,
+        { elements: concatedElements },
+        { drawing: concatedDrawings }
+      ) as UI.WindowContent
     );
     BookUI.drawPageNumbers();
     BookUI.UI.forceRefresh();
   }
-  public static pagesList: Record<playerName, string[]> = {};
+
   public static openFor(player: int) {
     const name = Entity.getNameTag(player);
-    BookUI.setContent(
-      BookPage.resultPages[(BookUI.pagesList[name] ??= ["main_title"])[0]]
-    );
+    const content =
+      BookPage.resultPages[(BookUI.pagesList[name] ??= ["main_title"])[0]];
+    BookUI.setContent(content);
     BookUI.UI.open();
   }
 }

@@ -4,14 +4,7 @@
         "title": "main_title",
         "subtitle": "main_subtitle",
         "text": "main_text"
-    },
-    "images": [{
-        "type": "item",
-        "x": 150,
-        "y": 50,
-        "scale": 3,
-        "texture": "eucalyptus_stick"
-    }]
+    }
  },
  "right": {
     "elements": {
@@ -21,11 +14,11 @@
        
     },
     "images": [{
-        "type": "item",
-        "x": 100,
-        "y": 50,
-        "scale": 3,
-        "texture": "blue_crystal"
+        "type": "default",
+        "x": 35,
+        "y": 10,
+        "scale": 3.5,
+        "texture": "crystal_cave_painting"
     }]
  } 
 }

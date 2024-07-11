@@ -6,10 +6,11 @@ interface IPagePosition {
 
 class BookPage {
   constructor(public description: IPageDescriptor) {
+    const content = BookPage.constructContent(description)
     BookPage.resultPages[description.left.elements.title] =
-      BookPage.constructElementList(description);
+      {elements: content.elements, drawing: content.drawing};
   }
-  public static resultPages: Record<string, UI.ElementSet> = {};
+  public static resultPages: Record<string, {elements: UI.ElementSet, drawing: UI.DrawingSet}> = {};
   public static separateText(text: string) {
     let result = "";
     for (let i = 0; i < text.length; i++) {
@@ -70,8 +71,39 @@ class BookPage {
       },
     };
   }
-  public static constructElementList(description: IPageDescriptor) {
+  public static constructImage(
+    drawing: UI.DrawingSet,
+    elements: UI.ElementSet,
+    images: pageImage[],
+    defaultX: int,
+    defaultY: int
+  ) {
+    if (!images) return;
+    for (const image of images) {
+      if (image.type === "default") {
+        drawing.push({
+          type: "bitmap",
+          x: defaultX + image.x,
+          y: defaultY + image.y,
+          scale: image.scale,
+          bitmap: `book.${image.texture}`,
+        });
+      } else {
+        elements[image.texture] = {
+          type: "slot",
+          x: defaultX + image.x,
+          y: defaultY + image.y,
+          scale: image.scale,
+          bitmap: "unknown",
+          visual: true,
+          source: {id: parseID(image.texture), count: 1, data: 0}
+        };
+      }
+    }
+  }
+  public static constructContent(description: IPageDescriptor) {
     const elements = {} as UI.ElementSet;
+    const drawing = [] as UI.DrawingSet;
     if (description.left) {
       BookPage.constructText(
         elements,
@@ -83,10 +115,12 @@ class BookPage {
         },
         "left"
       );
+
       BookPage.constructImage(
+        drawing,
         elements,
         description.left.images,
-        UI.getScreenHeight() / 3,
+        UI.getScreenHeight() / 2.7,
         200
       );
     }
@@ -102,6 +136,7 @@ class BookPage {
         "right"
       );
       BookPage.constructImage(
+        drawing,
         elements,
         description.right.images,
         UI.getScreenHeight(),
@@ -109,43 +144,10 @@ class BookPage {
       );
     }
 
-    return elements;
+    return {elements, drawing};
   }
-  public static constructImage(
-    elements: UI.ElementSet,
-    images: pageImage[],
-    x: int,
-    y: int
-  ) {
-    if (images) {
-      for (const image of images) {
-        if (image.type === "default") {
-          elements[image.texture] = {
-            type: "image",
-            x: x + image.x,
-            y: y + image.y,
-            bitmap: image.texture,
-            scale: image.scale,
-          };
-        } else {
-          const id =
-            ItemID[image.texture] ??
-            VanillaItemID[image.texture] ??
-            VanillaBlockID[image.texture] ??
-            BlockID[image.texture];
-
-          elements[image.texture] = {
-            type: "slot",
-            x: x + image.x,
-            y: y + image.y,
-            bitmap: "unknown",
-            scale: image.scale,
-            visual: true,
-            source: { id: id, count: 1, data: 0 },
-          };
-        }
-      }
-    }
+  public static constructDirection(x: int, y: int, image: int) {
+    const onClick = function () {};
   }
   public static readFromJSON() {
     const DIRS = FileTools.GetListOfFiles(
@@ -156,8 +158,9 @@ class BookPage {
       const takeJSON = JSON.parse(
         FileTools.ReadText(dir.getAbsolutePath())
       ) as IPageDescriptor;
+      const content = BookPage.constructContent(takeJSON);
       BookPage.resultPages[takeJSON.left.elements.title] =
-        BookPage.constructElementList(takeJSON);
+        {elements: content.elements, drawing: content.drawing};
       alert(JSON.stringify(BookPage.resultPages[takeJSON.left.elements.title]));
     }
     //TODO: description.directions write logic

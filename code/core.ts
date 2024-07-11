@@ -133,3 +133,7 @@ function breakBlockIfAir(id: int) {
     }
   );
 }
+
+function parseID(id: string) {
+  return ItemID[id] || VanillaItemID[id] || BlockID[id] || VanillaBlockID[id];
+}

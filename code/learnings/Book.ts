@@ -5,6 +5,8 @@ class Book {
     Item.registerNoTargetUseFunction(this.ITEM.getID(), this.onUse);
   };
   onUse(item: ItemInstance, player: number) {
+    Game.message(JSON.stringify(BookPage.resultPages));
+    Game.message("\n" + Native.Color.GREEN + BookUI.pagesList[Entity.getNameTag(player)])
     return BookUI.openFor(player);
   }
 }
