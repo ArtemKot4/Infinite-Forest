@@ -37,8 +37,6 @@ class Torch {
         },
         0
       );
-
-    //Block.registerPlaceFunctionForID(this.block.getID(), this.place);
   }
   public static click(
     coords: Callback.ItemUseCoordinates,
@@ -81,6 +79,36 @@ const FLAME_TORCH = new Torch("flame", "flame_dust");
 const ICE_TORCH = new Torch("ice", "ice_dust");
 
 abstract class CursedLightning {
+  public static speedGlowworm(x: int, y: int, z: int, region: BlockSource) {
+    const entities = region.listEntitiesInAABB(
+      x - 32,
+      y - 8,
+      z - 32,
+      x + 32,
+      y + 8,
+      z + 32,
+      EEntityType.PLAYER,
+      false
+    );
+    entities.forEach((v) => Game.message(Entity.getTypeName(v)));
+    Game.message("\n\n");
+    const players = entities.filter(
+      (v) => Entity.getType(v) === Native.EntityType.PLAYER
+    );
+    players.forEach((v) => Game.message("player: " + v));
+    for (const player of players) {
+      ForestParticle.send(
+        EForestParticle.GLOWWORM,
+        x + 0.5,
+        y + 8,
+        z + 0.5,
+        0,
+        -0.6,
+        0,
+        player
+      );
+    }
+  }
   public static clouds(x: int, y: int, z: int, player: int) {
     for (let i = 0; i <= 6; i++) {
       ForestParticle.send(
@@ -148,12 +176,12 @@ class UnlitTorchTile extends TileEntityBase {
       //   false
       // );
       // for (const entity of entities) {
-        CursedLightning.clouds(this.x, this.y, this.z, Player.getLocal());
-        CursedLightning.rain(this.x, this.y, this.z, Player.getLocal(), speed);
-        if (lightlevel >= 3) {
-          UnlitTorchTile.scaled(this.x, this.y, this.z, speed, Player.getLocal());
-        }
-     // }
+      CursedLightning.clouds(this.x, this.y, this.z, Player.getLocal());
+      CursedLightning.rain(this.x, this.y, this.z, Player.getLocal(), speed);
+      if (lightlevel >= 3) {
+        UnlitTorchTile.scaled(this.x, this.y, this.z, speed, Player.getLocal());
+      }
+      // }
     }
   }
   static {
@@ -167,7 +195,7 @@ class UnlitTorchTile extends TileEntityBase {
 Block.setRandomTickCallback(
   BlockID["flame_eucalyptus_torch"],
   (x, y, z, id, data, region) => {
-    Entity.spawn(x, y, z, EEntityType.LIGHTNING_BOLT);
+    CursedLightning.speedGlowworm(x, y, z, region);
     TileEntity.destroyTileEntityAtCoords(x, y, z, region);
     region.setBlock(x, y, z, BlockID["eucalyptus_torch"], 0);
     TileEntity.addTileEntity(x, y, z, region);

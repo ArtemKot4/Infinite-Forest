@@ -1,39 +1,39 @@
 class Reflection {
-  public learnings: Learning[] = [];
-  public static list: Record<name, Set<name>> = {};
+  public static list: Record<name, {message: string, bookPage: string, learnings: string[]}> = {};
+  public static playerList: Record<name, Set<name>> = {};
   constructor(
     public name: string,
     public message: string,
     public bookPage: string,
-    ...learnings: Learning[]
+    ...learnings: string[]
   ) {
-    this.learnings = learnings;
+    Reflection.list[name] = {message, bookPage, learnings};
   }
-  public hasLearnings(player: int) {
-    const list = (Learning.list[player] ??= new Set());
-    for (const learning of this.learnings) {
-      if (learning.has(player) === false) {
+  public static hasLearnings(player: int, learnings: string[]) {
+    const list = (Learning.playerList[player] ??= new Set());
+    for (const learning of learnings) {
+      if (Learning.has(player, learning) === false) {
         return false;
       };
     }
     return true;
   };
-  public has(player: int) {
-    return (Reflection.list[Entity.getNameTag(player)] ??= new Set()).has(this.name)
+  public static has(player: int, name: string) {
+    return (Reflection.playerList[Entity.getNameTag(player)] ??= new Set()).has(name)
   }
-  public send(player: int) {
-    if (!this.hasLearnings(player)) return;
+  public static send(player: int, name: string) {
+    if(Reflection.has(player, name) === true) return;
+    if (!Reflection.hasLearnings(player, Reflection.list[name].learnings)) return;
     const client = Network.getClientForPlayer(player);
     if (!client) return;
-    const name = Entity.getNameTag(player);
-    if(this.has(player) === true) return;
     BlockEngine.sendUnlocalizedMessage(
       client,
       Native.Color.DARK_GREEN +
         Translation.translate("message.infinite_forest.reflection")
     );
-    Reflection.list[name].add(this.name);
-    (BookUI.pagesList[name] ??= ["main_title"]).push(this.bookPage)
+    const playerName = Entity.getNameTag(player);
+    Reflection.playerList[playerName].add(name);
+    (BookUI.pagesList[playerName] ??= ["main_title"]).push(Reflection.list[name].bookPage);
   }
 }
 
@@ -42,12 +42,12 @@ namespace ReflectionList {
     "temperature_flowers",
     "temperature_flowers",
     "temperature_flowers_title",
-    LearningList.FIRONIA,
-    LearningList.ICE_FLOWER,
-    LearningList.ELECTRIC_MUSHROOM
+    "fironia",
+    "ice_flower",
+    "electric_mushroom"
   );
 }
 
 Callback.addCallback("ItemUse", (c, i, b, ise, p) => {
-  ReflectionList.TEMPERATURE_FLOWERS.send(p);
+  Reflection.send(p, "temperature_flowers");
 });

@@ -1,16 +1,10 @@
 
-namespace Command {
-    export const data = {
-      gamerules: {begin: "gamerule if:", list: {}}
-    }
-    export function registerGamerule(name, func: (value) => void) {
-      data.gamerules["list"][name] = {func: func};
-    };
-    export function setCustomGamerule(name: string, value: any) {
-        data.gamerules["list"][name]["func"](value)
-    }
-  };
+Callback.addCallback("NativeCommand", (command) => {
+  if (command === "/if:learnings delete") {
+  }
+});
 
-  Command.registerGamerule("test", (value) => {
-    return Game.message(value == "one" ? "It's one": "It's two")
-  })
+abstract class Command {
+  public static list: { name: string; player?: int; list: string[] };
+  public static registry(name: string, player: boolean, arg1: string) {}
+}

@@ -1,43 +1,53 @@
-type playerName = name;
+type playerName = string;
+type message = string;
 
-class Learning {
-  public static list: Record<playerName, Set<name>> = {};
-  constructor(public name: string, public message: string = name) {}
-  public send(player: int, color: Native.Color = Native.Color.GREEN) {
-    if (this.has(player) === true) return;
+  class Learning {
+  public static list: Record<name, message> = {};
+  public static playerList: Record<playerName, Set<name>> = {};
+  constructor(public name: string, public message: string = name) {
+    Learning.list[name] = message;
+  }
+  public static send(
+    name: string,
+    player: int,
+    color: Native.Color = Native.Color.DARK_GREEN
+  ) {
+    if (Learning.has(player, name) === true) return;
     const client = Network.getClientForPlayer(player);
     if (!client) return;
-    const name = Entity.getNameTag(player);
+    const playerName = Entity.getNameTag(player);
     BlockEngine.sendUnlocalizedMessage(
       client,
-      `<${name}> ${color}${Translation.translate(
-        "learning.infinite_forest." + this.message
+      `<${playerName}> ${color}${Translation.translate(
+        "learning.infinite_forest." + Learning.list[name]
       )}`
     );
-    Learning.list[name].add(this.name);
+    Learning.playerList[playerName].add(name);
   }
 
-  public has(player: int) {
-    return (Learning.list[Entity.getNameTag(player)] ??= new Set()).has(this.name);
+  public static has(player: int, name: string) {
+    return (Learning.playerList[Entity.getNameTag(player)] ??= new Set()).has(
+      name
+    );
   }
 
-  public static clickerList: { block: Tile; learning: Learning }[] = [];
+  public static clickerList: { block: Tile; name: name }[] = [];
 
-  public static sendByClick(block: Tile, learning: Learning) {
-    Learning.clickerList.push({ block, learning });
+  public static sendByClick(block: Tile, name: name) {
+    Learning.clickerList.push({ block, name });
   }
 
   static {
     Callback.addCallback(
       "ItemUse",
       (coords, item, clickerBlock, isExternal, player) => {
-        for (const i in this.clickerList) {
-          const block = this.clickerList[i].block;
+        for (const i in Learning.clickerList) {
+          const block = Learning.clickerList[i].block;
           if (
             block.id === clickerBlock.id &&
             block.data === clickerBlock.data
           ) {
-            this.clickerList[i].learning.send(player);
+            Learning.send(Learning.clickerList[i].name, player);
           }
         }
       }
@@ -47,17 +57,23 @@ class Learning {
 
 Callback.addCallback("LevelDisplayed", () => {
   const name = Entity.getNameTag(Player.getLocal());
-  Learning.list[name] ??= new Set();
+  Learning.playerList[name] ??= new Set();
 });
 
 namespace LearningList {
   export const FIRE_UNLIT = new Learning("fire_unlit");
   export const FIRONIA = new Learning("fironia");
   export const ICE_FLOWER = new Learning("ice_flower");
-  export const ELECTRIC_MUSHROOM = new Learning("electric_mushroom")
+  export const ELECTRIC_MUSHROOM = new Learning("electric_mushroom");
 }
 
-Learning.sendByClick({ id: BlockID["fironia"], data: 0 }, LearningList.FIRONIA);
-Learning.sendByClick({ id: BlockID["ice_flower"], data: 0 }, LearningList.ICE_FLOWER);
+Learning.sendByClick({ id: BlockID["fironia"], data: 0 }, "fironia");
+Learning.sendByClick(
+  { id: BlockID["ice_flower"], data: 0 },
+  "ice_flower"
+);
 
-Learning.sendByClick({id: BlockID["electric_mushroom"], data: 0}, LearningList.ELECTRIC_MUSHROOM);
+Learning.sendByClick(
+  { id: BlockID["electric_mushroom"], data: 0 },
+  "electric_mushroom"
+);
