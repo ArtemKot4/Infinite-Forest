@@ -19,7 +19,7 @@ type pageContent = {
 
 type pageDirection = {
   name: string;
-  texture: string;
+  texture?: string;
   content: pageContent;
 };
 

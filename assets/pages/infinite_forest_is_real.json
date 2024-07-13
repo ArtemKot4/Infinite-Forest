@@ -1,0 +1,50 @@
+{
+  "left": {
+    "elements": {
+      "title": "forest_title",
+      "subtitle": "forest_subtitle",
+      "text": "forest_text"
+    },
+    "images": [
+      {
+        "type": "default",
+        "x": 190,
+        "y": 170,
+        "scale": 1.6,
+        "texture": "glowworm"
+      },
+      {
+        "type": "default",
+        "x": 90,
+        "y": 210,
+        "scale": 1.6,
+        "texture": "glowworm"
+      }
+    ]
+  },
+
+  "right": {
+    "directions": {
+      "first": {
+        "name": "dream",
+        "content": {
+          "elements": {
+            "title": "place_of_dream",
+            "subtitle": "or_curse",
+            "text": "dream_text"
+          }
+        }
+      },
+      "second": {
+        "name": "different_curse",
+        "content": {
+          "elements": {
+            "title": "coldest_curse",
+            "subtitle": "fireflies_light",
+            "text": "forest_is_curse_text"
+          }
+        }
+      }
+    }
+  }
+}

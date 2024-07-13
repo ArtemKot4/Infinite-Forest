@@ -1,7 +1,7 @@
 interface IPagePosition {
-  text: { x: int; y: int };
-  title: { x: int; y: int };
-  subtitle: { x: int; y: int };
+  text: int;
+  title: int;
+  subtitle: int;
 }
 
 class BookPage {
@@ -36,9 +36,9 @@ class BookPage {
         color: android.graphics.Color.parseColor("#00A416"),
       },
       x:
-        pos.title.x +
+        pos.title +
         (translatedTitle.length < 14 ? translatedTitle.length * 4.5 : 0),
-      y: pos.title.y,
+      y: 60,
       text: BookPage.separateText(translatedTitle),
     };
     elements[side + "Subtitle"] = {
@@ -47,8 +47,8 @@ class BookPage {
         size: 16.5,
         color: android.graphics.Color.parseColor("#194D33"),
       },
-      x: pos.subtitle.x,
-      y: pos.subtitle.y,
+      x: pos.subtitle,
+      y: 85,
       text: BookPage.separateText(Translation.translate(description.subtitle)),
     };
     elements[side + "Text"] = {
@@ -57,8 +57,8 @@ class BookPage {
         size: 12.5,
         color: android.graphics.Color.parseColor("#9E9E9E"),
       },
-      x: pos.text.x,
-      y: pos.text.y,
+      x: pos.text,
+      y: 110,
       text: BookPage.separateText(Translation.translate(description.text)),
       multiline: true,
       clicker: {
@@ -109,9 +109,9 @@ class BookPage {
         elements,
         description.left.elements,
         {
-          title: { x: UI.getScreenHeight() / 1.95, y: 60 },
-          subtitle: { x: UI.getScreenHeight() / 1.8, y: 85 },
-          text: { x: UI.getScreenHeight() / 1.95, y: 110 },
+          title: UI.getScreenHeight() / 1.95,
+          subtitle: UI.getScreenHeight() / 1.8,
+          text: UI.getScreenHeight() / 1.95,
         },
         "left"
       );
@@ -128,9 +128,9 @@ class BookPage {
         elements,
         description.right.elements,
         {
-          title: { x: UI.getScreenHeight() * 1.1, y: 60 },
-          subtitle: { x: UI.getScreenHeight() * 1.15, y: 85 },
-          text: { x: UI.getScreenHeight() * 1.1, y: 110 },
+          title: UI.getScreenHeight() * 1.1,
+          subtitle: UI.getScreenHeight() * 1.15,
+          text: UI.getScreenHeight() * 1.1,
         },
         "right"
       );

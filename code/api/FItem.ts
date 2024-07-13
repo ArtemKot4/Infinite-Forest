@@ -96,6 +96,12 @@ class FItem {
   }
   public onUse(func: Callback.ItemUseLocalFunction): void {
     Item.registerUseFunction(this.id, func);
+  };
+  public onUseAndNoTarget(func: (item: ItemInstance, player: int) => void) {
+     Item.registerUseFunction(this.id, (coords, item, block, player) => {
+      return func(item, player);
+     });
+     Item.registerNoTargetUseFunction(this.id, func);
   }
 }
 

@@ -51,6 +51,7 @@ abstract class TransferCrystal {
         );
         return;
     };
+    Game.message(String(dimension))
     if (currentWorld !== dimension && Entity.getSneaking(player) === true) {
       entity.getGameMode() !== EGameMode.CREATIVE &&
         entity.decreaseCarriedItem(1);

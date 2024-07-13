@@ -164,7 +164,8 @@ Translation.addTranslation("main_subtitle", {
   en: "Strange feeling",
 });
 Translation.addTranslation("main_text", { 
-  ru: "«Перед вами будет простираться огромный лес, таящий в себе много неизведанного, а над вашей головой будут высочайшие деревья». Именно с этой мысли и начался мой день.", 
+  ru: "Сейчас день, и... В очередной раз я пытаюсь убежать от странного сна, что давно меня беспокоит. В нём я брёл по загадочному лесу. Высочайшие деревья, чьи кроны углублялись и теснились глубоко в небе, не дают мне покоя. Тихий шёпот листьев, прохладная земля, на которой были броско разбросаны листья и цветы, бросают меня в дрожь. Пора разобраться со своими проблемами. С этого дня начинаю вести дневник..."
+ ,
   en: "«In front of you there will be an enormous forest, hiding many unknown things within itself, and above your head there will be the tallest trees». That was the thought that started my day.", 
 }); 
 
@@ -198,6 +199,25 @@ Translation.addTranslation("temperature_flowers_subtitle", {
 
 Translation.addTranslation("temperature_flowers_text", { 
   ru: "Я встретил их случайно, и все они очень непросты...", 
+  en: "I meet with there by random, and all there is a smart", 
+}); 
+
+
+
+Translation.addTranslation("forest_title", { 
+  ru: "Место из сна", 
+  en: "Place from a dream", 
+}); 
+
+
+Translation.addTranslation("forest_subtitle", { 
+  ru: "Прохладное", 
+  en: "So cold", 
+}); 
+
+
+Translation.addTranslation("forest_text", { 
+  ru: "Не знаю, сколько времени прошло, помню лишь то, что разбил какой-то кристалл о землю, и очнулся уже здесь. Странное чувство... Это место очень похоже на место из сна. Надеюсь, я не совершил ошибку, надеюсь, мои кошмары меня отпустят... Тут так холодно: нужно найти, где можно согреться", 
   en: "I meet with there by random, and all there is a smart", 
 }); 
 

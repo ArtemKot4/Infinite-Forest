@@ -129,5 +129,8 @@ abstract class BookUI {
       BookPage.resultPages[(BookUI.pagesList[name] ??= ["main_title"])[0]];
     BookUI.setContent(content);
     BookUI.UI.open();
+  };
+  public static givePage(player: int, page: name) {
+    (BookUI.pagesList[Entity.getNameTag(player)] ??= ["main_title"]).push(page);
   }
 }

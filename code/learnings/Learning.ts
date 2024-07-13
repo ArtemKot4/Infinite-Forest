@@ -10,7 +10,8 @@ type message = string;
   public static send(
     name: string,
     player: int,
-    color: Native.Color = Native.Color.DARK_GREEN
+    color: Native.Color = Native.Color.DARK_GREEN,
+    page?: name
   ) {
     if (Learning.has(player, name) === true) return;
     const client = Network.getClientForPlayer(player);
@@ -23,6 +24,10 @@ type message = string;
       )}`
     );
     Learning.playerList[playerName].add(name);
+    if(page) {
+      BookUI.givePage(player, page);
+      Reflection.sendMessage(player);
+    }
   }
 
   public static has(player: int, name: string) {
@@ -65,6 +70,8 @@ namespace LearningList {
   export const FIRONIA = new Learning("fironia");
   export const ICE_FLOWER = new Learning("ice_flower");
   export const ELECTRIC_MUSHROOM = new Learning("electric_mushroom");
+  export const FOREST_IS_REAL = new Learning("infinite_forest_is_real");
+  export const RUINE = new Learning("ruine")
 }
 
 Learning.sendByClick({ id: BlockID["fironia"], data: 0 }, "fironia");
@@ -77,3 +84,4 @@ Learning.sendByClick(
   { id: BlockID["electric_mushroom"], data: 0 },
   "electric_mushroom"
 );
+

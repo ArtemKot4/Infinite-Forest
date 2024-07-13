@@ -29,7 +29,7 @@ class ColdCurse extends Curse {
   public onTick(ticker: int, player: int): void {
     if (this.player_list.includes(player)) return;
     const pos = Entity.getPosition(player);
-    if (pos.y > 185) {
+    if (pos.y > 150) {
       if (ColdCurse.UI.isOpened() && ticker > 2) {
         ticker--;
         ColdCurse.UI.layout.setAlpha(1 / ticker);

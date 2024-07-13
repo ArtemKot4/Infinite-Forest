@@ -20,6 +20,7 @@ const InfiniteTick = () => {
 
 Callback.addCallback("PlayerChangedDimension", function (player, from, to) {
   if (Entity.getDimension(player) === InfiniteForest.id) {
+    Learning.send("infinite_forest_is_real", player, Native.Color.BLUE, "forest_title");
     Updatable.addLocalUpdatable(InfiniteTick());
   }
 });
