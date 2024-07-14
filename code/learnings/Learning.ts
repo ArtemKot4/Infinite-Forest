@@ -1,11 +1,21 @@
 type playerName = string;
 type message = string;
 
-  class Learning {
+class Learning {
   public static list: Record<name, message> = {};
   public static playerList: Record<playerName, Set<name>> = {};
   constructor(public name: string, public message: string = name) {
     Learning.list[name] = message;
+  }
+  public static sendMessage(name: string, player: int, color: Native.Color) {
+    const client = Network.getClientForPlayer(player);
+    if (!client) return;
+    BlockEngine.sendUnlocalizedMessage(
+      client,
+      `<${Entity.getNameTag(player)}> ${color}${Translation.translate(
+        "learning.infinite_forest." + Learning.list[name]
+      )}`
+    );
   }
   public static send(
     name: string,
@@ -14,17 +24,10 @@ type message = string;
     page?: name
   ) {
     if (Learning.has(player, name) === true) return;
-    const client = Network.getClientForPlayer(player);
-    if (!client) return;
     const playerName = Entity.getNameTag(player);
-    BlockEngine.sendUnlocalizedMessage(
-      client,
-      `<${playerName}> ${color}${Translation.translate(
-        "learning.infinite_forest." + Learning.list[name]
-      )}`
-    );
+    Learning.sendMessage(playerName, player, color);
     Learning.playerList[playerName].add(name);
-    if(page) {
+    if (page) {
       BookUI.givePage(player, page);
       Reflection.sendMessage(player);
     }
@@ -71,17 +74,13 @@ namespace LearningList {
   export const ICE_FLOWER = new Learning("ice_flower");
   export const ELECTRIC_MUSHROOM = new Learning("electric_mushroom");
   export const FOREST_IS_REAL = new Learning("infinite_forest_is_real");
-  export const RUINE = new Learning("ruine")
+  export const RUINE = new Learning("ruine");
 }
 
 Learning.sendByClick({ id: BlockID["fironia"], data: 0 }, "fironia");
-Learning.sendByClick(
-  { id: BlockID["ice_flower"], data: 0 },
-  "ice_flower"
-);
+Learning.sendByClick({ id: BlockID["ice_flower"], data: 0 }, "ice_flower");
 
 Learning.sendByClick(
   { id: BlockID["electric_mushroom"], data: 0 },
   "electric_mushroom"
 );
-

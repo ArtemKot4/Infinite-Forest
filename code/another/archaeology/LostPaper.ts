@@ -65,7 +65,7 @@ class LostPaper {
     return extra;
   }
   public static giveExtraText(item: ItemInstance, player: int) {
-    if (!!item?.extra?.getString("text") !== null) return; 
+    if (item?.extra?.getString("text") !== null) return; 
      return item.extra = LostPaper.generateExtraText();
   }
   public static getExtraTextByItem(item: ItemInstance): string {
@@ -97,7 +97,7 @@ Translation.addTranslation("note.infinite_forest.wrong_mode", {
 });
 
 Translation.addTranslation("lost_paper", {
-  ru: "Потерянная запись",
+  ru: "Потрёпанный листок",
   en: "Lost paper",
 });
 

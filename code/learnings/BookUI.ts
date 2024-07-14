@@ -26,7 +26,7 @@ abstract class BookUI {
       buttonRight: {
         type: "button",
         x: UI.getScreenHeight() * 1.5,
-        y: 375,
+        y: 372.5,
         scale: 3,
         bitmap: "book.right_button",
         bitmap2: "book.right_button_pressed",
@@ -37,7 +37,7 @@ abstract class BookUI {
       buttonLeft: {
         type: "button",
         x: UI.getScreenHeight() / 1.75,
-        y: 375,
+        y: 372.5,
         scale: 3,
         bitmap: "book.left_button",
         bitmap2: "book.left_button_pressed",
@@ -122,11 +122,17 @@ abstract class BookUI {
     BookUI.drawPageNumbers();
     BookUI.UI.forceRefresh();
   }
-
+  public static getPagesFor(playerName: string): name[] {
+    const list = BookUI.pagesList[playerName];
+    if(!list) {
+      return BookUI.pagesList[playerName] = ["main_title"]
+    };
+    return list;
+  }
   public static openFor(player: int) {
-    const name = Entity.getNameTag(player);
+    const playerName = Entity.getNameTag(player);
     const content =
-      BookPage.resultPages[(BookUI.pagesList[name] ??= ["main_title"])[0]];
+      BookPage.resultPages[BookUI.getPagesFor(playerName)[0]];
     BookUI.setContent(content);
     BookUI.UI.open();
   };
@@ -134,3 +140,7 @@ abstract class BookUI {
     (BookUI.pagesList[Entity.getNameTag(player)] ??= ["main_title"]).push(page);
   }
 }
+
+
+
+

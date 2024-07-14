@@ -11,6 +11,8 @@ abstract class Curse {
 }
 
 class ColdCurse extends Curse {
+  public static COLD_HEIGHT = 130;
+  public static COLD_MESSAGE: boolean = true;
   public static UI = new UI.Window({
     drawing: [
       {
@@ -26,15 +28,30 @@ class ColdCurse extends Curse {
       },
     ],
   });
+  public static runSnow(x: int, y: int, z: int) {
+    if(World.getThreadTime() % 6 === 0) {
+    for (var n = -24; n <= 24; n++) {
+      ForestParticle.send(EForestParticle.SNOWFALL, x + n,  y, z + randomInt(-16, 16), 0.05, -0.1, 0, Player.getLocal());
+      ForestParticle.send(EForestParticle.SNOWFALL, x + randomInt(-16, 16), y, z + n, 0.05, -0.1, 0, Player.getLocal());
+  };
+}
+  };
+  public static sendMessage(coords: Vector) {
+    if(coords.y >= 130) {
+      ColdCurse.COLD_MESSAGE === true && Game.message(
+        `<${Entity.getNameTag(Player.getLocal())}> ${
+          Native.Color.BLUE
+        }${Translation.translate("message.infinite_forest.cold_myself")}`
+      );
+      ColdCurse.COLD_MESSAGE = false;
+    } else {
+      ColdCurse.COLD_MESSAGE = true;
+    }
+  }
   public onTick(ticker: int, player: int): void {
     if (this.player_list.includes(player)) return;
     const pos = Entity.getPosition(player);
-    if (pos.y > 150) {
-      if (ColdCurse.UI.isOpened() && ticker > 2) {
-        ticker--;
-        ColdCurse.UI.layout.setAlpha(1 / ticker);
-        ColdCurse.UI.forceRefresh()
-      }
+    if (pos.y > ColdCurse.COLD_HEIGHT) {
       if (new PlayerActor(player).getGameMode() !== EGameMode.CREATIVE) {
         Entity.damageEntity(player, 5);
         Entity.addEffect(
@@ -47,12 +64,10 @@ class ColdCurse extends Curse {
         );
       }
       ColdCurse.UI.isOpened() === false && ColdCurse.UI.open();
+    
     } else {
       const isOpened = ColdCurse.UI.isOpened() === true;
-      isOpened && ColdCurse.UI.layout.setAlpha(1);
-      ColdCurse.UI.forceRefresh()
       isOpened && ColdCurse.UI.close();
-      ticker = 1000;
     }
   }
   static {
@@ -64,3 +79,8 @@ class ColdCurse extends Curse {
 namespace Curses {
   export const COLD = new ColdCurse();
 }
+
+Translation.addTranslation("message.infinite_forest.cold_myself", {
+  ru: "Становится холодно...",
+  en: "Cold is coming..."
+})
