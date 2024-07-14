@@ -24,28 +24,24 @@ function getMinDistance(min, max) {
   }
 }
 
-function addGlowworm(coords) {
+function addFire(coords) {
   var xz = getMinDistance(10, 30);
   var x = xz.x;
   var y = random(0, 1);
   var z = xz.z;
   var xz = getMinDistance(3, 5);
-  var xV = xz.x / 80;
-  var yV = random(3, 5) / 600;
-  var zV = xz.z / 80;
-
   ForestParticle.send(
-    glowworm,
+    EParticleType.FLAME,
     coords.x + x,
     coords.y + y,
     coords.z + z,
-    xV,
-    yV,
-    zV,
+    0.03,
+    0.03,
+    0,
     Player.getLocal()
   );
 }
-function addFire(coords) {
+function addGlowworm(coords) {
   var xz = getMinDistance(30, 80);
   var x = xz.x;
   var y = random(0, 1);

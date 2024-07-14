@@ -25,7 +25,7 @@ class Learning {
   ) {
     if (Learning.has(player, name) === true) return;
     const playerName = Entity.getNameTag(player);
-    Learning.sendMessage(playerName, player, color);
+    Learning.sendMessage(name, player, color);
     Learning.playerList[playerName].add(name);
     if (page) {
       BookUI.givePage(player, page);

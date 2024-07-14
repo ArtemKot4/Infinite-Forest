@@ -8,12 +8,8 @@ class ArchaeologyBlock extends FBlock {
     50: [],
     40: [],
     25: [],
-    65: [],
+    65: []
   };
-  public static itemStorage: Map<
-    Vector,
-    { item: ItemInstance; animation: Animation.Item }
-  > = new Map();
   constructor(public id: string, public texture: string, sound: Block.Sound) {
     super(id, [
       {
@@ -66,16 +62,13 @@ class ArchaeologyBlock extends FBlock {
       BlockRenderer.setStaticICRender(this.getID(), data, render)
     );
   }
-  public registerDrop<T extends ItemStack | int>(
-    stack: T,
+  public registerDrop(
+    instance: ItemInstance,
     chance: chance = 50
   ) {
     this.dropList[chance].push(
-      stack instanceof ItemStack ? stack : new ItemStack(stack, 1, 0, null)
+      instance
     );
-  }
-  protected itemExists(coords: Callback.ItemUseCoordinates) {
-    return ArchaeologyBlock.itemStorage.has(coords) === true;
   }
   protected getItemFromChance(chance: chance): Nullable<ItemInstance> {
     if (Math.random() < chance) {
@@ -93,56 +86,7 @@ class ArchaeologyBlock extends FBlock {
       randomResult ?? new ItemStack()
     );
   }
-  protected createAnimation(
-    block: Tile,
-    coords: Callback.ItemUseCoordinates
-  ): void {
-    const pack = ArchaeologyBlock.itemStorage.get(coords);
-    if (
-      !!pack?.animation ||
-      block.data !== ArchaeologyBlock.ANIMATION_CREATE_VALID_DATA
-    ) {
-      return;
-    }
-    pack.animation = new Animation.Item(
-      coords.x + 0.5,
-      coords.y + 0.25,
-      coords.z
-    );
-    pack.animation.describeItem(
-      Object.assign({}, pack.item, {
-        size: 0.4,
-        rotation: [Math.PI / 2, 0, 0] as number3,
-      })
-    );
-    pack.animation.load();
-  }
-  protected addItemByCoordinates(
-    block: Tile,
-    coords: Callback.ItemUseCoordinates,
-    item: ItemInstance
-  ): void {
-    ArchaeologyBlock.itemStorage.set(coords, { item: item, animation: null });
-    Game.message(JSON.stringify(ArchaeologyBlock.itemStorage.get(coords))); //TODO: DELETE DEBUG MESSAGE
-  }
-  protected takeItem(
-    block: Tile,
-    coords: Callback.ItemUseCoordinates,
-    player: int
-  ): void {
-    if (block.data >= 4 && this.itemExists(coords)) {
-      const entity = new PlayerEntity(player);
-      const pack = ArchaeologyBlock.itemStorage.get(coords);
-      if (entity.getCarriedItem().isEmpty()) {
-        entity.setCarriedItem(pack.item);
-      } else {
-        entity.addItemToInventory(pack.item);
-      }
-      pack.animation && pack.animation.destroy();
-      ArchaeologyBlock.itemStorage.delete(coords);
-      return;
-    }
-  }
+ 
   protected manipulateData(
     coords: Callback.ItemUseCoordinates,
     block: Tile,
@@ -168,7 +112,6 @@ class ArchaeologyBlock extends FBlock {
     block: Tile,
     player: number
   ): void {
-    Game.message(JSON.stringify(block)); //TODO: DELETE DEBUG MESSAGE
     if (Entity.getDimension(player) !== InfiniteForest.id) {
       return;
     }
@@ -185,19 +128,19 @@ class ArchaeologyBlock extends FBlock {
       );
       return;
     }
-    if (block.data === 0) {
-      const instance = this.selectItem();
-      this.addItemByCoordinates(block, coords, instance);
-    }
+
     this.manipulateData(coords, block, player);
-    this.createAnimation(block, coords);
-    this.takeItem(block, coords, player);
+    if (block.data === 5) {
+      let item: ItemInstance;
+      if(Entity.getPosition(player).y <= 130) {
+       item = this.selectItem();
+      } else {
+
+      }
+      Game.message(JSON.stringify(item));
+      new PlayerEntity(player).addItemToInventory(item);
+    }
     return;
-  }
-  static {
-    Callback.addCallback("DestroyBlock", (coords, block, player) => {
-      ArchaeologyBlock.itemStorage.get(coords)?.animation?.destroy();
-    });
   }
 }
 

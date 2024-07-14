@@ -63,13 +63,16 @@ class Bottle extends TileEntityBase {
 }
 
 Block.setRandomTickCallback(BlockID["bottle"], (x, y, z, id, data, region) => {
+  if(y >= 130) {
+    region.destroyBlock(x, y, z, false);
+  }
   if (
     Block.getLightLevel(region.getBlockId(x, y + 1, z)) <= 5 ||
     region.getDimension() !== InfiniteForest.id
   ) {
     return;
   }
-  region.spawnEntity(x, y + 1, z, EEntityType.LIGHTNING_BOLT);
+  CursedLightning.speedGlowworm(x, y, z, region);
   region.destroyBlock(x, y + 1, z, false);
   if (Math.random() < 0.5) {
     region.destroyBlock(x, y, z, false);
@@ -97,3 +100,8 @@ function destroyBottle(coords: Vector, block: Tile, changedCoords: Vector, regio
 
 Block.registerNeighbourChangeFunctionForID(BlockID["bottle"], destroyBottle)
 Block.registerNeighbourChangeFunctionForID(BlockID["fireflies_bottle"], destroyBottle)
+Block.setRandomTickCallback(BlockID["fireflies_bottle"], (x, y, z, id, data, region) => {
+  if(y >= 130) {
+    region.destroyBlock(x, y, z, false);
+  }
+})

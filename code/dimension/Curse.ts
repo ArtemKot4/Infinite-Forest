@@ -28,21 +28,40 @@ class ColdCurse extends Curse {
       },
     ],
   });
-  public static runSnow(x: int, y: int, z: int) {
-    if(World.getThreadTime() % 6 === 0) {
-    for (var n = -24; n <= 24; n++) {
-      ForestParticle.send(EForestParticle.SNOWFALL, x + n,  y, z + randomInt(-16, 16), 0.05, -0.1, 0, Player.getLocal());
-      ForestParticle.send(EForestParticle.SNOWFALL, x + randomInt(-16, 16), y, z + n, 0.05, -0.1, 0, Player.getLocal());
-  };
-}
-  };
+  public static runSnow(x: int, y: int, z: int, radius = 16) {
+    if (World.getThreadTime() % 3 === 0) {
+      for (let n = -16; n <= 16; n++) {
+        ForestParticle.send(
+          EForestParticle.SNOWFALL,
+          x + n,
+          y,
+          z + randomInt(-radius, radius),
+          0.05,
+          -0.1,
+          0,
+          Player.getLocal()
+        );
+        ForestParticle.send(
+          EForestParticle.SNOWFALL,
+          x + randomInt(-radius, radius),
+          y,
+          z + n,
+          0.05,
+          -0.1,
+          0,
+          Player.getLocal()
+        );
+      }
+    }
+  }
   public static sendMessage(coords: Vector) {
-    if(coords.y >= 130) {
-      ColdCurse.COLD_MESSAGE === true && Game.message(
-        `<${Entity.getNameTag(Player.getLocal())}> ${
-          Native.Color.BLUE
-        }${Translation.translate("message.infinite_forest.cold_myself")}`
-      );
+    if (coords.y >= 130) {
+      ColdCurse.COLD_MESSAGE === true &&
+        Game.message(
+          `<${Entity.getNameTag(Player.getLocal())}> ${
+            Native.Color.BLUE
+          }${Translation.translate("message.infinite_forest.cold_myself")}`
+        );
       ColdCurse.COLD_MESSAGE = false;
     } else {
       ColdCurse.COLD_MESSAGE = true;
@@ -63,8 +82,16 @@ class ColdCurse extends Curse {
           false
         );
       }
-      ColdCurse.UI.isOpened() === false && ColdCurse.UI.open();
-    
+      const layout = ColdCurse.UI.layout;
+      if(ColdCurse.UI.isOpened() === false) { ColdCurse.UI.open(); 
+        layout && layout.setAlpha(0) };
+      if (ColdCurse.UI.isOpened() === true) {
+        layout && layout.setAlpha(1 / ticker);
+        ColdCurse.UI.forceRefresh();
+        if (ticker > 1) {
+          ticker -= 1;
+        }
+      }
     } else {
       const isOpened = ColdCurse.UI.isOpened() === true;
       isOpened && ColdCurse.UI.close();
@@ -82,5 +109,5 @@ namespace Curses {
 
 Translation.addTranslation("message.infinite_forest.cold_myself", {
   ru: "Становится холодно...",
-  en: "Cold is coming..."
-})
+  en: "Cold is coming...",
+});

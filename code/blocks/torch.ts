@@ -91,7 +91,6 @@ abstract class CursedLightning {
       false
     );
     entities.forEach((v) => Game.message(Entity.getTypeName(v)));
-    Game.message("\n\n");
     const players = entities.filter(
       (v) => Entity.getType(v) === Native.EntityType.PLAYER
     );
@@ -103,7 +102,7 @@ abstract class CursedLightning {
         y + 8,
         z + 0.5,
         0,
-        -0.6,
+        -0.1,
         0,
         player
       );

@@ -26,26 +26,34 @@ class LostPaper {
         text: ERROR_WARNING,
       },
       closeButton: {
-        type: "closeButton",
+        type: "button",
         scale: 1000,
         bitmap: "unknown",
+        clicker: {
+          onClick() {
+            const player = Player.getLocal();
+            LostPaper.sendLearning(Entity.getCarriedItem(player), player);
+            LostPaper.UI.close();
+          },
+        },
       },
     },
   });
-  protected static textList: {text: string, learning: name, page: name}[] = [];
+  protected static textList: { [key: string]: { learning: name; page: name } } =
+    {};
   public item: FItem;
   constructor(id: string) {
     this.item = new FItem(id, 1);
     this.item.onUseAndNoTarget(this.open.bind(this));
   }
-  public static get getTextList(): {}[] {
+  public static get getTextList(): {} {
     return LostPaper.textList;
   }
   public static addText(text: string, learning?: string, page?: string): void {
-    LostPaper.textList.push({text: `note.infinite_forest.${text}`, learning, page});
+    LostPaper.textList[`note.infinite_forest.${text}`] = { learning, page };
   }
   public static getRandomText(): string {
-    return MathHelper.randomValueFromArray(LostPaper.textList).text;
+    return MathHelper.randomValueFromArray(Object.keys(LostPaper.textList));
   }
   public static rewriteText(text: string, player: int) {
     const playerMode = new PlayerActor(player).getGameMode();
@@ -59,28 +67,31 @@ class LostPaper {
     LostPaper.UI.content.elements["text"].text = text;
     LostPaper.UI.forceRefresh();
   }
-  public static generateExtraText(): ItemExtraData {
+  public static generateExtraText(
+    item: ItemInstance,
+    player: int
+  ): ItemExtraData {
     const extra = new ItemExtraData();
     extra.putString("text", LostPaper.getRandomText());
+    Entity.setCarriedItem(player, item.id, item.count, item.data, extra);
     return extra;
   }
   public static giveExtraText(item: ItemInstance, player: int) {
-    if (item?.extra?.getString("text") !== null) return; 
-     return item.extra = LostPaper.generateExtraText();
+    if (item.extra && item.extra.getString("text") !== null) return;
+    return (item.extra = LostPaper.generateExtraText(item, player));
   }
   public static getExtraTextByItem(item: ItemInstance): string {
     return item.extra && item.extra.getString("text");
-  };
+  }
   public static sendLearning(item: ItemInstance, player: int) {
     const text = LostPaper.getExtraTextByItem(item);
-    const element = LostPaper.textList.find((v) => v.text === text);
-    if(element && element.learning) {
-      Learning.send(element.learning, player, Native.Color.GOLD, element.page && element.page)
+    const list = LostPaper.textList?.[text];
+    if (list?.learning) {
+      Learning.send(list.learning, player, Native.Color.GOLD, list?.page);
     }
   }
   public open(item: ItemInstance, player: int) {
     LostPaper.giveExtraText(item, player);
-    LostPaper.sendLearning(item, player);
     LostPaper.rewriteText(LostPaper.getExtraTextByItem(item), player);
     LostPaper.UI.open();
   }
@@ -103,5 +114,10 @@ Translation.addTranslation("lost_paper", {
 
 Translation.addTranslation("note.infinite_forest.forest", {
   ru: "Лес, что простирается во все стороны, кажется, бесконечно, окружает нас всю нашу жизнь. В очередной раз прогуливаясь по лесу, я нашёл необычное место. Оно будто бы замёрзло. На нём было растение, что олицетворяло холод, что цвело часто над луной. Я назвал его луноцветом. Но сорвать так и не смог. Любая поверхность, что его касается, моментально замерзает. Я буду работать, чтобы найти способ, как его сорвать. Надеюсь, что удача улыбнётся мне.",
+  en: "Sorry, but for read it you must use a survival or adventure mode, creative is not valid.",
+});
+
+Translation.addTranslation("note.infinite_forest.fireflies", {
+  ru: "Светлячки, это хранители нашего леса. Одни из немногочисленных существ, что приносят в это место хоть капельку света. А ещё их очень много, и они очень быстрые. Возможно, если поставить банку, открыть и ждать, один случайно и залетит на своей скорости, едва ли не разбив банку.",
   en: "Sorry, but for read it you must use a survival or adventure mode, creative is not valid.",
 });

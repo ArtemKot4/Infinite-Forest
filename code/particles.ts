@@ -74,7 +74,7 @@ const snowfall = Particles.registerParticleType({
   texture: "snowfall",
   render: 1,
   size: [0.7, 1.2],
-  lifetime: [30,50],
+  lifetime: [80, 120],
 
   animators: {
     alpha: {
