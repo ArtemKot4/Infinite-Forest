@@ -94,7 +94,6 @@ abstract class CursedLightning {
     const players = entities.filter(
       (v) => Entity.getType(v) === Native.EntityType.PLAYER
     );
-    players.forEach((v) => Game.message("player: " + v));
     for (const player of players) {
       ForestParticle.send(
         EForestParticle.GLOWWORM,

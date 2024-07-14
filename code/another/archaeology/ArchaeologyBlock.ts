@@ -148,4 +148,5 @@ namespace ArchaeologyBlocks {
   export const SAND = new ArchaeologyBlock("archaeology_sand", "sand", "sand");
   SAND.registerDrop(new ItemStack(VanillaItemID.diamond, 1, 0), 65);
   SAND.registerDrop(new ItemStack(VanillaItemID.gunpowder, 1, 0), 25);
+  SAND.registerDrop(new ItemStack(LOST_PAPER.item.getID(), 1, 0));
 }
