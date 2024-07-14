@@ -99,7 +99,7 @@ abstract class CursedLightning {
       ForestParticle.send(
         EForestParticle.GLOWWORM,
         x + 0.5,
-        y + 8,
+        y + 2.5,
         z + 0.5,
         0,
         -0.1,
