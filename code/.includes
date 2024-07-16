@@ -2,8 +2,12 @@ translations.ts
 core.ts
 unique_gen.ts
 
+dimension/Curse.ts
+
 api/FItem.ts
 api/FBlock.ts
+api/IceBlock.ts
+api/DungeonBlock.ts
 api/Command.ts
 api/AdvancedBlock.ts
 api/AdvancedItem.ts
@@ -70,8 +74,6 @@ items/dusts.ts
 dimension/dimension.ts
 dimension/forest.ts
 dimension/vanilla_items.ts
-dimension/Curse.ts
-dimension/InfiniteTick.ts
 
 dimension/plants_generation.ts
 
@@ -92,3 +94,4 @@ learnings/BookUI.ts
 learnings/IPageDescriptor.ts
 learnings/BookPage.ts
 learnings/Book.ts
+dimension/InfiniteTick.ts

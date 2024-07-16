@@ -1,16 +1,14 @@
 abstract class Curse {
-  private static curse_list: string[] = [];
-  public readonly player_list: int[] = [];
-  public onTick(...args): void {
-    if (this.player_list.includes(args[0])) return;
-  }
-  public name: string;
-  constructor() {
-    Curse.curse_list.push(this.name);
+  protected static readonly blacklist: string[] = [];
+  public static onTick: (...args) => void;
+  public static idenitifier: string;
+  public static has(player: int) {
+    if(new PlayerActor(player).getGameMode() === EGameMode.CREATIVE) return;
+    return this.blacklist.includes(Entity.getNameTag(player))
   }
 }
 
-class ColdCurse extends Curse {
+abstract class ColdCurse extends Curse {
   public static COLD_HEIGHT = 130;
   public static COLD_MESSAGE: boolean = true;
   public static UI = new UI.Window({
@@ -55,7 +53,7 @@ class ColdCurse extends Curse {
     }
   }
   public static sendMessage(coords: Vector) {
-    if (coords.y >= 130) {
+    if (coords.y >= 115) {
       ColdCurse.COLD_MESSAGE === true &&
         Game.message(
           `<${Entity.getNameTag(Player.getLocal())}> ${
@@ -67,11 +65,10 @@ class ColdCurse extends Curse {
       ColdCurse.COLD_MESSAGE = true;
     }
   }
-  public onTick(ticker: int, player: int): void {
-    if (this.player_list.includes(player)) return;
+  public static onTick(ticker: int, player: int): void {
+    if (this.has(player)) return;
     const pos = Entity.getPosition(player);
     if (pos.y > ColdCurse.COLD_HEIGHT) {
-      if (new PlayerActor(player).getGameMode() !== EGameMode.CREATIVE) {
         Entity.damageEntity(player, 5);
         Entity.addEffect(
           player,
@@ -81,30 +78,25 @@ class ColdCurse extends Curse {
           false,
           false
         );
-      }
-      const layout = ColdCurse.UI.layout;
+    //  const layout = ColdCurse.UI.layout;
       if(ColdCurse.UI.isOpened() === false) { ColdCurse.UI.open(); 
-        layout && layout.setAlpha(0) };
-      if (ColdCurse.UI.isOpened() === true) {
-        layout && layout.setAlpha(1 / ticker);
-        ColdCurse.UI.forceRefresh();
-        if (ticker > 1) {
-          ticker -= 1;
-        }
-      }
+       // layout && layout.setAlpha(0)
+       };
+      // if (ColdCurse.UI.isOpened() === true) {
+      //   layout && layout.setAlpha(1 / ticker);
+      //   ColdCurse.UI.forceRefresh();
+      //   if (ticker > 1) {
+      //     ticker -= 1;
+      //   }
+      // }
     } else {
-      const isOpened = ColdCurse.UI.isOpened() === true;
-      isOpened && ColdCurse.UI.close();
+      ColdCurse.UI.isOpened() && ColdCurse.UI.close();
     }
   }
   static {
     ColdCurse.UI.setTouchable(false);
     ColdCurse.UI.setAsGameOverlay(true);
   }
-}
-
-namespace Curses {
-  export const COLD = new ColdCurse();
 }
 
 Translation.addTranslation("message.infinite_forest.cold_myself", {

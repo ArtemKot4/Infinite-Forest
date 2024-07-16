@@ -12,15 +12,15 @@ const InfiniteTick = () => {
         addGlowworm(pos);
       };
       if (World.getThreadTime() % 20 === 0) {
-        Curses.COLD.onTick(this.ticker, player);
+        ColdCurse.onTick(this.ticker, player);
         ColdCurse.sendMessage(pos);
       };
       if (pos.y >= 100) {
         if (pos.y <= 130) {
           this.ticker = 3000;
-          ColdCurse.runSnow(pos.x, 130, pos.z);
+          ColdCurse.runSnow(pos.x, 130, pos.z, 512);
         } else {
-          ColdCurse.runSnow(pos.x, pos.y + 10, pos.z, 512);
+          ColdCurse.runSnow(pos.x, pos.y + 10, pos.z, 128);
         }
         return;
       }
