@@ -9,10 +9,13 @@ class IceBlock extends FBlock {
     constructor(id: string, data: Block.BlockVariation[], type: string | Block.SpecialType = IceBlock.specialType) {
         super(id, data, type);
         Block.setRandomTickCallback(this.getID(), IceBlock.melt);
+        this.create();
     };
     public static melt(x: number, y: number, z: number, id: number, data: number, region: BlockSource) {
-       if(region.getLightLevel(x, y, z) < 5) return;
+        alert("!")
+       if(region.getLightLevel(x, y + 1, z) === 0 || y >= 130) return;
        region.setBlock(x, y, z, VanillaBlockID.flowing_water, 0);
+       return;
     };
 };
 

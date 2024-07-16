@@ -3,9 +3,11 @@ abstract class Curse {
   public static onTick: (...args) => void;
   public static idenitifier: string;
   public static has(player: int) {
-    if(new PlayerActor(player).getGameMode() === EGameMode.CREATIVE) return;
-    return this.blacklist.includes(Entity.getNameTag(player))
-  }
+    const name = Entity.getNameTag(player);
+    const actor = new PlayerActor(player);
+    if(actor.getGameMode() === EGameMode.CREATIVE) return true;
+    return this.blacklist.includes(name) 
+}
 }
 
 abstract class ColdCurse extends Curse {
@@ -26,9 +28,9 @@ abstract class ColdCurse extends Curse {
       },
     ],
   });
-  public static runSnow(x: int, y: int, z: int, radius = 16) {
+  public static runSnow(x: int, y: int, z: int, radius = 16, count = 16) {
     if (World.getThreadTime() % 3 === 0) {
-      for (let n = -16; n <= 16; n++) {
+      for (let n = -count; n <= count; n++) {
         ForestParticle.send(
           EForestParticle.SNOWFALL,
           x + n,
@@ -66,7 +68,7 @@ abstract class ColdCurse extends Curse {
     }
   }
   public static onTick(ticker: int, player: int): void {
-    if (this.has(player)) return;
+    if (!this.has(player)) return;
     const pos = Entity.getPosition(player);
     if (pos.y > ColdCurse.COLD_HEIGHT) {
         Entity.damageEntity(player, 5);

@@ -105,7 +105,11 @@ public destroyWaterAnimation() {
       return;
     }
   }
-  public onTick() {}
+  public onTick() {};
+
+  static {
+    TileEntity.registerPrototype(this.BLOCK.getID(), new Caulron());
+  }
 }
 
  const WaterMesh = new RenderMesh();
