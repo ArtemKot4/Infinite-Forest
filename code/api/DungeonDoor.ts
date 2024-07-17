@@ -72,3 +72,7 @@ class DungeonDoor {
     }
   
 }
+
+namespace DungeonDoorList {
+    
+}

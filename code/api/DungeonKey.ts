@@ -17,4 +17,5 @@ class DungeonKey extends FItem {
              Entity.setCarriedItem(player, item.id, item.count, item.data, newExtra);
         }
     }
-}
+};
+

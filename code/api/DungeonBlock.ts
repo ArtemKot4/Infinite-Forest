@@ -1,22 +1,8 @@
-class DungeonBlock extends IceBlock {
+class DungeonBlock extends FBlock {
   protected static list: int[] = [];
   protected static blacklist: playerName[] = [] 
-  protected static colorList = [
-    "cyan",
-    "blue",
-    "green"
-  ];
-  constructor(id: string, textureKeyword: string) {
-    const variation = [] as Block.BlockVariation[];
-    for (const i in DungeonBlock.colorList) {
-      const color = DungeonBlock.colorList[i];
-      variation.push({
-        name: `block.infinite_forest.${id}_${color}`,
-        inCreative: true,
-        texture: [[`${textureKeyword}_${color}`, 0]],
-      });
-    }
-    super(id, variation);
+  constructor(id: string, variation: Block.BlockVariation[], specialType: string | Block.SpecialType) {
+    super(id, variation, specialType);
    DungeonBlock.addToDungeonList(this.getID())
   };
   public static addToDungeonList(block: int) {
@@ -42,8 +28,4 @@ class DungeonBlock extends IceBlock {
     Callback.addCallback("DestroyBlockStart", DungeonBlock.destroyBlock);
     Callback.addCallback("DestroyBlock", DungeonBlock.destroyBlock);
   }
-}
-
-namespace DungeonBlockList {
-    export const DEFAULT_ICE = new DungeonBlock("blue_ice_bricks", "blue_ice_bricks");
 }

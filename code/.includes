@@ -8,6 +8,7 @@ api/FItem.ts
 api/FBlock.ts
 api/IceBlock.ts
 api/DungeonBlock.ts
+api/IceDungeonBlock.ts
 api/DungeonKey.ts
 api/DungeonDoor.ts
 api/Command.ts
