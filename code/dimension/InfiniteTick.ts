@@ -20,7 +20,7 @@ const InfiniteTick = () => {
           this.ticker = 3000;
           ColdCurse.runSnow(pos.x, 130, pos.z, 512);
         } else {
-          ColdCurse.runSnow(pos.x, pos.y + 10, pos.z, 64, 32);
+          ColdCurse.runSnow(pos.x, pos.y + 12.5, pos.z, 64, 24);
         }
         return;
       }

@@ -42,5 +42,5 @@ class DungeonBlock extends IceBlock {
 }
 
 namespace DungeonBlockList {
-    export const DEFAULT_ICE = new DungeonBlock("ice_bricks", "ice_brick");
+    export const DEFAULT_ICE = new DungeonBlock("blue_ice_bricks", "blue_ice_bricks");
 }
