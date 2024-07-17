@@ -26,6 +26,8 @@ class DungeonDoor {
       this.locker.getID(),
       this.onClick.bind(this)
     );
+    DungeonBlock.addToDungeonList(this.filler.getID());
+    DungeonBlock.addToDungeonList(this.locker.getID());
   };
   openIfValid(coords: Vector[], region: BlockSource, item: ItemInstance, player: int) {
     for(let coord of coords) {

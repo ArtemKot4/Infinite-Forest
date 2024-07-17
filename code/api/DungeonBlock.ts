@@ -17,8 +17,11 @@ class DungeonBlock extends IceBlock {
       });
     }
     super(id, variation);
-    DungeonBlock.list.push(this.getID());
+   DungeonBlock.addToDungeonList(this.getID())
   };
+  public static addToDungeonList(block: int) {
+    DungeonBlock.list.push(block);
+  }
   protected static hasBlock(player: int) {
     const name = Entity.getNameTag(player);
     const actor = new PlayerActor(player);
