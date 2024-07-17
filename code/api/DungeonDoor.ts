@@ -13,13 +13,14 @@ class DungeonDoor {
           [locker, 0],
           [locker, 0],
         ],
-        inCreative: false,
+        inCreative: true //TODO: false,
       },
     ]).createWithRotation();
     this.locker = new FBlock(locker, [
       {
         name: `block.infinite_forest.${locker}`,
         texture: [[locker, 0]],
+        inCreative: true //TODO: false,
       },
     ]).create();
     Block.registerClickFunctionForID(
@@ -33,10 +34,13 @@ class DungeonDoor {
   openIfValid(coords: Vector[], region: BlockSource, item: ItemInstance, player: int) {
     for(let coord of coords) {
         if(region.getBlockId(coord.x, coord.y, coord.z) !== this.filler.getID()) {
+            Game.message(JSON.stringify(coord));
           return;
         }
     };
-    this.key.setLock(item, player)
+  
+    this.key.setLock(item, player);
+    alert("open")
     for(let coord of coords) {
         region.setBlock(coord.x, coord.y, coord.z, 0, 0);
     };
@@ -49,6 +53,7 @@ class DungeonDoor {
   ) {
     const region = BlockSource.getDefaultForDimension(InfiniteForest.id);
     if (!region) return;
+    alert("!")
     let coordsX = [] as Vector[];
     let coordsZ = [] as Vector[];
     for (let i = -1; i <= 1; i++) {
@@ -67,13 +72,14 @@ class DungeonDoor {
       }
     };
       if(this.key.isValid(item, player)) {
-        this.openIfValid(coordsX.concat(coords), region, item, player);
-        this.openIfValid(coordsZ.concat(coords), region, item, player)
+        alert("key valid")
+        this.openIfValid([].concat(coordsX).concat(coords), region, item, player);
+        this.openIfValid([].concat(coordsZ).concat(coords), region, item, player)
       }
     }
   
 }
 
 namespace DungeonDoorList {
-    
+    export const ICE_DUNGEON_DOOR = new DungeonDoor("ice_dungeon_door", "ice_dungeon_lock", DungeonKeyList.IceKey);
 }

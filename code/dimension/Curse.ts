@@ -5,9 +5,11 @@ abstract class Curse {
   public static has(player: int) {
     const name = Entity.getNameTag(player);
     const actor = new PlayerActor(player);
-    if(actor.getGameMode() === EGameMode.CREATIVE) return true;
-    return this.blacklist.includes(name) 
-}
+    if (actor.getGameMode() === EGameMode.CREATIVE) {
+      return false;
+    }
+    return !this.blacklist.includes(name);
+  }
 }
 
 abstract class ColdCurse extends Curse {
@@ -71,19 +73,13 @@ abstract class ColdCurse extends Curse {
     if (!this.has(player)) return;
     const pos = Entity.getPosition(player);
     if (pos.y > ColdCurse.COLD_HEIGHT) {
-        Entity.damageEntity(player, 5);
-        Entity.addEffect(
-          player,
-          EPotionEffect.DIG_SLOWDOWN,
-          3,
-          10,
-          false,
-          false
-        );
-    //  const layout = ColdCurse.UI.layout;
-      if(ColdCurse.UI.isOpened() === false) { ColdCurse.UI.open(); 
-       // layout && layout.setAlpha(0)
-       };
+      Entity.damageEntity(player, 5);
+      Entity.addEffect(player, EPotionEffect.DIG_SLOWDOWN, 3, 10, false, false);
+      //  const layout = ColdCurse.UI.layout;
+      if (ColdCurse.UI.isOpened() === false) {
+        ColdCurse.UI.open();
+        // layout && layout.setAlpha(0)
+      }
       // if (ColdCurse.UI.isOpened() === true) {
       //   layout && layout.setAlpha(1 / ticker);
       //   ColdCurse.UI.forceRefresh();
