@@ -4,6 +4,7 @@ IMPORT("ItemAnimHelper");
 IMPORT("SoundAPI");
 IMPORT("RenderUtil");
 IMPORT("BlockAnimator");
+IMPORT("ConnectedTexture");
 
 const ERROR_WARNING = "Error! please send issue on https://github.com/Artem0n4/Infinite-Forest"
 
