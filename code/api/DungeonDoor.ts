@@ -31,8 +31,8 @@ class DungeonDoor {
     DungeonBlock.addToDungeonList(this.filler.getID());
     DungeonBlock.addToDungeonList(this.locker.getID());
   };
-  openIfValid(coords: Vector[], region: BlockSource, item: ItemInstance, player: int) {
-    for(let coord of coords) {
+  openIfValid(coordsList: Vector[], coords: Vector, region: BlockSource, item: ItemInstance, player: int) {
+    for(let coord of coordsList) {
         if(region.getBlockId(coord.x, coord.y, coord.z) !== this.filler.getID()) {
             Game.message(JSON.stringify(coord));
           return;
@@ -41,9 +41,10 @@ class DungeonDoor {
   
     this.key.setLock(item, player);
     alert("open")
-    for(let coord of coords) {
+    for(let coord of coordsList) {
         region.setBlock(coord.x, coord.y, coord.z, 0, 0);
     };
+    region.setBlock(coords.x, coords.y, coords.z, 0, 0);
   }
   onClick(
     coords: Callback.ItemUseCoordinates,
@@ -73,8 +74,8 @@ class DungeonDoor {
     };
       if(this.key.isValid(item, player)) {
         alert("key valid")
-        this.openIfValid([].concat(coordsX).concat(coords), region, item, player);
-        this.openIfValid([].concat(coordsZ).concat(coords), region, item, player)
+        this.openIfValid(coordsX, coords, region, item, player);
+        this.openIfValid(coordsZ, coords, region, item, player)
       }
     }
   
