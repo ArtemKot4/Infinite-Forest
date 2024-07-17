@@ -66,7 +66,7 @@ class DungeonDoor {
         });
       }
     };
-      if(this.key.isValid(item)) {
+      if(this.key.isValid(item, player)) {
         this.openIfValid(coordsX.concat(coords), region, item, player);
         this.openIfValid(coordsZ.concat(coords), region, item, player)
       }
