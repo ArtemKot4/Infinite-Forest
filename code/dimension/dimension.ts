@@ -13,15 +13,17 @@ namespace ForestBiomes {
   //WinterForest.setSkyColor(128 / 255, 236 / 255, 255 / 255);
   WinterForest.setFoliageColor(173 / 255, 173 / 255, 173 / 255);
   WinterForest.setGrassColor(255 / 255, 255 / 255, 255 / 255);
-  WinterForest.setTemperatureAndDownfall(0, 0.5);
+  WinterForest.setTemperatureAndDownfall(0.15, 0.76);
 
   //BurntForest.setSkyColor(99 / 255, 64 / 255, 2 / 255);
   //BurntForest.setFoliageColor(79 / 255, 79 / 255, 79 / 255);
-  BurntForest.setGrassColor(79, 79, 79);
+  BurntForest.setGrassColor(79/255, 79/255, 79/255);
+
+  VolcanicLands.setGrassColor(50/255, 50/255, 50/255);
 
   //VolcanicLands.setSkyColor(173 / 255, 173 / 255, 173 / 255);
-  VolcanicLands.setCoverBlock(VanillaBlockID.stone, 0);
-  VolcanicLands.setSurfaceBlock(VanillaBlockID.stone, 0);
+  // VolcanicLands.setCoverBlock(VanillaBlockID.stone, 0);
+  // VolcanicLands.setSurfaceBlock(VanillaBlockID.stone, 0);
   export function addParticle(
     particle: EForestParticle,
     count: int,
@@ -63,28 +65,30 @@ namespace ForestBiomes {
     dimensionSeed: int,
     density: int = 0.7
   ) {
-    if (
-      GenerationUtils.getPerlinNoise(
-        chunkX * 16 + 8,
-        0,
-        chunkZ * 16 + 8,
-        dimensionSeed,
-        1 / 128,
-        2
-      ) <
-      density - 12 / 128
-    ) {
-      return;
-    }
+    // if (
+    //   GenerationUtils.getPerlinNoise(
+    //     chunkX * 16 + 8,
+    //     0,
+    //     chunkZ * 16 + 8,
+    //     dimensionSeed,
+    //     1 / 128,
+    //     2
+    //   ) <
+    //   density - 12 / 128
+    // ) {
+    //   return;
+    // }
     // обход всего чанка
     for (let x = chunkX * 16; x < (chunkX + 1) * 16; x++) {
       for (let z = chunkZ; z < (chunkZ + 1) * 16; z++) {
+        if(World.getBiome(x, z) === FirefliesForest.id) {
         if (
           GenerationUtils.getPerlinNoise(x, 0, z, dimensionSeed, 1 / 128, 2) >
           density
         ) {
           World.setBiomeMap(x, z, biome.id);
         }
+      }
       }
     }
     return;
@@ -106,31 +110,23 @@ namespace ForestBiomes {
       if (dimensionId !== InfiniteForest.id) {
         return;
       }
-      if (
-        GenerationUtils.getPerlinNoise(
-          chunkX * 16 + 8,
-          0,
-          chunkZ * 16 + 8,
-          dimensionSeed,
-          1 / 128,
-          2
-        ) <
-        0.8 - 12 / 128
-      ) {
-        return
-      }
+      // if (
+      //   GenerationUtils.getPerlinNoise(
+      //     chunkX * 16 + 8,
+      //     0,
+      //     chunkZ * 16 + 8,
+      //     dimensionSeed,
+      //     1 / 128,
+      //     2
+      //   ) <
+      //   0.8 - 12 / 128
+      // ) {
+      //   return
+      // }
       // обход всего чанка
-      for (let x = chunkX * 16; x < (chunkX + 1) * 16; x++) {
-        for (let z = chunkZ; z < (chunkZ + 1) * 16; z++) {
-          if (
-            GenerationUtils.getPerlinNoise(x, 0, z, dimensionSeed, 1 / 128, 2) >
-            0.3
-          ) {
-            World.setBiomeMap(x, z, ForestBiomes.WinterForest.id);
-          }
-        }
-      }
-
+    generateCustomBiome(WinterForest, chunkX, chunkZ, dimensionSeed, 0.5);
+    generateCustomBiome(BurntForest, chunkX, chunkZ, dimensionSeed, 0.5);
+    generateCustomBiome(VolcanicLands, chunkX, chunkZ, dimensionSeed, 0.8);
     }
   );
 

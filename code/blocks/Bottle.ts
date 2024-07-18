@@ -42,11 +42,19 @@ class Bottle extends TileEntityBase {
       0,
       player
     );
-  };
+  }
   public clientTick(): void {
     if (World.getThreadTime() % 20 === 0) {
-      Particles.addParticle(EForestParticle.GLOWWORM, this.x + 0.5, this.y + 0.4, this.z + 0.5, 0.001, 0.001, 0.001);
-      }
+      Particles.addParticle(
+        EForestParticle.GLOWWORM,
+        this.x + 0.5,
+        this.y + 0.4,
+        this.z + 0.5,
+        0.001,
+        0.001,
+        0.001
+      );
+    }
   }
   static {
     BlockRegistry.setSoundType(BlockID["bottle"], "glass");
@@ -63,12 +71,13 @@ class Bottle extends TileEntityBase {
 }
 
 Block.setRandomTickCallback(BlockID["bottle"], (x, y, z, id, data, region) => {
-  if(y >= 130) {
+  if (y >= 130) {
     region.destroyBlock(x, y, z, false);
   }
   if (
     Block.getLightLevel(region.getBlockId(x, y + 1, z)) <= 5 ||
-    region.getDimension() !== InfiniteForest.id
+    region.getDimension() !== InfiniteForest.id ||
+    region.getBiome(x, z) !== ForestBiomes.FirefliesForest.id
   ) {
     return;
   }
@@ -88,20 +97,31 @@ Block.setRandomTickCallback(BlockID["bottle"], (x, y, z, id, data, region) => {
   TileEntity.addTileEntity(x, y, z, region);
 });
 
-function destroyBottle(coords: Vector, block: Tile, changedCoords: Vector, region: BlockSource) {
- if(region.getBlockId(coords.x, coords.y - 1, coords.z) === 0) {
-  if(region.getBlockId(coords.x, coords.y + 1, coords.z) === 0) {
+function destroyBottle(
+  coords: Vector,
+  block: Tile,
+  changedCoords: Vector,
+  region: BlockSource
+) {
+  if (region.getBlockId(coords.x, coords.y - 1, coords.z) === 0) {
+    if (region.getBlockId(coords.x, coords.y + 1, coords.z) === 0) {
+      region.destroyBlock(coords.x, coords.y, coords.z, true);
+      return;
+    }
     region.destroyBlock(coords.x, coords.y, coords.z, true);
-    return;
-  };
-  region.destroyBlock(coords.x, coords.y, coords.z, true);
- }
+  }
 }
 
-Block.registerNeighbourChangeFunctionForID(BlockID["bottle"], destroyBottle)
-Block.registerNeighbourChangeFunctionForID(BlockID["fireflies_bottle"], destroyBottle)
-Block.setRandomTickCallback(BlockID["fireflies_bottle"], (x, y, z, id, data, region) => {
-  if(y >= 130) {
-    region.destroyBlock(x, y, z, false);
+Block.registerNeighbourChangeFunctionForID(BlockID["bottle"], destroyBottle);
+Block.registerNeighbourChangeFunctionForID(
+  BlockID["fireflies_bottle"],
+  destroyBottle
+);
+Block.setRandomTickCallback(
+  BlockID["fireflies_bottle"],
+  (x, y, z, id, data, region) => {
+    if (y >= 130) {
+      region.destroyBlock(x, y, z, false);
+    }
   }
-})
+);

@@ -303,18 +303,19 @@ namespace ForestGeneration {
       for (let x = chunkX * 16; x < (chunkX + 1) * 16; x++) {
         for (let z = chunkZ; z < (chunkZ + 1) * 16; z++) {
           const coords = GenerationUtils.findSurface(x, 90, z);
-          if (
-            World.getBiome(x, z) === ForestBiomes.WinterForest.id &&
-            World.getBlock(coords.x, coords.y, coords.z).id ===
+          if (World.getBiome(x, z) === ForestBiomes.WinterForest.id) {
+            if (
+              World.getBlock(coords.x, coords.y, coords.z).id ===
               VanillaBlockID.grass
-          ) {
-            World.setBlock(
-              coords.x,
-              coords.y + 1,
-              coords.z,
-              VanillaBlockID.snow_layer,
-              0
-            );
+            ) {
+              World.setBlock(
+                coords.x,
+                coords.y + 1,
+                coords.z,
+                VanillaBlockID.snow_layer,
+                0
+              );
+            }
           }
         }
       }

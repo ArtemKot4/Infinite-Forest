@@ -14,7 +14,7 @@ const InfiniteTick = () => {
         }
       }
       if (biome === ForestBiomes.WinterForest.id) {
-        ColdCurse.runSnow(pos.x, pos.y + 12.5, pos.z, 64, 24);
+        ColdCurse.runSnow(pos.x, pos.y + 12.5, pos.z, 32, 24);
       }
       if (biome === ForestBiomes.VolcanicLands.id) {
         ForestBiomes.addParticle(

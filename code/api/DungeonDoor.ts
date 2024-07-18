@@ -27,7 +27,7 @@ class DungeonDoor {
       this.locker.getID(),
       this.onClick.bind(this)
     );
-    ConnectedTexture.setModel(this.filler.getID(), -1, filler);
+    //ConnectedTexture.setModel(this.filler.getID(), -1, filler);
     DungeonBlock.addToDungeonList(this.filler.getID());
     DungeonBlock.addToDungeonList(this.locker.getID());
   };
