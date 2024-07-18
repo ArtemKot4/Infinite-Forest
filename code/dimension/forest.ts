@@ -93,7 +93,7 @@ namespace ForestGeneration {
   export function generatePlants(chunkX: number, chunkZ: number) {
     for (let i = 0; i <= 24; i++) {
       let coords = GenerationUtils.randomCoords(chunkX, chunkZ);
-      coords = GenerationUtils.findSurface(coords.x, 127, coords.z);
+      coords = GenerationUtils.findSurface(coords.x, 90, coords.z);
       if (coords.y > 54) {
         if (Math.random() > 0.94) {
           Plants.generate(coords, VanillaBlockID.tallgrass);
@@ -225,7 +225,7 @@ namespace ForestGeneration {
       );
       for (let i = 0; i <= 64; i++) {
         let coords = GenerationUtils.randomCoords(chunkX, chunkZ);
-        coords = GenerationUtils.findSurface(coords.x, 127, coords.z);
+        coords = GenerationUtils.findSurface(coords.x, 90, coords.z);
         if (coords.y <= 54) return;
         if (
           World.getBlockID(coords.x, coords.y, coords.z) ===
@@ -300,6 +300,24 @@ namespace ForestGeneration {
       generateGroundCavesBlock(chunkX, chunkZ);
       generateBlocksInsteadGrass(chunkX, chunkZ);
       generateBeaches(chunkX, chunkZ);
+      for (let x = chunkX * 16; x < (chunkX + 1) * 16; x++) {
+        for (let z = chunkZ; z < (chunkZ + 1) * 16; z++) {
+          const coords = GenerationUtils.findSurface(x, 90, z);
+          if (
+            World.getBiome(x, z) === ForestBiomes.WinterForest.id &&
+            World.getBlock(coords.x, coords.y, coords.z).id ===
+              VanillaBlockID.grass
+          ) {
+            World.setBlock(
+              coords.x,
+              coords.y + 1,
+              coords.z,
+              VanillaBlockID.snow_layer,
+              0
+            );
+          }
+        }
+      }
     }
   );
 }
