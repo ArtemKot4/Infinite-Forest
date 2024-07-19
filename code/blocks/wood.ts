@@ -46,8 +46,36 @@ class Wood {
         ],
         inCreative: true,
       },
+      {
+        name,
+        texture: [
+          [name, 1],
+          [name, 1],
+          [name, 0],
+          [name, 0],
+          [name, 1],
+          [name, 1],
+        ],
+        inCreative: false,
+      },
+      {
+        name,
+        texture: [
+          [name, 1],
+          [name, 1],
+          [name, 1],
+          [name, 1],
+          [name, 0],
+          [name, 0],
+        ],
+        inCreative: false,
+      },
     ]).create();
-
+    Block.registerClickFunctionForID(
+      BlockID[`${type}_log`],
+      this.cutLogFunction.bind({id: BlockID[`${type}_hewn`]})
+    );
+    Block.registerPlaceFunctionForID(BlockID[name], this.logPlaceFunction.bind({id: BlockID[name]}))
     Block.setDestroyTime(BlockID[name], 0.4);
     ToolAPI.registerBlockMaterial(BlockID[name], "wood");
 
@@ -148,10 +176,6 @@ class Wood {
       BlockID[name],
       this.logPlaceFunction.bind({ id: BlockID[name] })
     )
-      Block.registerClickFunctionForID(
-        BlockID[name],
-        this.cutLogFunction.bind({id: BlockID[`${type}_hewn`]})
-      );
   }
 }
 
