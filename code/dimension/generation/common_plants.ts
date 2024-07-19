@@ -28,10 +28,11 @@ namespace ForestGeneration {
                 for (let i = 0; i <= plant.count; i++) {
                   Plants.generate(coords, plant.id, plant.count);
                 }
-              }
-              for (let i = 0; i <= plant.count; i++) {
-                Plants.generate(coords, plant.id, plant.count);
-              }
+              };
+              continue;
+            };
+            for (let i = 0; i <= plant.count; i++) {
+              Plants.generate(coords, plant.id, plant.count);
             }
           }
         }
@@ -44,5 +45,4 @@ namespace ForestGeneration {
   addPlant(0.8, VanillaBlockID.tallgrass, 2, 8);
   addPlant(0.8, VanillaBlockID.yellow_flower, 0, 8);
   addPlant(0.8, VanillaBlockID.red_flower, 0, 8);
-  addPlant(0.3, VanillaBlockID.melon_block, 0, 4, ForestBiomes.FirefliesForest);
 }

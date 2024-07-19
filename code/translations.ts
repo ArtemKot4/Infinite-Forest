@@ -20,28 +20,19 @@ Translation.addTranslation("Bark Pink Log", {
   ru: "Обтёсанное розовое дерево",
 });
 
-Translation.addTranslation("Mill main block", {
-  ru: "§aКонтрольный блок мельницы",
-  en: "§aMill main block",
-});
-
-Translation.addTranslation("Mill blades station", {
-  ru: "§2Станция для установки лопастей",
-  en: "§aMill blades station",
-});
-
-Translation.addTranslation("Mill blades", {
-  ru: "§aЛопасти мельницы",
-  en: "§aMill blades",
-});
-
 Translation.addTranslation("eucalyptus_log", { ru: "§2Эвкалипт" });
 
 Translation.addTranslation("pink_log", { ru: "§dРозовое Дерево" });
 
+Translation.addTranslation("winter_log", { ru: "Зимнее дерево" });
+
+
 Translation.addTranslation("pink_planks", { ru: "§dДоски из розового дерева" });
 
 Translation.addTranslation("eucalyptus_planks", { ru: "§2Доски эвкалипта" });
+
+Translation.addTranslation("winter_planks", { ru: "Зимние доски" });
+
 
 Translation.addTranslation("eucalyptus_bark", { ru: "§2Кора эвкалипта" });
 

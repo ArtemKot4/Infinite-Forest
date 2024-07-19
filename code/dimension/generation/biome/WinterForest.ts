@@ -1,5 +1,5 @@
 namespace ForestGeneration {
-    ForestBiomes.WinterForest.addStructure("pink_tree", 1, 1);
+    //ForestBiomes.WinterForest.addStructure("pink_tree", 0, 0);
     export function generationSnowLayers(chunkX: int, chunkZ: int) {
         for (let x = chunkX * 16; x < (chunkX + 1) * 16; x++) {
             for (let z = chunkZ; z < (chunkZ + 1) * 16; z++) {

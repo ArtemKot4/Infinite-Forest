@@ -101,7 +101,8 @@ namespace ForestBiomes {
         Player.getLocal()
       );
     }
-  }
+  };
+
   export function generateCustomBiome(
     biome: ForestBiome,
     chunkX: int,
@@ -144,34 +145,37 @@ namespace ForestBiomes {
         1 / 128,
         2
       );
-      if (perlinNoise > 0.5 - 12 / 128) {
+      
+      if (perlinNoise > 0.7 - 12 / 128) {
         generateCustomBiome(
           ForestBiomes.WinterForest,
           chunkX,
           chunkZ,
           dimensionSeed,
-          0.5
+          0.7
         );
         return;
       }
-      if (perlinNoise > 0.3 - 12 / 128) {
+      if (perlinNoise > 0.8 - 12 / 128) {
         generateCustomBiome(
           ForestBiomes.BurntForest,
           chunkX,
           chunkZ,
           dimensionSeed,
-          0.5
+          0.7
         );
+        return;
       }
-      if (perlinNoise > 0.8 - 12 / 128) {
-        generateCustomBiome(
-          ForestBiomes.VolcanicLands,
-          chunkX,
-          chunkZ,
-          dimensionSeed,
-          0.8
-        );
-      }
+      // if (perlinNoise > 0.9 - 12 / 128) {
+      //   generateCustomBiome(
+      //     ForestBiomes.VolcanicLands,
+      //     chunkX,
+      //     chunkZ,
+      //     dimensionSeed,
+      //     0.9
+      //   );
+      //   return;
+      // }
     }
   );
 }

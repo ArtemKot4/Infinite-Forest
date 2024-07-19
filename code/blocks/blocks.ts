@@ -9,5 +9,3 @@ new FBlock("salt", [
 ]).create();
 
 Block.setDestroyLevel("salt", MiningLevel.STONE);
-
-type tree = "cherry" | "eucalyptus" | "pink";
