@@ -71,9 +71,11 @@ Callback.addCallback("PlayerChangedDimension", function (playerUid, from, to) {
     time = World.getWorldTime();
     World.setWorldTime(42000);
     Commands.exec("/gamerule doDaylightCycle false");
+    Commands.exec("/gamerule doWeatherCycle false");
   } else {
     // inventSaverFunc(EDimension.NORMAL, playerUid);
     Commands.exec("/gamerule doDaylightCycle true");
+    Commands.exec("/gamerule doWeatherCycle true");
     World.setWorldTime(time);
   }
 });
@@ -90,43 +92,7 @@ namespace Plants {
 }
 
 namespace ForestGeneration {
-  export function generatePlants(chunkX: number, chunkZ: number) {
-    for (let i = 0; i <= 24; i++) {
-      let coords = GenerationUtils.randomCoords(chunkX, chunkZ);
-      coords = GenerationUtils.findSurface(coords.x, 90, coords.z);
-      if (coords.y > 54) {
-        if (Math.random() > 0.94) {
-          Plants.generate(coords, VanillaBlockID.tallgrass);
-        }
-        if (Math.random() > 0.9) {
-          for (let i = 0; i <= 16; i++) {
-            Plants.generate(coords, VanillaBlockID.double_plant);
-          }
-        }
-        if (Math.random() > 0.9) {
-          for (let i = 0; i <= 16; i++) {
-            Plants.generate(coords, VanillaBlockID.double_plant, 1);
-          }
-        }
-        if (Math.random() > 0.8) {
-          for (let i = 0; i <= 8; i++) {
-            Plants.generate(coords, VanillaBlockID.tallgrass, 2);
-          }
-        }
 
-        if (Math.random() > 0.8) {
-          for (let i = 0; i <= 8; i++) {
-            Plants.generate(coords, VanillaBlockID.yellow_flower);
-          }
-        }
-        if (Math.random() > 0.8) {
-          for (let i = 0; i <= 8; i++) {
-            Plants.generate(coords, VanillaBlockID.red_flower);
-          }
-        }
-      }
-    }
-  }
 
   export function generateGroundCavesBlock(chunkX: number, chunkZ: number) {
     const cavesBlock_1 = MathHelper.randomValue(
@@ -291,36 +257,7 @@ namespace ForestGeneration {
     }
   }
 
-  Callback.addCallback(
-    "GenerateCustomDimensionChunk",
-    function (chunkX, chunkZ, random, dimensionId) {
-      if (dimensionId !== InfiniteForest.id) return;
-      generateWaterUnderground(chunkX, chunkZ);
-      generatePlants(chunkX, chunkZ);
-      generateGroundCavesBlock(chunkX, chunkZ);
-      generateBlocksInsteadGrass(chunkX, chunkZ);
-      generateBeaches(chunkX, chunkZ);
-      for (let x = chunkX * 16; x < (chunkX + 1) * 16; x++) {
-        for (let z = chunkZ; z < (chunkZ + 1) * 16; z++) {
-          const coords = GenerationUtils.findSurface(x, 90, z);
-          if (World.getBiome(x, z) === ForestBiomes.WinterForest.getID()) {
-            if (
-              World.getBlock(coords.x, coords.y, coords.z).id ===
-              VanillaBlockID.grass
-            ) {
-              World.setBlock(
-                coords.x,
-                coords.y + 1,
-                coords.z,
-                VanillaBlockID.snow_layer,
-                0
-              );
-            }
-          }
-        }
-      }
-    }
-  );
+
 }
 
 /* //!

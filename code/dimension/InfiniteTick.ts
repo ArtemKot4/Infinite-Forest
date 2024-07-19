@@ -17,19 +17,7 @@ const InfiniteTick = () => {
         ColdCurse.runSnow(pos.x, pos.y + 12.5, pos.z, 32, 24);
         Entity.damageEntity(player, 4);
       }
-      if (biome === ForestBiomes.VolcanicLands.getID()) {
-        ForestBiomes.addParticle(
-          EForestParticle.VANILLA_RAIN,
-          16,
-          24,
-          pos.x,
-          pos.y + 12.5,
-          pos.z,
-          MathHelper.randomValue(-0.08, 0.08),
-          0,
-          MathHelper.randomValue(-0.06, 0.06)
-        );
-      }
+
       if (World.getThreadTime() % 20 === 0) {
         ColdCurse.onTick(this.ticker, player);
         ColdCurse.sendMessage(pos);
@@ -57,3 +45,17 @@ Callback.addCallback("PlayerChangedDimension", function (player, from, to) {
     Updatable.addLocalUpdatable(InfiniteTick());
   }
 });
+
+      // if (biome === ForestBiomes.VolcanicLands.getID()) {
+      //   ForestBiomes.addS(
+      //     EForestParticle.VANILLA_RAIN,
+      //     16,
+      //     24,
+      //     pos.x,
+      //     pos.y + 12.5,
+      //     pos.z,
+      //     MathHelper.randomValue(-0.08, 0.08),
+      //     0,
+      //     MathHelper.randomValue(-0.06, 0.06)
+      //   );
+      // }

@@ -17,6 +17,9 @@ const AIR = 0;
 const Mistical = new Sound("Light.ogg");
 const Opening = new Sound("Opening.ogg");
 
+const structureDIR = __dir__ + "resources/structures/";
+const ForestStructurePool = new StructurePool("infinite_forest_structure_pool");
+
 const BLOCK_TYPE_FIRE = Block.createSpecialType({
   solid: false,
   lightlevel: 5,

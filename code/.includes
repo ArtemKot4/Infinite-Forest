@@ -74,11 +74,21 @@ blocks/TransferStorage.ts
 items/TransferCrystal.ts
 items/dusts.ts
 
+dimension/ForestBiome.ts
 dimension/dimension.ts
 dimension/forest.ts
+
+dimension/generation/common_plants.ts
+dimension/generation/biome/FirefliesForest.ts
+dimension/generation/biome/WinterForest.ts
+dimension/generation/biome/BurntForest.ts
+
 dimension/vanilla_items.ts
 
 dimension/plants_generation.ts
+dimension/generation/generation_all.ts
+
+
 
 core/callbacks/native_command.ts
 core/callbacks/level_displayed.ts
