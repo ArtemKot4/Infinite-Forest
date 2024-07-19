@@ -5,6 +5,10 @@
 			"type": "resource_directory"
 		},
 		{
+			"path": "structures",
+			"type": "resource_directory"
+		},
+		{
 			"path": "models",
 			"type": "resource_directory"
 		},

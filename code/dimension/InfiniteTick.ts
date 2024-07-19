@@ -7,16 +7,17 @@ const InfiniteTick = () => {
       if (Player.getDimension() !== InfiniteForest.id) {
         this.remove = true;
       }
-      if (biome === ForestBiomes.FirefliesForest.id) {
+      if (biome === ForestBiomes.FirefliesForest.getID()) {
         addFire(pos);
         for (let i = 0; i < 3; i++) {
           addGlowworm(pos);
         }
       }
-      if (biome === ForestBiomes.WinterForest.id) {
+      if (biome === ForestBiomes.WinterForest.getID()) {
         ColdCurse.runSnow(pos.x, pos.y + 12.5, pos.z, 32, 24);
+        Entity.damageEntity(player, 4);
       }
-      if (biome === ForestBiomes.VolcanicLands.id) {
+      if (biome === ForestBiomes.VolcanicLands.getID()) {
         ForestBiomes.addParticle(
           EForestParticle.VANILLA_RAIN,
           16,

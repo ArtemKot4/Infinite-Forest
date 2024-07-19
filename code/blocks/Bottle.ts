@@ -71,13 +71,13 @@ class Bottle extends TileEntityBase {
 }
 
 Block.setRandomTickCallback(BlockID["bottle"], (x, y, z, id, data, region) => {
-  if (y >= 130) {
+  if (y >= 130 || region.getBiome(x , z) === ForestBiomes.WinterForest.getID()) {
     region.destroyBlock(x, y, z, false);
   }
   if (
     Block.getLightLevel(region.getBlockId(x, y + 1, z)) <= 5 ||
     region.getDimension() !== InfiniteForest.id ||
-    region.getBiome(x, z) !== ForestBiomes.FirefliesForest.id
+    region.getBiome(x, z) !== ForestBiomes.FirefliesForest.getID()
   ) {
     return;
   }

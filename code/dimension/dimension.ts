@@ -1,29 +1,71 @@
 const InfiniteForest = new Dimensions.CustomDimension("infinite_forest", 75);
 InfiniteForest.setSkyColor(21 / 255, 96 / 255, 189 / 255);
 InfiniteForest.setFogColor(0 / 255, 128 / 255, 0 / 255);
+InfiniteForest.setHasSkyLight(false);
+
+const structureDIR = __dir__ + "resources/structures/";
+const ForestStructurePool = new StructurePool("infinite_structure_pool");
 
 namespace ForestBiomes {
-  export const FirefliesForest = new CustomBiome("fireflies_forest");
-  export const BurntForest = new CustomBiome("burnt_forest");
-  export const VolcanicLands = new CustomBiome("volcanic_lands");
-  export const WinterForest = new CustomBiome("winter_forest");
+  export type BiomeStructure = {
+    name: string;
+    distance: int;
+    chance: int;
+    biome: int;
+  };
+  export class ForestBiome {
+    public static structures: BiomeStructure[] = [];
+    public biome: CustomBiome;
+    constructor(
+      name: string,
+      grassColor?: number3,
+      foliageColor: number3 = grassColor
+    ) {
+      this.biome = new CustomBiome(name);
+      grassColor &&
+        this.biome.setGrassColor(grassColor[0] / 255, grassColor[1] / 255, grassColor[2] / 255);
+      foliageColor &&
+        this.biome.setFoliageColor(
+          foliageColor[0] / 255,
+          foliageColor[1] / 255,
+          foliageColor[2] / 255
+        );
+    }
+    public getID() {
+      return this.biome.id;
+    }
+    public addStructure(name: string, distance: int, chance: int) {
+      ForestStructurePool.load(structureDIR, name);
+      ForestBiome.structures.push({ name, distance, chance, biome: this.getID() });
+    }
+    static {
+      Callback.addCallback("StructureLoadOne", () => {
+        for (const structure of ForestBiome.structures) {
+          StructurePiece.register(
+            StructurePiece.getDefault({
+              type: "default",
+              dimension: InfiniteForest.id,
+              name: structure.name,
+              chance: structure.chance,
+              distance: structure.distance,
+              isSet: true,
+              structure: ForestStructurePool.StructureAdvanced(structure.name),
+              biomes: [structure.biome],
+            })
+          );
+        }
+      });
+    }
+  };
 
-  //FirefliesForest.setSkyColor(21 / 255, 96 / 255, 189 / 255);
+  export const FirefliesForest = new ForestBiome("fireflies_forest");
+  export const BurntForest = new ForestBiome("burnt_forest", [79, 79, 79]);
+  export const VolcanicLands = new ForestBiome("volcanic_lands", [173, 173, 173]);
+  export const WinterForest = new ForestBiome("winter_forest", [255, 255, 255]);
 
-  //WinterForest.setSkyColor(128 / 255, 236 / 255, 255 / 255);
-  WinterForest.setFoliageColor(173 / 255, 173 / 255, 173 / 255);
-  WinterForest.setGrassColor(255 / 255, 255 / 255, 255 / 255);
-  WinterForest.setTemperatureAndDownfall(0.15, 0.76);
+  WinterForest.addStructure("pink_tree", 15, 1000);
+ 
 
-  //BurntForest.setSkyColor(99 / 255, 64 / 255, 2 / 255);
-  //BurntForest.setFoliageColor(79 / 255, 79 / 255, 79 / 255);
-  BurntForest.setGrassColor(79/255, 79/255, 79/255);
-
-  VolcanicLands.setGrassColor(50/255, 50/255, 50/255);
-
-  //VolcanicLands.setSkyColor(173 / 255, 173 / 255, 173 / 255);
-  // VolcanicLands.setCoverBlock(VanillaBlockID.stone, 0);
-  // VolcanicLands.setSurfaceBlock(VanillaBlockID.stone, 0);
   export function addParticle(
     particle: EForestParticle,
     count: int,
@@ -59,7 +101,7 @@ namespace ForestBiomes {
     }
   }
   export function generateCustomBiome(
-    biome: CustomBiome,
+    biome: ForestBiome,
     chunkX: int,
     chunkZ: int,
     dimensionSeed: int,
@@ -81,20 +123,16 @@ namespace ForestBiomes {
     // обход всего чанка
     for (let x = chunkX * 16; x < (chunkX + 1) * 16; x++) {
       for (let z = chunkZ; z < (chunkZ + 1) * 16; z++) {
-        if(World.getBiome(x, z) === FirefliesForest.id) {
-        if (
-          GenerationUtils.getPerlinNoise(x, 0, z, dimensionSeed, 1 / 128, 2) >
-          density
-        ) {
-          World.setBiomeMap(x, z, biome.id);
-        }
-      }
+          if (
+            GenerationUtils.getPerlinNoise(x, 0, z, dimensionSeed, 1 / 128, 2) >
+            density
+          ) {
+            World.setBiomeMap(x, z, biome.getID());
+          }
       }
     }
     return;
   }
-
-
 
   Callback.addCallback(
     "GenerateBiomeMap",
@@ -110,32 +148,72 @@ namespace ForestBiomes {
       if (dimensionId !== InfiniteForest.id) {
         return;
       }
-      // if (
-      //   GenerationUtils.getPerlinNoise(
-      //     chunkX * 16 + 8,
-      //     0,
-      //     chunkZ * 16 + 8,
-      //     dimensionSeed,
-      //     1 / 128,
-      //     2
-      //   ) <
-      //   0.8 - 12 / 128
-      // ) {
-      //   return
-      // }
-      // обход всего чанка
-    generateCustomBiome(WinterForest, chunkX, chunkZ, dimensionSeed, 0.5);
-    generateCustomBiome(BurntForest, chunkX, chunkZ, dimensionSeed, 0.5);
-    generateCustomBiome(VolcanicLands, chunkX, chunkZ, dimensionSeed, 0.8);
+      if (
+        GenerationUtils.getPerlinNoise(
+          chunkX * 16 + 8,
+          0,
+          chunkZ * 16 + 8,
+          dimensionSeed,
+          1 / 128,
+          2
+        ) >
+        0.5 - 12 / 128
+      ) {
+        generateCustomBiome(
+          ForestBiomes.WinterForest,
+          chunkX,
+          chunkZ,
+          dimensionSeed,
+          0.5
+        );
+        return;
+      }
+      if (
+        GenerationUtils.getPerlinNoise(
+          chunkX * 16 + 8,
+          0,
+          chunkZ * 16 + 8,
+          dimensionSeed,
+          1 / 128,
+          2
+        ) >
+        0.3 - 12 / 128
+      ) {
+        // обход всего чанка
+
+        generateCustomBiome(
+          ForestBiomes.BurntForest,
+          chunkX,
+          chunkZ,
+          dimensionSeed,
+          0.5
+        );
+      }
+      if (
+        GenerationUtils.getPerlinNoise(
+          chunkX * 16 + 8,
+          0,
+          chunkZ * 16 + 8,
+          dimensionSeed,
+          1 / 128,
+          2
+        ) >
+        0.8 - 12 / 128
+      ) {
+        generateCustomBiome(
+          ForestBiomes.VolcanicLands,
+          chunkX,
+          chunkZ,
+          dimensionSeed,
+          0.8
+        );
+      }
     }
   );
-
 }
 
-InfiniteForest.setHasSkyLight(false);
-
 const generator = Dimensions.newGenerator({
-  biome: ForestBiomes.FirefliesForest.id,
+  biome: ForestBiomes.FirefliesForest.getID(),
 
   layers: [
     {
