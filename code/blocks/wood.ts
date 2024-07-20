@@ -24,10 +24,36 @@ class Wood {
         ],
         inCreative: true,
       },
+      {
+        name,
+        texture: [
+          [texture, 1],
+          [texture, 1],
+          [texture, 1],
+          [texture, 1],
+          [texture, 1],
+          [texture, 1],
+        ],
+        inCreative: false,
+      },
+      {
+        name,
+        texture: [
+          [texture, 1],
+          [texture, 1],
+          [texture, 1],
+          [texture, 1],
+          [texture, 1],
+          [texture, 1],
+        ],
+        inCreative: false,
+      },
     ]).createWithRotation();
 
     Block.setDestroyTime(BlockID[name], 0.4);
     ToolAPI.registerBlockMaterial(BlockID[name], "wood");
+    Block.registerPlaceFunctionForID(BlockID[name], this.logPlaceFunction.bind({id: BlockID[name]}))
+    Block.registerDropFunction(BlockID[name], this.dropFunction);
   }
 
   public registerHewn() {
@@ -78,6 +104,7 @@ class Wood {
     Block.registerPlaceFunctionForID(BlockID[name], this.logPlaceFunction.bind({id: BlockID[name]}))
     Block.setDestroyTime(BlockID[name], 0.4);
     ToolAPI.registerBlockMaterial(BlockID[name], "wood");
+    Block.registerDropFunction(BlockID[name], this.dropFunction)
 
   }
   public registerPlanks() {
@@ -175,7 +202,11 @@ class Wood {
     Block.registerPlaceFunctionForID(
       BlockID[name],
       this.logPlaceFunction.bind({ id: BlockID[name] })
-    )
+    );
+    Block.registerDropFunction(BlockID[name], this.dropFunction)
+  };
+  public dropFunction(blockCoords: Callback.ItemUseCoordinates, blockID: number, blockData: number, diggingLevel: number, enchant: ToolAPI.EnchantData, item: ItemInstance, region: BlockSource): ItemInstanceArray[] {
+         return [[blockID, 1, 0]];
   }
 }
 

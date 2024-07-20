@@ -1,4 +1,3 @@
-IMPORT("TileRender");
 IMPORT("BlockEngine");
 IMPORT("ItemAnimHelper");
 IMPORT("SoundAPI");

@@ -32,7 +32,7 @@ namespace ForestBiomes {
       return this.biome.id;
     }
     public addStructure(name: string, distance: int, chance: int) {
-      ForestStructurePool.load(structureDIR, name);
+      ForestStructurePool.load(structureDIR, name, "DungeonCore");
       ForestBiome.structures.push({
         name,
         distance,
@@ -50,7 +50,6 @@ namespace ForestBiomes {
               name: structure.name,
               chance: structure.chance,
               distance: structure.distance,
-              isSet: true,
               structure: ForestStructurePool.StructureAdvanced(structure.name),
               biomes: [structure.biome],
             })
