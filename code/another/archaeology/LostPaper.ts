@@ -101,6 +101,7 @@ const LOST_PAPER = new LostPaper("lost_paper");
 LostPaper.addText("forest");
 LostPaper.addText("ruine", "ruine");
 LostPaper.addText("fireflies");
+LostPaper.addText("forest_is_abandoned")
 
 Translation.addTranslation("note.infinite_forest.wrong_mode", {
   ru: "Извините, но вы не можете читать записки, играя в креативе. Пожалуйста, играйте честно, в режиме выживания или приключения.",
@@ -113,11 +114,16 @@ Translation.addTranslation("lost_paper", {
 });
 
 Translation.addTranslation("note.infinite_forest.forest", {
-  ru: "Лес, что простирается во все стороны, кажется, бесконечно, окружает нас всю нашу жизнь. В очередной раз прогуливаясь по лесу, я нашёл необычное место. Оно будто бы замёрзло. На нём было растение, что олицетворяло холод, что цвело часто над луной. Я назвал его луноцветом. Но сорвать так и не смог. Любая поверхность, что его касается, моментально замерзает. Я буду работать, чтобы найти способ, как его сорвать. Надеюсь, что удача улыбнётся мне.",
+  ru: "Лес, кажется, уже давно упал во мрак, не отпускает взгляда моего, и каждый раз я вижу светлячков, не понимаю замысел его. И постоянный холод, вижу я везде, он даже там, где он бы не хотел. И не смотря на то, есть кое что простое тут, но и оно пусто. Неподалёку видел лес, я видел лёд, где были вновь прохладные поля, что замерзали быстро, нехотя. Я жду лишь одного, узнать, что делать мне. Но вот, нашёл я лишь цветок, он под луной расцвёл, и холодом обжёг, я обречён...",
   en: "Sorry, but for read it you must use a survival or adventure mode, creative is not valid.",
 });
 
 Translation.addTranslation("note.infinite_forest.fireflies", {
   ru: "Светлячки, это хранители нашего леса. Одни из немногочисленных существ, что приносят в это место хоть капельку света. А ещё их очень много, и они очень быстрые. Возможно, если поставить банку, открыть и ждать, один случайно и залетит на своей скорости, едва ли не разбив банку.",
+  en: "Sorry, but for read it you must use a survival or adventure mode, creative is not valid.",
+});
+
+Translation.addTranslation("note.infinite_forest.forest_is_abandoned", {
+  ru: "Допишу позже",
   en: "Sorry, but for read it you must use a survival or adventure mode, creative is not valid.",
 });
