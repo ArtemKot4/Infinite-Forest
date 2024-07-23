@@ -1,25 +1,19 @@
 namespace ForestGeneration {
-    ForestBiomes.WinterForest.addStructure("winter_tree_dc", 1, 1);
-    export function generationSnowLayers(chunkX: int, chunkZ: int) {
-        for (let x = chunkX * 16; x < (chunkX + 1) * 16; x++) {
-            for (let z = chunkZ; z < (chunkZ + 1) * 16; z++) {
-              const coords = GenerationUtils.findSurface(x, 90, z);
-              if (World.getBiome(x, z) === ForestBiomes.WinterForest.getID()) {
-                if (
-                  World.getBlock(coords.x, coords.y, coords.z).id ===
-                  VanillaBlockID.grass
-                ) {
-                  World.setBlock(
-                    coords.x,
-                    coords.y + 1,
-                    coords.z,
-                    VanillaBlockID.snow_layer,
-                    0
-                  );
-                }
-              }
-            }
-          };
-          return;
+//  ForestBiomes.WinterForest.addStructure("winter_tree_dc", 0, 0);
+  export function generationSnowLayers(coords: Vector, x: int, z: int) {
+    if (World.getBiome(x, z) === ForestBiomes.WinterForest.getID()) {
+      if (
+        World.getBlock(coords.x, coords.y, coords.z).id === VanillaBlockID.grass
+      ) {
+        World.setBlock(
+          coords.x,
+          coords.y + 1,
+          coords.z,
+          VanillaBlockID.snow_layer,
+          0
+        );
+      }
     }
+  };
+  ForestBiomes.WinterForest.biome.setTemperatureAndDownfall(0.25, 0.6)
 }

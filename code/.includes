@@ -82,6 +82,7 @@ dimension/generation/common_plants.ts
 dimension/generation/biome/FirefliesForest.ts
 dimension/generation/biome/WinterForest.ts
 dimension/generation/biome/BurntForest.ts
+dimension/generation/biome/IcePeaks.ts
 
 dimension/vanilla_items.ts
 

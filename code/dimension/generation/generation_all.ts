@@ -8,7 +8,13 @@ namespace ForestGeneration {
           generateGroundCavesBlock(chunkX, chunkZ);
           generateBlocksInsteadGrass(chunkX, chunkZ);
           generateBeaches(chunkX, chunkZ);
-          generationSnowLayers(chunkX, chunkZ);
+          for (let x = chunkX * 16; x < (chunkX + 1) * 16; x++) {
+            for (let z = chunkZ; z < (chunkZ + 1) * 16; z++) {
+              const coords = GenerationUtils.findSurface(x, 90, z);
+          generationSnowLayers(coords, x, z);
+          generationReliefPeaks(coords, x, z)
         }
+      }
+    }
       );
 }

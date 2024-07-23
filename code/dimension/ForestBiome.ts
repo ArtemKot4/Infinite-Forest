@@ -66,6 +66,7 @@ namespace ForestBiomes {
     [173, 173, 173]
   );
   export const WinterForest = new ForestBiome("winter_forest", [255, 255, 255]);
+  export const IcePeaks = new ForestBiome("ice_peaks", [255, 255, 255]);
 
   export function addSquareParticle(
     particle: EForestParticle,
@@ -145,6 +146,16 @@ namespace ForestBiomes {
         2
       );
       
+      if (perlinNoise > 0.7 - 12 / 128) {
+        generateCustomBiome(
+          ForestBiomes.IcePeaks,
+          chunkX,
+          chunkZ,
+          dimensionSeed,
+          0.7
+        );
+        return;
+      };
       if (perlinNoise > 0.7 - 12 / 128) {
         generateCustomBiome(
           ForestBiomes.WinterForest,

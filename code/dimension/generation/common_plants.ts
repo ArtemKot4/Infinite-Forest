@@ -21,6 +21,7 @@ namespace ForestGeneration {
       let coords = GenerationUtils.randomCoords(chunkX, chunkZ);
       coords = GenerationUtils.findSurface(coords.x, 90, coords.z);
       if (coords.y > 54) {
+        if(World.getBlockID(coords.x, coords.y, coords.z) === VanillaBlockID.grass) {
         for (const plant of plants) {
           if (Math.random() > plant.chance) {
             if (plant.biome) {
@@ -38,6 +39,7 @@ namespace ForestGeneration {
         }
       }
     }
+  }
   }
   addPlant(0.94, VanillaBlockID.tallgrass, 0, 3);
   addPlant(0.9, VanillaBlockID.double_plant, 0, 16);

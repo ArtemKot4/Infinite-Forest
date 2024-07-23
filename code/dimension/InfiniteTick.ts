@@ -13,7 +13,7 @@ const InfiniteTick = () => {
           addGlowworm(pos);
         }
       }
-      if (biome === ForestBiomes.WinterForest.getID()) {
+      if (biome === ForestBiomes.WinterForest.getID() || biome === ForestBiomes.IcePeaks.getID()) {
         ColdCurse.runSnow(pos.x, pos.y + 12.5, pos.z, 32, 24);
         Entity.damageEntity(player, 4);
       }
