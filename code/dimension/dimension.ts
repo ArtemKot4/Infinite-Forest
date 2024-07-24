@@ -4,7 +4,7 @@ InfiniteForest.setFogColor(0 / 255, 128 / 255, 0 / 255);
 InfiniteForest.setHasSkyLight(false);
 
 const generator = Dimensions.newGenerator({
-  biome: ForestBiomes.FirefliesForest.getID(),
+  biome: ForestBiomes.FirefliesForest.getID(), // ForestBiomes.FirefliesForest.getID(),
 
   layers: [
     {

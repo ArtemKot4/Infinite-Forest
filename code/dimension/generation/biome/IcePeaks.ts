@@ -1,9 +1,36 @@
 namespace ForestGeneration {
+  let underwater_whitelist = [
+    VanillaTileID.air,
+    VanillaBlockID.water,
+    VanillaBlockID.flowing_water,
+  ];
+  function generateKelps(x: int, y: int, z: int) {
+    if (Math.random() < 0.05) {
+      if (underwater_whitelist.includes(World.getBlockID(x, y, z))) {
+        for (let i = 0; i <= randomInt(3, 12); i++) {
+          World.setBlock(x, y + i, z, 457, 0); //457 is kelp
+        }
+      }
+    }
+  }
+  function generateSeagrass(x: int, y: int, z: int) {
+    if (Math.random() < 0.5) {
+      if (underwater_whitelist.includes(World.getBlockID(x, y, z))) {
+        let random = randomInt(2, 6);
+        for (let i = 0; i <= random; i++) {
+          World.setBlock(x + i, y, z + i, VanillaBlockID.seagrass, 0);
+          World.setBlock(x + i, y, z - i, VanillaBlockID.seagrass, 0);
+          World.setBlock(x - i, y, z + i, VanillaBlockID.seagrass, 0);
+          World.setBlock(x - i, y, z - i, VanillaBlockID.seagrass, 0);
+        }
+      }
+    }
+  }
+
   export function generationReliefPeaks(coords: Vector, x: int, z: int) {
     if (World.getBiome(x, z) === ForestBiomes.IcePeaks.getID()) {
-      if (
-        World.getBlock(x, coords.y, z).id === VanillaBlockID.grass
-      ) {
+      if (World.getBlock(x, coords.y, z).id === VanillaBlockID.grass) {
+        const BOTTOM_HEIGHT = coords.y - 21;
         if (Math.random() < 0.4) {
           World.setBlock(
             coords.x,
@@ -12,15 +39,9 @@ namespace ForestGeneration {
             VanillaBlockID.snow_layer,
             0
           );
-        };
+        }
         for (let ice_height = 0; ice_height <= 4; ice_height++) {
-          World.setBlock(
-            x,
-            coords.y - ice_height,
-            z,
-            VanillaBlockID.ice,
-            0
-          );
+          World.setBlock(x, coords.y - ice_height, z, VanillaBlockID.ice, 0);
         }
         for (let ocean_height = 5; ocean_height <= 20; ocean_height++) {
           World.setBlock(
@@ -32,16 +53,12 @@ namespace ForestGeneration {
           );
         }
         let bottom_block = VanillaBlockID.dirt;
-        if (Math.random() < 0.2) {
+        if (Math.random() < 0.03) {
           bottom_block = VanillaBlockID.magma;
         }
-        World.setBlock(
-          x,
-          coords.y - 21,
-          z,
-          bottom_block,
-          0
-        );
+        World.setBlock(x, coords.y - 21, z, bottom_block, 0);
+        generateKelps(x, BOTTOM_HEIGHT + 1, z);
+        generateSeagrass(x, BOTTOM_HEIGHT + 1, z);
       }
     }
   }
