@@ -23,7 +23,7 @@ namespace ForestGeneration {
           World.setBlock(x - i, y, z + i, VanillaBlockID.seagrass, 0);
           World.setBlock(x - i, y, z - i, VanillaBlockID.seagrass, 0);
         }
-      }
+      } 
     }
   }
 
