@@ -1,13 +1,13 @@
 namespace ForestBiomes {
   export type BiomeStructure = {
-    name: string;
-    distance: int;
-    chance: int;
-    biome: int;
+    [name: string]: {
+      chance: int,
+      count: int
+    }
   };
 
   export class ForestBiome {
-    public static structures: BiomeStructure[] = [];
+    public structures: BiomeStructure = {}
     public biome: CustomBiome;
     constructor(
       name: string,
@@ -31,31 +31,37 @@ namespace ForestBiomes {
     public getID() {
       return this.biome.id;
     }
-    public addStructure(name: string, distance: int, chance: int) {
+    public addStructure(name: string, chance: int, count: int) {
       ForestStructurePool.load(structureDIR, name, "DungeonCore");
-      ForestBiome.structures.push({
-        name,
-        distance,
-        chance,
-        biome: this.getID(),
-      });
+       this.structures[name] = {
+        chance, 
+        count
+      };
+    };
+    public generateChunkStructure(name: string, coords: Vector) {
+      const descriptor = this.structures[name];
+      if(descriptor.chance && Math.random() > descriptor.chance) return;
+      for(let i = 0; i <= descriptor.count; i++) {
+        Structure.setStructure(name, coords.x, coords.y, coords.z, BlockSource.getCurrentWorldGenRegion());
+      };
+      return;
     }
     static {
-      Callback.addCallback("StructureLoadOne", () => {
-        for (const structure of ForestBiome.structures) {
-          StructurePiece.register(
-            StructurePiece.getDefault({
-              type: "default",
-              dimension: InfiniteForest.id,
-              name: structure.name,
-              chance: structure.chance,
-              distance: structure.distance,
-              structure: ForestStructurePool.StructureAdvanced(structure.name),
-              biomes: [structure.biome],
-            })
-          );
-        }
-      });
+      // Callback.addCallback("StructureLoadOne", () => {
+      //   for (const structure of ForestBiome.structures) {
+      //     StructurePiece.register(
+      //       StructurePiece.getDefault({
+      //         type: "default",
+      //         dimension: InfiniteForest.id,
+      //         name: structure.name,
+      //         chance: structure.chance,
+      //         distance: structure.distance,
+      //         structure: ForestStructurePool.StructureAdvanced(structure.name),
+      //         biomes: [structure.biome],
+      //       })
+      //     );
+      //   }
+      // });
     }
   }
 
@@ -67,7 +73,6 @@ namespace ForestBiomes {
   );
   export const WinterForest = new ForestBiome("winter_forest", [255, 255, 255]);
   export const IcePeaks = new ForestBiome("ice_peaks", [255, 255, 255]);
-
   export function addSquareParticle(
     particle: EForestParticle,
     count: int,

@@ -11,9 +11,15 @@ namespace ForestGeneration {
           for (let x = chunkX * 16; x < (chunkX + 1) * 16; x++) {
             for (let z = chunkZ; z < (chunkZ + 1) * 16; z++) {
               const coords = GenerationUtils.findSurface(x, 90, z);
+              if(coords.y < 54) return;
           generationSnowLayers(coords, x, z);
           generationReliefPeaks(coords, x, z)
-        }
+        };
+      };
+      let randomCoords = GenerationUtils.randomCoords(chunkX, chunkZ);
+      randomCoords = GenerationUtils.findSurface(randomCoords.x, 90, randomCoords.z);
+      if(World.getBiome(randomCoords.x, randomCoords.y) === ForestBiomes.IcePeaks.getID()) {
+        ForestBiomes.WinterForest.generateChunkStructure("winter_tree", randomCoords)
       }
     }
       );

@@ -1,5 +1,5 @@
 namespace ForestGeneration {
-//  ForestBiomes.WinterForest.addStructure("winter_tree_dc", 0, 0);
+ ForestBiomes.WinterForest.addStructure("winter_tree", null, 2);
   export function generationSnowLayers(coords: Vector, x: int, z: int) {
     if (World.getBiome(x, z) === ForestBiomes.WinterForest.getID()) {
       if (

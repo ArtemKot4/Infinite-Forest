@@ -8,7 +8,7 @@ namespace ForestGeneration {
     if (Math.random() < 0.05) {
       if (underwater_whitelist.includes(World.getBlockID(x, y, z))) {
         for (let i = 0; i <= randomInt(3, 12); i++) {
-          World.setBlock(x, y + i, z, 457, 0); //457 is kelp
+          World.setBlock(x, y + i, z, VanillaTileID.kelp, 0);
         }
       }
     }
@@ -16,8 +16,7 @@ namespace ForestGeneration {
   function generateSeagrass(x: int, y: int, z: int) {
     if (Math.random() < 0.5) {
       if (underwater_whitelist.includes(World.getBlockID(x, y, z))) {
-        let random = randomInt(2, 6);
-        for (let i = 0; i <= random; i++) {
+        for (let i = 0; i <= randomInt(2, 6); i++) {
           World.setBlock(x + i, y, z + i, VanillaBlockID.seagrass, 0);
           World.setBlock(x + i, y, z - i, VanillaBlockID.seagrass, 0);
           World.setBlock(x - i, y, z + i, VanillaBlockID.seagrass, 0);
@@ -29,9 +28,10 @@ namespace ForestGeneration {
 
   export function generationReliefPeaks(coords: Vector, x: int, z: int) {
     if (World.getBiome(x, z) === ForestBiomes.IcePeaks.getID()) {
+      
       if (World.getBlock(x, coords.y, z).id === VanillaBlockID.grass) {
-        const BOTTOM_HEIGHT = coords.y - 21;
-        if (Math.random() < 0.4) {
+        const BOTTOM_HEIGHT = coords.y - 36;
+        if (Math.random() < 0.65) {
           World.setBlock(
             coords.x,
             coords.y + 1,
@@ -43,7 +43,7 @@ namespace ForestGeneration {
         for (let ice_height = 0; ice_height <= 4; ice_height++) {
           World.setBlock(x, coords.y - ice_height, z, VanillaBlockID.ice, 0);
         }
-        for (let ocean_height = 5; ocean_height <= 20; ocean_height++) {
+        for (let ocean_height = 5; ocean_height <= 35; ocean_height++) {
           World.setBlock(
             x,
             coords.y - ocean_height,
@@ -56,7 +56,7 @@ namespace ForestGeneration {
         if (Math.random() < 0.03) {
           bottom_block = VanillaBlockID.magma;
         }
-        World.setBlock(x, coords.y - 21, z, bottom_block, 0);
+        World.setBlock(x, coords.y - BOTTOM_HEIGHT, z, bottom_block, 0);
         generateKelps(x, BOTTOM_HEIGHT + 1, z);
         generateSeagrass(x, BOTTOM_HEIGHT + 1, z);
       }
