@@ -57,8 +57,15 @@ namespace DungeonKeyList {
   IceKey.registerHandFunction((player) => {
     if (ColdCurse.has(player)) {
       const randomSlot = randomInt(0, 8);
-      const actor = new PlayerActor(player);
+      const actor = new PlayerEntity(player);
       actor.setSelectedSlot(randomSlot);
+      const selectedSlotStack = actor.getInventorySlot(actor.getSelectedSlot());
+      actor.setCarriedItem(
+        selectedSlotStack.id,
+        selectedSlotStack.count,
+        selectedSlotStack.data,
+        selectedSlotStack.extra
+      );
       ColdCurse.damage(player);
       return;
     }
