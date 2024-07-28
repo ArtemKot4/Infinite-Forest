@@ -28,7 +28,7 @@ class Mushroom extends TileEntityBase {
     item: ItemStack,
     player: number
   ) {
-    return electric_damage(player);
+    return Entity.damageEntity(player, 1);
   }
 }
 
@@ -49,14 +49,21 @@ Block.setRandomTickCallback(
   }
 );
 
-const electric_damage = (player) => {
-  if (Game.getGameMode() === EGameMode.CREATIVE) return;
-  const pos = Entity.getPosition(player);
-  return Entity.damageEntity(player, 5);
-};
+const ServerPlayerDamage = (count: int = 1) => 
+  Network.sendToServer("infinite_forest.damage_player", {count: count});
+
+Network.addServerPacket("infinite_forest.damage_player", (client, data: {count: int}) => {
+  const player = client.getPlayerUid();
+  const actor = new PlayerActor(player);
+  if(actor.getGameMode() === EGameMode.CREATIVE) return;
+   return Entity.damageEntity(client.getPlayerUid(), data.count || 1);
+});
+
+
+
 
 Callback.addCallback("DestroyBlockContinue", (coords, block, progress) => {
   if (block.id == EForestPlants.ELECTRIC_MUSHROOM) {
-    return electric_damage(Player.get());
+    return ServerPlayerDamage();
   }
 });

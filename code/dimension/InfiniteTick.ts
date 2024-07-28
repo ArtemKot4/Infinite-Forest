@@ -1,3 +1,11 @@
+
+
+Callback.addCallback("ServerPlayerTick", (playerUid, isPlayerDead) => {
+  if (World.getThreadTime() % 8 === 0) {
+    return checkHandItem(playerUid);
+  }
+});
+
 const InfiniteTick = () => {
   return {
     update(): void {
@@ -13,7 +21,10 @@ const InfiniteTick = () => {
           addGlowworm(pos);
         }
       }
-      if (biome === ForestBiomes.WinterForest.getID() || biome === ForestBiomes.IcePeaks.getID()) {
+      if (
+        biome === ForestBiomes.WinterForest.getID() ||
+        biome === ForestBiomes.IcePeaks.getID()
+      ) {
         ColdCurse.runSnow(pos.x, pos.y + 12.5, pos.z, 16, 16); //32 24
         Entity.damageEntity(player, 4);
       }
@@ -46,16 +57,16 @@ Callback.addCallback("PlayerChangedDimension", function (player, from, to) {
   }
 });
 
-      // if (biome === ForestBiomes.VolcanicLands.getID()) {
-      //   ForestBiomes.addS(
-      //     EForestParticle.VANILLA_RAIN,
-      //     16,
-      //     24,
-      //     pos.x,
-      //     pos.y + 12.5,
-      //     pos.z,
-      //     MathHelper.randomValue(-0.08, 0.08),
-      //     0,
-      //     MathHelper.randomValue(-0.06, 0.06)
-      //   );
-      // }
+// if (biome === ForestBiomes.VolcanicLands.getID()) {
+//   ForestBiomes.addS(
+//     EForestParticle.VANILLA_RAIN,
+//     16,
+//     24,
+//     pos.x,
+//     pos.y + 12.5,
+//     pos.z,
+//     MathHelper.randomValue(-0.08, 0.08),
+//     0,
+//     MathHelper.randomValue(-0.06, 0.06)
+//   );
+// }

@@ -31,7 +31,7 @@ abstract class ColdCurse extends Curse {
     ],
   });
   public static runSnow(x: int, y: int, z: int, radius = 16, count = 16) {
-    if (World.getThreadTime() % 3 === 0) {
+    if (World.getThreadTime() % 8 === 0) {
       for (let n = -count; n <= count; n++) {
         ForestParticle.send(
           EForestParticle.SNOWFALL,
@@ -68,13 +68,17 @@ abstract class ColdCurse extends Curse {
     } else {
       ColdCurse.COLD_MESSAGE = true;
     }
+  };
+  public static damage(player: int) {
+    Entity.damageEntity(player, 1);
+    Entity.addEffect(player, EPotionEffect.DIG_SLOWDOWN, 3, 10, false, false);
+    return;
   }
   public static onTick(ticker: int, player: int): void {
     if (!this.has(player)) return;
     const pos = Entity.getPosition(player);
     if (pos.y > ColdCurse.COLD_HEIGHT) {
-      Entity.damageEntity(player, 5);
-      Entity.addEffect(player, EPotionEffect.DIG_SLOWDOWN, 3, 10, false, false);
+    ServerPlayerDamage();
       //  const layout = ColdCurse.UI.layout;
       if (ColdCurse.UI.isOpened() === false) {
         ColdCurse.UI.open();

@@ -1,3 +1,17 @@
+const handItemFunctions = {} as Record<int, (player) => void>;
+function checkHandItem(player: int) {
+  const actor = new PlayerEntity(player);
+  for (const i in handItemFunctions) {
+    const id = Number(i);
+    if (
+      actor.getCarriedItem().id === id &&
+      actor.getInventorySlot(actor.getSelectedSlot()).id === id
+    ) {
+     return handItemFunctions[i](player);
+    }
+  }
+}
+
 type texture = string | [texture: string, frame: int, time?: int];
 class FItem {
   protected id: string;
@@ -102,6 +116,9 @@ class FItem {
       return func(item, player);
      });
      Item.registerNoTargetUseFunction(this.id, func);
+  };
+  public registerHandFunction(callback: (player: int) => void) {
+    handItemFunctions[this.getID()] = callback;
   }
 }
 

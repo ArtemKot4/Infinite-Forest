@@ -21,7 +21,7 @@ class DungeonKey extends FItem {
     }
     if (item.id === this.getID()) {
       const extra = item.extra;
-      if (!extra || extra && extra.getBoolean("lock") === null) {
+      if (!extra || (extra && extra.getBoolean("lock") === null)) {
         return true;
       }
     }
@@ -54,4 +54,22 @@ Translation.addTranslation("message.infinite_forest.cold_curse", {
 
 namespace DungeonKeyList {
   export const IceKey = new DungeonKey("ice_dungeon_key");
+  IceKey.registerHandFunction((player) => {
+    if (ColdCurse.has(player)) {
+      const randomSlot = randomInt(0, 8);
+      const actor = new PlayerActor(player);
+      actor.setSelectedSlot(randomSlot);
+      ColdCurse.damage(player);
+      return;
+    }
+  });
 }
+
+Callback.addCallback("ItemUse", (c, i, b, isE, p) => {
+  if (Entity.getSneaking(p)) {
+    Game.message(
+      "name: " + IDRegistry.getNameByID(b.id) + " | " + "id: " + b.id
+    );
+    return;
+  }
+}); //TODO: DEBUG -> DELETE PLS
