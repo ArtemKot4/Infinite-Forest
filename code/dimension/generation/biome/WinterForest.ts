@@ -3,7 +3,7 @@ namespace ForestGeneration {
   export function generationSnowLayers(coords: Vector, x: int, z: int) {
     if (World.getBiome(x, z) === ForestBiomes.WinterForest.getID()) {
       if (
-        World.getBlock(coords.x, coords.y, coords.z).id === VanillaBlockID.grass
+        World.getBlockID(coords.x, coords.y, coords.z) === VanillaBlockID.grass
       ) {
         World.setBlock(
           coords.x,
@@ -12,8 +12,9 @@ namespace ForestGeneration {
           VanillaBlockID.snow_layer,
           0
         );
+        return;
       }
     }
   };
-  ForestBiomes.WinterForest.biome.setTemperatureAndDownfall(0.25, 0.6)
+ // ForestBiomes.WinterForest.biome.setTemperatureAndDownfall(0.25, 0.6)
 }

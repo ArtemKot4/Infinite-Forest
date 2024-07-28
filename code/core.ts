@@ -139,4 +139,10 @@ function breakBlockIfAir(id: int) {
 
 function parseID(id: string) {
   return ItemID[id] || VanillaItemID[id] || BlockID[id] || VanillaBlockID[id];
-}
+};
+
+enum EForestState {
+  ICE = -1,
+  BALANCE = 0,
+  FIRE = 1
+ }

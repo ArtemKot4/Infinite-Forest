@@ -7,12 +7,14 @@ namespace ForestBiomes {
   };
 
   export class ForestBiome {
+    protected static list: Record<int, EForestState> = {}
     public structures: BiomeStructure = {}
     public biome: CustomBiome;
     constructor(
       name: string,
       grassColor?: number3,
-      foliageColor: number3 = grassColor
+      foliageColor: number3 = grassColor,
+      state: EForestState = EForestState.BALANCE
     ) {
       this.biome = new CustomBiome(name);
       grassColor &&
@@ -27,6 +29,7 @@ namespace ForestBiomes {
           foliageColor[1] / 255,
           foliageColor[2] / 255
         );
+        ForestBiome[this.getID()] = state;
     }
     public getID() {
       return this.biome.id;
@@ -45,6 +48,9 @@ namespace ForestBiomes {
         Structure.setStructure(name, coords.x, coords.y, coords.z, BlockSource.getCurrentWorldGenRegion());
       };
       return;
+    };
+    static getState(biome: int): EForestState {
+      return ForestBiome.list[biome] || EForestState.BALANCE;
     }
     static {
       // Callback.addCallback("StructureLoadOne", () => {
@@ -67,12 +73,12 @@ namespace ForestBiomes {
 
   export const FirefliesForest = new ForestBiome("fireflies_forest");
   export const BurntForest = new ForestBiome("burnt_forest", [79, 79, 79]);
-  export const VolcanicLands = new ForestBiome(
+  /*export const VolcanicLands = new ForestBiome(
     "volcanic_lands",
     [173, 173, 173]
-  );
-  export const WinterForest = new ForestBiome("winter_forest", [255, 255, 255]);
-  export const IcePeaks = new ForestBiome("ice_peaks", [255, 255, 255]);
+  );*/
+  export const WinterForest = new ForestBiome("winter_forest", [255, 255, 255], null, EForestState.ICE);
+  export const IcePeaks = new ForestBiome("ice_peaks", [255, 255, 255], null, EForestState.ICE);
   export function addSquareParticle(
     particle: EForestParticle,
     count: int,
@@ -171,16 +177,16 @@ namespace ForestBiomes {
         );
         return;
       }
-      if (perlinNoise > 0.8 - 12 / 128) {
-        generateCustomBiome(
-          ForestBiomes.BurntForest,
-          chunkX,
-          chunkZ,
-          dimensionSeed,
-          0.7
-        );
-        return;
-      }
+      // if (perlinNoise > 0.8 - 12 / 128) {
+      //   generateCustomBiome(
+      //     ForestBiomes.BurntForest,
+      //     chunkX,
+      //     chunkZ,
+      //     dimensionSeed,
+      //     0.7
+      //   );
+      //   return;
+      // }
       // if (perlinNoise > 0.9 - 12 / 128) {
       //   generateCustomBiome(
       //     ForestBiomes.VolcanicLands,
