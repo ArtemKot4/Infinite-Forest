@@ -59,12 +59,8 @@ namespace DungeonKeyList {
       const randomSlot = randomInt(0, 8);
       const actor = new PlayerEntity(player);
       actor.setSelectedSlot(randomSlot);
-      const selectedSlotStack = actor.getInventorySlot(actor.getSelectedSlot());
       actor.setCarriedItem(
-        selectedSlotStack.id,
-        selectedSlotStack.count,
-        selectedSlotStack.data,
-        selectedSlotStack.extra
+        actor.getInventorySlot(actor.getSelectedSlot())
       );
       ColdCurse.damage(player);
       return;

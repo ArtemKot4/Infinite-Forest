@@ -127,7 +127,7 @@ namespace ForestBiomes {
           GenerationUtils.getPerlinNoise(x, 0, z, dimensionSeed, 1 / 128, 2) >
           density
         ) {
-          World.setBiomeMap(x, z, biome.getID());
+          World.setBiomeMap(x, z, biome.getID()); //  World.setBiomeMap(x, z, biome.getID());
         }
       }
     }
