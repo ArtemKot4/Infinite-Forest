@@ -16,6 +16,9 @@ const AIR = 0;
 const Mistical = new Sound("Light.ogg");
 const Opening = new Sound("Opening.ogg");
 
+/** __ dir __ + "resources/structures/";
+ * 
+ */
 const structureDIR = __dir__ + "resources/structures/";
 const ForestStructurePool = new StructurePool("infinite_forest_structure_pool");
 
@@ -145,4 +148,8 @@ enum EForestState {
   ICE = -1,
   BALANCE = 0,
   FIRE = 1
+ };
+
+ const ForestConfiguration = {
+
  }

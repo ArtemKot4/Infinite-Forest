@@ -16,11 +16,6 @@ namespace ForestGeneration {
           generationReliefPeaks(coords, x, z)
         };
       };
-      let randomCoords = GenerationUtils.randomCoords(chunkX, chunkZ);
-      randomCoords = GenerationUtils.findSurface(randomCoords.x, 90, randomCoords.z);
-      if(World.getBiome(randomCoords.x, randomCoords.y) === ForestBiomes.IcePeaks.getID()) {
-        ForestBiomes.WinterForest.generateChunkStructure("winter_tree", randomCoords)
-      }
     }
       );
 }
