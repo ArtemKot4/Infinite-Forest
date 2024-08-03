@@ -59,7 +59,8 @@ namespace ForestBiomes {
               chance: structure.chance,
               distance: structure.distance,
               structure: ForestStructurePool.StructureAdvanced(structure.name),
-             // biomes: [structure.biome],
+              biomes: [structure.biome],
+              //count: [structure.chance]
             })
           );
         }
@@ -136,7 +137,7 @@ namespace ForestBiomes {
     let isHeart = false;
     for (let x = chunkX * 16; x < (chunkX + 1) * 16; x++) {
       for (let z = chunkZ; z < (chunkZ + 1) * 16; z++) {
-        if(x >= HEART_FOREST_COORDS && z >= HEART_FOREST_COORDS && x <= HEART_FOREST_COORDS * 1.25 && z <= HEART_FOREST_COORDS * 1.25) {
+        if(x >= HEART_FOREST_COORDS && z >= HEART_FOREST_COORDS && x <= HEART_FOREST_COORDS * 1.3333333 && z <= HEART_FOREST_COORDS * 1.3333333) {
           World.setBiomeMap(x, z, HeartForest.getID());
           isHeart = true;
         }

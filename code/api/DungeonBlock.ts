@@ -1,3 +1,7 @@
+class DungeonCurse extends Curse {
+ public static idenitifier: string = "dungeon";
+};
+
 class DungeonBlock extends FBlock {
   protected static list: int[] = [];
   protected static blacklist: playerName[] = [] 
@@ -8,19 +12,13 @@ class DungeonBlock extends FBlock {
   public static addToDungeonList(block: int) {
     DungeonBlock.list.push(block);
   }
-  protected static hasBlock(player: int) {
-    const name = Entity.getNameTag(player);
-    const actor = new PlayerActor(player);
-    if(actor.getGameMode() === EGameMode.CREATIVE) return true;
-    return this.blacklist.includes(name) 
-  }
   protected static destroyBlock(
     coords: Callback.ItemUseCoordinates,
     block: Tile,
     player: number
   ) {
     if(!DungeonBlock.list.includes(block.id)) return;
-    if (ColdCurse.has(player) || !DungeonBlock.hasBlock(player)) {
+    if (DungeonCurse.has(player)) {
       Game.prevent();
     };
   }

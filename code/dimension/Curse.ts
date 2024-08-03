@@ -1,20 +1,40 @@
 abstract class Curse {
-  protected static readonly blacklist: string[] = [];
+  private static readonly list: name[] = [];
+  private static readonly blacklist: Record<playerName, name[]> = {};
   public static onTick: (...args) => void;
   public static idenitifier: string;
+  public static addIdentifierToList = (() => Curse.list.push(this.idenitifier))();
   public static has(player: int) {
     const name = Entity.getNameTag(player);
     const actor = new PlayerActor(player);
     if (actor.getGameMode() === EGameMode.CREATIVE) {
       return false;
     }
-    return !this.blacklist.includes(name);
+    return !Curse.blacklist[name].includes(this.idenitifier);
+  };
+  public static hasList(player: int, list: name[]) {
+    const name = Entity.getNameTag(player);
+    const actor = new PlayerActor(player);
+    if (actor.getGameMode() === EGameMode.CREATIVE) {
+      return false;
+    };
+      for(let element of list) {
+        if(!this.blacklist[name].includes(element)) return false;
+      };
+      return true;
+  };
+  public static  getCurseList() {
+    return Curse.list;
   }
+  public static  getBlacklist() {
+    return Curse.blacklist
+  };
 }
 
 abstract class ColdCurse extends Curse {
   public static COLD_HEIGHT = 130;
   public static COLD_MESSAGE: boolean = true;
+  public static idenitifier: string = "cold";
   public static UI = new UI.Window({
     drawing: [
       {
@@ -79,18 +99,10 @@ abstract class ColdCurse extends Curse {
     const pos = Entity.getPosition(player);
     if (pos.y > ColdCurse.COLD_HEIGHT) {
     ServerPlayerDamage();
-      //  const layout = ColdCurse.UI.layout;
       if (ColdCurse.UI.isOpened() === false) {
         ColdCurse.UI.open();
-        // layout && layout.setAlpha(0)
       }
-      // if (ColdCurse.UI.isOpened() === true) {
-      //   layout && layout.setAlpha(1 / ticker);
-      //   ColdCurse.UI.forceRefresh();
-      //   if (ticker > 1) {
-      //     ticker -= 1;
-      //   }
-      // }
+
     } else {
       ColdCurse.UI.isOpened() && ColdCurse.UI.close();
     }

@@ -83,6 +83,8 @@ dimension/generation/biome/FirefliesForest.ts
 dimension/generation/biome/WinterForest.ts
 dimension/generation/biome/BurntForest.ts
 dimension/generation/biome/IcePeaks.ts
+dimension/generation/biome/BurntForest.ts
+dimension/generation/biome/HeartForest.ts
 
 dimension/vanilla_items.ts
 

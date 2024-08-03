@@ -10,10 +10,12 @@ namespace ForestGeneration {
           generateBeaches(chunkX, chunkZ);
           for (let x = chunkX * 16; x < (chunkX + 1) * 16; x++) {
             for (let z = chunkZ; z < (chunkZ + 1) * 16; z++) {
+              generateGreatWall(x, z);
               const coords = GenerationUtils.findSurface(x, 90, z);
               if(coords.y < 54) return;
           generationSnowLayers(coords, x, z);
-          generationReliefPeaks(coords, x, z)
+          generationReliefPeaks(coords, x, z);
+
         };
       };
     }
