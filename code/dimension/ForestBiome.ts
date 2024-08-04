@@ -1,15 +1,14 @@
 namespace ForestBiomes {
   export type BiomeStructure = {
-    name: string,
-    distance: int,
-    chance: int,
-    biome: int
+    name: string;
+    distance: int;
+    chance: int;
+    biome: int;
   };
   export const HEART_FOREST_COORDS = 200;
   export class ForestBiome {
-
-    protected static list: Record<int, EForestState> = {}
-    public static structures: BiomeStructure[] = []
+    protected static list: Record<int, EForestState> = {};
+    public static structures: BiomeStructure[] = [];
     public biome: CustomBiome;
     constructor(
       name: string,
@@ -30,20 +29,52 @@ namespace ForestBiomes {
           foliageColor[1] / 255,
           foliageColor[2] / 255
         );
-        ForestBiome[this.getID()] = state;
+      ForestBiome[this.getID()] = state;
     }
     public getID() {
       return this.biome.id;
     }
+    public loadStructure(name: string) {
+      ForestStructurePool.load(structureDIR + name + ".struct", name);
+    }
     public addStructure(name: string, distance: int, chance: int) {
       ForestStructurePool.load(structureDIR + name + ".struct", name);
       ForestBiome.structures.push({
-          name: name,
-          distance: distance,
-          chance: chance,
-          biome: this.getID(),
+        name: name,
+        distance: distance,
+        chance: chance,
+        biome: this.getID(),
       });
-    };
+    }
+    public generateStructure(
+      name: string,
+      chunkX: int,
+      chunkZ: int,
+      count: int = 2,
+      radius: int
+    ) {
+      for (let i = 0; i < count; i++) {
+        let coords = GenerationUtils.randomCoords(chunkX, chunkZ);
+        coords = GenerationUtils.findSurface(coords.x, 127, coords.z);
+        if (World.getBiome(coords.x, coords.z) !== this.getID()) return;
+       
+          // for(let y = 1; y <= 5; y++) {
+          //   if(coords.y + y !== VanillaTileID.air) return;
+          //   for(let i = -radius; i <= radius; i++) {
+          //   if(coords.x + i !== VanillaTileID.air && coords.z + i !== VanillaTileID.air) return;
+          //   }
+          // }
+        ForestStructurePool.StructureAdvanced(name).build(
+          name,
+          coords.x,
+          coords.y + 1,
+          coords.z,
+          0,
+          BlockSource.getCurrentWorldGenRegion()
+        );
+      }
+      return;
+    }
     static getState(biome: int): EForestState {
       return ForestBiome.list[biome] || EForestState.BALANCE;
     }
@@ -67,15 +98,24 @@ namespace ForestBiomes {
       });
     }
   }
-
   export const FirefliesForest = new ForestBiome("fireflies_forest");
   export const BurntForest = new ForestBiome("burnt_forest", [79, 79, 79]);
   /*export const VolcanicLands = new ForestBiome(
     "volcanic_lands",
     [173, 173, 173]
   );*/
-  export const WinterForest = new ForestBiome("winter_forest", [255, 255, 255], null, EForestState.ICE);
-  export const IcePeaks = new ForestBiome("ice_peaks", [255, 255, 255], null, EForestState.ICE);
+  export const WinterForest = new ForestBiome(
+    "winter_forest",
+    [255, 255, 255],
+    null,
+    EForestState.ICE
+  );
+  export const IcePeaks = new ForestBiome(
+    "ice_peaks",
+    [255, 255, 255],
+    null,
+    EForestState.ICE
+  );
   export const HeartForest = new ForestBiome("heart_forest", [79, 79, 79]);
 
   export function addSquareParticle(
@@ -111,7 +151,7 @@ namespace ForestBiomes {
         Player.getLocal()
       );
     }
-  };
+  }
 
   export function generateCustomBiome(
     biome: ForestBiome,
@@ -131,18 +171,23 @@ namespace ForestBiomes {
       }
     }
     return;
-  };
-  
+  }
+
   export function generateHeartForest(chunkX: int, chunkZ: int) {
     let isHeart = false;
     for (let x = chunkX * 16; x < (chunkX + 1) * 16; x++) {
       for (let z = chunkZ; z < (chunkZ + 1) * 16; z++) {
-        if(x >= HEART_FOREST_COORDS && z >= HEART_FOREST_COORDS && x <= HEART_FOREST_COORDS * 1.3333333 && z <= HEART_FOREST_COORDS * 1.3333333) {
+        if (
+          x >= HEART_FOREST_COORDS &&
+          z >= HEART_FOREST_COORDS &&
+          x <= HEART_FOREST_COORDS * 1.3333333 &&
+          z <= HEART_FOREST_COORDS * 1.3333333
+        ) {
           World.setBiomeMap(x, z, HeartForest.getID());
           isHeart = true;
         }
       }
-    };
+    }
     return isHeart;
   }
 
@@ -161,7 +206,7 @@ namespace ForestBiomes {
         return;
       }
       const isHeart = generateHeartForest(chunkX, chunkZ);
-      if(isHeart) return;
+      if (isHeart) return;
       const perlinNoise = GenerationUtils.getPerlinNoise(
         chunkX * 16 + 8,
         0,
@@ -170,7 +215,7 @@ namespace ForestBiomes {
         1 / 128,
         2
       );
-      
+
       if (perlinNoise > 0.7 - 12 / 128) {
         generateCustomBiome(
           ForestBiomes.IcePeaks,
@@ -180,7 +225,7 @@ namespace ForestBiomes {
           0.7
         );
         return;
-      };
+      }
       if (perlinNoise > 0.7 - 12 / 128) {
         generateCustomBiome(
           ForestBiomes.WinterForest,

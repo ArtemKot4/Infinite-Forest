@@ -1,5 +1,5 @@
 namespace ForestGeneration {
-  ForestBiomes.HeartForest.addStructure("winter_tree", 0, 11);
+ // ForestBiomes.HeartForest.addStructure("winter_tree", 0, 11);
   export class GreatWall extends DungeonBlock {
     protected static destroyBlock(
       coords: Callback.ItemUseCoordinates,
@@ -7,7 +7,7 @@ namespace ForestGeneration {
       player: number
     ) {
       if (!GreatWall.list.includes(block.id)) return;
-      if (Curse.hasList(player, Curse.getCurseList())) {
+      if (!Curse.hasList(player, Curse.getCurseList())) {
         Game.prevent();
       }
     }

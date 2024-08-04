@@ -1,9 +1,9 @@
 namespace ForestGeneration {
- ForestBiomes.WinterForest.addStructure("winter_tree", 0, 0);
-  export function generationSnowLayers(coords: Vector, x: int, z: int) {
-    if (World.getBiome(x, z) === ForestBiomes.WinterForest.getID()) {
+// ForestBiomes.WinterForest.addStructure("winter_tree", 0, 0);
+  export function generateSnowLayers(coords: Vector, x: int, z: int) {
+    if (World.getBiome(coords.x, coords.z) === ForestBiomes.WinterForest.getID()) {
       if (
-        World.getBlockID(coords.x, coords.y, coords.z) === VanillaBlockID.grass
+        World.getBlockID(x, coords.y, z) === VanillaBlockID.grass
       ) {
         World.setBlock(
           coords.x,
@@ -12,9 +12,9 @@ namespace ForestGeneration {
           VanillaBlockID.snow_layer,
           0
         );
-        return;
       }
     }
   };
  // ForestBiomes.WinterForest.biome.setTemperatureAndDownfall(0.25, 0.6)
+ ForestBiomes.WinterForest.loadStructure("winter_tree");
 }

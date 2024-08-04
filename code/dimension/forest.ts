@@ -92,8 +92,6 @@ namespace Plants {
 }
 
 namespace ForestGeneration {
-
-
   export function generateGroundCavesBlock(chunkX: number, chunkZ: number) {
     const cavesBlock_1 = MathHelper.randomValue(
       VanillaBlockID.cobblestone,
@@ -256,8 +254,6 @@ namespace ForestGeneration {
       }
     }
   }
-
-
 }
 
 /* //!
