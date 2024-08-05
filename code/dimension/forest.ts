@@ -227,30 +227,14 @@ namespace ForestGeneration {
     }
   }
 
-  export function generateBeaches(chunkX: int, chunkZ: int) {
-    const block = [
-      VanillaBlockID.sand,
-      VanillaBlockID.clay,
-      VanillaBlockID.gravel,
-    ];
-    const random = MathHelper.randomValueFromArray(block);
-    const coordsX = chunkX * 16;
-    const coordsZ = chunkZ * 16;
-    for (let gs = 0; gs < 16; gs++) {
-      if (
-        World.getBlockID(coordsX + gs, 54, coordsZ + gs) ===
-        VanillaBlockID.grass
-      ) {
-        World.setBlock(coordsX + gs, 54, coordsZ + gs, random, 0);
-        if (random === VanillaBlockID.sand && Math.random() < 0.05) {
-          World.setBlock(
-            coordsX + gs,
-            54,
-            coordsZ + gs,
-            VanillaBlockID.deadbush,
-            0
-          );
-        }
+  export function generateBeaches(coords: Vector) {
+    if (World.getBlockID(coords.x, 54, coords.z) === VanillaBlockID.grass) {
+      for (let i = 0; i <= 4; i++) {
+        World.setBlock(coords.x, 54, coords.z, VanillaBlockID.sand, 0);
+      }
+      World.setBlock(coords.x, 50, coords.z, VanillaBlockID.sandstone, 0);
+      if (Math.random() < 0.05) {
+        World.setBlock(coords.x, 55, coords.z, VanillaBlockID.deadbush, 0);
       }
     }
   }

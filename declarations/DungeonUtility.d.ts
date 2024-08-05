@@ -110,6 +110,7 @@ declare namespace Structure {
         isUseGlobalPrototype(): boolean;
     }
     function setStructure(name:string, x:number, y:number, z:number, region:BlockSource, packet?:any): void;
+    function set(name:JavaStructure, x:number, y:number, z:number, region:BlockSource, packet?:any): void;
     function set(name:string, x:number, y:number, z:number, region:BlockSource, packet?:any): void;
     function isStructure(name:string, x:number, y:number, z:number, region:BlockSource, packet?:any): boolean;
     function is(name:string, x:number, y:number, z:number, region:BlockSource, packet?:any): boolean;

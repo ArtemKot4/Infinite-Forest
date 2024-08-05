@@ -35,7 +35,7 @@ namespace ForestBiomes {
       return this.biome.id;
     }
     public loadStructure(name: string) {
-      ForestStructurePool.load(structureDIR + name + ".struct", name);
+      return ForestStructurePool.load(structureDIR + name + ".struct", name);
     }
     public addStructure(name: string, distance: int, chance: int) {
       ForestStructurePool.load(structureDIR + name + ".struct", name);
@@ -56,21 +56,18 @@ namespace ForestBiomes {
       for (let i = 0; i < count; i++) {
         let coords = GenerationUtils.randomCoords(chunkX, chunkZ);
         coords = GenerationUtils.findSurface(coords.x, 127, coords.z);
-        if (World.getBiome(coords.x, coords.z) !== this.getID()) return;
-       
-          // for(let y = 1; y <= 5; y++) {
-          //   if(coords.y + y !== VanillaTileID.air) return;
-          //   for(let i = -radius; i <= radius; i++) {
-          //   if(coords.x + i !== VanillaTileID.air && coords.z + i !== VanillaTileID.air) return;
-          //   }
-          // }
-        ForestStructurePool.StructureAdvanced(name).build(
-          name,
+
+        // if (World.getBiome(coords.x, coords.z) !== this.getID()) return;
+        //        //if(World.getBlockID(coords.x, coords.y + 1, coords.z) !== VanillaTileID.air) return;
+        //   //alert("2 | spawn");
+        //   if(World.getBlockID(coords.x, coords.y, coords.z) !== VanillaBlockID.grass) return;
+        //   Game.message(JSON.stringify(coords));
+        Structure.set(
+          ForestStructurePool.get(name),
           coords.x,
           coords.y + 1,
           coords.z,
-          0,
-          BlockSource.getCurrentWorldGenRegion()
+          BlockSource.getDefaultForDimension(InfiniteForest.id)
         );
       }
       return;
@@ -259,3 +256,5 @@ namespace ForestBiomes {
     }
   );
 }
+
+
