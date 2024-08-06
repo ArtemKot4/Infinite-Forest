@@ -42,16 +42,6 @@ class DungeonKey extends FItem {
   }
 }
 
-Translation.addTranslation("message.infinite_forest.wrong_key", {
-  en: "It's key don't fit to it door",
-  ru: "Этот ключ не подходит к этой двери",
-});
-
-Translation.addTranslation("message.infinite_forest.cold_curse", {
-  en: "You have a cold",
-  ru: "Вам слишком холодно",
-});
-
 namespace DungeonKeyList {
   export const IceKey = new DungeonKey("ice_dungeon_key");
   IceKey.registerHandFunction((player) => {
@@ -76,3 +66,13 @@ Callback.addCallback("ItemUse", (c, i, b, isE, p) => {
     return;
   }
 }); //TODO: DEBUG -> DELETE PLS
+
+Translation.addTranslation("message.infinite_forest.wrong_key", {
+  en: "It's key don't fit to it door",
+  ru: "Этот ключ не подходит к этой двери",
+});
+
+Translation.addTranslation("message.infinite_forest.cold_curse", {
+  en: "You have a cold",
+  ru: "Вам слишком холодно",
+});

@@ -54,7 +54,6 @@ class DungeonDoor {
   ) {
     const region = BlockSource.getDefaultForDimension(InfiniteForest.id);
     if (!region) return;
-    alert("!")
     let coordsX = [] as Vector[];
     let coordsZ = [] as Vector[];
     for (let i = -1; i <= 1; i++) {
@@ -73,7 +72,6 @@ class DungeonDoor {
       }
     };
       if(this.key.isValid(item, player)) {
-        alert("key valid")
         this.openIfValid(coordsX, coords, region, item, player);
         this.openIfValid(coordsZ, coords, region, item, player)
       }

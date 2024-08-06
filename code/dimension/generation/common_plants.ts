@@ -47,4 +47,5 @@ namespace ForestGeneration {
   addPlant(0.8, VanillaBlockID.tallgrass, 2, 8);
   addPlant(0.8, VanillaBlockID.yellow_flower, 0, 8);
   addPlant(0.8, VanillaBlockID.red_flower, 0, 8);
+  
 }

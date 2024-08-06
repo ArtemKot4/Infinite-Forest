@@ -137,6 +137,34 @@ namespace ForestGeneration {
     }
   }
 
+  let underwater_whitelist = [
+    VanillaTileID.air,
+    VanillaBlockID.water,
+    VanillaBlockID.flowing_water,
+  ];
+
+
+  export function generateKelps(x: int, y: int, z: int, height: int) {
+    if (Math.random() < 0.05) {
+      if (underwater_whitelist.includes(World.getBlockID(x, y, z))) {
+        for (let i = 0; i <= height; i++) {
+          World.setBlock(x, y + i, z, VanillaTileID.kelp, 0);
+        }
+      }
+    }
+  }
+  export function generateSeagrass(x: int, y: int, z: int) {
+    if (Math.random() < 0.5) {
+        for (let i = 0; i <= randomInt(2, 6); i++) {
+          if(World.getBlockID(x + i, y + 1, z + i) !== VanillaBlockID.dirt) continue;
+          World.setBlock(x + i, y + 1, z + i, VanillaBlockID.seagrass, 0);
+          World.setBlock(x + i, y + 1, z - i, VanillaBlockID.seagrass, 0);
+          World.setBlock(x - i, y + 1, z + i, VanillaBlockID.seagrass, 0);
+          World.setBlock(x - i, y + 1, z - i, VanillaBlockID.seagrass, 0);
+        }
+    }
+  }
+
   export function generateWaterUnderground(chunkX: number, chunkZ: number) {
     const list = [
       VanillaBlockID.gravel,
@@ -160,13 +188,8 @@ namespace ForestGeneration {
             underwater_block_1 === VanillaBlockID.dirt &&
             Math.random() < 0.1
           ) {
-            World.setBlock(
-              coords.x,
-              coords.y + 1,
-              coords.z,
-              VanillaBlockID.seagrass,
-              0
-            );
+            let heightMax = 53 - coords.y;
+           generateKelps(coords.x, coords.y, coords.z, randomInt(1, heightMax))
           }
         } else {
           World.setBlock(coords.x, coords.y, coords.z, underwater_block_2, 0);

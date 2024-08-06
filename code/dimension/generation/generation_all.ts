@@ -3,6 +3,19 @@ namespace ForestGeneration {
     "GenerateCustomDimensionChunk",
     function (chunkX, chunkZ, random, dimensionId) {
       if (dimensionId !== InfiniteForest.id) return;
+         ForestBiomes.FirefliesForest.generateStructure(
+        "eucalyptus_tree_0",
+        chunkX,
+        chunkZ,
+        3
+      ),
+      ForestBiomes.FirefliesForest.generateStructure(
+        "pink_tree_0",
+        chunkX,
+        chunkZ,
+        3,
+        0.87
+      );
       generateWaterUnderground(chunkX, chunkZ);
       generatePlants(chunkX, chunkZ);
       generateGroundCavesBlock(chunkX, chunkZ);
@@ -17,28 +30,9 @@ namespace ForestGeneration {
           generateReliefPeaks(coords, x, z);
         }
       };
-      ForestBiomes.HeartForest.generateStructure(
-        "winter_forest",
-        chunkX,
-        chunkZ,
-        3,
-        5
-      ),
-      ForestBiomes.FirefliesForest.generateStructure(
-        "eucalyptus_tree_0",
-        chunkX,
-        chunkZ,
-        3,
-        5
-      ),
-      ForestBiomes.FirefliesForest.generateStructure(
-        "pink_tree_0",
-        chunkX,
-        chunkZ,
-        3,
-        5
-      );
+   
       return;
+      
     }
   );
 }

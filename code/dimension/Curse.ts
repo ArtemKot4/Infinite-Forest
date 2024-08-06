@@ -1,35 +1,46 @@
 abstract class Curse {
   private static readonly list: name[] = [];
-  private static readonly blacklist: Record<playerName, name[]> = {};
+  private static readonly stateList: Record<name, boolean> = {};
   public static onTick: (...args) => void;
   public static idenitifier: string;
-  public static addIdentifierToList = (() => Curse.list.push(this.idenitifier))();
-  public static has(player: int) {
-    const name = Entity.getNameTag(player);
+  public static addIdentifierToList = (() =>
+    Curse.list.push(this.idenitifier))();
+  public static has(player) {
     const actor = new PlayerActor(player);
     if (actor.getGameMode() === EGameMode.CREATIVE) {
       return false;
     }
-    return !Curse.blacklist[name].includes(this.idenitifier);
-  };
+    return !(Curse.stateList[this.idenitifier] =
+      Curse.stateList[this.idenitifier] || true);
+  }
   public static hasList(player: int, list: name[]) {
     const name = Entity.getNameTag(player);
     const actor = new PlayerActor(player);
     if (actor.getGameMode() === EGameMode.CREATIVE) {
       return false;
-    };
-      for(let element of list) {
-        if(!this.blacklist[name].includes(element)) return false;
-      };
-      return true;
-  };
-  public static  getCurseList() {
+    }
+    for (let element of list) {
+      if (!Curse.stateList[element]) return false;
+    }
+    return true;
+  }
+  public static getCurseList() {
     return Curse.list;
   }
-  public static  getBlacklist() {
-    return Curse.blacklist
-  };
+  public static getStatelist() {
+    return Curse.stateList;
+  }
 }
+
+Saver.addSavesScope(
+  "scope.infinite_forest.curseStatelist",
+  function read(scope) {
+    scope.stateList ??= Curse.getStatelist();
+  },
+  function save() {
+    return {stateList: Curse.getStatelist()}
+  }
+);
 
 abstract class ColdCurse extends Curse {
   public static COLD_HEIGHT = 130;
@@ -88,7 +99,7 @@ abstract class ColdCurse extends Curse {
     } else {
       ColdCurse.COLD_MESSAGE = true;
     }
-  };
+  }
   public static damage(player: int) {
     Entity.damageEntity(player, 1);
     Entity.addEffect(player, EPotionEffect.DIG_SLOWDOWN, 3, 10, false, false);
@@ -98,11 +109,10 @@ abstract class ColdCurse extends Curse {
     if (!this.has(player)) return;
     const pos = Entity.getPosition(player);
     if (pos.y > ColdCurse.COLD_HEIGHT) {
-    ServerPlayerDamage();
+      ServerPlayerDamage();
       if (ColdCurse.UI.isOpened() === false) {
         ColdCurse.UI.open();
       }
-
     } else {
       ColdCurse.UI.isOpened() && ColdCurse.UI.close();
     }
