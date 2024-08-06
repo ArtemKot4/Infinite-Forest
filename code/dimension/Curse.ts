@@ -10,7 +10,7 @@ abstract class Curse {
     if (actor.getGameMode() === EGameMode.CREATIVE) {
       return false;
     }
-    return !(Curse.stateList[this.idenitifier] =
+    return (Curse.stateList[this.idenitifier] =
       Curse.stateList[this.idenitifier] || true);
   }
   public static hasList(player: int, list: name[]) {
@@ -106,7 +106,7 @@ abstract class ColdCurse extends Curse {
     return;
   }
   public static onTick(ticker: int, player: int): void {
-    if (!this.has(player)) return;
+    if (this.has(player) === false) return;
     const pos = Entity.getPosition(player);
     if (pos.y > ColdCurse.COLD_HEIGHT) {
       ServerPlayerDamage();

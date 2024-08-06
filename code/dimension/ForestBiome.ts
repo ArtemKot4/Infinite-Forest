@@ -59,18 +59,15 @@ namespace ForestBiomes {
         if (coords.y < 56) return;
         if(random && Math.random() > random) return;
         if (World.getBiome(coords.x, coords.z) !== this.getID()) {
-          Game.message("error 1 type");
           return;
         }
         if (World.getBlockID(coords.x, coords.y + 1, coords.z) !== AIR) {
-          Game.message("error 2 type");
           return;
         }
         if (
           World.getBlockID(coords.x, coords.y, coords.z) !==
           VanillaBlockID.grass
         ) {
-          Game.message("error 3 type");
           return;
         }
         Structure.set(
@@ -223,17 +220,6 @@ namespace ForestBiomes {
         1 / 128,
         2
       );
-
-      if (perlinNoise > 0.7 - 12 / 128) {
-        generateCustomBiome(
-          ForestBiomes.IcePeaks,
-          chunkX,
-          chunkZ,
-          dimensionSeed,
-          0.7
-        );
-        return;
-      }
       if (perlinNoise > 0.7 - 12 / 128) {
         generateCustomBiome(
           ForestBiomes.WinterForest,

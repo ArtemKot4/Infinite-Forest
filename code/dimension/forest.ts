@@ -251,15 +251,17 @@ namespace ForestGeneration {
   }
 
   export function generateBeaches(coords: Vector) {
-    if (World.getBlockID(coords.x, 54, coords.z) === VanillaBlockID.grass) {
+    for(let y = 54; y <= 55; y++) {
+    if (World.getBlockID(coords.x, y, coords.z) === VanillaBlockID.grass) {
       for (let i = 0; i <= 4; i++) {
-        World.setBlock(coords.x, 54, coords.z, VanillaBlockID.sand, 0);
+        World.setBlock(coords.x, y, coords.z, VanillaBlockID.sand, 0);
       }
       World.setBlock(coords.x, 50, coords.z, VanillaBlockID.sandstone, 0);
       if (Math.random() < 0.05) {
         World.setBlock(coords.x, 55, coords.z, VanillaBlockID.deadbush, 0);
       }
     }
+  }
   }
 }
 
