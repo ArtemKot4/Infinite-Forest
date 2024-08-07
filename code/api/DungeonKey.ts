@@ -44,16 +44,7 @@ class DungeonKey extends FItem {
 
 namespace DungeonKeyList {
   export const IceKey = new DungeonKey("ice_dungeon_key");
-  IceKey.registerHandFunction((player) => {
-    if (ColdCurse.has(player)) {
-      const randomSlot = randomInt(0, 8);
-      const actor = new PlayerEntity(player);
-      actor.setSelectedSlot(randomSlot);
-      actor.setCarriedItem(actor.getInventorySlot(actor.getSelectedSlot()));
-      ColdCurse.damage(player);
-      return;
-    }
-  });
+  IceKey.registerHandFunction(iceItemProtectFunction);
 }
 
 Callback.addCallback("ItemUse", (c, i, b, isE, p) => {

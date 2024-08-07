@@ -34,7 +34,9 @@ class FItem {
   public category(int: int): void {
     Item.setCategory(this.id, int); //?
   }
-
+  public setTool(toolMaterial: string | ToolAPI.ToolMaterial, toolType?: any, brokenId?: number) {
+    ToolAPI.setTool(this.getID(), toolMaterial, toolType);
+  }
   public create(): void {
     IDRegistry.genItemID(this.id);
     Item.createItem(

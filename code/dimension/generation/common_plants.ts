@@ -78,5 +78,5 @@ namespace ForestGeneration {
   addPlant(0.8, VanillaBlockID.tallgrass, 2, 8);
   addPlant(0.2, VanillaBlockID.yellow_flower, 0, 5);
   addPlant(0.5, VanillaBlockID.red_flower, 0, 4);
-  addPlant(0.1, EForestPlants.FIRONIA, 0, 3, ForestBiomes.FirefliesForest);
+  addPlant(0.2, EForestPlants.FIRONIA, 0, 3, ForestBiomes.FirefliesForest);
 }

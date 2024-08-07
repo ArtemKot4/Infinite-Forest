@@ -153,3 +153,18 @@ enum EForestState {
  const ForestConfiguration = {
 
  }
+
+ function randomizeHotbarSlot(player) {
+      const randomSlot = randomInt(0, 8);
+      const actor = new PlayerEntity(player);
+      actor.setSelectedSlot(randomSlot);
+      actor.setCarriedItem(actor.getInventorySlot(actor.getSelectedSlot()));
+      return;
+};
+
+function iceItemProtectFunction(player) {
+  if(ColdCurse.has(player)) {
+    randomizeHotbarSlot(player);
+    Entity.damageEntity(player, 3);
+  }
+}
