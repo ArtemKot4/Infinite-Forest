@@ -3,43 +3,42 @@ namespace ForestGeneration {
     "GenerateCustomDimensionChunk",
     function (chunkX, chunkZ, random, dimensionId) {
       if (dimensionId !== InfiniteForest.id) return;
-         ForestBiomes.FirefliesForest.generateStructure(
+      ForestBiomes.FirefliesForest.generateStructure(
         "eucalyptus_tree_0",
         chunkX,
         chunkZ,
-        3, 0.90
-      ),
-      ForestBiomes.FirefliesForest.generateStructure(
-        "pink_tree_0",
-        chunkX,
-        chunkZ,
         3,
-        0.84
-      );
+        0.94
+      ),
+        ForestBiomes.FirefliesForest.generateStructure(
+          "pink_tree_0",
+          chunkX,
+          chunkZ,
+          3,
+          0.84
+        );
       ForestBiomes.WinterForest.generateStructure(
         "winter_tree",
         chunkX,
         chunkZ,
         3,
-        0.6
+        0.9
       );
       for (let x = chunkX * 16; x < (chunkX + 1) * 16; x++) {
         for (let z = chunkZ; z < (chunkZ + 1) * 16; z++) {
           generateGreatWall(x, z);
           const coords = GenerationUtils.findSurface(x, 90, z);
-          generateBeaches(coords);
+          // generateBeaches(coords);
           if (coords.y < 54) return;
-          generateSnowLayers(coords, x, z);
-          generateReliefPeaks(coords, x, z);
-        };
-        generateWaterUnderground(chunkX, chunkZ);
-        generatePlants(chunkX, chunkZ);
-        generateGroundCavesBlock(chunkX, chunkZ);
-        generateBlocksInsteadGrass(chunkX, chunkZ);
-      };
-   
+          // generateSnowLayers(coords, x, z);
+          //  generateReliefPeaks(coords, x, z);
+        }
+      }
+      generateWaterUnderground(chunkX, chunkZ);
+      generateGroundCavesBlock(chunkX, chunkZ);
+      generateBlocksInsteadGrass(chunkX, chunkZ);
+      generatePlants(chunkX, chunkZ);
       return;
-      
     }
   );
 }
@@ -61,7 +60,7 @@ Item.registerUseFunctionForID(
       coords.z,
       BlockSource.getDefaultForDimension(InfiniteForest.id)
     );
-    Game.message(JSON.stringify(Curse.getStatelist()))
+    Game.message(JSON.stringify(Curse.getStatelist()));
     return;
   }
 );

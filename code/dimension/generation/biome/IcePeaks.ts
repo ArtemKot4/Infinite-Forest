@@ -2,7 +2,7 @@ namespace ForestGeneration {
 
 
   export function generateReliefPeaks(coords: Vector, x: int, z: int) {
-    if (World.getBiome(x, z) === ForestBiomes.IcePeaks.getID()) {
+    if (World.getBiome(x, z) === ForestBiomes.IcePeaks.id) {
       if (World.getBlock(x, coords.y, z).id === VanillaBlockID.grass) {
         const BOTTOM_HEIGHT = coords.y - 36;
         if (Math.random() < 0.85) {

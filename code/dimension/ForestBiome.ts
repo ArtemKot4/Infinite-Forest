@@ -29,11 +29,10 @@ namespace ForestBiomes {
           foliageColor[1] / 255,
           foliageColor[2] / 255
         );
-      ForestBiome[this.getID()] = state;
+        this.id = this.biome.id;
+      ForestBiome.list[this.id] = state;
     }
-    public getID() {
-      return this.biome.id;
-    }
+    public id: int;
     public loadStructure(name: string) {
       return ForestStructurePool.load(structureDIR + name + ".struct", name);
     }
@@ -43,9 +42,9 @@ namespace ForestBiomes {
         name: name,
         distance: distance,
         chance: chance,
-        biome: this.getID(),
+        biome: this.id,
       });
-    }
+    };
     public generateStructure(
       name: string,
       chunkX: int,
@@ -56,9 +55,9 @@ namespace ForestBiomes {
       for (let i = 0; i < count; i++) {
         let coords = GenerationUtils.randomCoords(chunkX, chunkZ);
         coords = GenerationUtils.findSurface(coords.x, 127, coords.z);
-        if (coords.y < 56) return;
+        if (coords.y < 55) return;
         if(random && Math.random() > random) return;
-        if (World.getBiome(coords.x, coords.z) !== this.getID()) {
+        if (World.getBiome(coords.x, coords.z) !== this.id) {
           return;
         }
         if (World.getBlockID(coords.x, coords.y + 1, coords.z) !== AIR) {
@@ -82,7 +81,7 @@ namespace ForestBiomes {
     }
     static getState(biome: int): EForestState {
       return ForestBiome.list[biome] || EForestState.BALANCE;
-    }
+    };
     static {
       Callback.addCallback("StructureLoadOne", () => {
         for (const structure of ForestBiome.structures) {
@@ -104,7 +103,7 @@ namespace ForestBiomes {
     }
   }
   export const FirefliesForest = new ForestBiome("fireflies_forest");
-  export const BurntForest = new ForestBiome("burnt_forest", [79, 79, 79]);
+  export const BurntForest = new ForestBiome("burnt_forest", [79, 79, 79], null, EForestState.FIRE);
   /*export const VolcanicLands = new ForestBiome(
     "volcanic_lands",
     [173, 173, 173]
@@ -171,7 +170,11 @@ namespace ForestBiomes {
           GenerationUtils.getPerlinNoise(x, 0, z, dimensionSeed, 1 / 128, 2) >
           density
         ) {
-          World.setBiomeMap(x, z, biome.getID()); //  World.setBiomeMap(x, z, biome.getID());
+          World.setBiomeMap(x, z, biome.id); //  World.setBiomeMap(x, z, biome.getID());
+          const surface = GenerationUtils.findHighSurface(x, z);
+          if(surface.y > 54) { 
+          World.setBlock(surface.x, surface.y, surface.z, VanillaBlockID.snow_layer, 0);
+          }
         }
       }
     }
@@ -188,7 +191,7 @@ namespace ForestBiomes {
           x <= HEART_FOREST_COORDS * 1.3333333 &&
           z <= HEART_FOREST_COORDS * 1.3333333
         ) {
-          World.setBiomeMap(x, z, HeartForest.getID());
+          World.setBiomeMap(x, z, HeartForest.id);
           isHeart = true;
         }
       }

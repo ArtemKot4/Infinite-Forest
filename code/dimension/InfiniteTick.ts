@@ -1,5 +1,3 @@
-
-
 Callback.addCallback("ServerPlayerTick", (playerUid, isPlayerDead) => {
   if (World.getThreadTime() % 8 === 0) {
     return checkHandItem(playerUid);
@@ -15,18 +13,20 @@ const InfiniteTick = () => {
       if (Player.getDimension() !== InfiniteForest.id) {
         this.remove = true;
       }
-      if (biome === ForestBiomes.FirefliesForest.getID()) {
-        addFire(pos);
-        for (let i = 0; i < 3; i++) {
+      if (biome === ForestBiomes.FirefliesForest.id) {
+        if (World.getThreadTime() % 10 === 0) {
+          addFire(pos);
+        }
+        for (let i = 0; i < 5; i++) {
           addGlowworm(pos);
         }
       }
       if (
-        biome === ForestBiomes.WinterForest.getID() ||
-        biome === ForestBiomes.IcePeaks.getID()
+        ForestBiomes.ForestBiome.getState(World.getBiome(pos.x, pos.z)) ===
+        EForestState.ICE
       ) {
         ColdCurse.runSnow(pos.x, pos.y + 12.5, pos.z, 16, 16); //32 24
-        Entity.damageEntity(player, 4);
+        ColdCurse.has(player) && Entity.damageEntity(player, 1);
       }
 
       if (World.getThreadTime() % 20 === 0) {

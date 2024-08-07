@@ -49,9 +49,7 @@ namespace DungeonKeyList {
       const randomSlot = randomInt(0, 8);
       const actor = new PlayerEntity(player);
       actor.setSelectedSlot(randomSlot);
-      actor.setCarriedItem(
-        actor.getInventorySlot(actor.getSelectedSlot())
-      );
+      actor.setCarriedItem(actor.getInventorySlot(actor.getSelectedSlot()));
       ColdCurse.damage(player);
       return;
     }
@@ -61,7 +59,13 @@ namespace DungeonKeyList {
 Callback.addCallback("ItemUse", (c, i, b, isE, p) => {
   if (Entity.getSneaking(p)) {
     Game.message(
-      "name: " + IDRegistry.getNameByID(b.id) + " | " + "id: " + b.id
+      "name: " +
+        Translation.translate(IDRegistry.getNameByID(b.id)) +
+        " | " +
+        "id: " +
+        b.id +
+        " | data: " +
+        b.data
     );
     return;
   }
