@@ -12,13 +12,13 @@ function checkHandItem(player: int) {
   }
 }
 
-type texture = string | [texture: string, frame: int, time?: int];
+type texture = string | [texture: string, frame: int | int[], time?: int];
 class FItem {
   protected id: string;
   protected stack: int = 64;
   protected meta: int = 0;
   protected isTech: boolean = false;
-  protected texture: string | [string, int, int?];
+  protected texture: texture;
   protected name: string;
   public static funcs = [];
   constructor(id: string, stack?: int, name?: string, texture?: texture , meta?: int, isTech?: boolean) {
@@ -35,7 +35,7 @@ class FItem {
     Item.setCategory(this.id, int); //?
   }
   public setTool(toolMaterial: string | ToolAPI.ToolMaterial, toolType?: any, brokenId?: number) {
-    ToolAPI.setTool(this.getID(), toolMaterial, toolType);
+    ToolAPI.registerTool(this.getID(), toolMaterial, toolType);
   }
   public create(): void {
     IDRegistry.genItemID(this.id);
@@ -54,7 +54,7 @@ class FItem {
         ItemID[this.id],
         texture[0],
         texture.length == 3 ? texture[2] : 2,
-        range(1, texture[1])
+        Array.isArray(texture[1]) ? texture[1] : range(1, texture[1])
       );
     }
   };

@@ -94,6 +94,10 @@ class LostPaper {
     LostPaper.giveExtraText(item, player);
     LostPaper.rewriteText(LostPaper.getExtraTextByItem(item), player);
     LostPaper.UI.open();
+  }; 
+  static {
+    LostPaper.UI.setCloseOnBackPressed(true);
+    LostPaper.UI.setBlockingBackground(true);
   }
 }
 

@@ -171,10 +171,6 @@ namespace ForestBiomes {
           density
         ) {
           World.setBiomeMap(x, z, biome.id); //  World.setBiomeMap(x, z, biome.getID());
-          const surface = GenerationUtils.findHighSurface(x, z);
-          if(surface.y > 54) { 
-          World.setBlock(surface.x, surface.y, surface.z, VanillaBlockID.snow_layer, 0);
-          }
         }
       }
     }

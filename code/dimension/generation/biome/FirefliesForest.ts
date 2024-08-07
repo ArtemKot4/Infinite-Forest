@@ -1,4 +1,6 @@
 namespace ForestGeneration {
-    ForestBiomes.FirefliesForest.loadStructure("eucalyptus_tree_0");
-    ForestBiomes.FirefliesForest.loadStructure("pink_tree_0");
+    for(let i = 0; i <= 1; i++) {
+    ForestBiomes.FirefliesForest.loadStructure("eucalyptus_tree_"+i);
+    ForestBiomes.FirefliesForest.loadStructure("pink_tree_"+i);
+    }
 }

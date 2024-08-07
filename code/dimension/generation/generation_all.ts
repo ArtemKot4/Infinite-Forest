@@ -4,14 +4,14 @@ namespace ForestGeneration {
     function (chunkX, chunkZ, random, dimensionId) {
       if (dimensionId !== InfiniteForest.id) return;
       ForestBiomes.FirefliesForest.generateStructure(
-        "eucalyptus_tree_0",
+        Math.random() < 0.1 ? "eucalyptus_tree_1" : "eucalyptus_tree_0",
         chunkX,
         chunkZ,
         3,
         0.94
       ),
         ForestBiomes.FirefliesForest.generateStructure(
-          "pink_tree_0",
+          Math.random() < 0.1 ? "pink_tree_1" : "pink_tree_0",
           chunkX,
           chunkZ,
           3,

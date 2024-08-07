@@ -138,6 +138,10 @@ abstract class BookUI {
   };
   public static givePage(player: int, page: name) {
     (BookUI.pagesList[Entity.getNameTag(player)] ??= ["main_title"]).push(page);
+  };
+  static {
+    BookUI.UI.setCloseOnBackPressed(true);
+    BookUI.UI.setBlockingBackground(true);
   }
 }
 
