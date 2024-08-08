@@ -4,6 +4,7 @@ namespace ForestBiomes {
     distance: int;
     chance: int;
     biome: int;
+    prototype?: StructurePrototype;
   };
   export const HEART_FOREST_COORDS = 200;
   export class ForestBiome {
@@ -29,14 +30,14 @@ namespace ForestBiomes {
           foliageColor[1] / 255,
           foliageColor[2] / 255
         );
-        this.id = this.biome.id;
+      this.id = this.biome.id;
       ForestBiome.list[this.id] = state;
     }
     public id: int;
     public loadStructure(name: string) {
       return ForestStructurePool.load(structureDIR + name + ".struct", name);
     }
-    public addStructure(name: string, distance: int, chance: int) {
+    public addStructure(name: string, distance: int, chance: int, prototype?: StructurePrototype) {
       ForestStructurePool.load(structureDIR + name + ".struct", name);
       ForestBiome.structures.push({
         name: name,
@@ -44,7 +45,7 @@ namespace ForestBiomes {
         chance: chance,
         biome: this.id,
       });
-    };
+    }
     public generateStructure(
       name: string,
       chunkX: int,
@@ -56,7 +57,7 @@ namespace ForestBiomes {
         let coords = GenerationUtils.randomCoords(chunkX, chunkZ);
         coords = GenerationUtils.findSurface(coords.x, 127, coords.z);
         if (coords.y < 55) return;
-        if(random && Math.random() > random) return;
+        if (random && Math.random() > random) return;
         if (World.getBiome(coords.x, coords.z) !== this.id) {
           return;
         }
@@ -81,7 +82,7 @@ namespace ForestBiomes {
     }
     static getState(biome: int): EForestState {
       return ForestBiome.list[biome] || EForestState.BALANCE;
-    };
+    }
     static {
       Callback.addCallback("StructureLoadOne", () => {
         for (const structure of ForestBiome.structures) {
@@ -93,7 +94,11 @@ namespace ForestBiomes {
               name: structure.name,
               chance: structure.chance,
               distance: structure.distance,
-              structure: ForestStructurePool.StructureAdvanced(structure.name),
+              structure: structure.prototype
+                ? ForestStructurePool.StructureAdvanced(
+                    structure.name
+                  ).setPrototype(structure.prototype)
+                : ForestStructurePool.StructureAdvanced(structure.name),
               biomes: [structure.biome],
               //count: [structure.chance]
             })
@@ -103,7 +108,12 @@ namespace ForestBiomes {
     }
   }
   export const FirefliesForest = new ForestBiome("fireflies_forest");
-  export const BurntForest = new ForestBiome("burnt_forest", [79, 79, 79], null, EForestState.FIRE);
+  export const BurntForest = new ForestBiome(
+    "burnt_forest",
+    [79, 79, 79],
+    null,
+    EForestState.FIRE
+  );
   /*export const VolcanicLands = new ForestBiome(
     "volcanic_lands",
     [173, 173, 173]

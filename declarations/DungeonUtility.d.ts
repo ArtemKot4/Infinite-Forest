@@ -105,7 +105,7 @@ declare namespace Structure {
         build(name:string, x:number, y:number, z:number, sleep:number, region:BlockSource, packet?:any): advanced;
         destroy(name:string, x:number, y:number, z:number, region:BlockSource, packet?:any): advanced;
         setUseGlobalPrototype(value: boolean):advanced;
-        setProt(prot: StructurePrototype): advanced;
+        setPrototype(prot: StructurePrototype): advanced;
         getStructureJava(): JavaStructure;
         isUseGlobalPrototype(): boolean;
     }

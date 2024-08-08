@@ -28,11 +28,12 @@ namespace ForestGeneration {
         for (let z = chunkZ; z < (chunkZ + 1) * 16; z++) {
           generateGreatWall(x, z);
           const coords = GenerationUtils.findSurface(x, 90, z);
-          // generateBeaches(coords);
-          if (coords.y < 54) return;
-          // generateSnowLayers(coords, x, z);
+           generateBeaches(coords);
+          if (coords.y > 54) {
+          generateSnowLayers(coords, x, z);
           //  generateReliefPeaks(coords, x, z);
-        }
+          }
+        };
       }
       generateWaterUnderground(chunkX, chunkZ);
       generateGroundCavesBlock(chunkX, chunkZ);
@@ -48,19 +49,25 @@ Item.registerUseFunctionForID(
   ItemID["pink_stick"],
   (coords, item, block, player) => {
     alert("yes");
-    const random = MathHelper.randomValue(
-      "winter_tree",
-      "pink_tree_0",
-      "eucalyptus_tree_0"
-    );
-    Structure.set(
-      ForestStructurePool.get(random),
-      coords.x,
-      coords.y + 1,
-      coords.z,
-      BlockSource.getDefaultForDimension(InfiniteForest.id)
-    );
+    // const random = MathHelper.randomValue(
+    //   "winter_tree",
+    //   "pink_tree_0",
+    //   "eucalyptus_tree_0"
+    // );
+    // Structure.set(
+    //   ForestStructurePool.get(random),
+    //   coords.x,
+    //   coords.y + 1,
+    //   coords.z,
+    //   BlockSource.getDefaultForActor(player)
+    // );
     Game.message(JSON.stringify(Curse.getStatelist()));
-    return;
+    const random = MathHelper.randomValue([10, 10], [5, 10], [10, 5]);
+    return ForestGeneration.placeColumn(
+      { id: BlockID["salt"], data: 0 },
+      coords,
+      random[0],
+      random[1]
+    );
   }
 );
