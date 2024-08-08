@@ -63,6 +63,9 @@ class Bottle extends TileEntityBase {
         0.001
       );
     }
+  };
+  public onLoad(): void {
+    this.networkData.putInt("color", this.data.color);
   }
   public static setGlowwormColor(
     coords: Vector,
