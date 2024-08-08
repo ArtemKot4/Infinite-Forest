@@ -275,20 +275,20 @@ namespace ForestGeneration {
     if (
       World.getBlockID(coords.x, coords.y, coords.z) === VanillaBlockID.grass
     ) {
-      if(World.getBiome(coords.x, coords.z) === ForestBiomes.WinterForest.id) {
-        for(let y = 0; y <= 2; y++) {
-          World.setBlock(coords.x, y, coords.z, VanillaBlockID.ice, 0);
-        }
-      } else {
-      for (let i = 0; i <= 4; i++) {
-        World.setBlock(
-          coords.x,
-          coords.y - i,
-          coords.z,
-          VanillaBlockID.sand,
-          0
-        );
-      }
+      // if(World.getBiome(coords.x, coords.z) === ForestBiomes.WinterForest.id) {
+      //   for(let y = 0; y <= 2; y++) {
+      //     World.setBlock(coords.x, y, coords.z, VanillaBlockID.ice, 0);
+      //   }
+      // } else {
+      // for (let i = 0; i <= 4; i++) {
+      //   World.setBlock(
+      //     coords.x,
+      //     coords.y - i,
+      //     coords.z,
+      //     VanillaBlockID.sand,
+      //     0
+      //   );
+      // }
       for (let y = coords.y - 4; y > coords.y - 10; y--) {
         World.setBlock(coords.x, y, coords.z, VanillaBlockID.sandstone, 0);
       }
@@ -305,7 +305,7 @@ namespace ForestGeneration {
     }
   }
   }
-}
+//}
 
 /* //!
       for (let i = 0; i <= 3; i++) {
