@@ -63,8 +63,12 @@ class Bottle extends TileEntityBase {
         0.001
       );
     }
-  };
-  public static setGlowwormColor(coords: Vector, region: BlockSource, color: int) {
+  }
+  public static setGlowwormColor(
+    coords: Vector,
+    region: BlockSource,
+    color: int
+  ) {
     const tile = TileEntity.getTileEntity(coords.x, coords.y, coords.z, region);
     if (tile && tile.data && tile.networkData) {
       tile.data.color = color;
@@ -120,7 +124,7 @@ Block.setRandomTickCallback(BlockID["bottle"], (x, y, z, id, data, region) => {
   region.setBlock(x, y, z, BlockID["fireflies_bottle"], 0);
 
   TileEntity.addTileEntity(x, y, z, region);
-  Bottle.setGlowwormColor({x, y, z}, region, glowwormColor);
+  Bottle.setGlowwormColor({ x, y, z }, region, glowwormColor);
   return;
 });
 
@@ -130,12 +134,13 @@ function destroyBottle(
   changedCoords: Vector,
   region: BlockSource
 ) {
+  if (
+    region.getBlockId(coords.x, coords.y + 1, coords.z) === VanillaBlockID.chain
+  ) {
+    return;
+  }
   if (region.getBlockId(coords.x, coords.y - 1, coords.z) === 0) {
-    if (region.getBlockId(coords.x, coords.y + 1, coords.z) === 0) {
-      region.destroyBlock(coords.x, coords.y, coords.z, true);
-      return;
-    }
-    region.destroyBlock(coords.x, coords.y, coords.z, true);
+    return region.destroyBlock(coords.x, coords.y, coords.z, true);
   }
 }
 
@@ -153,11 +158,25 @@ Block.setRandomTickCallback(
   }
 );
 
-Block.registerPlaceFunctionForID(BlockID["fireflies_bottle"], (coords, item, block, player, region) => {
-  const relative = coords.relative;
-  TileEntity.destroyTileEntityAtCoords(relative.x, relative.y, relative.z, region);
-  region.setBlock(relative.x, relative.y, relative.z, BlockID["fireflies_bottle"], 0);
-  TileEntity.addTileEntity(relative.x, relative.y, relative.z);
-  Bottle.setGlowwormColor(relative, region, randomGlowworm());
-  return;
-})
+Block.registerPlaceFunctionForID(
+  BlockID["fireflies_bottle"],
+  (coords, item, block, player, region) => {
+    const relative = coords.relative;
+    TileEntity.destroyTileEntityAtCoords(
+      relative.x,
+      relative.y,
+      relative.z,
+      region
+    );
+    region.setBlock(
+      relative.x,
+      relative.y,
+      relative.z,
+      BlockID["fireflies_bottle"],
+      0
+    );
+    TileEntity.addTileEntity(relative.x, relative.y, relative.z);
+    Bottle.setGlowwormColor(relative, region, randomGlowworm());
+    return;
+  }
+);

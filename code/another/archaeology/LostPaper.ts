@@ -101,6 +101,7 @@ class LostPaper {
   }
 }
 
+
 const LOST_PAPER = new LostPaper("lost_paper");
 LostPaper.addText("forest");
 LostPaper.addText("ruine", "ruine");
