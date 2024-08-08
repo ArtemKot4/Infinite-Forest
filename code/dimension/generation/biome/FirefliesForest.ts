@@ -1,10 +1,11 @@
 namespace ForestGeneration {
+    addPlant(0.2, EForestPlants.FIRONIA, 0, 3, ForestBiomes.FirefliesForest);
     ItemGeneration.newGenerator("if:ancient_fountain");
     for(let i = 0; i <= 1; i++) {
     ForestBiomes.FirefliesForest.loadStructure("eucalyptus_tree_"+i);
     ForestBiomes.FirefliesForest.loadStructure("pink_tree_"+i);
     };
-    ForestBiomes.FirefliesForest.addStructure("ancient_fountain", 150, 800, {
+    ForestBiomes.FirefliesForest.addStructure("ancient_fountain", 1, 1, {
         after(x, y, z, region, packet) {
             ItemGeneration.fill("if:ancient_fountain", x, y+1, z, packet.random, region);
         },

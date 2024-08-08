@@ -94,6 +94,7 @@ namespace ForestBiomes {
               name: structure.name,
               chance: structure.chance,
               distance: structure.distance,
+              isSet: false,
               structure: structure.prototype
                 ? ForestStructurePool.StructureAdvanced(
                     structure.name
