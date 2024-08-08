@@ -280,15 +280,15 @@ namespace ForestGeneration {
       //     World.setBlock(coords.x, y, coords.z, VanillaBlockID.ice, 0);
       //   }
       // } else {
-      // for (let i = 0; i <= 4; i++) {
-      //   World.setBlock(
-      //     coords.x,
-      //     coords.y - i,
-      //     coords.z,
-      //     VanillaBlockID.sand,
-      //     0
-      //   );
-      // }
+      for (let i = 0; i <= 4; i++) {
+        World.setBlock(
+          coords.x,
+          coords.y - i,
+          coords.z,
+          VanillaBlockID.sand,
+          0
+        );
+      }
       for (let y = coords.y - 4; y > coords.y - 10; y--) {
         World.setBlock(coords.x, y, coords.z, VanillaBlockID.sandstone, 0);
       }
