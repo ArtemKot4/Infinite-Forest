@@ -34,11 +34,12 @@ Callback.addCallback(
   (player, victim) => {
     if (hasCursedBlade(new PlayerEntity(player))) {
       const pos = Entity.getPosition(player);
+      const victimPos = Entity.getPosition(victim);
       if (
         ForestBiomes.ForestBiome.getState(World.getBiome(pos.x, pos.z)) ===
         EForestState.ICE
       ) {
-        alert("Урон увеличен!");
+        ColdCurse.runSnow(victimPos.x, victimPos.y + 2.5, victimPos.z, 0.5, 16) //TODO: DEBUG
         Entity.damageEntity(victim, 4);
         return;
       }

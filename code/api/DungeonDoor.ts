@@ -40,7 +40,6 @@ class DungeonDoor {
     };
   
     this.key.setLock(item, player);
-    alert("open")
     for(let coord of coordsList) {
         region.setBlock(coord.x, coord.y, coord.z, 0, 0);
     };

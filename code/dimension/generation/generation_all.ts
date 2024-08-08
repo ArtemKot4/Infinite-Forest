@@ -3,37 +3,49 @@ namespace ForestGeneration {
     "GenerateCustomDimensionChunk",
     function (chunkX, chunkZ, random, dimensionId) {
       if (dimensionId !== InfiniteForest.id) return;
-      ForestBiomes.FirefliesForest.generateStructure(
-        Math.random() < 0.1 ? "eucalyptus_tree_1" : "eucalyptus_tree_0",
-        chunkX,
-        chunkZ,
-        3,
-        0.94
-      ),
-        ForestBiomes.FirefliesForest.generateStructure(
-          Math.random() < 0.1 ? "pink_tree_1" : "pink_tree_0",
+      for (let i in ForestBiomes.ForestBiome.chunkStructures) {
+        let index = ForestBiomes.ForestBiome.chunkStructures[i];
+        ForestBiomes.ForestBiome.generateStructure(
+          i,
           chunkX,
           chunkZ,
-          3,
-          0.84
+          index.biome,
+          index.count,
+          index.chance,
+          index.cover_block
         );
-      ForestBiomes.WinterForest.generateStructure(
-        "winter_tree",
-        chunkX,
-        chunkZ,
-        3,
-        0.9
-      );
+      }
+      // ForestBiomes.FirefliesForest.generateStructure(
+      //   Math.random() < 0.1 ? "eucalyptus_tree_1" : "eucalyptus_tree_0",
+      //   chunkX,
+      //   chunkZ,
+      //   3,
+      //   0.94
+      // ),
+      //   ForestBiomes.FirefliesForest.generateStructure(
+      //     Math.random() < 0.1 ? "pink_tree_1" : "pink_tree_0",
+      //     chunkX,
+      //     chunkZ,
+      //     3,
+      //     0.84
+      //   );
+      // ForestBiomes.WinterForest.generateStructure(
+      //   "winter_tree",
+      //   chunkX,
+      //   chunkZ,
+      //   3,
+      //   0.9
+      // );
       for (let x = chunkX * 16; x < (chunkX + 1) * 16; x++) {
         for (let z = chunkZ; z < (chunkZ + 1) * 16; z++) {
           generateGreatWall(x, z);
           const coords = GenerationUtils.findSurface(x, 90, z);
-           generateBeaches(coords);
+          generateBeaches(coords);
           if (coords.y > 54) {
-          generateSnowLayers(coords, x, z);
-          //  generateReliefPeaks(coords, x, z);
+            generateSnowLayers(coords, x, z);
+            //  generateReliefPeaks(coords, x, z);
           }
-        };
+        }
       }
       generateWaterUnderground(chunkX, chunkZ);
       generateGroundCavesBlock(chunkX, chunkZ);

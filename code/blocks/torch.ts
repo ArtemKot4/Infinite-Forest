@@ -225,6 +225,6 @@ Block.setAnimateTickCallback(
   }
 );
 
-breakBlockIfAir(BlockID["eucalyptus_torch"]);
-breakBlockIfAir(BlockID["flame_eucalyptus_torch"]);
-breakBlockIfAir(BlockID["ice_eucalyptus_torch"]);
+breakHasAir(BlockID["eucalyptus_torch"]);
+breakHasAir(BlockID["flame_eucalyptus_torch"]);
+breakHasAir(BlockID["ice_eucalyptus_torch"]);

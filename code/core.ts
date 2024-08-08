@@ -126,7 +126,7 @@ Network.addClientPacket(
   }
 );
 
-function breakBlockIfAir(id: int) {
+function breakHasAir(id: int) {
   Block.registerNeighbourChangeFunctionForID(
     id,
     (coords, block, changedCoords, region) => {
@@ -167,4 +167,15 @@ function iceItemProtectFunction(player) {
     randomizeHotbarSlot(player);
     Entity.damageEntity(player, 3);
   }
-}
+};
+
+const ServerPlayerDamage = (count: int = 1) => 
+  Network.sendToServer("infinite_forest.damage_player", {count: count});
+
+Network.addServerPacket("infinite_forest.damage_player", (client, data: {count: int}) => {
+  const player = client.getPlayerUid();
+  const actor = new PlayerActor(player);
+  if(actor.getGameMode() === EGameMode.CREATIVE) return;
+   return Entity.damageEntity(client.getPlayerUid(), data.count || 1);
+});
+

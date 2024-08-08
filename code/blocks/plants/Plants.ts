@@ -31,7 +31,21 @@ namespace Plants {
       BlockRenderer.setCustomCollisionShape(BlockID[id], -1, shape);
       render.addEntry(model);
     }
+
+
+  export function setPlaceFunction(id: EForestPlants, blockList: int | int[] = [VanillaBlockID.grass]) {
+      let resultArray = Array.isArray(blockList) ? blockList : [blockList];
+      Block.registerPlaceFunctionForID(id, (coords, item, block, player, region) => {
+        if(!resultArray.includes(block.id)) {
+          return;
+        };
+        const relative = coords.relative
+        TileEntity.destroyTileEntityAtCoords(relative.x, relative.y, relative.z)
+        region.setBlock(relative.x, relative.y, relative.z, id, 0);
+        TileEntity.addTileEntity(relative.x, relative.y, relative.z);
+      })
   }
+};
 
   function fireParticle(x, y, z) {
     Particles.addParticle(

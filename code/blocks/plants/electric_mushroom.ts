@@ -1,69 +1,102 @@
-Plants.registry("electric_mushroom", "electric_mushroom", BLOCK_TYPE_ELECTRIC);
+namespace Plants {
+  Plants.registry(
+    "electric_mushroom",
+    "electric_mushroom",
+    BLOCK_TYPE_ELECTRIC
+  );
 
-breakBlockIfAir(EForestPlants.ELECTRIC_MUSHROOM);
+  breakHasAir(EForestPlants.ELECTRIC_MUSHROOM);
+  setPlaceFunction(EForestPlants.ELECTRIC_MUSHROOM, [VanillaBlockID.grass, VanillaBlockID.stone, VanillaBlockID.mycelium])
 
-Block.setTempDestroyTime(EForestPlants.ELECTRIC_MUSHROOM, 20 * 60);
+  Block.setTempDestroyTime(EForestPlants.ELECTRIC_MUSHROOM, 20 * 60);
 
-class Mushroom extends TileEntityBase {
-  public static particle(that, y = 0.4) {
-    Particles.addParticle(
-      EForestParticle.ELECTRIC,
-      that.x + 0.5,
-      that.y + y,
-      that.z + 0.5,
-      Math.random() / 20,
-      Math.random() / 20,
-      Math.random() / 20
-    );
-  }
-  clientTick(): void {
-    if (World.getThreadTime() % 10 === 0) {
-      Mushroom.particle(this);
-      Mushroom.particle(this);
-      Mushroom.particle(this);
+  export class Mushroom extends TileEntityBase {
+    public static particle(that, y = 0.4) {
+      Particles.addParticle(
+        EForestParticle.ELECTRIC,
+        that.x + 0.5,
+        that.y + y,
+        that.z + 0.5,
+        Math.random() / 20,
+        Math.random() / 20,
+        Math.random() / 20
+      );
+    }
+    clientTick(): void {
+      if (World.getThreadTime() % 10 === 0) {
+        Mushroom.particle(this);
+        Mushroom.particle(this);
+        Mushroom.particle(this);
+      }
+    }
+    onItemUse(
+      coords: Callback.ItemUseCoordinates,
+      item: ItemStack,
+      player: number
+    ) {
+      return Entity.damageEntity(player, 1);
     }
   }
-  onItemUse(
-    coords: Callback.ItemUseCoordinates,
-    item: ItemStack,
-    player: number
-  ) {
-    return Entity.damageEntity(player, 1);
-  }
-}
 
-TileEntity.registerPrototype(EForestPlants.ELECTRIC_MUSHROOM, new Mushroom());
+  TileEntity.registerPrototype(EForestPlants.ELECTRIC_MUSHROOM, new Mushroom());
 
-Block.setRandomTickCallback(
-  VanillaBlockID.brown_mushroom,
-  (x, y, z, id, data) => {
-    const region = BlockSource.getDefaultForDimension(InfiniteForest.id);
-    if (!region) return;
-    if (World.getWeather().rain === 1 && region.getLightLevel(x, y, z) >= 10) {
-      region.spawnEntity(x, y, z, EEntityType.LIGHTNING_BOLT);
-      region.explode(x, y, z, 0, false);
+  Block.setRandomTickCallback(
+    EForestPlants.ELECTRIC_MUSHROOM,
+    (x, y, z, id, data, region) => {
+      if (TileEntity.getTileEntity(x, y, z, region) !== null) {
+        return;
+      }
       TileEntity.destroyTileEntityAtCoords(x, y, z, region);
-      region.setBlock(x, y, z, EForestPlants.ELECTRIC_MUSHROOM, 0);
       TileEntity.addTileEntity(x, y, z, region);
+      return;
     }
-  }
-);
+  );
 
-const ServerPlayerDamage = (count: int = 1) => 
-  Network.sendToServer("infinite_forest.damage_player", {count: count});
+  Block.setRandomTickCallback(
+    VanillaBlockID.brown_mushroom,
+    (x, y, z, id, data) => {
+      const region = BlockSource.getDefaultForDimension(InfiniteForest.id);
+      if (!region) return;
+      if (
+        World.getWeather().rain === 1 &&
+        region.getLightLevel(x, y, z) >= 10
+      ) {
+        region.spawnEntity(x, y, z, EEntityType.LIGHTNING_BOLT);
+        region.explode(x, y, z, 0, false);
+        TileEntity.destroyTileEntityAtCoords(x, y, z, region);
+        region.setBlock(x, y, z, EForestPlants.ELECTRIC_MUSHROOM, 0);
+        TileEntity.addTileEntity(x, y, z, region);
+      }
+    }
+  );
 
-Network.addServerPacket("infinite_forest.damage_player", (client, data: {count: int}) => {
-  const player = client.getPlayerUid();
-  const actor = new PlayerActor(player);
-  if(actor.getGameMode() === EGameMode.CREATIVE) return;
-   return Entity.damageEntity(client.getPlayerUid(), data.count || 1);
-});
+  Callback.addCallback("DestroyBlockContinue", (coords, block, progress) => {
+    if (block.id == EForestPlants.ELECTRIC_MUSHROOM) {
+      return ServerPlayerDamage();
+    }
+  });
 
+  export const MushroomBlock: FBlock = new FBlock("blue_mushroom_block", [
+    {
+      name: "block.infinite_forest.blue_mushroom_block",
+      texture: [
+        ["mushroom_block_skin_blue", 0]
+      ],
+      inCreative: true
+    },
+  ]).create();
 
+  Block.setAnimateTickCallback(MushroomBlock.getID(), (x, y, z, id, data) => {
+    Mushroom.particle({x, z}, 1.5);
+    Mushroom.particle({x, z}, -1.5);
+    return;
+  })
 
-
-Callback.addCallback("DestroyBlockContinue", (coords, block, progress) => {
-  if (block.id == EForestPlants.ELECTRIC_MUSHROOM) {
-    return ServerPlayerDamage();
-  }
-});
+  BlockRegistry.setSoundType(MushroomBlock.getID(), "cloth");
+  Block.registerDropFunctionForID(MushroomBlock.getID(), (coords, id, data, diggingLevel, enchant, item, region) => {
+    if(ToolAPI.getToolData(item.id)?.blockMaterials?.["wood"] && Math.random() < 0.25) {
+      return [[EForestPlants.ELECTRIC_MUSHROOM, 1, 0]]
+    };
+    return [[0, 0, 0]];
+  })
+}

@@ -78,8 +78,4 @@ namespace ForestGeneration {
   addPlant(0.8, VanillaBlockID.tallgrass, 2, 8);
   addPlant(0.2, VanillaBlockID.yellow_flower, 0, 5);
   addPlant(0.5, VanillaBlockID.red_flower, 0, 4);
-  addPlant(0.3, VanillaBlockID.red_mushroom, 0, 3);
-  addPlant(0.2, VanillaBlockID.brown_mushroom, 0,  3);
-  addPlant(0.1, EForestPlants.ELECTRIC_MUSHROOM, 0, 5);
-  addPlant(0.01, EForestPlants.ICE_FLOWER, 0, 3);
 }

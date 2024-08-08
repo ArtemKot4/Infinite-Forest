@@ -9,6 +9,7 @@ namespace ForestBiomes {
   export const HEART_FOREST_COORDS = 200;
   export class ForestBiome {
     protected static list: Record<int, EForestState> = {};
+    public static chunkStructures: Record<name, {chance: int, cover_block: int, biome: int, count: int}> = {};
     public static structures: BiomeStructure[] = [];
     public biome: CustomBiome;
     constructor(
@@ -45,20 +46,26 @@ namespace ForestBiomes {
         chance: chance,
         biome: this.id,
       });
+    };
+    public addChunkStructure(name: string, chance: int, count: int, cover_block: int = VanillaBlockID.grass) {
+      ForestStructurePool.load(structureDIR + name + ".struct", name);
+       ForestBiome.chunkStructures[name] = {chance, cover_block, biome: this.id, count};
     }
-    public generateStructure(
+    public static generateStructure(
       name: string,
       chunkX: int,
       chunkZ: int,
+      biome: int,
       count: int = 2,
-      random: int = 0.94
+      random: int = 0.94,
+      cover_block: int
     ) {
       for (let i = 0; i < count; i++) {
         let coords = GenerationUtils.randomCoords(chunkX, chunkZ);
         coords = GenerationUtils.findSurface(coords.x, 127, coords.z);
         if (coords.y < 55) return;
         if (random && Math.random() > random) return;
-        if (World.getBiome(coords.x, coords.z) !== this.id) {
+        if (World.getBiome(coords.x, coords.z) !== biome) {
           return;
         }
         if (World.getBlockID(coords.x, coords.y + 1, coords.z) !== AIR) {
@@ -66,7 +73,7 @@ namespace ForestBiomes {
         }
         if (
           World.getBlockID(coords.x, coords.y, coords.z) !==
-          VanillaBlockID.grass
+          cover_block
         ) {
           return;
         }
@@ -101,13 +108,16 @@ namespace ForestBiomes {
                   ).setPrototype(structure.prototype)
                 : ForestStructurePool.StructureAdvanced(structure.name),
               biomes: [structure.biome],
+              white_list: true,
+              white_list_blocks: true,
+              blocks: [VanillaBlockID.grass]
               //count: [structure.chance]
             })
           );
         }
       });
     }
-  }
+  } 
   export const FirefliesForest = new ForestBiome("fireflies_forest");
   export const BurntForest = new ForestBiome(
     "burnt_forest",
