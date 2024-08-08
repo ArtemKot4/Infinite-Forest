@@ -38,11 +38,11 @@ namespace ForestGeneration {
       // );
       for (let x = chunkX * 16; x < (chunkX + 1) * 16; x++) {
         for (let z = chunkZ; z < (chunkZ + 1) * 16; z++) {
-          generateGreatWall(x, z);
+        //  generateGreatWall(x, z);
           const coords = GenerationUtils.findSurface(x, 90, z);
           generateBeaches(coords);
           if (coords.y > 54) {
-            generateSnowLayers(coords, x, z);
+          //  generateSnowLayers(coords, x, z);
             //  generateReliefPeaks(coords, x, z);
           }
         }
@@ -83,3 +83,4 @@ Item.registerUseFunctionForID(
     );
   }
 );
+

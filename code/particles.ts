@@ -1,4 +1,4 @@
-const glowworm = Particles.registerParticleType({
+const glowworm_1 = Particles.registerParticleType({
   texture: "part_1",
   render: 2,
   size: [1, 3],
@@ -9,6 +9,44 @@ const glowworm = Particles.registerParticleType({
     size: { fadeOut: 0.5, fadeIn: 0.4, start: 0, end: 0 },
   },
 });
+
+const glowworm_2 = Particles.registerParticleType({
+  texture: "part_2",
+  render: 2,
+  size: [1, 3],
+  lifetime: [40, 100],
+
+  animators: {
+    alpha: { fadeIn: 0.4, fadeOut: 0.4 },
+    size: { fadeOut: 0.5, fadeIn: 0.4, start: 0, end: 0 },
+  },
+});
+
+const glowworm_3 = Particles.registerParticleType({
+  texture: "part_3",
+  render: 2,
+  size: [1, 3],
+  lifetime: [40, 100],
+
+  animators: {
+    alpha: { fadeIn: 0.4, fadeOut: 0.4 },
+    size: { fadeOut: 0.5, fadeIn: 0.4, start: 0, end: 0 },
+  },
+});
+
+const glowworm_4 = Particles.registerParticleType({
+  texture: "part_4",
+  render: 2,
+  size: [1, 3],
+  lifetime: [40, 100],
+
+  animators: {
+    alpha: { fadeIn: 0.4, fadeOut: 0.4 },
+    size: { fadeOut: 0.5, fadeIn: 0.4, start: 0, end: 0 },
+  },
+});
+
+
 
 const flame_white = Particles.registerParticleType({
   texture: "flame",
@@ -110,7 +148,11 @@ const poison = Particles.registerParticleType({
 });
 
 enum EForestParticle {
-  GLOWWORM = glowworm,
+  GLOWWORM_1 = glowworm_1,
+  GLOWWORM_2 = glowworm_2,
+  GLOWWORM_3 = glowworm_3,
+  GLOWWORM_4 = glowworm_4,
+  
   FLAME_WHITE = flame_white,
   STAR = star,
   SMOKE = smoke,

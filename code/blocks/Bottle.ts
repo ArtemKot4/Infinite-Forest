@@ -31,9 +31,16 @@ const FULL_BOTTLE = new FBlock("fireflies_bottle", [
   );
 
 class Bottle extends TileEntityBase {
-  public static destroyParticles(x: int, y: int, z: int, player: int) {
+  data: { color: int };
+  public static destroyParticles(
+    x: int,
+    y: int,
+    z: int,
+    player: int,
+    color: int
+  ) {
     return ForestParticle.send(
-      EForestParticle.GLOWWORM,
+      color,
       x + 0.5,
       y + 0.4,
       z + 0.5,
@@ -44,9 +51,10 @@ class Bottle extends TileEntityBase {
     );
   }
   public clientTick(): void {
-    if (World.getThreadTime() % 20 === 0) {
+    const color = this.networkData.getInt("color", EForestParticle.GLOWWORM_1);
+    if (World.getThreadTime() % 20 === 0 && color !== undefined) {
       Particles.addParticle(
-        EForestParticle.GLOWWORM,
+        color,
         this.x + 0.5,
         this.y + 0.4,
         this.z + 0.5,
@@ -54,6 +62,13 @@ class Bottle extends TileEntityBase {
         0.001,
         0.001
       );
+    }
+  };
+  public static setGlowwormColor(coords: Vector, region: BlockSource, color: int) {
+    const tile = TileEntity.getTileEntity(coords.x, coords.y, coords.z, region);
+    if (tile && tile.data && tile.networkData) {
+      tile.data.color = color;
+      tile.networkData.putInt("color", color);
     }
   }
   static {
@@ -64,7 +79,14 @@ class Bottle extends TileEntityBase {
     Projectiles.breakBlock(
       BlockID["fireflies_bottle"],
       (x, y, z, block, region) =>
-        Bottle.destroyParticles(x, y, z, Player.getLocal()) //!
+        Bottle.destroyParticles(
+          x,
+          y,
+          z,
+          Player.getLocal(),
+          TileEntity.getTileEntity(x, y, z)?.data?.color ||
+            EForestParticle.GLOWWORM_1
+        ) //!
     );
     TileEntity.registerPrototype(BlockID["fireflies_bottle"], new Bottle());
   }
@@ -82,7 +104,8 @@ Block.setRandomTickCallback(BlockID["bottle"], (x, y, z, id, data, region) => {
   ) {
     return;
   }
-  CursedLightning.speedGlowworm(x, y, z, region);
+  const glowwormColor = randomGlowworm();
+  CursedLightning.speedGlowworm(x, y, z, region, glowwormColor);
   region.destroyBlock(x, y + 1, z, false);
   if (Math.random() < 0.5) {
     region.destroyBlock(x, y, z, false);
@@ -95,7 +118,10 @@ Block.setRandomTickCallback(BlockID["bottle"], (x, y, z, id, data, region) => {
   region.destroyBlock(x, y, z, false);
   TileEntity.destroyTileEntityAtCoords(x, y, z);
   region.setBlock(x, y, z, BlockID["fireflies_bottle"], 0);
+
   TileEntity.addTileEntity(x, y, z, region);
+  Bottle.setGlowwormColor({x, y, z}, region, glowwormColor);
+  return;
 });
 
 function destroyBottle(
@@ -126,3 +152,12 @@ Block.setRandomTickCallback(
     }
   }
 );
+
+Block.registerPlaceFunctionForID(BlockID["fireflies_bottle"], (coords, item, block, player, region) => {
+  const relative = coords.relative;
+  TileEntity.destroyTileEntityAtCoords(relative.x, relative.y, relative.z, region);
+  region.setBlock(relative.x, relative.y, relative.z, BlockID["fireflies_bottle"], 0);
+  TileEntity.addTileEntity(relative.x, relative.y, relative.z);
+  Bottle.setGlowwormColor(relative, region, randomGlowworm());
+  return;
+})

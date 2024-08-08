@@ -79,7 +79,7 @@ const FLAME_TORCH = new Torch("flame", "flame_dust");
 const ICE_TORCH = new Torch("ice", "ice_dust");
 
 abstract class CursedLightning {
-  public static speedGlowworm(x: int, y: int, z: int, region: BlockSource) {
+  public static speedGlowworm(x: int, y: int, z: int, region: BlockSource, color: int) {
     const entities = region.listEntitiesInAABB(
       x - 32,
       y - 8,
@@ -96,7 +96,7 @@ abstract class CursedLightning {
     );
     for (const player of players) {
       ForestParticle.send(
-        EForestParticle.GLOWWORM,
+        color,
         x + 0.5,
         y + 2.5,
         z + 0.5,
@@ -181,7 +181,8 @@ class UnlitTorchTile extends TileEntityBase {
       }
       // }
     }
-  }
+  };
+
   static {
     TileEntity.registerPrototype(
       BlockID["eucalyptus_torch"],
@@ -193,7 +194,7 @@ class UnlitTorchTile extends TileEntityBase {
 Block.setRandomTickCallback(
   BlockID["flame_eucalyptus_torch"],
   (x, y, z, id, data, region) => {
-    CursedLightning.speedGlowworm(x, y, z, region);
+    CursedLightning.speedGlowworm(x, y, z, region, randomGlowworm());
     TileEntity.destroyTileEntityAtCoords(x, y, z, region);
     region.setBlock(x, y, z, BlockID["eucalyptus_torch"], 0);
     TileEntity.addTileEntity(x, y, z, region);

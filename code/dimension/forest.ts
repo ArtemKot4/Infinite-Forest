@@ -41,6 +41,9 @@ function addFire(coords) {
     Player.getLocal()
   );
 }
+
+const randomGlowworm: () => int = MathHelper.randomValue.bind(null, glowworm_1, glowworm_2, glowworm_3, glowworm_4);
+
 function addGlowworm(coords) {
   var xz = getMinDistance(30, 80);
   var x = xz.x;
@@ -50,9 +53,8 @@ function addGlowworm(coords) {
   var xV = xz.x / 80;
   var yV = random(3, 5) / 600;
   var zV = xz.z / 80;
-
   ForestParticle.send(
-    glowworm,
+    randomGlowworm(),
     coords.x + x,
     coords.y + y,
     coords.z + z,
@@ -299,7 +301,7 @@ namespace ForestGeneration {
           randomInt(1, 5)
         );
       }
-      if (Math.random() < 0.01) {
+      if (Math.random() < 0.01 &&   World.getBlockID(coords.x, 55, coords.z) === VanillaTileID.air) {
         World.setBlock(coords.x, 55, coords.z, VanillaBlockID.deadbush, 0);
       }
     }
