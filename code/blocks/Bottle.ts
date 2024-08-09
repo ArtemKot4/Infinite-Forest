@@ -155,7 +155,7 @@ Block.registerNeighbourChangeFunctionForID(
 Block.setRandomTickCallback(
   BlockID["fireflies_bottle"],
   (x, y, z, id, data, region) => {
-    if (y >= 130) {
+    if (y >= 130 && ColdCurse.has()) {
       region.destroyBlock(x, y, z, false);
     }
   }

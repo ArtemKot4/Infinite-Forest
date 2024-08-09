@@ -5,10 +5,12 @@ abstract class Curse {
   public static idenitifier: string;
   public static addIdentifierToList = (() =>
     Curse.list.push(this.idenitifier))();
-  public static has(player) {
-    const actor = new PlayerActor(player);
-    if (actor.getGameMode() === EGameMode.CREATIVE) {
-      return false;
+  public static has(player?) {
+    if (player) {
+      const actor = new PlayerActor(player);
+      if (actor.getGameMode() === EGameMode.CREATIVE) {
+        return false;
+      }
     }
     return (Curse.stateList[this.idenitifier] =
       Curse.stateList[this.idenitifier] || true);
@@ -38,7 +40,7 @@ Saver.addSavesScope(
     scope.stateList ??= Curse.getStatelist();
   },
   function save() {
-    return {stateList: Curse.getStatelist()}
+    return { stateList: Curse.getStatelist() };
   }
 );
 

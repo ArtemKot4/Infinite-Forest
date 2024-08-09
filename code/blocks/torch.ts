@@ -78,7 +78,8 @@ class Torch {
 const FLAME_TORCH = new Torch("flame", "flame_dust");
 const ICE_TORCH = new Torch("ice", "ice_dust");
 
-abstract class CursedLightning {
+abstract class CursedLightning extends Curse {
+  public identifier = "lightning";
   public static speedGlowworm(x: int, y: int, z: int, region: BlockSource, color: int) {
     const entities = region.listEntitiesInAABB(
       x - 32,

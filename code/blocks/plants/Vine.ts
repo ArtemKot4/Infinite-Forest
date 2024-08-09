@@ -182,12 +182,12 @@ const FLAME_VINE = new Vine(
 );
 
 Block.setAnimateTickCallback(BlockID["flame_vine_top"], (x, y, z, id, data) => {
-  return fireParticle(x, y, z);
+  return fireParticle({x, y, z});
 });
 
 Block.setAnimateTickCallback(BlockID["flame_vine"], (x, y, z, id, data) => {
   if (Math.random() < 0.1) {
-    return fireParticle(x, y, z);
+    return fireParticle({x, y, z});
   }
 });
 

@@ -64,7 +64,16 @@ class FBlock {
     BlockRenderer.setStaticICRender(BlockID[this.id], data || 0, render);
     return this;
   }
-
+  public setSoundType(sound: Block.Sound) {
+    BlockRegistry.setSoundType(this.getID(), sound);
+    return this;
+  };
+  public setAnimateTickParticles(particle: EParticleType | EForestParticle, x: int, y: int, z: int, vx: int, vy: int, vz: int) {
+      Block.setAnimateTickCallback(this.getID(), (x, y, z, id, data) => {
+        Particles.addParticle(particle, x, y, z, vx, vy, vz);
+      });
+      return this;
+  }
   public createWithRotation() {
     Block.createBlockWithRotation(this.id, this.data, this.type);
     return this;

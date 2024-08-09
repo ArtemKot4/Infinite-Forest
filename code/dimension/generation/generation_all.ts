@@ -61,26 +61,6 @@ Item.registerUseFunctionForID(
   ItemID["pink_stick"],
   (coords, item, block, player) => {
     alert("yes");
-    // const random = MathHelper.randomValue(
-    //   "winter_tree",
-    //   "pink_tree_0",
-    //   "eucalyptus_tree_0"
-    // );
-    // Structure.set(
-    //   ForestStructurePool.get(random),
-    //   coords.x,
-    //   coords.y + 1,
-    //   coords.z,
-    //   BlockSource.getDefaultForActor(player)
-    // );
-    Game.message(JSON.stringify(Curse.getStatelist()));
-    const random = MathHelper.randomValue([10, 10], [5, 10], [10, 5]);
-    return ForestGeneration.placeColumn(
-      { id: BlockID["salt"], data: 0 },
-      coords,
-      random[0],
-      random[1]
-    );
   }
 );
 

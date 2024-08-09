@@ -7,12 +7,12 @@ Callback.addCallback("ServerPlayerTick", (playerUid, isPlayerDead) => {
 const InfiniteTick = () => {
   return {
     update(): void {
-      const pos = Player.getPosition();
-      const biome = World.getBiome(pos.x, pos.z);
-      const player = Player.getLocal();
       if (Player.getDimension() !== InfiniteForest.id) {
         this.remove = true;
       }
+      const pos = Player.getPosition();
+      const biome = World.getBiome(pos.x, pos.z);
+      const player = Player.getLocal();
       if (biome === ForestBiomes.FirefliesForest.id) {
         if (World.getThreadTime() % 10 === 0) {
           addFire(pos);
@@ -22,7 +22,7 @@ const InfiniteTick = () => {
         }
       }
       if (
-        ForestBiomes.ForestBiome.getState(World.getBiome(pos.x, pos.z)) ===
+        ForestBiomes.ForestBiome.getState(biome) ===
         EForestState.ICE
       ) {
         ColdCurse.runSnow(pos.x, pos.y + 12.5, pos.z, 16, 16); //32 24

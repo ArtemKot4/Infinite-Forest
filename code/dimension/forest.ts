@@ -42,7 +42,7 @@ function addFire(coords) {
   );
 }
 
-const randomGlowworm: () => int = MathHelper.randomValue.bind(null, glowworm_1, glowworm_2, glowworm_3, glowworm_4);
+const randomGlowworm: () => int = MathHelper.randomValueFromArray.bind(null, glowwormColors);
 
 function addGlowworm(coords) {
   var xz = getMinDistance(30, 80);
