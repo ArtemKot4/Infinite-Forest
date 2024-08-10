@@ -81,6 +81,10 @@ class FBlock {
   public setDestroyLevel(level: MiningLevel) {
     Block.setDestroyLevelForID(BlockID[this.id], level);
     return this;
+  };
+  public setDestroyTime(time: int) {
+    Block.setDestroyTime(this.getID(), time)
+    return this;
   }
   public getID() {
     return BlockID[this.id];
