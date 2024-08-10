@@ -1,14 +1,15 @@
 const glowwormColors = [
-  [255/255, 255/255, 0/255],
-  [0/255, 150/255, 255/255],
-  [255/255, 185/255, 0/255],
-  [0/255, 255/255, 70/255],
-  [255/255, 110/255, 110/255],
+  [255, 255, 0], //yellow
+  [185, 210, 255], //light blue
+  [255, 165, 0], //golden  <- yellow  & [255, 185, 0]
+  [0, 255, 70], //green
+  [255, 0, 0], //red
+  [0,  109, 56] //dark_green
 ].map((v) =>
   Particles.registerParticleType({
     texture: "part_color",
     render: 2,
-    color: v.concat(1) as number3 & [number],
+    color: v.map((v) => v / 256).concat(1) as number3 & [number],
     size: [1, 3],
     lifetime: [40, 100],
     animators: {
