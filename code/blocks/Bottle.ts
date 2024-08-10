@@ -30,7 +30,7 @@ const FULL_BOTTLE = new FBlock("fireflies_bottle", [
     0
   );
 
-class Bottle extends TileEntityBase {
+class FirefliesBottle extends TileEntityBase {
   data: { color: int };
   public static destroyParticles(
     x: int,
@@ -63,7 +63,7 @@ class Bottle extends TileEntityBase {
         0.001
       );
     }
-  };
+  }
   public onLoad(): void {
     this.networkData.putInt("color", this.data.color);
   }
@@ -86,7 +86,7 @@ class Bottle extends TileEntityBase {
     Projectiles.breakBlock(
       BlockID["fireflies_bottle"],
       (x, y, z, block, region) =>
-        Bottle.destroyParticles(
+        FirefliesBottle.destroyParticles(
           x,
           y,
           z,
@@ -95,7 +95,10 @@ class Bottle extends TileEntityBase {
             EForestParticle.GLOWWORM_1
         ) //!
     );
-    TileEntity.registerPrototype(BlockID["fireflies_bottle"], new Bottle());
+    TileEntity.registerPrototype(
+      BlockID["fireflies_bottle"],
+      new FirefliesBottle()
+    );
   }
 }
 
@@ -127,7 +130,7 @@ Block.setRandomTickCallback(BlockID["bottle"], (x, y, z, id, data, region) => {
   region.setBlock(x, y, z, BlockID["fireflies_bottle"], 0);
 
   TileEntity.addTileEntity(x, y, z, region);
-  Bottle.setGlowwormColor({ x, y, z }, region, glowwormColor);
+  FirefliesBottle.setGlowwormColor({ x, y, z }, region, glowwormColor);
   return;
 });
 
@@ -161,6 +164,19 @@ Block.setRandomTickCallback(
   }
 );
 
+Block.registerDropFunctionForID(
+  BlockID["fireflies_bottle"],
+  (coords, id, data, diggingLevel, enchant, item, region) => {
+    const tile = TileEntity.getTileEntity(coords.x, coords.y, coords.z, region);
+    let extra: Nullable<ItemExtraData> = null;
+    if (tile && tile.data && tile.data.color) {
+      extra = new ItemExtraData(item.extra);
+      extra.putInt("color", tile.data.color);
+    }
+    return [[item.id, item.count, item.data, extra]];
+  }
+);
+
 Block.registerPlaceFunctionForID(
   BlockID["fireflies_bottle"],
   (coords, item, block, player, region) => {
@@ -179,7 +195,7 @@ Block.registerPlaceFunctionForID(
       0
     );
     TileEntity.addTileEntity(relative.x, relative.y, relative.z);
-    Bottle.setGlowwormColor(relative, region, randomGlowworm());
+    FirefliesBottle.setGlowwormColor(relative, region, item.extra?.getInt("color", randomGlowworm()));
     return;
   }
 );

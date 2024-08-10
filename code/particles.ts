@@ -82,7 +82,7 @@ const cauldron_bubble = Particles.registerParticleType({
 const snowfall = Particles.registerParticleType({
   texture: "snowfall",
   render: 1,
-  size: [0.7, 1.2],
+  size: [0.5, 1],
   lifetime: [120, 180],
 
   animators: {
