@@ -44,7 +44,7 @@ function addFire(coords) {
 
 const randomGlowworm: () => int = MathHelper.randomValueFromArray.bind(null, glowwormColors);
 
-function addGlowworm(coords) {
+function addGlowworm(coords: Vector, color: EForestParticle) {
   var xz = getMinDistance(30, 80);
   var x = xz.x;
   var y = random(0, 1);
@@ -54,7 +54,7 @@ function addGlowworm(coords) {
   var yV = random(3, 5) / 600;
   var zV = xz.z / 80;
   ForestParticle.send(
-    randomGlowworm(),
+    color,
     coords.x + x,
     coords.y + y,
     coords.z + z,

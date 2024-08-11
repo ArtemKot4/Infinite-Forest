@@ -181,19 +181,14 @@ function destroyBottle(
   region: BlockSource
 ) {
   if (
-    region.getBlockId(coords.x, coords.y + 1, coords.z) === VanillaBlockID.chain
+    region.getBlockId(coords.x, coords.y + 1, coords.z) !== VanillaBlockID.chain
   ) {
-    return;
-  }
-  if (
-    [1, -1].some(
-      (y) =>
-        region.getBlockId(coords.x, coords.y + y, coords.z) ===
-        AIR
-    ) === true
-  ) {
-    return region.destroyBlock(coords.x, coords.y, coords.z, true);
-  }
+    if(region.getBlockId(coords.x, coords.y - 1, coords.z) !== 0) {
+return
+    }
+    region.destroyBlock(coords.x, coords.y, coords.z, true);
+  };
+  
 }
 
 Block.registerNeighbourChangeFunctionForID(BlockID["bottle"], destroyBottle);

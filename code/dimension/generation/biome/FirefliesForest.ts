@@ -32,6 +32,8 @@ namespace ForestGeneration {
 
   ForestBiomes.FirefliesForest.addChunkStructure("electric_mushroom_tree_0", 0.01, 1);
   ForestBiomes.FirefliesForest.addChunkStructure("electric_mushroom_tree_1", 0.004, 1);
+  ForestBiomes.FirefliesForest.addChunkStructure("big_mushroom_tree", 0.004, 1 );
+
   ForestBiomes.FirefliesForest.addChunkStructure("brown_mushroom_tree_0", 0.01, 1);
   ForestBiomes.FirefliesForest.addChunkStructure("brown_mushroom_tree_1", 0.008, 1);
   ForestBiomes.FirefliesForest.addChunkStructure("red_mushroom_tree", 0.01, 1 );
@@ -79,7 +81,7 @@ namespace ForestGeneration {
     0
   );
 
-  ForestBiomes.FirefliesForest.addStructure("ancient_fountain", 500, 1, {
+  ForestBiomes.FirefliesForest.addStructure("ancient_fountain", 1, 1, {
     after(x, y, z, region, packet) {
       Game.message("" + World.getBlockID(x, y + 8, z))
       ItemGeneration.fill(

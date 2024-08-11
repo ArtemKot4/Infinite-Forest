@@ -14,16 +14,15 @@ const InfiniteTick = () => {
       const biome = World.getBiome(pos.x, pos.z);
       const player = Player.getLocal();
       if (biome === ForestBiomes.FirefliesForest.id) {
-        if (World.getThreadTime() % 10 === 0) {
+        if (World.getThreadTime() % 15 === 0) {
           addFire(pos);
         }
-        for (let i = 0; i < 5; i++) {
-          addGlowworm(pos);
-        }
+          addGlowworm(pos, EForestParticle.GLOWWORM_1);
+          addGlowworm(pos, EForestParticle.GLOWWORM_2);
+          addGlowworm(pos, EForestParticle.GLOWWORM_4);
       }
       if (
-        ForestBiomes.ForestBiome.getState(biome) ===
-        EForestState.ICE
+        biome === ForestBiomes.WinterForest.id
       ) {
         ColdCurse.runSnow(pos.x, pos.y + 12.5, pos.z, 16, 16); //32 24
         ColdCurse.has(player) && Entity.damageEntity(player, 1);

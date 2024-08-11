@@ -6,7 +6,11 @@ namespace Plants {
   );
 
   breakHasAir(EForestPlants.ELECTRIC_MUSHROOM);
-  setPlaceFunction(EForestPlants.ELECTRIC_MUSHROOM, [VanillaBlockID.grass, VanillaBlockID.stone, VanillaBlockID.mycelium])
+  setPlaceFunction(EForestPlants.ELECTRIC_MUSHROOM, [
+    VanillaBlockID.grass,
+    VanillaBlockID.stone,
+    VanillaBlockID.mycelium,
+  ]);
 
   Block.setTempDestroyTime(EForestPlants.ELECTRIC_MUSHROOM, 20 * 60);
 
@@ -52,24 +56,6 @@ namespace Plants {
     }
   );
 
-  Block.setRandomTickCallback(
-    VanillaBlockID.brown_mushroom,
-    (x, y, z, id, data) => {
-      const region = BlockSource.getDefaultForDimension(InfiniteForest.id);
-      if (!region) return;
-      if (
-        World.getWeather().rain === 1 &&
-        region.getLightLevel(x, y, z) >= 10
-      ) {
-        region.spawnEntity(x, y, z, EEntityType.LIGHTNING_BOLT);
-        region.explode(x, y, z, 0, false);
-        TileEntity.destroyTileEntityAtCoords(x, y, z, region);
-        region.setBlock(x, y, z, EForestPlants.ELECTRIC_MUSHROOM, 0);
-        TileEntity.addTileEntity(x, y, z, region);
-      }
-    }
-  );
-
   Callback.addCallback("DestroyBlockContinue", (coords, block, progress) => {
     if (block.id == EForestPlants.ELECTRIC_MUSHROOM) {
       return ServerPlayerDamage();
@@ -79,24 +65,29 @@ namespace Plants {
   export const MushroomBlock: FBlock = new FBlock("blue_mushroom_block", [
     {
       name: "block.infinite_forest.blue_mushroom_block",
-      texture: [
-        ["mushroom_block_skin_blue", 0]
-      ],
-      inCreative: true
+      texture: [["mushroom_block_skin_blue", 0]],
+      inCreative: true,
     },
   ]).create();
 
   Block.setAnimateTickCallback(MushroomBlock.getID(), (x, y, z, id, data) => {
-    Mushroom.particle({x, z}, 1.5);
-    Mushroom.particle({x, z}, -1.5);
+    Mushroom.particle({ x, z }, 1.5);
+    Mushroom.particle({ x, z }, -1.5);
     return;
-  })
+  });
 
   BlockRegistry.setSoundType(MushroomBlock.getID(), "cloth");
-  Block.registerDropFunctionForID(MushroomBlock.getID(), (coords, id, data, diggingLevel, enchant, item, region) => {
-    if(ToolAPI.getToolData(item.id)?.blockMaterials?.["wood"] && Math.random() < 0.25) {
-      return [[EForestPlants.ELECTRIC_MUSHROOM, 1, 0]]
-    };
-    return [[0, 0, 0]];
-  })
+  Block.registerDropFunctionForID(
+    MushroomBlock.getID(),
+    (coords, id, data, diggingLevel, enchant, item, region) => {
+      if (
+        ToolAPI.getToolData(item.id)?.blockMaterials?.["wood"] &&
+        Math.random() < 0.25
+      ) {
+        return [[EForestPlants.ELECTRIC_MUSHROOM, 1, 0]];
+      }
+      return [[0, 0, 0]];
+    }
+  );
+
 }
