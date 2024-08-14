@@ -81,7 +81,7 @@ namespace ForestGeneration {
     0
   );
 
-  ForestBiomes.FirefliesForest.addStructure("ancient_fountain", 1, 1, {
+  /*ForestBiomes.FirefliesForest.addStructure("ancient_fountain", 1, 1, {
     after(x, y, z, region, packet) {
       Game.message("" + World.getBlockID(x, y + 8, z))
       ItemGeneration.fill(
@@ -93,8 +93,7 @@ namespace ForestGeneration {
         region
       );
     },
-  });
-  
+  });*/
   ModAPI.addAPICallback("AncientWondersAPI", (api: {}) => {
     ItemGeneration.addItem(
       "if:ancient_fountain",

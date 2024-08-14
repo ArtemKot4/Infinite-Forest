@@ -42,20 +42,26 @@ Translation.addTranslation("pink_hewn", { ru: "§2Обтёсанное розо�
 
 Translation.addTranslation("pink_bark", { ru: "§dКора розового дерева" });
 
-Translation.addTranslation("blue_crystal", {
+Translation.addTranslation("item.infinite_forest.blue_crystal", {
   ru: "§9Ледяной кристалл",
   en: "§9Ice crystal",
 });
 
-Translation.addTranslation("orange_crystal", {
+Translation.addTranslation("item.infinite_forest.orange_crystal", {
   ru: "§6Огненный кристалл",
   en: "§6Flame crystal",
 });
 
-Translation.addTranslation("learning_book", {
+Translation.addTranslation("item.infinite_forest.learning_book", {
   ru: Native.Color.GREEN + "Дневник исследователя",
   en: Native.Color.GREEN + "Diary of researcher",
 });
+
+Translation.addTranslation("item.infinite_forest.insight_eye", {
+  ru: Native.Color.GREEN + "Глаз прозрения",
+  en: Native.Color.GREEN + "Insight eye",
+});
+
 
 Translation.addTranslation("It burns", {
   ru: "Обжигает",

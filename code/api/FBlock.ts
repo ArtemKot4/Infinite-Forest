@@ -49,7 +49,7 @@ class FBlock {
   }
   public setupBlockModel(obj: BlockModelDescriptor, data = 0) {
     const mesh = new RenderMesh(
-      __dir__ + "/resources/assets/models/block/" + obj.model + ".obj",
+      __dir__ + "/resources/assets/models/" + obj.model + ".obj",
       "obj",
       {
         translate: obj.translate || [0.5, 0, 0.5],

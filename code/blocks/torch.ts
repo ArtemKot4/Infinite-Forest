@@ -11,7 +11,7 @@ class Torch {
 
     .setupBlockModel(
       {
-        model: "eucalyptus_torch",
+        model: "block/eucalyptus_torch",
         texture: "eucalyptus_torch",
       },
       0
@@ -32,7 +32,7 @@ class Torch {
       .createWithRotation()
       .setupBlockModel(
         {
-          model: "eucalyptus_torch",
+          model: "block/eucalyptus_torch",
           texture: id,
         },
         0

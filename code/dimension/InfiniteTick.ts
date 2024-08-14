@@ -1,7 +1,22 @@
 Callback.addCallback("ServerPlayerTick", (playerUid, isPlayerDead) => {
+  const entity = new PlayerEntity(playerUid);
+  const carriedItem = entity.getCarriedItem();
+  const inventoryItem = entity.getInventorySlot(entity.getSelectedSlot());
   if (World.getThreadTime() % 8 === 0) {
-    return checkHandItem(playerUid);
+    checkHandItem(playerUid, carriedItem, inventoryItem);
   }
+  if (World.getThreadTime() % 20 === 0) {
+    if (
+      Entity.getSneaking(playerUid) &&
+      carriedItem.id === ItemID["insight_eye"] &&
+      inventoryItem.id === ItemID["insight_eye"]
+    ) {
+      visionMode = true;
+    } else {
+      visionMode = false;
+    }
+  }
+  return;
 });
 
 const InfiniteTick = () => {
@@ -17,25 +32,23 @@ const InfiniteTick = () => {
         if (World.getThreadTime() % 15 === 0) {
           addFire(pos);
         }
-          addGlowworm(pos, EForestParticle.GLOWWORM_1);
-          addGlowworm(pos, EForestParticle.GLOWWORM_2);
-          addGlowworm(pos, EForestParticle.GLOWWORM_4);
+        addGlowworm(pos, EForestParticle.GLOWWORM_1);
+        addGlowworm(pos, EForestParticle.GLOWWORM_2);
+        addGlowworm(pos, EForestParticle.GLOWWORM_4);
       }
-      if (
-        biome === ForestBiomes.WinterForest.id
-      ) {
+      if (biome === ForestBiomes.WinterForest.id) {
         ColdCurse.runSnow(pos.x, pos.y + 12.5, pos.z, 16, 16); //32 24
         ColdCurse.has(player) && Entity.damageEntity(player, 1);
       }
 
-      if (World.getThreadTime() % 20 === 0) {
-        ColdCurse.onTick(this.ticker, player);
+      if (World.getThreadTime() % 30 === 0) {
         ColdCurse.sendMessage(pos);
       }
       if (pos.y >= 100) {
         if (pos.y <= 130) {
           ColdCurse.runSnow(pos.x, 130, pos.z, 512);
         } else {
+          ColdCurse.onTick(this.ticker, player);
           ColdCurse.runSnow(pos.x, pos.y + 12.5, pos.z, 64, 24);
         }
         return;

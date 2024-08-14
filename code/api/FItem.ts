@@ -1,11 +1,10 @@
 const handItemFunctions = {} as Record<int, (player) => void>;
-function checkHandItem(player: int) {
-  const actor = new PlayerEntity(player);
+function checkHandItem(player: int, carriedItem: ItemInstance, inventoryItem: ItemInstance) {
   for (const i in handItemFunctions) {
     const id = Number(i);
     if (
-      actor.getCarriedItem().id === id &&
-      actor.getInventorySlot(actor.getSelectedSlot()).id === id
+      carriedItem.id === id &&
+      inventoryItem.id === id
     ) {
      return handItemFunctions[i](player);
     }
@@ -27,7 +26,7 @@ class FItem {
     this.meta = meta;
     this.isTech = isTech;
     this.texture = texture || id;
-    this.name = name || id;
+    this.name = name || "item.infinite_forest."+id;
     this.create();
   }
 
@@ -76,26 +75,30 @@ class FItem {
     return mesh;
   }
 
-  public setHandModel(model_name: string, texture: string, import_params?) {
+  public setHandModel(model_name: string, texture: string, import_params?: RenderMesh.ImportParams, rotation?: number3) {
     const model = ItemModel.getForWithFallback(ItemID[this.id], 0);
+    const mesh = this.model(model, import_params);
+    rotation && mesh.rotate(rotation[0], rotation[1], rotation[2])
     model.setHandModel(
-      this.model(model_name, import_params),
+     mesh,
       "models/" + texture
     );
-
+   return this;
   }
-  public setItemModel(model_name: string, texture: string, import_params?) {
+  public setItemModel(model_name: string, texture: string, import_params?: RenderMesh.ImportParams, rotation?: number3) {
     const model = ItemModel.getForWithFallback(ItemID[this.id], 0);
+    const mesh = this.model(model, import_params);
+    rotation && mesh.rotate(rotation[0], rotation[1], rotation[2])
     model.setModel(
-      this.model(model, import_params),
+     mesh,
       "models/" + texture
     );
-
+    return this;
   }
   public setInventoryModel(
     model_name: string,
     texture: string,
-    import_params?: {},
+    import_params?: RenderMesh.ImportParams,
     rotation: [int, int, int] = [0, 0, 0]
   ) {
     const mesh = this.model(model_name, import_params) as RenderMesh;
@@ -106,6 +109,7 @@ class FItem {
     );
    const model = ItemModel.getForWithFallback(ItemID[this.id], 0);
    model.setUiModel(mesh, "models/" + texture);
+   return this;
   };
   public getID(): int {
     return ItemID[this.id];

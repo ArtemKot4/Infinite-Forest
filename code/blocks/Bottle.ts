@@ -15,7 +15,7 @@ const EMPTY_BOTTLE = new FBlock("bottle", [
   .create().setDestroyTime(0.5)
   .setupBlockModel(
     {
-      model: "bottle",
+      model: "block/bottle",
       texture: "forest_bottle",
     },
     0
@@ -31,7 +31,7 @@ const FULL_BOTTLE = new FBlock("fireflies_bottle", [
   .create().setDestroyTime(0.5)
   .setupBlockModel(
     {
-      model: "bottle",
+      model: "block/bottle",
       texture: "forest_bottle",
     },
     0

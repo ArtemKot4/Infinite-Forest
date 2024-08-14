@@ -6,6 +6,7 @@ interface IVineDescriptor {
 class Vine {
   public readonly whitelist_blocks: int[] = [];
   public readonly grow_height_limit: number = 200;
+  public drop = true;
   constructor(
     public readonly id: string,
     descriptor: IVineDescriptor,
@@ -90,7 +91,7 @@ class Vine {
         region.getBlockId(coords.x, coords.y - 1, coords.z)
       ) === false
     ) {
-      region.destroyBlock(coords.x, coords.y, coords.z, true);
+      region.destroyBlock(coords.x, coords.y, coords.z, this.drop);
     }
   }
   protected detectStems(region: BlockSource, coords: Vector) {
@@ -111,12 +112,12 @@ class Vine {
     if (
       region.getBlockId(coords.x, coords.y - 1, coords.z) !== BlockID[this.id]
     ) {
-      region.destroyBlock(coords.x, coords.y, coords.z, true);
+      region.destroyBlock(coords.x, coords.y, coords.z, this.drop);
       return;
     }
     if (region.getBlockId(coords.x, coords.y + 1, coords.z) !== 0) {
       for (let i = 0; i < this.detectStems(region, coords); i++) {
-        region.destroyBlock(coords.x, coords.y - i, coords.z, true);
+        region.destroyBlock(coords.x, coords.y - i, coords.z, this.drop);
       }
     }
   }
@@ -149,7 +150,7 @@ class Vine {
     region: BlockSource
   ) {
     for (let i = 0; i <= this.detectStems(region, { x: x, y: y, z: z }); i++) {
-      region.destroyBlock(x, y - i, z, true);
+      region.destroyBlock(x, y - i, z, this.drop);
     }
   }
   public static generateOn(
