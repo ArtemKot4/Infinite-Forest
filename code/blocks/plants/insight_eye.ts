@@ -36,5 +36,5 @@ BlockRegistry.setDestroyLevel(BlockID["insight_eye_top"], -1);
     "invertV": false,
     "noRebuild": false,
  },
- [Math.PI / 2, 0, 0]);
+ [0, 0, 0]);
 };
