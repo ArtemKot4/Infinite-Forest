@@ -27,13 +27,13 @@ BlockRegistry.setSoundType(BlockID["insight_eye_top"], "grass");
 BlockRegistry.setDestroyLevel(BlockID["insight_eye_top"], -1);
 
  export const INSIGHT_EYE_ITEM = new FItem("insight_eye", 1).setInventoryModel("insight_eye", "insight_eye", {
-    "scale": [0.7, 0.7, 0.7],
-    "translate": [0.5, 0.4, 0.5],
+    "scale": [0.9, 0.9, 0.9],
+    "translate": [0.5, 0.25, 0.5],
     "invertV": false,
     "noRebuild": false
  }).setHandModel("insight_eye", "insight_eye", {
-    "scale": [1.5, 1.5, 1.5],
-    "translate": [1, 1.5, 1.5],
+    "scale": [1.7, 1.7, 1.7],
+    "translate": [0.3, 1, 2.5],
     "invertV": false,
     "noRebuild": false,
  },
