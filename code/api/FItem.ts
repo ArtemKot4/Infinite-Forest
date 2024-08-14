@@ -65,7 +65,7 @@ class FItem {
         : name + "\n§7" + "Info is locked"; //? надпись требует переработки
     });
   }
-  protected model(model, import_params) {
+  protected model(model: string, import_params) {
     const mesh = new RenderMesh();
     mesh.importFromFile(
       MODELSDIR + model + ".obj",
@@ -77,7 +77,7 @@ class FItem {
 
   public setHandModel(model_name: string, texture: string, import_params?: RenderMesh.ImportParams, rotation?: number3) {
     const model = ItemModel.getForWithFallback(ItemID[this.id], 0);
-    const mesh = this.model(model, import_params);
+    const mesh = this.model(model_name, import_params);
     rotation && mesh.rotate(rotation[0], rotation[1], rotation[2])
     model.setHandModel(
      mesh,
@@ -87,7 +87,7 @@ class FItem {
   }
   public setItemModel(model_name: string, texture: string, import_params?: RenderMesh.ImportParams, rotation?: number3) {
     const model = ItemModel.getForWithFallback(ItemID[this.id], 0);
-    const mesh = this.model(model, import_params);
+    const mesh = this.model(model_name, import_params);
     rotation && mesh.rotate(rotation[0], rotation[1], rotation[2])
     model.setModel(
      mesh,
