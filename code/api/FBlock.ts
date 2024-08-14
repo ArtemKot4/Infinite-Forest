@@ -90,3 +90,21 @@ class FBlock {
     return BlockID[this.id];
   }
 }
+
+function  setupBlockModel(id: int, obj: BlockModelDescriptor, data = -1) {
+  const mesh = new RenderMesh(
+    __dir__ + "/resources/assets/models/" + obj.model + ".obj",
+    "obj",
+    {
+      translate: obj.translate || [0.5, 0, 0.5],
+      scale: obj.scale || [1, 1, 1],
+      invertV: false,
+      noRebuild: false,
+    }
+  );
+  mesh.setBlockTexture(obj.texture ?? obj.model, 0);
+  const render = new ICRender.Model();
+  render.addEntry(new BlockRenderer.Model(mesh));
+  BlockRenderer.setStaticICRender(id, data || 0, render);
+  return this;
+}

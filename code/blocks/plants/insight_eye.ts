@@ -15,9 +15,8 @@ namespace Plants {
     
 
 
-FBlock.prototype.setupBlockModel.call({
-    id: BlockID["insight_eye_top"]
-}, {
+setupBlockModel(
+    BlockID["insight_eye_top"], {
     model: "insight_eye",
     texture: "insight_eye"
 } 
@@ -37,5 +36,5 @@ BlockRegistry.setDestroyLevel(BlockID["insight_eye_top"], -1);
     "invertV": false,
     "noRebuild": false,
  },
- [0, 0, 0]);
+ [Math.PI / 2, 0, 0]);
 };
