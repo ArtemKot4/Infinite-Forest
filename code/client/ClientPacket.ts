@@ -1,10 +1,8 @@
 abstract class ClientPacket {
-    protected constructor() {
-    };
-    static identifier: string
-    static function: (data: [] | {}) => any; 
+  protected constructor() {}
+  static identifier: string;
+  static action: (data: [] | {}) => any;
+//   static {
+//     this.identifier && Network.addClientPacket(this.identifier, this.action);
+//   }
 }
-
-Callback.addCallback("ItemUseNoTarget", (item, player) => {
-    LazerParticlePacket.send(player);
-})

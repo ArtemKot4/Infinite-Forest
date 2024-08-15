@@ -1,10 +1,10 @@
 abstract class LazerParticlePacket extends ClientPacket {
   static LAZER_DISTANCE = 0.05;
   static identifier: string = "packet.infinite_forest.lazer_particles";
-  static function(packetData: { player: int }) {
-    const vector = Entity.getLookVector(packetData.player);
-    const position = Entity.getPosition(packetData.player);
-    Entity.getPosition(packetData.player);
+  static action(packetData: {}) {
+    const player = Player.getLocal();
+    const vector = Entity.getLookVector(player);
+    const position = Entity.getPosition(player);
     for (let distance = 0.35; distance <= 15; distance += 0.01) {
       Particles.addParticle(
         EForestParticle.INSIGHT_VIEW,
@@ -15,6 +15,7 @@ abstract class LazerParticlePacket extends ClientPacket {
         0,
         0
       );
+     
     }
     return;
   }
@@ -24,13 +25,9 @@ abstract class LazerParticlePacket extends ClientPacket {
       return;
     }
     client.send("packet.infinite_forest.lazer_particles", {
-      player: player,
     });
     return;
   }
 }
 
-Network.addClientPacket(
-  LazerParticlePacket.identifier,
-  LazerParticlePacket.function
-);
+Network.addClientPacket(LazerParticlePacket.identifier, LazerParticlePacket.action)

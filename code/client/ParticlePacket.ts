@@ -1,6 +1,6 @@
 abstract class ParticlePacket extends ClientPacket {
     static identifier: string = "packet.infinite_forest.particles";
-    static function(packetData: IParticleSenderDescriptor) {
+    static action(packetData: IParticleSenderDescriptor) {
         Particles.addParticle(
           packetData.type,
           packetData.x,
@@ -23,7 +23,8 @@ abstract class ParticlePacket extends ClientPacket {
     ) {
       const client = Network.getClientForPlayer(player);
       if (!client) return;
-      client.send("packet.infinite_forest.particles", { type, x, y, z, vx, vy, vz });
+      client.send(this.identifier, { type, x, y, z, vx, vy, vz });
     }
   }
-  Network.addClientPacket(ParticlePacket.identifier, ParticlePacket.function);
+
+  Network.addClientPacket(ParticlePacket.identifier, ParticlePacket.action)
