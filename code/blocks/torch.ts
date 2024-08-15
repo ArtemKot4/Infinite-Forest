@@ -96,7 +96,7 @@ abstract class CursedLightning extends Curse {
       (v) => Entity.getType(v) === Native.EntityType.PLAYER
     );
     for (const player of players) {
-      ForestParticle.send(
+      ParticlePacket.send(
         color,
         x + 0.5,
         y + 2.5,
@@ -110,7 +110,7 @@ abstract class CursedLightning extends Curse {
   }
   public static clouds(x: int, y: int, z: int, player: int) {
     for (let i = 0; i <= 6; i++) {
-      ForestParticle.send(
+      ParticlePacket.send(
         flame_white,
         x + randomInt(0.3, 0.6),
         y + 2.5,
@@ -123,7 +123,7 @@ abstract class CursedLightning extends Curse {
     }
   }
   public static rain(x: int, y: int, z: int, player: int, speed: int) {
-    ForestParticle.send(
+    ParticlePacket.send(
       vanilla_rain,
       x + randomInt(0.3, 0.6),
       y + 2.1,

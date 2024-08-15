@@ -66,7 +66,7 @@ abstract class ColdCurse extends Curse {
   public static runSnow(x: int, y: int, z: int, radius = 16, count = 16) {
     if (World.getThreadTime() % 8 === 0) {
       for (let n = -count; n <= count; n++) {
-        ForestParticle.send(
+        ParticlePacket.send(
           EForestParticle.SNOWFALL,
           x + n,
           y,
@@ -76,7 +76,7 @@ abstract class ColdCurse extends Curse {
           0,
           Player.getLocal()
         );
-        ForestParticle.send(
+        ParticlePacket.send(
           EForestParticle.SNOWFALL,
           x + randomInt(-radius, radius),
           y,

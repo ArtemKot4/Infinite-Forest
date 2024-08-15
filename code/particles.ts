@@ -118,6 +118,18 @@ const poison = Particles.registerParticleType({
   },
 });
 
+const insight_view = Particles.registerParticleType({
+  texture: "insight_view",
+  render: 2,
+  size: [0.25, 0.8],
+  lifetime: [30, 60],
+
+  animators: {
+    size: { fadeOut: 0, fadeIn: 0, start: 0.6, end: 0 },
+  },
+});
+
+
 enum EForestParticle {
   GLOWWORM_1 = glowwormColors[0],
   GLOWWORM_2 = glowwormColors[1],
@@ -134,4 +146,5 @@ enum EForestParticle {
   ELECTRIC = electric,
   POISON = poison,
   SNOWFALL = snowfall,
+  INSIGHT_VIEW = insight_view
 }

@@ -9,7 +9,7 @@ namespace Plants {
        },
        top: {
         texture: "insight_eye",
-        block_type: "opaque"
+        block_type: "stone"
        }
     });
     
@@ -37,4 +37,10 @@ BlockRegistry.setDestroyLevel(BlockID["insight_eye_top"], -1);
     "noRebuild": false,
  },
  [0, 0, 0]);
+
+
+
+
+INSIGHT_EYE_ITEM.registerHandFunction( LazerParticlePacket.send);
+
 };

@@ -155,7 +155,7 @@ namespace ForestBiomes {
     vz: int
   ) {
     for (let i = 0; i < count; i++) {
-      ForestParticle.send(
+      ParticlePacket.send(
         particle,
         x + randomInt(-radius, radius),
         y,
@@ -165,7 +165,7 @@ namespace ForestBiomes {
         vz,
         Player.getLocal()
       );
-      ForestParticle.send(
+      ParticlePacket.send(
         particle,
         x,
         y,

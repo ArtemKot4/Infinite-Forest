@@ -4,6 +4,16 @@ unique_gen.ts
 
 dimension/Curse.ts
 
+particles.ts
+
+client/ClientPacket.ts
+
+client/ParticlePacket.ts
+
+client/LazerParticlePacket.ts
+
+server/ServerPlayer.ts
+
 api/FItem.ts
 api/FBlock.ts
 api/IceBlock.ts
@@ -28,14 +38,14 @@ core/PlayerHelper.ts
 
 blocks/MagicTile.ts
 
-particles.ts
+
 core/starfall.ts
 
 items/book.ts
-items.ts 
+items/items.ts 
 items/infinite_shark.ts
 
-infinite_table.ts
+blocks/infinite_table.ts
 structure.ts
 Eucalyptus Tree.ts
 Pink Tree and oak & birch.ts
@@ -113,4 +123,7 @@ learnings/BookUI.ts
 learnings/IPageDescriptor.ts
 learnings/BookPage.ts
 learnings/Book.ts
+
+
+server/PlayerTick.ts
 dimension/InfiniteTick.ts

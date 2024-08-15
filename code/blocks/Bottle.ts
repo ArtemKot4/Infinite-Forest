@@ -49,7 +49,7 @@ class FirefliesBottle extends TileEntityBase {
     player: int,
     color: int
   ) {
-    return ForestParticle.send(
+    return ParticlePacket.send(
       color,
       x + 0.5,
       y + 0.4,

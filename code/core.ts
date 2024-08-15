@@ -111,21 +111,6 @@ interface IParticleSenderDescriptor {
   vz: int;
 }
 
-Network.addClientPacket(
-  "infinite_forest.particles",
-  (packetData: IParticleSenderDescriptor) => {
-    Particles.addParticle(
-      packetData.type,
-      packetData.x,
-      packetData.y,
-      packetData.z,
-      packetData.vx,
-      packetData.vy,
-      packetData.vz
-    );
-  }
-);
-
 function breakHasAir(id: int) {
   Block.registerNeighbourChangeFunctionForID(
     id,

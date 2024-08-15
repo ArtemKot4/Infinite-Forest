@@ -30,7 +30,7 @@ function addFire(coords) {
   var y = random(0, 1);
   var z = xz.z;
   var xz = getMinDistance(3, 5);
-  ForestParticle.send(
+  ParticlePacket.send(
     EParticleType.FLAME,
     coords.x + x,
     coords.y + y,
@@ -53,7 +53,7 @@ function addGlowworm(coords: Vector, color: EForestParticle) {
   var xV = xz.x / 80;
   var yV = random(3, 5) / 600;
   var zV = xz.z / 80;
-  ForestParticle.send(
+  ParticlePacket.send(
     color,
     coords.x + x,
     coords.y + y,
