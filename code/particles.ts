@@ -121,8 +121,8 @@ const poison = Particles.registerParticleType({
 const insight_view = Particles.registerParticleType({
   texture: "insight_view",
   render: 2,
-  size: [0.25, 0.8],
-  lifetime: [30, 60],
+  size: [0.15, 0.2],
+  lifetime: [5, 10],
 
   animators: {
     size: { fadeOut: 0, fadeIn: 0, start: 0.6, end: 0 },

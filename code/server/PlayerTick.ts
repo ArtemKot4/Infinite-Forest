@@ -3,7 +3,7 @@ Callback.addCallback("ServerPlayerTick", (playerUid, isPlayerDead) => {
   const entity = new PlayerEntity(playerUid);
   const carriedItem = entity.getCarriedItem();
   const inventoryItem = entity.getInventorySlot(entity.getSelectedSlot());
-  if (World.getThreadTime() % 8 === 0) {
+  if (World.getThreadTime() % 5 === 0) {
     checkHandItem(playerUid, carriedItem, inventoryItem);
   }
   if (World.getThreadTime() % 30 === 0) {
