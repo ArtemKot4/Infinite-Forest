@@ -5,7 +5,7 @@ abstract class LazerParticlePacket extends ClientPacket {
     const vector = Entity.getLookVector(packetData.player);
     const position = Entity.getPosition(packetData.player);
     Entity.getPosition(packetData.player);
-    for (let distance = 0.30; distance <= 15; distance += 0.01) {
+    for (let distance = 0.35; distance <= 15; distance += 0.01) {
       Particles.addParticle(
         EForestParticle.INSIGHT_VIEW,
         position.x + vector.x * distance,
