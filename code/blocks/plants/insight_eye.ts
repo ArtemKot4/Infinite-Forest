@@ -40,9 +40,9 @@ namespace Plants {
       [0, 0, 0]
     );
 
-  INSIGHT_EYE_ITEM.onNoTarget((item, player) {
+  INSIGHT_EYE_ITEM.onNoTarget((item, player) => {
     LazerParticlePacket.send(player, 15);
-    const entity = PlayerHelper.getPointed().entity
+    const entity = PlayerHelper.getPointed().entity;
     if(entity > -1) {
         const velocity = Entity.getVelocity(entity);
        Entity.addVelocity(entity, velocity.x, velocity.y + 0.3, velocity.z);
