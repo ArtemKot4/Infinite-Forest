@@ -5,7 +5,8 @@ IMPORT("RenderUtil");
 IMPORT("BlockAnimator");
 IMPORT("ConnectedTexture");
 
-const ERROR_WARNING = "Error! please send issue on https://github.com/Artem0n4/Infinite-Forest"
+const ERROR_WARNING =
+  "Error! please send issue on https://github.com/Artem0n4/Infinite-Forest";
 
 type int = number;
 type universal = string | number;
@@ -17,7 +18,7 @@ const Mistical = new Sound("Light.ogg");
 const Opening = new Sound("Opening.ogg");
 
 /** __ dir __ + "resources/structures/";
- * 
+ *
  */
 const structureDIR = __dir__ + "resources/structures/";
 const ForestStructurePool = new StructurePool("infinite_forest_structure_pool");
@@ -68,6 +69,7 @@ const BLOCK_TYPE_PRINT = Block.createSpecialType({
   sound: "glass",
   destroytime: -1,
 });
+
 /**
  * Функция для получения массива с числами от min до max
  * @min первое число
@@ -81,8 +83,6 @@ function range(min: int, max: int): int[] {
   }
   return arr;
 }
-
-
 
 /**
  * __ dir __ + resources/models/
@@ -127,40 +127,53 @@ function breakHasAir(id: int) {
 
 function parseID(id: string) {
   return ItemID[id] || VanillaItemID[id] || BlockID[id] || VanillaBlockID[id];
-};
+}
 
 enum EForestState {
   ICE = -1,
   BALANCE = 0,
-  FIRE = 1
- };
+  FIRE = 1,
+}
 
- const ForestConfiguration = {
+const ForestConfiguration = {};
 
- }
-
- function randomizeHotbarSlot(player) {
-      const randomSlot = randomInt(0, 8);
-      const actor = new PlayerEntity(player);
-      actor.setSelectedSlot(randomSlot);
-      actor.setCarriedItem(actor.getInventorySlot(actor.getSelectedSlot()));
-      return;
-};
+function randomizeHotbarSlot(player) {
+  const randomSlot = randomInt(0, 8);
+  const actor = new PlayerEntity(player);
+  actor.setSelectedSlot(randomSlot);
+  actor.setCarriedItem(actor.getInventorySlot(actor.getSelectedSlot()));
+  return;
+}
 
 function iceItemProtectFunction(player) {
-  if(ColdCurse.has(player)) {
+  if (ColdCurse.has(player)) {
     randomizeHotbarSlot(player);
     Entity.damageEntity(player, 3);
   }
-};
+}
 
-const ServerPlayerDamage = (count: int = 1) => 
-  Network.sendToServer("infinite_forest.damage_player", {count: count});
+const ServerPlayerDamage = (count: int = 1) =>
+  Network.sendToServer("infinite_forest.damage_player", { count: count });
 
-Network.addServerPacket("infinite_forest.damage_player", (client, data: {count: int}) => {
-  const player = client.getPlayerUid();
-  const actor = new PlayerActor(player);
-  if(actor.getGameMode() === EGameMode.CREATIVE) return;
-   return Entity.damageEntity(client.getPlayerUid(), data.count || 1);
-});
+Network.addServerPacket(
+  "infinite_forest.damage_player",
+  (client, data: { count: int }) => {
+    const player = client.getPlayerUid();
+    const actor = new PlayerActor(player);
+    if (actor.getGameMode() === EGameMode.CREATIVE) return;
+    return Entity.damageEntity(client.getPlayerUid(), data.count || 1);
+  }
+);
 
+namespace PlayerHelper {
+  export const getPointed = ModAPI.requireGlobal("Player.getPointed") as () => {
+    pos: BlockPosition;
+    vec: Vector;
+    block: Tile;
+    entity: number;
+  };
+
+  Callback.addCallback("ItemUseNoTarget", (item, player) => {
+    Game.message(JSON.stringify(PlayerHelper.getPointed()))
+  })
+}

@@ -76,7 +76,7 @@ class Caulron extends TileEntityBase {
   public takeCurrentSlot(player: int): void {
     const currentSlotName = this.getCurrentSlotName();
     const currentSlot = this.container.getSlot(currentSlotName);
-    PlayerHelper.takeItemInstance(player, currentSlot);
+    //PlayerHelper.takeItemInstance(player, currentSlot); //TODO: fix;
     this.setCurrentSlot(new ItemStack());
   }
   @BlockEngine.Decorators.NetworkEvent(Side.Client)

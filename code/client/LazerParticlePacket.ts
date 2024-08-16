@@ -1,7 +1,7 @@
 abstract class LazerParticlePacket extends ClientPacket {
   static LAZER_DISTANCE = 0.05;
   static identifier: string = "packet.infinite_forest.lazer_particles";
-  static action(packetData: {}) {
+  static action(packetData: {distance: int}) {
     const player = Player.getLocal();
     const vector = Entity.getLookVector(player);
     const position = Entity.getPosition(player);
@@ -19,12 +19,13 @@ abstract class LazerParticlePacket extends ClientPacket {
     }
     return;
   }
-  public static send(player: int) {
+  public static send(player: int, distance: int) {
     const client = Network.getClientForPlayer(player);
     if (!client) {
       return;
     }
     client.send("packet.infinite_forest.lazer_particles", {
+      distance
     });
     return;
   }

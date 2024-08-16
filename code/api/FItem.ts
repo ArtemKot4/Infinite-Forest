@@ -114,18 +114,21 @@ class FItem {
   public getID(): int {
     return ItemID[this.id];
   }
-  public onUse(func: Callback.ItemUseLocalFunction): void {
-    Item.registerUseFunction(this.id, func);
+  public onUse(callback: Callback.ItemUseLocalFunction): void {
+    Item.registerUseFunction(this.id, callback);
   };
-  public onUseAndNoTarget(func: (item: ItemInstance, player: int) => void) {
+  public onUseAndNoTarget(callback: (item: ItemInstance, player: int) => void) {
      Item.registerUseFunction(this.id, (coords, item, block, player) => {
-      return func(item, player);
+      return callback(item, player);
      });
-     Item.registerNoTargetUseFunction(this.id, func);
+     Item.registerNoTargetUseFunction(this.id, callback);
+  };
+  public onNoTarget(callback: (item, player) => void) {
+    Item.registerNoTargetUseFunction(this.getID(), callback);
   };
   public registerHandFunction(callback: (player: int) => void) {
     handItemFunctions[this.getID()] = callback;
-  }
+  };
 }
 
 Translation.addTranslation("Info is locked", {

@@ -1,0 +1,30 @@
+{
+	"format_version": 2,
+	"header": {
+		"name": "Infinite Forest resources",
+		"description": "Resource pack for mobs from infinite forest",
+		"min_engine_version": [
+			1,
+			16,
+			201
+		],
+		"uuid": "9c92c779-1215-4845-a004-70a0ec960e0e",
+		"version": [
+			1,
+			0,
+			0
+		]
+	},
+	"modules": [
+		{
+			"description": "Resource pack for mobs from infinite forest",
+			"type": "resources",
+			"uuid": "a2dbbee2-fb4c-43d9-b4f8-9b6bb39f777c",
+			"version": [
+				1,
+				0,
+				0
+			]
+		}
+	]
+}
