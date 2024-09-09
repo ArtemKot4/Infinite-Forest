@@ -102,6 +102,9 @@ dimension/generation/biome/HeartForest.ts
 dimension/vanilla_items.ts
 
 dimension/plants_generation.ts
+
+dimension/generation/underground/crystal.ts
+
 dimension/generation/generation_all.ts
 
 

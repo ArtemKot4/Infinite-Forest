@@ -23,6 +23,14 @@ const Opening = new Sound("Opening.ogg");
 const structureDIR = __dir__ + "resources/structures/";
 const ForestStructurePool = new StructurePool("infinite_forest_structure_pool");
 
+const BLOCK_TYPE_GLASS = Block.createSpecialType({
+  explosionres: 0.5,
+  lightopacity: 1,
+  destroytime: 60,
+  renderlayer: 1,
+  sound: "glass"
+});
+
 const BLOCK_TYPE_FIRE = Block.createSpecialType({
   solid: false,
   lightlevel: 5,
