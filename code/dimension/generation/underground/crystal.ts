@@ -12,7 +12,6 @@ namespace ForestGeneration {
       [0.3125, 0.3125, 0.6875, 0.6875],
       [0.375, 0.375, 0.625, 0.625],
       [0.4375, 0.4375, 0.5625, 0.5625],
-      [0.453125, 0.453125, 0.546875],
     ];
     constructor(
       public id: string,
@@ -20,7 +19,7 @@ namespace ForestGeneration {
       lightLevel?: int,
       type?: string | Block.SpecialType
     ) {
-      const datas = (new Array(12) as Block.BlockVariation[]).fill({
+      const datas = (new Array(11) as Block.BlockVariation[]).fill({
         name: "block.infinite_forest." + id,
         texture: [[texture || id, 0]],
         inCreative: true,
@@ -41,9 +40,9 @@ namespace ForestGeneration {
       let startData = 0;
 
       if (random < 0.8) {
-        startData = randomInt(0, 2);
-      } else {
         startData = randomInt(0, 6);
+      } else {
+        startData = randomInt(5, 10);
       };
       return startData;
 
@@ -52,7 +51,7 @@ namespace ForestGeneration {
     public placeBottom(coords: Vector) {
      
       const startData = this.findStartData();
-      const blockCount = 12 - (startData + 1);
+      const blockCount = 11 - (startData + 1);
 
       for(let count = 0; count <= blockCount; count++) {
         World.setBlock(coords.x, coords.y + count, coords.z, BlockID[this.id], count);
@@ -62,7 +61,7 @@ namespace ForestGeneration {
     public placeTop(coords: Vector) {
       
       const startData = this.findStartData();
-      const blockCount = 12 - (startData + 1);
+      const blockCount = 11 - (startData + 1);
 
       for(let count = blockCount; count >= 0; count--) {
         World.setBlock(coords.x, coords.y - count, coords.z, BlockID[this.id], count);
@@ -74,28 +73,28 @@ namespace ForestGeneration {
     export const BLUE_CRYSTAL = new UndergroundCrystal(
       "blue_underground_crystal",
       null,
-      randomInt(3, 12),
+      randomInt(3, 8),
       BLOCK_TYPE_GLASS
     );
 
     export const GREEN_CRYSTAL = new UndergroundCrystal(
       "green_underground_crystal",
       null,
-      randomInt(3, 12),
+      randomInt(3, 8),
       BLOCK_TYPE_GLASS
     );
 
     export const ORANGE_CRYSTAL = new UndergroundCrystal(
       "orange_underground_crystal",
       null,
-      randomInt(3, 12),
+      randomInt(3, 8),
       BLOCK_TYPE_GLASS
     );
 
     export const RED_CRYSTAL = new UndergroundCrystal(
       "red_underground_crystal",
       null,
-      randomInt(3, 12),
+      randomInt(3, 8),
       BLOCK_TYPE_GLASS
     );
 
@@ -128,7 +127,7 @@ namespace ForestGeneration {
       "salt_stalactite",
       "salt"
     );
-    
+
   }
 }
 
