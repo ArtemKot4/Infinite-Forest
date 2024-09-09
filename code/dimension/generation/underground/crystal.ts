@@ -35,22 +35,10 @@ namespace ForestGeneration {
 
       lightLevel && BlockRegistry.setLightLevel(BlockID[id], lightLevel);
     };
-    protected findStartData() {
-      const random = Math.random();
-      let startData = 0;
 
-      if (random < 0.8) {
-        startData = randomInt(0, 6);
-      } else {
-        startData = randomInt(5, 10);
-      };
-      return startData;
-
-    };
-
-    public placeBottom(coords: Vector) {
+    public placeBottom(coords: Vector, min: int, max: int) {
      
-      const startData = this.findStartData();
+      const startData = randomInt(min, max);
       const blockCount = 11 - (startData + 1);
 
       for(let count = 0; count <= blockCount; count++) {
@@ -58,9 +46,9 @@ namespace ForestGeneration {
       };
     };
 
-    public placeTop(coords: Vector) {
+    public placeTop(coords: Vector, min: int, max: int) {
       
-      const startData = this.findStartData();
+      const startData = randomInt(min, max);
       const blockCount = 11 - (startData + 1);
 
       for(let count = blockCount; count >= 0; count--) {
@@ -134,9 +122,9 @@ namespace ForestGeneration {
 Callback.addCallback("ItemUse", (coords, item, block, i, player) => {
   if(item.id === VanillaItemID.bone) {
     if(Entity.getSneaking(player)) {
-          ForestGeneration.UndergroundRock.STONE_STALACTITE.placeBottom(coords)
+          ForestGeneration.UndergroundRock.STONE_STALACTITE.placeBottom(coords, 0, 4)
     } else {
-          ForestGeneration.UndergroundRock.STONE_STALACTITE.placeTop(coords)
+          ForestGeneration.UndergroundRock.STONE_STALACTITE.placeTop(coords, 4, 8)
     }
   }
 })
