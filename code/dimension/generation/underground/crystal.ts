@@ -13,49 +13,56 @@ namespace ForestGeneration {
       [0.375, 0.375, 0.625, 0.625],
       [0.4375, 0.4375, 0.5625, 0.5625],
     ];
+
     constructor(
       public id: string,
       public texture?: string,
       lightLevel?: int,
       type?: string | Block.SpecialType
     ) {
-      const datas = (new Array(11) as Block.BlockVariation[]).fill({
+      super(id, [{
         name: "block.infinite_forest." + id,
         texture: [[texture || id, 0]],
         inCreative: true,
-      });
-
-      super(id, datas, type);
+      }], type);
 
       this.create();
-
-      UndergroundCrystal.boxList.forEach((v, i) => {
-        Block.setShape(BlockID[id], v[0], 0, v[1], v[2], 1, v[3], i);
-      });
-
       lightLevel && BlockRegistry.setLightLevel(BlockID[id], lightLevel);
+     // Block.registerPlaceFunctionForID(BlockID[id], this.placeFunction.bind(this))
+     this.setModelByConditions();
     };
-
-    public placeBottom(coords: Vector, min: int, max: int) {
-     
-      const startData = randomInt(min, max);
-      const blockCount = 11 - (startData + 1);
-
-      for(let count = 0; count <= blockCount; count++) {
-        World.setBlock(coords.x, coords.y + count, coords.z, BlockID[this.id], count);
+    public placeFunction(coords: Callback.ItemUseCoordinates, item: ItemInstance, block: Tile, player: number, region: BlockSource) {
+     Game.message("coords.side -> " + coords.side);
+      if(coords.side === 0) { //UP
+            region.setBlock(coords.relative.x, coords.relative.y, coords.relative.z, this.getID(), 1);
+            return;
       };
+      region.setBlock(coords.relative.x, coords.relative.y, coords.relative.z, this.getID(), 0);
     };
+    public setModelByConditions() {
+      const group = ICRender.getGroup(this.id + "-group");
+      const model = new ICRender.Model();
+      const conditionList = [];
 
-    public placeTop(coords: Vector, min: int, max: int) {
-      
-      const startData = randomInt(min, max);
-      const blockCount = 11 - (startData + 1);
+      for(let i = 0; i < UndergroundCrystal.boxList.length; i++) {
 
-      for(let count = blockCount; count >= 0; count--) {
-        World.setBlock(coords.x, coords.y - count, coords.z, BlockID[this.id], count);
+        const current = UndergroundCrystal.boxList[i];
+         const blockModel = new BlockRenderer.Model(current[0], 0, current[1],
+           current[2], 1, current[3], this.getID(), 0);
+           conditionList.push(  ICRender.BLOCK(0, 1+i, 0, group, false));
+         model.addEntry(blockModel)
+         .setCondition(ICRender.AND(conditionList.concat(ICRender.NOT(
+          ICRender.BLOCK(0, 2+i, 0, group, false)
+        )
+        )
+        )
+          )
       };
+
+      BlockRenderer.setStaticICRender(this.getID(), -1, model);
     }
   }
+
 
   export namespace UndergroundRock {
     export const BLUE_CRYSTAL = new UndergroundCrystal(
@@ -119,12 +126,12 @@ namespace ForestGeneration {
   }
 }
 
-Callback.addCallback("ItemUse", (coords, item, block, i, player) => {
-  if(item.id === VanillaItemID.bone) {
-    if(Entity.getSneaking(player)) {
-          ForestGeneration.UndergroundRock.STONE_STALACTITE.placeBottom(coords, 0, 4)
-    } else {
-          ForestGeneration.UndergroundRock.STONE_STALACTITE.placeTop(coords, 4, 8)
-    }
-  }
-})
+// Callback.addCallback("ItemUse", (coords, item, block, i, player) => {
+//   if(item.id === VanillaItemID.bone) {
+//     if(Entity.getSneaking(player)) {
+//           ForestGeneration.UndergroundRock.STONE_STALACTITE.placeBottom(coords, 0, 4)
+//     } else {
+//           ForestGeneration.UndergroundRock.STONE_STALACTITE.placeTop(coords, 4, 8)
+//     }
+//   }
+// })
