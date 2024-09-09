@@ -123,6 +123,12 @@ namespace ForestGeneration {
       "cobblestone_stalactite",
       "granite_andesite"
     );
+    
+    export const SALT_STALACTITE = new UndergroundCrystal(
+      "salt_stalactite",
+      "salt"
+    );
+    
   }
 }
 
