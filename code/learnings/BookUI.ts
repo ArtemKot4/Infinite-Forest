@@ -1,13 +1,17 @@
 abstract class IdeaUI {
-  protected constructor() {}
+  protected constructor() {};
+
   public static readonly FRAME_MAX = 10;
+  public static readonly IMAGE_SCALE = 35;
+  public static readonly HEIGHT_LOCATION = 250;
+  public static readonly WIDTH_LOCATION = 270;
 
   public static GUI = new UI.Window({
     location: {
       height: 500,
       width: 500,
-      x: 270,
-      y: 220,
+      x: this.WIDTH_LOCATION,
+      y: this.HEIGHT_LOCATION,
     },
     drawing: [
       { type: "background", color: android.graphics.Color.argb(0, 0, 0, 0) },
@@ -18,10 +22,11 @@ abstract class IdeaUI {
         x: 0,
         y: 0,
         bitmap: "idea_book.book_open_0",
-        scale: 35,
+        scale: this.IMAGE_SCALE,
       },
     },
   });
+
   public static redrawImage(frame: int, scale: int) {
     IdeaUI.GUI.content.elements["image"] = {
       type: "image",
@@ -33,53 +38,79 @@ abstract class IdeaUI {
     IdeaUI.GUI.forceRefresh();
     return;
   }
+ 
+  public static setOffset(x: int, y?: int) {
+    IdeaUI.GUI.content.location = {
+      height: 500,
+      width: 500,
+      x: x,
+      y: y || this.HEIGHT_LOCATION,
+    };
+    IdeaUI.GUI.forceRefresh();
+    return;
+  }
+
+  public static close() {
+    IdeaUI.GUI.close();
+    IdeaUI.setOffset(this.WIDTH_LOCATION, this.HEIGHT_LOCATION);
+    IdeaUI.redrawImage(0, this.IMAGE_SCALE);
+  }
 
   public static initAnimation() {
-    let x = 0;
-    let page_counter = 0;
-
-    let size = 0;
-
     if (this.GUI.isOpened()) {
       return;
-    }
+    };
 
-    IdeaUI.GUI.content.location.x = 270;
+    let x = this.WIDTH_LOCATION;
+    let y = this.HEIGHT_LOCATION;
 
-    IdeaUI.redrawImage(0, 35);
+    let frame = 0;
+    let timer = 0;
+
+    let scale = this.IMAGE_SCALE;
+
+    const RESULT_WIDTH = this.WIDTH_LOCATION * 2;
+    const RESULT_HEIGHT = this.HEIGHT_LOCATION * 1.25
+
+
+
     IdeaUI.GUI.open();
 
     Threading.initThread("thread.infinite_forest.idea_animation", () => {
-      while (x <= 100) {
-        if (page_counter < IdeaUI.FRAME_MAX) {
-          if (size >= 35) {
-            IdeaUI.redrawImage(page_counter, 35);
+        while(true) {
+          if(frame < this.FRAME_MAX) {
 
-            page_counter++;
+            IdeaUI.redrawImage(frame++, this.IMAGE_SCALE);
             java.lang.Thread.sleep(125);
-          } else {
-            IdeaUI.redrawImage(0, (size += 0.09));
 
-            java.lang.Thread.sleep(3);
-          }
-        } else {
-          if (size <= 5) {
-            IdeaUI.GUI.content.location.x += x += 0.1;
-            IdeaUI.GUI.forceRefresh();
-            java.lang.Thread.sleep(7);
           } else {
-            IdeaUI.redrawImage(IdeaUI.FRAME_MAX, (size -= 0.04));
-            java.lang.Thread.sleep(25);
+
+            if(timer < 5) {
+
+              timer++;
+              java.lang.Thread.sleep(500); 
+
+            } else {
+
+              if(x < RESULT_WIDTH) {
+                IdeaUI.setOffset(x += 0.8, y);
+              };
+
+              if(y < RESULT_HEIGHT) {
+                IdeaUI.setOffset(x, y += 0.4)
+                IdeaUI.redrawImage(this.FRAME_MAX, scale-=0.7)
+              };
+
+              if(x === RESULT_WIDTH && y === RESULT_HEIGHT) {
+                this.close();
+                return;
+              };
+
+              java.lang.Thread.sleep(7);
+            }
           }
         }
-
-        if (x >= 100) {
-          this.GUI.close();
-        }
-      }
-    });
-
-    return;
+    })
   }
 }
 
