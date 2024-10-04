@@ -98,14 +98,13 @@ abstract class IdeaUI {
 
               if(y < RESULT_HEIGHT) {
                 IdeaUI.setOffset(x, y += 0.4)
-                IdeaUI.redrawImage(this.FRAME_MAX, scale-=0.7)
+                IdeaUI.redrawImage(this.FRAME_MAX, scale-=0.2)
               };
 
               if(x === RESULT_WIDTH && y === RESULT_HEIGHT) {
                 this.close();
-                return;
+                break;
               };
-
               java.lang.Thread.sleep(7);
             }
           }
