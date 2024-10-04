@@ -2,9 +2,9 @@ abstract class IdeaUI {
   protected constructor() {};
 
   public static readonly FRAME_MAX = 10;
-  public static readonly IMAGE_SCALE = 20;
-  public static readonly HEIGHT_LOCATION = 10;
-  public static readonly WIDTH_LOCATION = 270;
+  public static readonly IMAGE_SCALE = 22.5;
+  public static readonly HEIGHT_LOCATION = 23.5;
+  public static readonly WIDTH_LOCATION = 290;
 
   public static GUI = new UI.Window({
     // location: {
@@ -65,53 +65,61 @@ abstract class IdeaUI {
   public static initAnimation() {
     if (this.GUI.isOpened()) {
       return;
-    };
+  }
+  ;
+  let x = this.WIDTH_LOCATION;
+  let y = this.HEIGHT_LOCATION;
+  let frame = 0;
+  let timer = 0;
+  let scale = this.IMAGE_SCALE;
 
-    let x = this.WIDTH_LOCATION;
-    let y = this.HEIGHT_LOCATION;
+  IdeaUI.GUI.open();
 
-    let frame = 0;
-    let timer = 0;
+  Threading.initThread("thread.infinite_forest.idea_animation", () => {
+      while (y < 1900) {
+          if (frame < this.FRAME_MAX && timer <= 0) {
+            frame++;
+              IdeaUI.redrawImage(frame, this.IMAGE_SCALE);
+              java.lang.Thread.sleep(50);
+          }
+          else {
+            if(timer >= 10 && frame > 0) {
+              IdeaUI.redrawImage(frame--, this.IMAGE_SCALE);
+              java.lang.Thread.sleep(50);
+            }
+              if (timer <= 10) {
+                  timer++;
+                  java.lang.Thread.sleep(500);
+              }
+              else if (frame <= 0) {
+                  if (scale < 12.5) {
+                      if (x < this.WIDTH_LOCATION * 3) {
+                          IdeaUI.redrawImage(0, scale -= 0.06, x += 0.8, y += 0.3);
+                      }
+                      else {
+                          IdeaUI.redrawImage(0, scale -= 0.03, x, y += 0.8);
+                      }
+                  }
+                  else {
+                      IdeaUI.redrawImage(0, scale -= 0.2, x, y += 0.2);
+                      java.lang.Thread.sleep(15);
+                  }
+                  ;
+                 if(y >= 1900) {
+                     this.close();
+                     break;
+                 };
+                  java.lang.Thread.sleep(2);
+              }
+          }
+      }
+  });
 
-    let scale = this.IMAGE_SCALE;
-
-    IdeaUI.GUI.open();
-
-    Threading.initThread("thread.infinite_forest.idea_animation", () => {
-        while(y < 50) {
-          if (frame < this.FRAME_MAX) {
-            IdeaUI.redrawImage(frame++, this.IMAGE_SCALE);
-            java.lang.Thread.sleep(125);
-            }
-            else {
-            if (timer < 5) {
-            timer++;
-            java.lang.Thread.sleep(500);
-            }
-            else {
-            if(scale < 8) {
-            if (x < this.WIDTH_LOCATION * 3) {
-              IdeaUI.redrawImage(this.FRAME_MAX, scale -= 0.03, x += 0.8, y);
-           // IdeaUI.setOffset(x += 0.8, y -= 0.15);
-            } else {
-              IdeaUI.redrawImage(this.FRAME_MAX, scale -= 0.08, x, y += 0.6);
-            }
-            
-            } else {
-            IdeaUI.redrawImage(this.FRAME_MAX, scale -= 0.2, x, y+=0.2);
-            java.lang.Thread.sleep(15);
-            }
-            ;
-            java.lang.Thread.sleep(2);
-            }
-            }
-            
-        }
-    })
   };
 
   static {
    this.GUI.setAsGameOverlay(true);
+   this.GUI.setTouchable(false);
   };
 
 }
