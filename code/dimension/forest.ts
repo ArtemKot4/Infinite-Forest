@@ -233,7 +233,7 @@ namespace ForestGeneration {
       for (let i = 0; i <= 64; i++) {
         let coords = GenerationUtils.randomCoords(chunkX, chunkZ);
         coords = GenerationUtils.findSurface(coords.x, 90, coords.z);
-        if (coords.y <= 93) return;
+        if (coords.y <= 54) return;
         if (
           World.getBlockID(coords.x, coords.y, coords.z) ===
           VanillaBlockID.grass
@@ -271,7 +271,7 @@ namespace ForestGeneration {
   }
 
   export function generateBeaches(coords: Vector) {
-    if (coords.y !== 92) {
+    if (coords.y !== 54) {
       return;
     }
     if (

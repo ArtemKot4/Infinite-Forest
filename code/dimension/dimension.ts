@@ -15,50 +15,28 @@ namespace ForestGeneration {
     }
   }
 
-  DimensionLayers.add({
-    minY: 80,
-    maxY: 93,
+  DimensionLayers.add( {
+    minY: 0,
+    maxY: 55,
     yConversion: [
       [0, 1],
       [-1, 0.4],
     ],
-    material: { base: VanillaBlockID.water },
+    material: { base: 9 },
   }); //FOREST SURFACE WATER
 
-  DimensionLayers.add({
-    minY: 65,
-    maxY: 120,
-    yConversion: [
-      [0, 1.9],
-      [1, -1.9],
-    ],
-    material: { base: VanillaBlockID.stone, surface: { id: VanillaBlockID.dirt, data: 0, width: 4 }, cover: VanillaBlockID.grass },
-    noise: {
-      octaves: { count: 5, scale: 40 },
-    },
-  }); //FOREST SURFACE
-
-  DimensionLayers.add(  {
-    minY: 0, maxY: 75, 
-    yConversion: [
-        [0.56, 0.17],
-        [0.9, -0.12],
-        [0.2, 0.45],
-        [-1, 0.94]
-        ], 
-    material: {
-        base: 1,
-        surface: {
-            id: 1,
-            data: 0,
-            width: 3
-        },
-        cover: 1
-    }, 
-    noise: {
-        octaves: {count: 3, scale: [37,30,39], weight:0.978}
-    }
-}); // CAVE
+  DimensionLayers.add( {
+      minY: 0,
+      maxY: 120,
+      yConversion: [
+        [0, 1.7],
+        [1, -1.9],
+      ],
+      material: { base: 1, surface: { id: 3, data: 0, width: 3 }, cover: 2 },
+      noise: {
+        octaves: { count: 5, scale: 70 },
+      },
+    }); //FOREST SURFACE
 
   const generator = Dimensions.newGenerator({
     biome: ForestBiomes.FirefliesForest.id, // ForestBiomes.FirefliesForest.getID(),

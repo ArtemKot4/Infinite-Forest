@@ -63,7 +63,7 @@ namespace ForestBiomes {
       for (let i = 0; i < count; i++) {
         let coords = GenerationUtils.randomCoords(chunkX, chunkZ);
         coords = GenerationUtils.findSurface(coords.x, 127, coords.z);
-        if (coords.y <= 94) return;
+        if (coords.y < 55) return;
         if (random && Math.random() > random) return;
         if (World.getBiome(coords.x, coords.z) !== biome) {
           return;

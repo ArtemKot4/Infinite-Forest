@@ -3,5 +3,5 @@
     "library-dirs":["lib"],
     "verbose":true,
     "options":[],
-    "boot-classes":[]
+    "boot-classes":["com.artemkot4.InfiniteForest.InfiniteForest"]
 }
