@@ -50,9 +50,9 @@ abstract class IdeaUI {
     IdeaUI.GUI.content.elements["rune"] = {
       type: "image",
       bitmap: "rune." + rune,
-      x: this.WIDTH_LOCATION + 45,
-      y: this.HEIGHT_LOCATION + 110,
-      scale: 8
+      x: this.WIDTH_LOCATION + 65,
+      y: this.HEIGHT_LOCATION + 130,
+      scale: 5
     };
     IdeaUI.GUI.forceRefresh();
   };
@@ -97,19 +97,19 @@ abstract class IdeaUI {
   let scale = this.IMAGE_SCALE;
 
   Threading.initThread("thread.infinite_forest.idea_animation", () => {
-      while (y < 1500) {
+      while (y < 1300) {
           if (frame < this.FRAME_MAX && timer <= 0) {
             frame++;
               IdeaUI.redrawImage(frame, this.IMAGE_SCALE);
               java.lang.Thread.sleep(50);
           }
           else {
-            if(timer >= 5 && frame > 0) {
+            if(timer > 5 && frame > 0) {
               this.clearRune();
               IdeaUI.redrawImage(frame--, this.IMAGE_SCALE);
               java.lang.Thread.sleep(50);
             }
-              if (timer <= 5) {
+              if (timer < 5) {
                 this.drawRune(Array.isArray(rune) ? MathHelper.randomValueFromArray(rune) : rune);
                   timer++;
                   java.lang.Thread.sleep(1000);
@@ -128,7 +128,7 @@ abstract class IdeaUI {
                       java.lang.Thread.sleep(15);
                   }
                   ;
-                 if(y >= 1500) {
+                 if(y >= 1300) {
                      this.close();
                      break;
                  };
