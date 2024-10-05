@@ -22,7 +22,7 @@ class Learning {
     player: int,
     color: Native.Color = Native.Color.DARK_GREEN,
     page?: name,
-    rune = "question"
+    rune: string | string[] = "question"
   ) {
     if (Learning.has(player, name) === true) return;
     const playerName = Entity.getNameTag(player);

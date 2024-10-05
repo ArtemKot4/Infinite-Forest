@@ -45,7 +45,7 @@ Callback.addCallback("PlayerChangedDimension", function (player, from, to) {
       player,
       Native.Color.BLUE,
       "forest_title",
-      "forest"
+      ["crystal", "snow", "fire", "forest"]
     );
     Updatable.addLocalUpdatable(InfiniteTick());
   }
