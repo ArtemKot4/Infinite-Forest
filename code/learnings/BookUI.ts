@@ -94,28 +94,37 @@ abstract class IdeaUI {
     let timer = 0;
     let scale = this.IMAGE_SCALE;
 
-    let timerMax = [].concat(rune).length + 1;
+    let timerMax = [].concat(rune).length;
 
     let runeIndex = 0;
 
     Threading.initThread("thread.infinite_forest.idea_animation", () => {
       while (y < 1300) {
+
         if (frame < this.FRAME_MAX && timer <= 0) {
           frame++;
           IdeaUI.redrawImage(frame, this.IMAGE_SCALE);
           java.lang.Thread.sleep(50);
+
         } else {
+
           if (timer > timerMax && frame > 0) {
             this.clearRune();
             IdeaUI.redrawImage(frame--, this.IMAGE_SCALE);
             java.lang.Thread.sleep(50);
-          }
+          };
+
           if (timer <= timerMax) {
             this.drawRune(
               Array.isArray(rune)
-                ? rune[runeIndex++]
+                ? rune[runeIndex]
                 : rune
             );
+
+          if(runeIndex < rune.length - 1) {
+            runeIndex++;
+          }
+
             timer++;
             java.lang.Thread.sleep(1000);
           } else if (frame <= 0) {
