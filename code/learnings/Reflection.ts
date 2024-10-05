@@ -1,16 +1,18 @@
 class Reflection {
   public static list: Record<
     name,
-    { message: string; bookPage: string; learnings: string[] }
+    { message: string; bookPage: string; learnings: string[], rune: string | string[] }
   > = {};
   public static playerList: Record<name, Set<name>> = {};
   constructor(
     public name: string,
     public message: string,
     public bookPage: string,
+    
+    rune?: string | string[],
     ...learnings: string[]
   ) {
-    Reflection.list[name] = { message, bookPage, learnings };
+    Reflection.list[name] = { message, bookPage, learnings, rune };
   }
   public static hasLearnings(player: int, learnings: string[]) {
     const list = (Learning.playerList[player] ??= new Set());
@@ -33,7 +35,7 @@ class Reflection {
     Reflection.sendMessage(player);
     const playerName = Entity.getNameTag(player);
     Reflection.playerList[playerName].add(name);
-    BookUI.givePage(player,   Reflection.list[name].bookPage);
+    BookUI.givePage(player, Reflection.list[name].bookPage, Reflection.list[name].rune || "question");
   }
   public static sendMessage(player: int) {
     const client = Network.getClientForPlayer(player);
@@ -51,6 +53,7 @@ namespace ReflectionList {
     "temperature_flowers",
     "temperature_flowers",
     "temperature_flowers_title",
+    ["snow", "question"],
     "fironia",
     "ice_flower",
     "electric_mushroom"

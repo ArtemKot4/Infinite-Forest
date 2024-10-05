@@ -44,7 +44,8 @@ Callback.addCallback("PlayerChangedDimension", function (player, from, to) {
       "infinite_forest_is_real",
       player,
       Native.Color.BLUE,
-      "forest_title"
+      "forest_title",
+      "forest"
     );
     Updatable.addLocalUpdatable(InfiniteTick());
   }

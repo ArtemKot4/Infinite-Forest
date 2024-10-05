@@ -22,7 +22,7 @@ abstract class IdeaUI {
         x: this.WIDTH_LOCATION,
         y: this.HEIGHT_LOCATION,
         bitmap: "idea_book.book_open_0",
-        scale: this.IMAGE_SCALE,
+        scale: this.IMAGE_SCALE
       },
     },
   });
@@ -44,7 +44,22 @@ abstract class IdeaUI {
     IdeaUI.GUI.content.elements["image"].y = y;
     IdeaUI.GUI.forceRefresh();
     return;
-  }
+  };
+
+  public static drawRune(rune: string) {
+    IdeaUI.GUI.content.elements["rune"] = {
+      type: "image",
+      bitmap: "rune." + rune,
+      x: this.WIDTH_LOCATION + 45,
+      y: this.HEIGHT_LOCATION + 110,
+      scale: 8
+    };
+    IdeaUI.GUI.forceRefresh();
+  };
+
+  public static clearRune() {
+    IdeaUI.GUI.content.elements["rune"].bitmap = "unknown";
+  };
   // public static setOffset(x: int, y?: int) {
   //   IdeaUI.GUI.content.location = {
   //     height: 500,
@@ -58,38 +73,46 @@ abstract class IdeaUI {
 
   public static close() {
     IdeaUI.GUI.close();
-    IdeaUI.setOffset(this.WIDTH_LOCATION, this.HEIGHT_LOCATION);
-    IdeaUI.redrawImage(0, this.IMAGE_SCALE);
   }
 
-  public static initAnimation() {
+  public static open() {
+    IdeaUI.setOffset(this.WIDTH_LOCATION, this.HEIGHT_LOCATION);
+    IdeaUI.redrawImage(0, this.IMAGE_SCALE);
+  
+    IdeaUI.GUI.open();
+
+  }
+
+  public static initAnimation(rune: string | string[]) {
     if (this.GUI.isOpened()) {
       return;
   }
   ;
+  this.open();
+
   let x = this.WIDTH_LOCATION;
   let y = this.HEIGHT_LOCATION;
   let frame = 0;
   let timer = 0;
   let scale = this.IMAGE_SCALE;
 
-  IdeaUI.GUI.open();
-
   Threading.initThread("thread.infinite_forest.idea_animation", () => {
-      while (y < 1900) {
+      while (y < 1500) {
           if (frame < this.FRAME_MAX && timer <= 0) {
             frame++;
               IdeaUI.redrawImage(frame, this.IMAGE_SCALE);
               java.lang.Thread.sleep(50);
           }
           else {
-            if(timer >= 10 && frame > 0) {
+            if(timer >= 5 && frame > 0) {
+              this.clearRune();
               IdeaUI.redrawImage(frame--, this.IMAGE_SCALE);
               java.lang.Thread.sleep(50);
             }
-              if (timer <= 10) {
+              if (timer <= 5) {
+                this.drawRune(Array.isArray(rune) ? MathHelper.randomValueFromArray(rune) : rune);
                   timer++;
-                  java.lang.Thread.sleep(500);
+                  java.lang.Thread.sleep(1000);
               }
               else if (frame <= 0) {
                   if (scale < 12.5) {
@@ -105,7 +128,7 @@ abstract class IdeaUI {
                       java.lang.Thread.sleep(15);
                   }
                   ;
-                 if(y >= 1900) {
+                 if(y >= 1500) {
                      this.close();
                      break;
                  };
@@ -266,8 +289,8 @@ abstract class BookUI {
     BookUI.setContent(content);
     BookUI.UI.open();
   }
-  public static givePage(player: int, page: name) {
-    IdeaUI.initAnimation();
+  public static givePage(player: int, page: name, rune: string | string[]) {
+    IdeaUI.initAnimation(rune);
     (BookUI.pagesList[Entity.getNameTag(player)] ??= ["main_title"]).push(page);
   }
   static {
@@ -277,5 +300,5 @@ abstract class BookUI {
 }
 
 Item.registerUseFunctionForID(VanillaItemID.coal, () => {
-  IdeaUI.initAnimation();
+  IdeaUI.initAnimation("crystal");
 });
