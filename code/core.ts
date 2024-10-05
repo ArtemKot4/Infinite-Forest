@@ -14,8 +14,11 @@ type name = string;
 
 const AIR = 0;
 
-const Mistical = new Sound("Light.ogg");
-const Opening = new Sound("Opening.ogg");
+const SoundContainer = {
+  //book_writing: new Sound("book_writing")
+};
+// const Mistical = new Sound("Light.ogg");
+// const Opening = new Sound("Opening.ogg");
 
 /** __ dir __ + "resources/structures/";
  *

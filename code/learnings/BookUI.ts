@@ -7,12 +7,7 @@ abstract class IdeaUI {
   public static readonly WIDTH_LOCATION = 310;
 
   public static GUI = new UI.Window({
-    // location: {
-    //   height: 500,
-    //   width: 500,
-    //   x: this.WIDTH_LOCATION,
-    //   y: this.HEIGHT_LOCATION,
-    // },
+
     drawing: [
       { type: "background", color: android.graphics.Color.argb(0, 0, 0, 0) },
     ],
@@ -60,16 +55,6 @@ abstract class IdeaUI {
   public static clearRune() {
     IdeaUI.GUI.content.elements["rune"].bitmap = "unknown";
   }
-  // public static setOffset(x: int, y?: int) {
-  //   IdeaUI.GUI.content.location = {
-  //     height: 500,
-  //     width: 500,
-  //     x: x,
-  //     y: y || this.HEIGHT_LOCATION,
-  //   };
-  //   IdeaUI.GUI.forceRefresh();
-  //   return;
-  // }
 
   public static close() {
     IdeaUI.GUI.close();
@@ -103,14 +88,17 @@ abstract class IdeaUI {
 
         if (frame < this.FRAME_MAX && timer <= 0) {
           frame++;
+
           IdeaUI.redrawImage(frame, this.IMAGE_SCALE);
           java.lang.Thread.sleep(50);
-
+          
         } else {
 
           if (timer > timerMax && frame > 0) {
+
             this.clearRune();
             IdeaUI.redrawImage(frame--, this.IMAGE_SCALE);
+
             java.lang.Thread.sleep(50);
           };
 
@@ -127,18 +115,27 @@ abstract class IdeaUI {
 
             timer++;
             java.lang.Thread.sleep(1000);
+
           } else if (frame <= 0) {
+
             if (scale < 10) {
+
               if (x < this.WIDTH_LOCATION * 3) {
+
                 IdeaUI.redrawImage(0, (scale -= 0.04), (x += 1), (y += 0.3));
               } else {
+
                 IdeaUI.redrawImage(0, (scale -= 0.03), x, (y += 0.7));
               }
+
             } else {
+
               IdeaUI.redrawImage(0, (scale -= 0.3), x, (y += 0.2));
               java.lang.Thread.sleep(2);
             }
+
             if (y >= 1300) {
+
               this.close();
               break;
             }
