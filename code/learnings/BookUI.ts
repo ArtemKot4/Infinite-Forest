@@ -41,10 +41,10 @@ abstract class IdeaUI {
     return;
   }
 
-  public static drawRune(rune: string) {
-    IdeaUI.GUI.content.elements["rune"] = {
+  public static drawSign(sign: string) {
+    IdeaUI.GUI.content.elements["sign"] = {
       type: "image",
-      bitmap: "rune." + rune,
+      bitmap: "sign." + sign,
       x: this.WIDTH_LOCATION + 25,
       y: this.HEIGHT_LOCATION + 110,
       scale: 9.7,
@@ -52,8 +52,8 @@ abstract class IdeaUI {
     IdeaUI.GUI.forceRefresh();
   }
 
-  public static clearRune() {
-    IdeaUI.GUI.content.elements["rune"].bitmap = "unknown";
+  public static clearSign() {
+    IdeaUI.GUI.content.elements["sign"].bitmap = "unknown";
   }
 
   public static close() {
@@ -67,7 +67,7 @@ abstract class IdeaUI {
     IdeaUI.GUI.open();
   }
 
-  public static initAnimation(rune: string | string[]) {
+  public static initAnimation(sign: string | string[]) {
     if (this.GUI.isOpened()) {
       return;
     }
@@ -79,9 +79,9 @@ abstract class IdeaUI {
     let timer = 0;
     let scale = this.IMAGE_SCALE;
 
-    let timerMax = [].concat(rune).length;
+    let timerMax = [].concat(sign).length;
 
-    let runeIndex = 0;
+    let signIndex = 0;
 
     Threading.initThread("thread.infinite_forest.idea_animation", () => {
       while (y < 1300) {
@@ -96,25 +96,25 @@ abstract class IdeaUI {
 
           if (timer > timerMax && frame > 0) {
 
-            this.clearRune();
+            this.clearSign();
             IdeaUI.redrawImage(frame--, this.IMAGE_SCALE);
 
             java.lang.Thread.sleep(50);
           };
 
           if (timer <= timerMax) {
-            this.drawRune(
-              Array.isArray(rune)
-                ? rune[runeIndex]
-                : rune
+            this.drawSign(
+              Array.isArray(sign)
+                ? sign[signIndex]
+                : sign
             );
 
-          if(runeIndex < rune.length - 1) {
-            runeIndex++;
+          if(signIndex < sign.length - 1) {
+            signIndex++;
           }
 
             timer++;
-            java.lang.Thread.sleep(1000);
+            java.lang.Thread.sleep(2000);
 
           } else if (frame <= 0) {
 
@@ -294,8 +294,8 @@ abstract class BookUI {
     BookUI.setContent(content);
     BookUI.UI.open();
   }
-  public static givePage(player: int, page: name, rune: string | string[]) {
-    IdeaUI.initAnimation(rune);
+  public static givePage(player: int, page: name, sign: string | string[]) {
+    IdeaUI.initAnimation(sign);
     (BookUI.pagesList[Entity.getNameTag(player)] ??= ["main_title"]).push(page);
   }
   static {

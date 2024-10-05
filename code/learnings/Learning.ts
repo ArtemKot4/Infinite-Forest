@@ -22,14 +22,14 @@ class Learning {
     player: int,
     color: Native.Color = Native.Color.DARK_GREEN,
     page?: name,
-    rune: string | string[] = "question"
+    sign: string | string[] = "question"
   ) {
     if (Learning.has(player, name) === true) return;
     const playerName = Entity.getNameTag(player);
     Learning.sendMessage(name, player, color);
     Learning.playerList[playerName].add(name);
     if (page) {
-      BookUI.givePage(player, page, rune);
+      BookUI.givePage(player, page, sign);
       Reflection.sendMessage(player);
     }
   }

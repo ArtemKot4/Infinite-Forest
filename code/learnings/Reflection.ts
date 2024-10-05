@@ -1,7 +1,7 @@
 class Reflection {
   public static list: Record<
     name,
-    { message: string; bookPage: string; learnings: string[], rune: string | string[] }
+    { message: string; bookPage: string; learnings: string[], sign: string | string[] }
   > = {};
   public static playerList: Record<name, Set<name>> = {};
   constructor(
@@ -9,10 +9,10 @@ class Reflection {
     public message: string,
     public bookPage: string,
     
-    rune?: string | string[],
+    sign?: string | string[],
     ...learnings: string[]
   ) {
-    Reflection.list[name] = { message, bookPage, learnings, rune };
+    Reflection.list[name] = { message, bookPage, learnings, sign };
   }
   public static hasLearnings(player: int, learnings: string[]) {
     const list = (Learning.playerList[player] ??= new Set());
@@ -35,7 +35,7 @@ class Reflection {
     Reflection.sendMessage(player);
     const playerName = Entity.getNameTag(player);
     Reflection.playerList[playerName].add(name);
-    BookUI.givePage(player, Reflection.list[name].bookPage, Reflection.list[name].rune || "question");
+    BookUI.givePage(player, Reflection.list[name].bookPage, Reflection.list[name].sign || "question");
   }
   public static sendMessage(player: int) {
     const client = Network.getClientForPlayer(player);

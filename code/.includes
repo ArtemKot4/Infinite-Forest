@@ -128,5 +128,7 @@ learnings/BookPage.ts
 learnings/Book.ts
 
 
+blocks/Sign.ts
+
 server/PlayerTick.ts
 dimension/InfiniteTick.ts
