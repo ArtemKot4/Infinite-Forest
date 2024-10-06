@@ -78,57 +78,61 @@ abstract class IdeaUI {
       let frame = 0;
       let timer = 0;
       let scale = this.IMAGE_SCALE;
-  
+      let alpha = 1;
       let timerMax = [].concat(sign).length;
   
       let signIndex = 0;
   
       Threading.initThread("thread.infinite_forest.idea_animation", () => {
         while (y < 1300) {
-            if (frame < this.FRAME_MAX && timer <= 0) {
-                frame++;
-                IdeaUI.redrawImage(frame, this.IMAGE_SCALE);
-                java.lang.Thread.sleep(50);
-            }
-            else {
-                if (timer > timerMax && frame > 0) {
-                    this.clearSign();
-                    IdeaUI.redrawImage(frame--, this.IMAGE_SCALE);
-                    java.lang.Thread.sleep(50);
-                }
-                ;
-                if (timer <= timerMax) {
-                    this.drawSign(Array.isArray(sign)
-                        ? sign[signIndex]
-                        : sign);
-                    if (signIndex < sign.length - 1) {
-                        signIndex++;
-                    }
-                    timer++;
-                    java.lang.Thread.sleep(2000);
-                }
-                else if (frame <= 0) {
-                    if (scale < 10) {
-                        if (x < this.WIDTH_LOCATION * 2.9) {
-                            IdeaUI.redrawImage(0, (scale -= 0.04), (x += 1.15), y);
-                        }
-                        else {
-                            IdeaUI.redrawImage(0, (scale -= 0.03), x, (y += 0.87));
-                        }
-                    }
-                    else {
-                        IdeaUI.redrawImage(0, (scale -= 0.3), x, (y += 0.2));
-                        java.lang.Thread.sleep(2);
-                    }
-                    if (y >= 1300) {
-                        this.close();
-                        break;
-                    };
-                    java.lang.Thread.sleep(1);
-                }
-            }
-        }
-      });
+          if (frame < this.FRAME_MAX && timer <= 0) {
+              frame++;
+              IdeaUI.redrawImage(frame, this.IMAGE_SCALE);
+              java.lang.Thread.sleep(50);
+          }
+          else {
+              if (timer > timerMax && frame > 0) {
+                  this.clearSign();
+                  IdeaUI.redrawImage(frame--, this.IMAGE_SCALE);
+                  java.lang.Thread.sleep(50);
+              }
+              ;
+              if (timer <= timerMax) {
+                  this.drawSign(Array.isArray(sign)
+                      ? sign[signIndex]
+                      : sign);
+                  if (signIndex < sign.length - 1) {
+                      signIndex++;
+                  }
+                  timer++;
+                  java.lang.Thread.sleep(2000);
+              }
+              else if (frame <= 0) {
+                  if (scale < 15) {
+                      if (x < this.WIDTH_LOCATION * 2.8) {
+                          IdeaUI.redrawImage(0, (scale -= 0.02), (x += 1.3), y);
+                      }
+                      else {
+                          IdeaUI.redrawImage(0, scale, x, (y += 0.87));
+                          if (y > 250) {
+                              IdeaUI.GUI.layout.setAlpha(alpha -= 0.007);
+                          }
+                      }
+                  }
+                  else {
+                      IdeaUI.redrawImage(0, (scale -= 0.3), x, (y += 0.2));
+                      java.lang.Thread.sleep(1);
+                  }
+                  if (y >= 1300) {
+                      this.close();
+                      break;
+                  }
+                  ;
+                  java.lang.Thread.sleep(1);
+              }
+          }
+      }
+    });
     }
   
     static {
