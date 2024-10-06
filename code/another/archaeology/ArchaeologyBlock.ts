@@ -1,152 +1,97 @@
 type chance = 10 | 50 | 40 | 25 | 65;
 type number3 = [number, number, number];
-class ArchaeologyBlock extends FBlock {
-  public static readonly percents = [10, 25, 40, 50, 65] satisfies chance[];
-  protected static readonly ANIMATION_CREATE_VALID_DATA = 3;
-  protected readonly dropList: Record<chance, ItemInstance[]> = {
-    10: [],
-    50: [],
-    40: [],
-    25: [],
-    65: []
-  };
-  constructor(public id: string, public texture: string, sound: Block.Sound) {
+
+namespace Archaeology {
+
+export interface IDrop {
+  instance: ItemInstance, chance?: int | [int, int], action?: Block.ClickFunction
+}
+
+export const list: Set<IDrop> = new Set();
+
+export function registerDrop(instance: ItemInstance, chance?: int | [int, int], action?: Block.ClickFunction) {
+  list.add(Object.assign({instance, chance: chance || 25}, action && {action}));
+};
+
+export class CustomBlock extends FBlock {
+  constructor(id: string, texture: string) {
     super(id, [
       {
-        name: `block.infinite_forest.${id}`,
-        texture: [
-          [texture, 0],
-          [texture, 0],
-          [texture, 0],
-          [texture, 0],
-          [texture, 0],
-          [texture, 0],
-        ],
-        inCreative: true,
-      },
-    ]);
-    this.createWithRotation();
-    BlockRegistry.setSoundType(id, sound);
-    Block.registerClickFunctionForID(this.getID(), this.clickLogic.bind(this));
-    Block.registerPlaceFunctionForID(
-      this.getID(),
-      this.place.bind({ id: BlockID[id] })
-    );
-    this.setModelByData(1, 14);
-    this.setModelByData(2, 11);
-    this.setModelByData(3, 7);
-    this.setModelByData(4, 4);
-    this.setModelByData(5, 2);
-  }
-  public place(
-    coords: Callback.ItemUseCoordinates,
-    item: ItemInstance,
-    block: Tile,
-    player: number,
-    region: BlockSource
-  ) {
-    const rel = coords.relative;
-    return region.setBlock(rel.x, rel.y, rel.z, this.id as unknown as int, 0);
-  }
-  public setModelByData(data: int, height: int) {
-    const model = BlockRenderer.createModel();
-    const render = new ICRender.Model();
-    const shape = new ICRender.CollisionShape();
-    const entry = shape.addEntry();
-
-    model.addBox(0, 0, 0, 1, height / 16, 1, this.texture, 0);
-    entry.addBox(0, 0, 0, 1, height / 16, 1);
-    render.addEntry(model);
-    return (
-      BlockRenderer.setCustomCollisionShape(this.getID(), data, shape),
-      BlockRenderer.setStaticICRender(this.getID(), data, render)
-    );
-  }
-  public registerDrop(
-    instance: ItemInstance,
-    chance: chance = 50
-  ) {
-    this.dropList[chance].push(
-      instance
-    );
-  }
-  protected getItemFromChance(chance: chance): Nullable<ItemInstance> {
-    if (Math.random() < chance) {
-      return MathHelper.randomValueFromArray(this.dropList[chance]);
-    }
-    return null;
-  }
-  protected selectItem(): ItemInstance {
-    const items = ArchaeologyBlock.percents.map((v) =>
-      this.getItemFromChance(v)
-    );
-    const filtered = items.filter((v) => v !== null);
-    const randomResult = MathHelper.randomValueFromArray(filtered);
-    return MathHelper.randomValue<ItemInstance>(
-      randomResult ?? new ItemStack()
-    );
-  }
- 
-  protected manipulateData(
-    coords: Callback.ItemUseCoordinates,
-    block: Tile,
-    player: int
-  ): void {
-    const region = BlockSource.getDefaultForActor(player);
-    if (block.data < 5) {
-      return region.setBlock(
-        coords.x,
-        coords.y,
-        coords.z,
-        this.getID(),
-        (block.data += 1)
-      );
-    }
-    if (block.data === 5) {
-      return region.destroyBlock(coords.x, coords.y, coords.z, false);
-    }
-  }
-  protected clickLogic(
-    coords: Callback.ItemUseCoordinates,
-    item: ItemInstance,
-    block: Tile,
-    player: number
-  ): void {
-    if (Entity.getDimension(player) !== InfiniteForest.id) {
-      return;
-    }
-    if (
-      World.getWeather().rain === 0 &&
-      new PlayerActor(player).getGameMode() !== EGameMode.CREATIVE
-    ) {
-      BlockEngine.sendUnlocalizedMessage(
-        Network.getClientForPlayer(player),
-        Native.Color.GREEN,
-        Translation.translate(
-          "message.infinite_forest.archaeology_water_not_valid"
-        )
-      );
-      return;
-    }
-
-    this.manipulateData(coords, block, player);
-    if (block.data === 5) {
-      let item: ItemInstance;
-      if(Entity.getPosition(player).y <= 130) {
-       item = this.selectItem();
-      } else {
-
+        "inCreative": true,
+        "name": "block.infinite_forest." + id,
+        "texture": [[texture || id, 0]]
       }
-      Game.message(JSON.stringify(item));
-      new PlayerEntity(player).addItemToInventory(item);
-    }
-    return;
+    ]);
+   
+   Block.registerClickFunctionForID(BlockID[id], this.onUse.bind(this));
+
+   Block.setShape(BlockID[id], 0, 0, 0, 1, 15/16, 1, 1);
+   Block.setShape(BlockID[id], 0, 0, 0, 1, 14/16, 1, 2);
+   Block.setShape(BlockID[id], 0, 0, 0, 1, 13/16, 1, 3);
+   Block.setShape(BlockID[id], 0, 0, 0, 1, 12/16, 1, 4);
+   Block.setShape(BlockID[id], 0, 0, 0, 1, 11/16, 1, 5);
+   Block.setShape(BlockID[id], 0, 0, 0, 1, 10/16, 1, 6);
+   Block.setShape(BlockID[id], 0, 0, 0, 1, 9/16, 1, 7);
+   Block.setShape(BlockID[id], 0, 0, 0, 1, 8/16, 1, 8);
+   Block.setShape(BlockID[id], 0, 0, 0, 1, 7/16, 1, 9);
+   Block.setShape(BlockID[id], 0, 0, 0, 1, 6/16, 1, 10);
+   Block.setShape(BlockID[id], 0, 0, 0, 1, 5/16, 1, 11);
+   Block.setShape(BlockID[id], 0, 0, 0, 1, 4/16, 1, 12);
+   Block.setShape(BlockID[id], 0, 0, 0, 1, 3/16, 1, 13);
+   Block.setShape(BlockID[id], 0, 0, 0, 1, 2/16, 1, 14);
+   Block.setShape(BlockID[id], 0, 0, 0, 1, 1/16, 1, 15);
+
+  };
+
+  onUse(coords: Callback.ItemUseCoordinates, item: ItemInstance, block: Tile, player: number) {
+    const region = BlockSource.getDefaultForActor(player);
+    let isValid = true;
+
+    region.destroyBlock(coords.x, coords.y, coords.z, false);  
+
+     if(block.data < 15) {
+
+       region.setBlock(coords.x, coords.y, coords.z, this.getID(), block.data+1);
+       
+     } else {
+
+
+      list.forEach((v) => {
+
+        if(!isValid) {
+          return;
+        };
+
+        if(Math.random() < MathHelper.randomValueFromArray([].concat(v.chance))) {
+          
+        region.spawnDroppedItem(coords.x + 0.5, coords.y + 0.1, coords.z + 0.5,
+           v.instance.id, v.instance.count, v.instance.data, v.instance.extra);
+
+           v.action && v.action(coords, v.instance, block, player);
+
+           isValid = false;
+           return;
+        } 
+      })
+    
+     };
   }
 }
 
-namespace ArchaeologyBlocks {
-  export const SAND = new ArchaeologyBlock("archaeology_sand", "sand", "sand");
-  SAND.registerDrop(new ItemStack(VanillaItemID.diamond, 1, 0), 65);
-  SAND.registerDrop(new ItemStack(VanillaItemID.gunpowder, 1, 0), 25);
-  SAND.registerDrop(new ItemStack(LOST_PAPER.item.getID(), 1, 0));
+
+  export const SAND = new CustomBlock("archaeology_sand", "sand").create();
+  registerDrop(new ItemStack(VanillaItemID.diamond, 1, 0));
+  registerDrop(new ItemStack(VanillaItemID.gunpowder, 1, 0));
+  registerDrop(new ItemStack(LOST_PAPER.item.getID(), 1, 0), 90, (coords, item, block, player) => {
+    const extra = item.extra;
+    
+    if(!extra) {
+      return;
+    };
+
+    if(extra.getString("text") === "sign") {
+      BookUI.givePage(player, "sign_title", "unknown")
+    }
+  });
 }
+

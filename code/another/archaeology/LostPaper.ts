@@ -107,9 +107,17 @@ LostPaper.addText("forest");
 LostPaper.addText("ruine", "ruine");
 LostPaper.addText("fireflies");
 LostPaper.addText("forest_is_abandoned")
+LostPaper.addText("sign")
+
+
 
 Translation.addTranslation("note.infinite_forest.wrong_mode", {
   ru: "Извините, но вы не можете читать записки, играя в креативе. Пожалуйста, играйте честно, в режиме выживания или приключения.",
+  en: "Sorry, but for read it you must use a survival or adventure mode, creative is not valid.",
+});
+
+Translation.addTranslation("note.infinite_forest.sign", {
+  ru: "Я нашёл магические камни.. В чаще леса, странное строение, где камни блёклые. Каждый из них символизирует что-то. Что-то лес, что-то холод, что-то жар. Они горели, но угасли быстро.",
   en: "Sorry, but for read it you must use a survival or adventure mode, creative is not valid.",
 });
 
