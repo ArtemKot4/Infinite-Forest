@@ -64,9 +64,9 @@ class BookPage {
       clicker: {
         onLongClick(position, container, tileEntity, window, canvas, scale) {
           //TODO: DELETE
-          BookUI.UI.content.elements[side + "Text"].x = position.x;
-          BookUI.UI.content.elements[side + "Text"].y = position.y;
-          BookUI.UI.forceRefresh();
+          Book.GraphicUI.UI.content.elements[side + "Text"].x = position.x;
+          Book.GraphicUI.UI.content.elements[side + "Text"].y = position.y;
+          Book.GraphicUI.UI.forceRefresh();
         },
       },
     };

@@ -82,16 +82,6 @@ export class CustomBlock extends FBlock {
   export const SAND = new CustomBlock("archaeology_sand", "sand").create();
   registerDrop(new ItemStack(VanillaItemID.diamond, 1, 0));
   registerDrop(new ItemStack(VanillaItemID.gunpowder, 1, 0));
-  registerDrop(new ItemStack(LOST_PAPER.item.getID(), 1, 0), 90, (coords, item, block, player) => {
-    const extra = item.extra;
-    
-    if(!extra) {
-      return;
-    };
-
-    if(extra.getString("text") === "sign") {
-      BookUI.givePage(player, "sign_title", "unknown")
-    }
-  });
+  registerDrop(new ItemStack(LOST_PAPER.item.getID(), 1, 0), 90);
 }
 

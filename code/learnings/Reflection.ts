@@ -28,14 +28,14 @@ class Reflection {
       name
     );
   }
-  public static send(player: int, name: string) {
+  public static send(player: int, name: string, section: keyof Book.ISectionList = "default") {
     if (Reflection.has(player, name) === true) return;
     if (!Reflection.hasLearnings(player, Reflection.list[name].learnings))
       return;
     Reflection.sendMessage(player);
     const playerName = Entity.getNameTag(player);
     Reflection.playerList[playerName].add(name);
-    BookUI.givePage(player, Reflection.list[name].bookPage, Reflection.list[name].sign || "question");
+    Book.Section.givePage(player, Reflection.list[name].bookPage, section, Reflection.list[name].sign || "question");
   }
   public static sendMessage(player: int) {
     const client = Network.getClientForPlayer(player);

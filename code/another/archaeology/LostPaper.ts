@@ -39,7 +39,7 @@ class LostPaper {
       },
     },
   });
-  protected static textList: { [key: string]: { learning: name; page: name } } =
+  protected static textList: { [key: string]: { learning: name | ((text: string, player: int) => void); page: name} } =
     {};
   public item: FItem;
   constructor(id: string) {
@@ -48,9 +48,13 @@ class LostPaper {
   }
   public static get getTextList(): {} {
     return LostPaper.textList;
-  }
-  public static addText(text: string, learning?: string, page?: string): void {
-    LostPaper.textList[`note.infinite_forest.${text}`] = { learning, page };
+  };
+  public static addText(text: string, action: (text: string, player: int) => void): void;
+  public static addText(text: string);
+  public static addText(text: string, learning: string, page?: string);
+  public static addText(text: string, learning?: string | ((text: string, player: int) => void), page?: string): void {
+    
+    LostPaper.textList[`note.infinite_forest.${text}`] = {learning: learning, page};
   }
   public static getRandomText(): string {
     return MathHelper.randomValueFromArray(Object.keys(LostPaper.textList));
@@ -86,14 +90,23 @@ class LostPaper {
   public static sendLearning(item: ItemInstance, player: int) {
     const text = LostPaper.getExtraTextByItem(item);
     const list = LostPaper.textList?.[text];
-    if (list?.learning) {
+
+    if (list.learning && typeof list.learning === "string") {
       Learning.send(list.learning, player, Native.Color.GOLD, list?.page);
     }
   }
   public open(item: ItemInstance, player: int) {
-    LostPaper.giveExtraText(item, player);
+    const extra = LostPaper.giveExtraText(item, player);
     LostPaper.rewriteText(LostPaper.getExtraTextByItem(item), player);
     LostPaper.UI.open();
+
+    const text = extra.getString("text");
+    const action = LostPaper.textList[`note.infinite_forest.${text}`]?.learning;
+
+    if(text !== null && action && typeof action === "function") {
+      action(text, player)
+    };
+
   }; 
   static {
     LostPaper.UI.setCloseOnBackPressed(true);
@@ -107,7 +120,9 @@ LostPaper.addText("forest");
 LostPaper.addText("ruine", "ruine");
 LostPaper.addText("fireflies");
 LostPaper.addText("forest_is_abandoned")
-LostPaper.addText("sign")
+LostPaper.addText("sign", (text, player) => {
+  Book.DefaultSection.givePage(player, "sign_title", "question");
+})
 
 
 

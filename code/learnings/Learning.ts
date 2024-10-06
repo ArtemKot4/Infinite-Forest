@@ -22,14 +22,15 @@ class Learning {
     player: int,
     color: Native.Color = Native.Color.DARK_GREEN,
     page?: name,
-    sign: string | string[] = "question"
+    sign: string | string[] = "question",
+    section: keyof Book.ISectionList = "default"
   ) {
     if (Learning.has(player, name) === true) return;
     const playerName = Entity.getNameTag(player);
     Learning.sendMessage(name, player, color);
     Learning.playerList[playerName].add(name);
     if (page) {
-      BookUI.givePage(player, page, sign);
+      Book.Section.givePage(player, page, section, sign);
       Reflection.sendMessage(player);
     }
   }
@@ -76,6 +77,7 @@ namespace LearningList {
   export const ELECTRIC_MUSHROOM = new Learning("electric_mushroom");
   export const FOREST_IS_REAL = new Learning("infinite_forest_is_real");
   export const RUINE = new Learning("ruine");
+  export const SIGN = new Learning("sign");
 }
 
 Learning.sendByClick({ id: BlockID["fironia"], data: 0 }, "fironia");

@@ -122,7 +122,11 @@ another/archaeology/Archaeology.ts
 learnings/LearningBase.ts
 learnings/Learning.ts
 learnings/Reflection.ts
+
+learnings/BookSection.ts
+learnings/IdeaUI.ts
 learnings/BookUI.ts
+
 learnings/IPageDescriptor.ts
 learnings/BookPage.ts
 learnings/Book.ts
@@ -132,3 +136,4 @@ blocks/Sign.ts
 
 server/PlayerTick.ts
 dimension/InfiniteTick.ts
+final.ts

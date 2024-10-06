@@ -188,3 +188,7 @@ namespace PlayerHelper {
     Game.message(JSON.stringify(PlayerHelper.getPointed()))
   })
 }
+
+namespace ConfigManager {
+
+}
