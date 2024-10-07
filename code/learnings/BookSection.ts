@@ -68,7 +68,7 @@ namespace Book {
 
     public static initSectionButtons(playerName: string) {
       let data = (GraphicUI.pagesList[playerName] ??= {} as ISectionList);
-      let endY = 110;
+      let distanceY = 110;
     
       for (const section of Object.keys(Section.list)) {
 
@@ -77,10 +77,11 @@ namespace Book {
 
         if (data[section as keyof ISectionList].pages.length > 0) {
 
-               const last = elementList.findLast((v) => (v.bitmap as string).endsWith("tab"))
+               const last = elementList.findLast((v) => (v.bitmap as string).endsWith("tab")) //! ->
+               //! -> Эта функция даёт ошибку
 
              if(last) {
-              this.eachPositions[section] ??= endY += last.y;
+              this.eachPositions[section] ??= distanceY + last.y;
              }
           
 
