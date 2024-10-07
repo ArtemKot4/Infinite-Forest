@@ -68,7 +68,7 @@ abstract class IdeaUI {
     }
   
     public static initAnimation(sign: string | string[]) {
-      
+
         if(!ConfigManager.IdeaAnimation) {
           return;
         };
@@ -147,5 +147,6 @@ abstract class IdeaUI {
   Callback.addCallback("ItemUse", (c, i) => {
     if(i.id === VanillaItemID.charcoal) {
       IdeaUI.initAnimation(["snow", "fire", "forest", "question"])
+      
     }
   })

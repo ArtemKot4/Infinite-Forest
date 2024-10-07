@@ -21,18 +21,30 @@ export class Section {
       public static grawSectionButton(section: keyof ISectionList, y: int) {
         const textureList = Section.list[section];
 
+       const clicker =  {clicker: {
+        onClick(position, container) {
+          currentSection = section;
+
+          GraphicUI.openFor(Player.getLocal());
+
+          alert("Раздел: -> " + section)
+        }
+      }}
+
           GraphicUI.UI.content.elements[section + "_tab"] = {
             "type": "image",
             x: UI.getScreenHeight() - 280,
             y: y,
-            bitmap: textureList.texture
+            bitmap: textureList.texture,
+           ...clicker
           };
 
           GraphicUI.UI.content.elements[section + "_tab_icon"] = {
             "type": "image",
             x: UI.getScreenHeight() - 280,
             y: y + 5,
-            bitmap: textureList.texture
+            bitmap: textureList.texture,
+            ...clicker
           };
 
           GraphicUI.UI.forceRefresh();

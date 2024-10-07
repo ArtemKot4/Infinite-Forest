@@ -171,8 +171,12 @@ export abstract class GraphicUI {
    
   }
   public static openFor(player: int) {
+
     const playerName = Entity.getNameTag(player);
     const content = BookPage.resultPages[GraphicUI.getPagesFor(playerName)[0]];
+    
+    Section.initSectionButtons(playerName);
+
     GraphicUI.setContent(content);
     GraphicUI.UI.open();
   }
