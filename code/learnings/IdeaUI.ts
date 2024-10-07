@@ -68,6 +68,11 @@ abstract class IdeaUI {
     }
   
     public static initAnimation(sign: string | string[]) {
+      
+        if(!ConfigManager.IdeaAnimation) {
+          return;
+        };
+
       if (this.GUI.isOpened()) {
         return;
       }
@@ -79,7 +84,7 @@ abstract class IdeaUI {
       let timer = 0;
       let scale = this.IMAGE_SCALE;
       let alpha = 1;
-      let timerMax = [].concat(sign).length;
+      let timerMax = ([].concat(sign)).length;
   
       let signIndex = 0;
   
@@ -110,7 +115,7 @@ abstract class IdeaUI {
               else if (frame <= 0) {
                   if (scale < 15) {
                       if (x < this.WIDTH_LOCATION * 2.8) {
-                          IdeaUI.redrawImage(0, (scale -= 0.02), (x += 1.3), y);
+                          IdeaUI.redrawImage(0, (scale -= 0.02), (x += 1), y);
                       }
                       else {
                           IdeaUI.redrawImage(0, scale, x, (y += 0.87));
@@ -127,8 +132,6 @@ abstract class IdeaUI {
                       this.close();
                       break;
                   }
-                  ;
-                  java.lang.Thread.sleep(1);
               }
           }
       }
@@ -141,3 +144,8 @@ abstract class IdeaUI {
     }
   }
   
+  Callback.addCallback("ItemUse", (c, i) => {
+    if(i.id === VanillaItemID.charcoal) {
+      IdeaUI.initAnimation(["snow", "fire", "forest", "question"])
+    }
+  })

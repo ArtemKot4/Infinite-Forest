@@ -63,7 +63,7 @@ abstract class ColdCurse extends Curse {
       },
     ],
   });
-/*
+
   public static open() {
     ColdCurse.UI.open();
     let alpha = 0;
@@ -91,7 +91,7 @@ abstract class ColdCurse extends Curse {
     }
   })
  }
-*/
+
   public static runSnow(x: int, y: int, z: int, radius = 16, count = 16) {
     if (World.getThreadTime() % 8 === 0) {
       for (let n = -count; n <= count; n++) {

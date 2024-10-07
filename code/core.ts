@@ -190,5 +190,5 @@ namespace PlayerHelper {
 }
 
 namespace ConfigManager {
-
+   export const IdeaAnimation = __config__.getBool("idea_animation") || true;
 }

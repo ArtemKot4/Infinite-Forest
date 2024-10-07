@@ -100,13 +100,13 @@ class LostPaper {
     LostPaper.rewriteText(LostPaper.getExtraTextByItem(item), player);
     LostPaper.UI.open();
 
-    const text = extra.getString("text");
+    const text = extra && extra.getString("text");
     const action = LostPaper.textList[`note.infinite_forest.${text}`]?.learning;
 
     if(text !== null && action && typeof action === "function") {
       action(text, player)
     };
-
+      return;
   }; 
   static {
     LostPaper.UI.setCloseOnBackPressed(true);
