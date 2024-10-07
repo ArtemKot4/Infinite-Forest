@@ -173,11 +173,10 @@ export abstract class GraphicUI {
   public static openFor(player: int) {
 
     const playerName = Entity.getNameTag(player);
-    const content = BookPage.resultPages[GraphicUI.getPagesFor(playerName)[0]];
-    
+
     Section.initSectionButtons(playerName);
 
-    GraphicUI.setContent(content);
+    GraphicUI.setContent(BookPage.resultPages[GraphicUI.getPagesFor(playerName)[0]]);
     GraphicUI.UI.open();
   }
 
@@ -186,11 +185,6 @@ export abstract class GraphicUI {
     GraphicUI.UI.setBlockingBackground(true);
   }
 }
-
-
-Item.registerUseFunctionForID(VanillaItemID.coal, () => {
-  IdeaUI.initAnimation("crystal");
-});
 
 /*
  

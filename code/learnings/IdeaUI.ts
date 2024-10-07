@@ -131,7 +131,8 @@ abstract class IdeaUI {
                   if (y >= 1300) {
                       this.close();
                       break;
-                  }
+                  };
+                  java.lang.Thread.sleep(1);
               }
           }
       }
@@ -141,12 +142,12 @@ abstract class IdeaUI {
     static {
       this.GUI.setAsGameOverlay(true);
       this.GUI.setTouchable(false);
+      this.GUI.setBlockingBackground(true);
     }
   }
   
-  Callback.addCallback("ItemUse", (c, i) => {
+  Callback.addCallback("ItemUse", (c, i, b, ise, p) => {
     if(i.id === VanillaItemID.charcoal) {
-      IdeaUI.initAnimation(["snow", "fire", "forest", "question"])
-      
+      Book.SignSection.givePage(p, "sign", "question");
     }
   })
