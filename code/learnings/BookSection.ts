@@ -2,6 +2,9 @@ namespace Book {
   export class Section {
     public static list: Record<name, { texture: string; icon: string }> = {};
 
+   public static eachPositions: Record<name, int> = {};
+
+
     constructor(
       public name: keyof ISectionList,
       public icon: string,
@@ -65,24 +68,23 @@ namespace Book {
 
     public static initSectionButtons(playerName: string) {
       let data = (GraphicUI.pagesList[playerName] ??= {} as ISectionList);
-      let endY = 90;
-
+      let endY = 110;
+    
       for (const section of Object.keys(Section.list)) {
+
+        const elementList = Object.values(GraphicUI.UI.content.elements);
+
 
         if (data[section as keyof ISectionList].pages.length > 0) {
 
-          for (const index in GraphicUI.UI.content.elements) {
-            
-            const element = GraphicUI.UI.content.elements[index];
+               const last = elementList.findLast((v) => (v.bitmap as string).endsWith("tab"))
 
-            if (index.startsWith(section + "_tab")) {
-              endY = element.y + 110;
-            }
-          }
+             if(last) {
+              this.eachPositions[section] ??= endY += last.y;
+             }
+          
 
-          const textureList = Section.list[section];
-
-          Section.grawSectionButton(section as keyof ISectionList, endY);
+          Section.grawSectionButton(section as keyof ISectionList, this.eachPositions[section]);
         }
       }
     }
@@ -91,7 +93,7 @@ namespace Book {
   export const DefaultSection = new Section("default", "book.glowworm");
   export const CauldronSection = new Section(
     "cauldron",
-    "book.cauldron_section"
+    "book.left_button_pressed"
   );
-  export const SignSection = new Section("sign", "book.sign_sectin");
+  export const SignSection = new Section("sign", "book.left_button");
 }
