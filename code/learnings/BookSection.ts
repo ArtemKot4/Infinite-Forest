@@ -1,14 +1,13 @@
 namespace Book {
   export class Section {
-    public static list: Record<name, { texture: string; icon: string }> = {};
+    public static list: Record<name, { texture: string[]; icon: string }> = {};
 
-   public static eachPositions: Record<name, int> = {};
-
+    public static current: keyof ISectionList = "default";
 
     constructor(
       public name: keyof ISectionList,
       public icon: string,
-      public texture = "book.default_section"
+      public texture: string[] = ["book.default_section", "book.default_section_larged"]
     ) {
       Section.list[name] = { texture, icon };
     }
@@ -36,7 +35,7 @@ namespace Book {
       const clicker = {
         clicker: {
           onClick(position, container) {
-            currentSection = section;
+            Section.setCurrent(section);
 
             GraphicUI.openFor(Player.getLocal());
 
@@ -49,7 +48,7 @@ namespace Book {
         type: "image",
         x: UI.getScreenHeight() - 275,
         y: y,
-        bitmap: textureList.texture,
+        bitmap: textureList.texture[0],
         scale: 1.3,
         ...clicker,
       };
@@ -69,32 +68,41 @@ namespace Book {
     public static initSectionButtons(playerName: string) {
       let data = (GraphicUI.pagesList[playerName] ??= {} as ISectionList);
       let distanceY = 110;
-    
+
       for (const section of Object.keys(Section.list)) {
-
         const elementList = Object.values(GraphicUI.UI.content.elements);
-
 
         if (data[section as keyof ISectionList].pages.length > 0) {
 
-               const last = elementList.findLast((v) => (v.bitmap as string).endsWith("tab")) //! ->
-               //! -> Эта функция даёт ошибку
+          const last = []
+            .concat(elementList)
+            .reverse()
+            .find((v) => String(v.bitmap as string).endsWith("tab")); 
 
-             if(last) {
-              this.eachPositions[section] ??= distanceY + last.y;
-             }
-          
+          const coords = (last?.y || distanceY + last.y);
 
-          Section.grawSectionButton(section as keyof ISectionList, this.eachPositions[section]);
+          Section.grawSectionButton(
+            section as keyof ISectionList,
+            coords
+          );
         }
       }
-    }
+    };
+
+    public static setCurrent(section: keyof ISectionList) {
+        Section.current = section;
+    };
+
+    public static getCurrent() {
+      return Section.current;
+    };
+
   }
 
   export const DefaultSection = new Section("default", "book.glowworm");
   export const CauldronSection = new Section(
     "cauldron",
-    "book.left_button_pressed"
+    "book.cauldron_tab"
   );
   export const SignSection = new Section("sign", "book.left_button");
 }

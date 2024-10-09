@@ -12,8 +12,6 @@ export interface ISectionList {
   }
 }
 
-export let currentSection = "default" as keyof ISectionList;
-
 export abstract class GraphicUI {
   public static pagesList: Record<playerName, ISectionList> = {};
   protected constructor() {}
@@ -47,7 +45,7 @@ export abstract class GraphicUI {
         bitmap: "book.right_button",
         bitmap2: "book.right_button_pressed",
         clicker: {
-          onClick: GraphicUI.rightOnClick,
+          onClick: () => GraphicUI.rightOnClick,
         },
       },
       buttonLeft: {
@@ -58,7 +56,7 @@ export abstract class GraphicUI {
         bitmap: "book.left_button",
         bitmap2: "book.left_button_pressed",
         clicker: {
-          onClick: GraphicUI.leftOnClick,
+          onClick: () => GraphicUI.leftOnClick,
         },
       },
 
@@ -85,17 +83,31 @@ export abstract class GraphicUI {
     },
   } as UI.WindowContent;
 
-  protected static drawPageNumbers() {
+  protected static getButtonsContentFor(sector: keyof ISectionList) {
+         const buttonLeft = {...GraphicUI.UI.content.elements.buttonLeft};
+         const buttonRight = {...GraphicUI.UI.content.elements.buttonRight};
+
+         buttonLeft.clicker.onClick = GraphicUI.leftOnClick.bind({}, sector || Section.getCurrent());
+         buttonRight.clicker.onClick = GraphicUI.rightOnClick.bind({}, sector || Section.getCurrent());
+
+         return {
+          buttonLeft,
+          buttonRight
+         };
+  }
+
+  protected static drawPageNumbers(section?: keyof ISectionList) {
     const name = Entity.getNameTag(Player.getLocal());
     const content = GraphicUI.UI.getContent();
-    const index = GraphicUI.findPageIndex();
+    const index = GraphicUI.findPageIndex(section);
     content.elements["number1"].text = index.toString();
     content.elements["number2"].text = (index + 1).toString();
   }
 
-  protected static findPageIndex() {
+  protected static findPageIndex(section?: keyof ISectionList) {
     const playerName = Entity.getNameTag(Player.getLocal());
-    const index = GraphicUI.pagesList[playerName][currentSection].pages.findIndex((v) =>
+    const pageList = this.getPagesFor(playerName, section);
+    const index = pageList.findIndex((v) =>
       (GraphicUI.UI.content.elements["leftTitle"].text as string).includes(
         Translation.translate(v)
       )
@@ -103,39 +115,38 @@ export abstract class GraphicUI {
     return index;
   }
 
-  protected static buttonFlip(index: int) {
-    const playerName = Entity.getNameTag(Player.getLocal());
-    if (GraphicUI.pagesList[playerName][currentSection].pages[index] !== undefined) {
-      const content = BookPage.resultPages[GraphicUI.pagesList[playerName][currentSection].pages[index]];
-      return GraphicUI.setContent(content);
-    }
-  }
+  protected static buttonFlip(section: keyof ISectionList, pageNumber: int) {
+      return GraphicUI.updateFor(section, pageNumber);
+  };
+
   protected static rightOnClick(
-    position: Vector,
-    container: com.zhekasmirnov.innercore.api.mod.ui.container.UiAbstractContainer
+   section: keyof ISectionList
   ) {
-    return GraphicUI.buttonFlip(GraphicUI.findPageIndex() + 1);
-  }
+    return GraphicUI.buttonFlip(section, GraphicUI.findPageIndex(section) + 1);
+  };
+
   protected static leftOnClick(
-    position: Vector,
-    container: com.zhekasmirnov.innercore.api.mod.ui.container.UiAbstractContainer
+    section: keyof ISectionList
   ) {
-    return GraphicUI.buttonFlip(GraphicUI.findPageIndex() - 1);
-  }
+    return GraphicUI.buttonFlip(section, GraphicUI.findPageIndex(section) - 1);
+  };
+
   public static UI = new UI.Window(GraphicUI.content as UI.WindowContent);
-  public static setContent(content: {
-    elements: UI.ElementSet;
-    drawing: UI.DrawingSet;
-  }) {
+  public static setContent(section?: keyof ISectionList, pageNumber?: int) {
+   
+    const playerName = Entity.getNameTag(Player.getLocal());
+    const existingContent = BookPage.resultPages[GraphicUI.getPagesFor(playerName)[pageNumber || 0]];
     const concatedElements = Object.assign(
       {},
       GraphicUI.content.elements,
-      content.elements
+      GraphicUI.getButtonsContentFor(section),
+      existingContent.elements
+    
     );
 
     const concatedDrawings = []
       .concat(GraphicUI.content.drawing)
-      .concat(content.drawing.concat());
+      .concat(existingContent.drawing.concat());
 
     GraphicUI.UI.setContent(
       Object.assign(
@@ -144,12 +155,12 @@ export abstract class GraphicUI {
       ) as UI.WindowContent
     );
 
-    GraphicUI.drawPageNumbers();
+    GraphicUI.drawPageNumbers(section);
     GraphicUI.UI.forceRefresh();
   }
 
   public static initializeSections(playerName: name) {
-    let data = GraphicUI.pagesList[playerName] ??= {} as ISectionList;
+    const data = GraphicUI.pagesList[playerName] ??= {} as ISectionList;
 
     for(const section of Object.keys(Section.list)) {
       if(!data[section]) {
@@ -165,20 +176,27 @@ export abstract class GraphicUI {
 
     }
 
-  public static getPagesFor(playerName: string): name[] {
+  public static getPagesFor(playerName: string, section?: keyof ISectionList): name[] {
 
-      return GraphicUI.pagesList[playerName][currentSection].pages;
+      return GraphicUI.pagesList[playerName][section || Section.getCurrent()].pages;
    
-  }
+  };
+
   public static openFor(player: int) {
 
     const playerName = Entity.getNameTag(player);
 
     Section.initSectionButtons(playerName);
 
-    GraphicUI.setContent(BookPage.resultPages[GraphicUI.getPagesFor(playerName)[0]]);
+    GraphicUI.setContent();
     GraphicUI.UI.open();
+  };
+
+  public static updateFor(section: keyof ISectionList, pageNumber: int) {
+      Section.setCurrent(section);
+      GraphicUI.setContent(section, pageNumber);
   }
+
 
   static {
     GraphicUI.UI.setCloseOnBackPressed(true);

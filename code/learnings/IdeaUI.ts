@@ -78,14 +78,15 @@ abstract class IdeaUI {
       }
       this.open();
   
+      const timerMax = ([].concat(sign)).length-1;
+
       let x = this.WIDTH_LOCATION;
       let y = this.HEIGHT_LOCATION;
       let frame = 0;
       let timer = 0;
       let scale = this.IMAGE_SCALE;
       let alpha = 1;
-      let timerMax = ([].concat(sign)).length;
-  
+    
       let signIndex = 0;
   
       Threading.initThread("thread.infinite_forest.idea_animation", () => {
@@ -93,13 +94,13 @@ abstract class IdeaUI {
           if (frame < this.FRAME_MAX && timer <= 0) {
               frame++;
               IdeaUI.redrawImage(frame, this.IMAGE_SCALE);
-              java.lang.Thread.sleep(50);
+              java.lang.Thread.sleep(25);
           }
           else {
               if (timer > timerMax && frame > 0) {
                   this.clearSign();
                   IdeaUI.redrawImage(frame--, this.IMAGE_SCALE);
-                  java.lang.Thread.sleep(50);
+                  java.lang.Thread.sleep(25);
               }
               ;
               if (timer <= timerMax) {
@@ -110,12 +111,12 @@ abstract class IdeaUI {
                       signIndex++;
                   }
                   timer++;
-                  java.lang.Thread.sleep(2000);
+                  java.lang.Thread.sleep(500);
               }
               else if (frame <= 0) {
                   if (scale < 15) {
                       if (x < this.WIDTH_LOCATION * 2.8) {
-                          IdeaUI.redrawImage(0, (scale -= 0.02), (x += 1), y);
+                          IdeaUI.redrawImage(0, (scale -= 0.02), (x += 0.98), y);
                       }
                       else {
                           IdeaUI.redrawImage(0, scale, x, (y += 0.87));
@@ -131,7 +132,8 @@ abstract class IdeaUI {
                   if (y >= 1300) {
                       this.close();
                       break;
-                  };
+                  }
+                  ;
                   java.lang.Thread.sleep(1);
               }
           }
