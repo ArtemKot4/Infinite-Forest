@@ -80,7 +80,7 @@ class Candle extends FBlock {
           item.data++,
           item.extra
         );
-        
+
         region.setBlock(
           coords.x,
           coords.y,
@@ -88,6 +88,8 @@ class Candle extends FBlock {
           BlockID[newID],
           block.data
         );
+
+        CandleTileReplacer.initialize(coords.x, coords.y, coords.z);
       }
     });
 
@@ -114,3 +116,79 @@ Translation.addTranslation("block.infinite_forest.candle", {
   en: "Candle",
   ru: "Свеча",
 });
+
+class CandleTileReplacer {
+  public static initialize(x: int, y: int, z: int) {
+    Updatable.addLocalUpdatable({
+      flames: 0,
+      x,
+      y,
+      z,
+      update() {
+        const region = BlockSource.getCurrentClientRegion();
+        const block = region.getBlock(this.x, this.y, this.z);
+        if (World.getThreadTime() % 40 === 0) {
+          if (!IDRegistry.getNameByID(block.id).startsWith("candle_lit")) {
+            this.remove = true;
+          }
+        }
+        if (World.getThreadTime() % 15 === 0) {
+          block.data >= 0 &&
+            Particles.addParticle(
+              EParticleType.FLAME,
+              this.x + 0.5,
+              this.y + 0.95,
+              this.z + 0.5,
+              0,
+              0.05,
+              0
+            );
+
+          block.data >= 1 &&
+            Particles.addParticle(
+              EParticleType.FLAME,
+              this.x + 0.8,
+              this.y + 0.85,
+              this.z + 0.5,
+              0,
+              0.05,
+              0
+            );
+
+          block.data >= 2 &&
+            Particles.addParticle(
+              EParticleType.FLAME,
+              this.x + 0.2,
+              this.y + 0.85,
+              this.z + 0.5,
+              0,
+              0.05,
+              0
+            );
+
+          block.data >= 3 &&
+            Particles.addParticle(
+              EParticleType.FLAME,
+              this.x + 0.5,
+              this.y + 0.85,
+              this.z + 0.8,
+              0,
+              0.05,
+              0
+            );
+
+          block.data >= 4 &&
+            Particles.addParticle(
+              EParticleType.FLAME,
+              this.x + 0.5,
+              this.y + 0.85,
+              this.z + 0.2,
+              0,
+              0.05,
+              0
+            );
+        }
+      },
+    });
+  }
+}
