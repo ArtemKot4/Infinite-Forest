@@ -118,7 +118,15 @@ Translation.addTranslation("block.infinite_forest.candle", {
 });
 
 class CandleTileReplacer {
+  public static coordsList = new Set();
   public static initialize(x: int, y: int, z: int) {
+    if(this.coordsList.has({x, y, z})) {
+        return;
+    };
+    
+
+    this.coordsList.add({x, y, z});
+  
     Updatable.addLocalUpdatable({
       flames: 0,
       x,
