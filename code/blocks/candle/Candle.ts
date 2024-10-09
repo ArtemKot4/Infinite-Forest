@@ -49,7 +49,7 @@ class Candle extends FBlock {
       }
     });
   })();
-  
+
   constructor() {
     super(
       "candle",
@@ -62,6 +62,11 @@ class Candle extends FBlock {
       ],
       "stone"
     );
+  };
+
+  public static getCount(region: BlockSource, coords: Vector) {
+    const block = region.getBlock(coords.x, coords.y, coords.z);
+    return Number(block.id === BlockID["candle"] ? block.data : 0);
   }
 }
 
