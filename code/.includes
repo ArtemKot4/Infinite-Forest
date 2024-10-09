@@ -119,17 +119,16 @@ another/archaeology/LostPaper.ts
 another/archaeology/ArchaeologyBlock.ts
 another/archaeology/Archaeology.ts
 
-learnings/LearningBase.ts
 learnings/Learning.ts
 learnings/Reflection.ts
 
-learnings/BookSection.ts
-learnings/IdeaUI.ts
-learnings/BookUI.ts
+learnings/ui/BookSection.ts
+learnings/ui/IdeaAnimation.ts
+learnings/ui/BookUI.ts
 
-learnings/IPageDescriptor.ts
-learnings/BookPage.ts
-learnings/Book.ts
+learnings/ui/IPageDescriptor.ts
+learnings/ui/BookPage.ts
+learnings/ui/Book.ts
 
 
 blocks/Sign.ts

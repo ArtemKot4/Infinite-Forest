@@ -13,7 +13,7 @@ namespace Book {
     }
 
     public givePage(player: int, page: name, sign: string | string[]) {
-      IdeaUI.initAnimation(sign);
+      IdeaAnimation.init(sign);
       (GraphicUI.pagesList[Entity.getNameTag(player)][this.name].pages ??=
         []).push(page);
     }
@@ -24,12 +24,12 @@ namespace Book {
       section: keyof ISectionList,
       sign: string | string[]
     ) {
-      IdeaUI.initAnimation(sign);
+      IdeaAnimation.init(sign);
       (GraphicUI.pagesList[Entity.getNameTag(player)][section].pages ??=
         []).push(page);
     }
 
-    public static grawSectionButton(section: keyof ISectionList, y: int) {
+    public static drawSectionButton(section: keyof ISectionList, y: int) {
       const textureList = Section.list[section];
 
       const clicker = {
@@ -66,7 +66,7 @@ namespace Book {
     }
 
     public static initSectionButtons(playerName: string) {
-      let data = (GraphicUI.pagesList[playerName] ??= {} as ISectionList);
+      const data = (GraphicUI.pagesList[playerName] ??= {} as ISectionList);
       let distanceY = 110;
 
       for (const section of Object.keys(Section.list)) {
@@ -79,9 +79,9 @@ namespace Book {
             .reverse()
             .find((v) => String(v.bitmap as string).endsWith("tab")); 
 
-          const coords = (last?.y || distanceY + last.y);
+          const coords = (last && last.y ? distanceY + last.y : 120);
 
-          Section.grawSectionButton(
+          Section.drawSectionButton(
             section as keyof ISectionList,
             coords
           );
