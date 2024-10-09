@@ -1,7 +1,7 @@
 class Candle extends FBlock {
   public static readonly CANDLE_MAX = 5;
 
-  public settingModels = (() => {
+  public static meshes = (() => {
     const one = new RenderMesh(MODELSDIR + "block/candle_max.obj", "obj", {
       translate: [0.5, 0, 0.5],
       invertV: false,
@@ -9,7 +9,7 @@ class Candle extends FBlock {
     });
 
     one.setBlockTexture("candle", 0);
-    this.setupBlockModelFromMesh(one, 0);
+    //  this.setupBlockModelFromMesh(one, 0);
 
     const small = new RenderMesh(MODELSDIR + "block/candle_min.obj", "obj", {
       translate: [0.5, 0, 0.5],
@@ -20,39 +20,28 @@ class Candle extends FBlock {
     const two = one.clone();
     two.addMesh(small, 0.3, 0, 0);
     two.setBlockTexture("candle", 0);
-    this.setupBlockModelFromMesh(two, 1);
+    //  this.setupBlockModelFromMesh(two, 1);
 
     const three = two.clone();
     three.addMesh(small, -0.3, 0, 0);
     three.setBlockTexture("candle", 0);
-    this.setupBlockModelFromMesh(three, 2);
+    // this.setupBlockModelFromMesh(three, 2);
 
     const four = three.clone();
     four.addMesh(small, 0, 0, 0.3);
     four.setBlockTexture("candle", 0);
-    this.setupBlockModelFromMesh(four, 3);
+    //  this.setupBlockModelFromMesh(four, 3);
 
     const five = four.clone();
     five.addMesh(small, 0, 0, -0.3);
     five.setBlockTexture("candle", 0);
-    this.setupBlockModelFromMesh(five, 4);
-
-    Block.registerClickFunction("candle", (coords, item, block, player) => {
-      if (item.id === block.id && block.data < Candle.CANDLE_MAX) {
-        BlockSource.getDefaultForActor(player).setBlock(
-          coords.x,
-          coords.y,
-          coords.z,
-          block.id,
-          block.data + 1
-        );
-      }
-    });
+    //   this.setupBlockModelFromMesh(five, 4);
+    return [one, two, three, four, five];
   })();
 
-  constructor() {
+  constructor(public id: string, level: int) {
     super(
-      "candle",
+      id,
       [
         {
           inCreative: true,
@@ -62,7 +51,49 @@ class Candle extends FBlock {
       ],
       "stone"
     );
-  };
+
+    Block.registerClickFunction(id, (coords, item, block, player) => {
+      const region = BlockSource.getDefaultForActor(player);
+
+      if (item.id === block.id && block.data < Candle.CANDLE_MAX) {
+        region.setBlock(coords.x, coords.y, coords.z, block.id, block.data + 1);
+      }
+
+      if (item.id === VanillaItemID.flint_and_steel) {
+        if (block.id === BlockID["candle_lit_4"]) {
+          return;
+        }
+
+        let newID = "candle_lit_1";
+
+        const stringId = IDRegistry.getIdInfo(block.id).split(":")[1];
+        const endChar = Number(stringId.at(-1));
+
+        if (typeof endChar === "number") {
+          newID = "candle_lit_" + (endChar + 1);
+        }
+
+        Entity.setCarriedItem(
+          player,
+          item.id,
+          item.count,
+          item.data++,
+          item.extra
+        );
+        region.setBlock(
+          coords.x,
+          coords.y,
+          coords.z,
+          BlockID[newID],
+          block.data
+        );
+      }
+    });
+
+    BlockRegistry.setLightLevel(id, level);
+
+    Candle.meshes.forEach((v, i) => this.setupBlockModelFromMesh(v, i));
+  }
 
   public static getCount(region: BlockSource, coords: Vector) {
     const block = region.getBlock(coords.x, coords.y, coords.z);
@@ -70,7 +101,13 @@ class Candle extends FBlock {
   }
 }
 
-new Candle().create();
+namespace ELightCandes {
+  export const none = new Candle("unlit_candle", 0);
+  export const three = new Candle("candle_lit_1", 3);
+  export const six = new Candle("candle_lit_2", 6);
+  export const nine = new Candle("candle_lit_3", 9);
+  export const twenty = new Candle("candle_lit_4", 12);
+}
 
 Translation.addTranslation("block.infinite_forest.candle", {
   en: "Candle",
