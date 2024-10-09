@@ -1,9 +1,4 @@
-// function setTimeout(callback: () => void, timeout: int) {
-//   Threading.initThread("thread.infinite_forest.timeout", () => {
-//     java.lang.Thread.sleep(timeout);
-//     return callback();
-//   });
-// }
+
 
 const EMPTY_BOTTLE = new FBlock("bottle", [
   {
@@ -39,9 +34,6 @@ const FULL_BOTTLE = new FBlock("fireflies_bottle", [
 
 class FirefliesBottle extends TileEntityBase {
   data: { color: int };
-  // defaultValues = {
-  //   color: randomGlowworm(),
-  // };
   public static destroyParticles(
     x: int,
     y: int,

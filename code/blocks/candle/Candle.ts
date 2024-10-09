@@ -2,7 +2,8 @@ class Candle extends FBlock {
   public static readonly CANDLE_MAX = 5;
 
   public static meshes = (() => {
-    const one = new RenderMesh(MODELSDIR + "block/candle_max.obj", "obj", {
+    const one = new RenderMesh();
+    one.importFromFile(MODELSDIR + "block/candle_max.obj", "obj",{
       translate: [0.5, 0.5, 0.5],
       invertV: false,
       noRebuild: false,
@@ -11,29 +12,31 @@ class Candle extends FBlock {
     one.setBlockTexture("candle", 0);
     //  this.setupBlockModelFromMesh(one, 0);
 
-    const small = new RenderMesh(MODELSDIR + "block/candle_min.obj", "obj", {
+    const small = new RenderMesh();
+    small.importFromFile(MODELSDIR + "block/candle_min.obj", "obj", {
       translate: [0.5, 0.5, 0.5],
       invertV: false,
       noRebuild: false,
     });
+    small.setBlockTexture("candle", 0);
 
     const two = one.clone();
-    two.addMesh(small, 0.3, 0.5, 0);
+    two.addMesh(small, 0.3, 0, 0);
     two.setBlockTexture("candle", 0);
     //  this.setupBlockModelFromMesh(two, 1);
 
     const three = two.clone();
-    three.addMesh(small, -0.3, 0.5, 0);
+    three.addMesh(small, -0.3, 0, 0);
     three.setBlockTexture("candle", 0);
     // this.setupBlockModelFromMesh(three, 2);
 
     const four = three.clone();
-    four.addMesh(small, 0, 0.5, 0.3);
+    four.addMesh(small, 0, 0, 0.3);
     four.setBlockTexture("candle", 0);
     //  this.setupBlockModelFromMesh(four, 3);
 
     const five = four.clone();
-    five.addMesh(small, 0, 0.5, -0.3);
+    five.addMesh(small, 0, 0, -0.3);
     five.setBlockTexture("candle", 0);
     //   this.setupBlockModelFromMesh(five, 4);
     return [one, two, three, four, five];
@@ -48,8 +51,7 @@ class Candle extends FBlock {
           name: "block.infinite_forest.candle",
           texture: [["salt", 0]],
         },
-      ],
-      "stone"
+      ]
     );
 
     Block.registerClickFunction(id, (coords, item, block, player) => {
@@ -67,7 +69,7 @@ class Candle extends FBlock {
         let newID = "candle_lit_1";
 
         const stringId = String(IDRegistry.getIdInfo(block.id).split(":")[1]);
-        const endChar = Number(stringId.at(-1));
+        const endChar = Number(stringId[stringId.length-1]);
 
         if (typeof endChar === "number") {
           newID = "candle_lit_" + (endChar + 1);

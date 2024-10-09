@@ -81,6 +81,13 @@ const BLOCK_TYPE_PRINT = Block.createSpecialType({
   destroytime: -1,
 });
 
+const BLOCK_TYPE_TRANSLURENT = Block.createSpecialType({
+  destroytime: 0,
+  explosionres: 0,
+  translucency: 1,
+  material: 4
+});
+
 /**
  * Функция для получения массива с числами от min до max
  * @min первое число
