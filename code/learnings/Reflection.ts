@@ -55,8 +55,7 @@ namespace ReflectionList {
     "temperature_flowers_title",
     ["snow", "fire"],
     "fironia",
-    "ice_flower",
-    "electric_mushroom"
+    "ice_flower"
   );
 }
 

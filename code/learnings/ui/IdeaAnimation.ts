@@ -53,7 +53,7 @@ abstract class IdeaAnimation {
     }
   
     protected static clearSign() {
-      delete IdeaAnimation.GUI.content.elements["sign"];
+      IdeaAnimation.GUI.content.elements["sign"].bitmap = "unknown";
     }
   
     protected static close() {

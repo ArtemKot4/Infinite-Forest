@@ -132,10 +132,10 @@ export abstract class GraphicUI {
   };
 
   public static UI = new UI.Window(GraphicUI.content as UI.WindowContent);
-  public static setContent(section?: keyof ISectionList, pageNumber?: int) {
+  public static setContent(section?: keyof ISectionList, pageNumber: int = 0) {
    
     const playerName = Entity.getNameTag(Player.getLocal());
-    const existingContent = BookPage.resultPages[GraphicUI.getPagesFor(playerName)[pageNumber || 0]];
+    const existingContent = BookPage.resultPages[GraphicUI.getPagesFor(playerName)[pageNumber]];
     const concatedElements = Object.assign(
       {},
       GraphicUI.content.elements,
