@@ -5,7 +5,13 @@ abstract class Curse {
   public static idenitifier: string;
   public static addIdentifierToList = (() =>
     Curse.list.push(this.idenitifier))();
-  public static has(player?) {
+
+  public static worldIs() {
+    return (Curse.stateList[this.idenitifier] =
+      Curse.stateList[this.idenitifier] || true);
+  }
+
+  public static allowHas(player?: int) {
     if (player) {
       const actor = new PlayerActor(player);
       if (actor.getGameMode() === EGameMode.CREATIVE) {
@@ -136,18 +142,18 @@ abstract class ColdCurse extends Curse {
     Entity.addEffect(player, EPotionEffect.DIG_SLOWDOWN, 3, 10, false, false);
     return;
   }
-  public static onTick(ticker: int, player: int): void {
-    if (this.has(player) === false) return;
-    const pos = Entity.getPosition(player);
-    if (pos.y > ColdCurse.COLD_HEIGHT) {
-      ServerPlayerDamage();
-      if (ColdCurse.UI.isOpened() === false) {
-        ColdCurse.UI.open();
-      }
-    } else {
-      ColdCurse.UI.isOpened() && ColdCurse.UI.close();
-    }
-  }
+  // public static onTick(ticker: int, player: int): void {
+  //   if (this.has(player) === false) return;
+  //   const pos = Entity.getPosition(player);
+  //   if (pos.y > ColdCurse.COLD_HEIGHT) {
+  //     ServerPlayerDamage();
+  //     if (ColdCurse.UI.isOpened() === false) {
+  //       ColdCurse.UI.open();
+  //     }
+  //   } else {
+  //     ColdCurse.UI.isOpened() && ColdCurse.UI.close();
+  //   }
+  // }
   static {
     ColdCurse.UI.setTouchable(false);
     ColdCurse.UI.setAsGameOverlay(true);

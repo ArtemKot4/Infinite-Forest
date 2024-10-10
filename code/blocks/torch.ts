@@ -107,41 +107,42 @@ abstract class CursedLightning extends Curse {
         player
       );
     }
-  }
-  public static clouds(x: int, y: int, z: int, player: int) {
+  };
+
+  public static clouds(x: int, y: int, z: int) {
     for (let i = 0; i <= 6; i++) {
-      ParticlePacket.send(
-        flame_white,
+      Particles.addParticle(
+        EForestParticle.CLOUD,
         x + randomInt(0.3, 0.6),
         y + 2.5,
         z + randomInt(0.3, 0.6),
         0,
         0,
-        0,
-        player
+        0
       );
     }
-  }
-  public static rain(x: int, y: int, z: int, player: int, speed: int) {
-    ParticlePacket.send(
-      vanilla_rain,
+  };
+
+  public static rain(x: int, y: int, z: int,speed: int) {
+    Particles.addParticle(
+      EForestParticle.VANILLA_RAIN,
       x + randomInt(0.3, 0.6),
       y + 2.1,
       z + randomInt(0.3, 0.5),
       0.01,
       -speed,
       0.01,
-      player
     );
-  }
+  };
+
   public static send(coords: Vector, speed: int, player: int) {
-    CursedLightning.clouds(coords.x, coords.y, coords.z, player);
-    CursedLightning.rain(coords.x, coords.y, coords.z, player, speed);
+    CursedLightning.clouds(coords.x, coords.y, coords.z);
+    CursedLightning.rain(coords.x, coords.y, coords.z, speed);
   }
 }
 
 class UnlitTorchTile extends TileEntityBase {
-  public static scaled(x, y, z, speed: int, player: int) {
+  public static scaled(x: int, y: int, z: int, speed: int) {
     const vectors = [
       [x + 1, y, z],
       [x - 1, y, z],
@@ -152,35 +153,50 @@ class UnlitTorchTile extends TileEntityBase {
     ];
     for (const vector of vectors) {
       return (
-        CursedLightning.clouds(vector[0], vector[1], vector[2], player),
-        CursedLightning.rain(vector[0], vector[1], vector[2], player, speed)
+        CursedLightning.clouds(vector[0], vector[1], vector[2]),
+        CursedLightning.rain(vector[0], vector[1], vector[2], speed)
       );
     }
   }
 
-  onTick(): void {
-    if (this.blockSource.getDimension() !== InfiniteForest.id) return;
+  clientTick(): void {
+    const region = BlockSource.getCurrentClientRegion();
+
+
+
+    if (region.getDimension() !== InfiniteForest.id) return;
+
+    if(!CursedLightning.worldIs()) {
+      return;
+    }
+
     if (World.getThreadTime() % 5 === 0) {
+
+      if(World.getWeather().rain > 0 && region.canSeeSky(this.x, this.y + 1, this.z)) {
+        return;
+      };
+
+
       const lightlevel = this.blockSource.getLightLevel(this.x, this.y, this.z);
       const speed = lightlevel < 4 ? 0.2 : lightlevel / 35;
+      
+      const stringIdTop = String(IDRegistry.getIdInfo(region.getBlockId(this.x, this.y + 1, this.z))).split(":")[1];
 
-      // const entities = this.blockSource.listEntitiesInAABB(
-      //   this.x - 20,
-      //   this.y - 20,
-      //   this.y - 20,
-      //   this.x + 20,
-      //   this.y + 20,
-      //   this.z + 20,
-      //   EEntityType.PLAYER,
-      //   false
-      // );
-      // for (const entity of entities) {
-      CursedLightning.clouds(this.x, this.y, this.z, Player.getLocal());
-      CursedLightning.rain(this.x, this.y, this.z, Player.getLocal(), speed);
       if (lightlevel >= 3) {
-        UnlitTorchTile.scaled(this.x, this.y, this.z, speed, Player.getLocal());
+        UnlitTorchTile.scaled(this.x, this.y, this.z, speed);
       }
-      // }
+  
+      if(stringIdTop.includes("glass")) {
+
+        CursedLightning.clouds(this.x, this.y, this.z);
+        CursedLightning.rain(this.x, this.y, this.z, speed);
+
+        return;
+      };
+      
+      CursedLightning.clouds(this.x, this.y + 1.5, this.z);
+      CursedLightning.rain(this.x, this.y + 1.5, this.z, speed);
+   
     }
   };
 
@@ -199,7 +215,6 @@ Block.setRandomTickCallback(
     TileEntity.destroyTileEntityAtCoords(x, y, z, region);
     region.setBlock(x, y, z, BlockID["eucalyptus_torch"], 0);
     TileEntity.addTileEntity(x, y, z, region);
-    //  Learning.send("torch_cloud", Player.getLocal());
   }
 );
 
@@ -207,8 +222,7 @@ Block.setRandomTickCallback(
   BlockID["eucalyptus_torch"],
   (x, y, z, id, data, region) => {
     Entity.spawn(x, y, z, EEntityType.LIGHTNING_BOLT);
-    alert("!");
-    //  Learning.send("torch_cloud", Player.getLocal());
+
   }
 );
 

@@ -23,7 +23,7 @@ const InfiniteTick = () => {
 
       if (biome === ForestBiomes.WinterForest.id) {
         ColdCurse.runSnow(pos.x, pos.y + 12.5, pos.z, 16, 16); //32 24
-        ColdCurse.has(player) && Entity.damageEntity(player, 1);
+        ColdCurse.allowHas(player) && Entity.damageEntity(player, 1);
       };
 
       if (World.getThreadTime() % 30 === 0) {
@@ -37,7 +37,7 @@ const InfiniteTick = () => {
           ColdCurse.runSnow(pos.x, 130, pos.z, 512);
         } else {
           
-          ColdCurse.onTick(this.ticker, player);
+          //ColdCurse.onTick(this.ticker, player);
           ColdCurse.runSnow(pos.x, pos.y + 12.5, pos.z, 64, 24);
         }
         return;

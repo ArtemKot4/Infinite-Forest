@@ -155,7 +155,7 @@ class CandleTileReplacer {
         if (World.getThreadTime() % 200 === 0) {
           if (
             (World.getWeather().rain > 0 &&
-              region.canSeeSky(this.x, this.y, this.z)) ||
+              region.canSeeSky(this.x, this.y + 1, this.z)) ||
             region.getBlockId(this.x, this.y + 1, this.z) === 0
           ) {
             CandleTileReplacer.clear(this.x, this.y, this.z);
