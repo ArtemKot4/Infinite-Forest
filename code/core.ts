@@ -198,7 +198,7 @@ namespace PlayerHelper {
 }
 
 function getIdByNumber(id: int) {
- return String(IDRegistry.getIdInfo(id).split(":"))[1].split("#")[0];
+ return String(IDRegistry.getIdInfo(id).split(":"))[1]//.split("#")[0];
 }
 
 namespace ConfigManager {

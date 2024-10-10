@@ -74,7 +74,7 @@ class Candle extends FBlock {
         const clicks = CandleTileReplacer.coordsList.get({
           x: coords.x,
           y: coords.y,
-          z: coords.z,
+          z: coords.z
         });
 
         if (endChar >= Candle.CANDLE_MAX_DATA) {
@@ -107,11 +107,14 @@ class Candle extends FBlock {
 
         CandleTileReplacer.initialize(coords.x, coords.y, coords.z);
 
-        clicks &&
+        Game.message("clicks: -> " + clicks);
+      
           CandleTileReplacer.coordsList.set(
             { x: coords.x, y: coords.y, z: coords.z },
             clicks + 1 || 1
           );
+
+        
         return;
       }
     });
@@ -150,7 +153,7 @@ class CandleTileReplacer {
       return;
     }
 
-    this.coordsList.set({ x, y, z }, 1);
+    CandleTileReplacer.coordsList.set({ x, y, z }, 1);
 
     Updatable.addLocalUpdatable({
       x,
@@ -161,13 +164,19 @@ class CandleTileReplacer {
         const block = region.getBlock(this.x, this.y, this.z);
 
         if (World.getThreadTime() % 60 === 0) {
-          if (!String(IDRegistry.getNameByID(block.id)).includes("candle")) {
+          if (getIdByNumber(block.id).includes("candle")) {
             CandleTileReplacer.clear(this.x, this.y, this.z, block);
             this.remove = true;
           }
         }
 
         if (World.getThreadTime() % 200 === 0) {
+          Game.message("click count in candleTile: ->" +
+            CandleTileReplacer.coordsList.get({
+              x: this.x,
+              y: this.y,
+              z: this.z,
+            }));
           if (
             (region.canSeeSky(this.x, this.y + 1, this.z) &&
               World.getWeather().rain > 0) ||
