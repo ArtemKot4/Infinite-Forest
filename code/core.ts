@@ -197,6 +197,10 @@ namespace PlayerHelper {
   })
 }
 
+function getIdByNumber(id: int) {
+ return String(IDRegistry.getIdInfo(id).split(":"))[1].split("#")[0];
+}
+
 namespace ConfigManager {
    export const IdeaAnimation = __config__.getBool("idea_animation") || true;
 }

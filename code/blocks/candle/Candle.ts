@@ -35,6 +35,13 @@ class Candle extends FBlock {
     return [one, two, three, four, five];
   })();
 
+  public static shape = (() => {
+    const shape = new ICRender.CollisionShape();
+    const entry = shape.addEntry();
+    entry.addBox(0, 0, 0, 0.59375, 0.5643750000000001, 0.59375);
+    return shape;
+  })();
+
   constructor(public id: string, lightLevel: int) {
     super(
       id,
@@ -64,7 +71,11 @@ class Candle extends FBlock {
         const stringId = String(IDRegistry.getIdInfo(block.id)).split(":")[1];
         const endChar = Number(stringId[stringId.length - 1]);
 
-        const clicks = CandleTileReplacer.coordsList.get({x: coords.x, y: coords.y, z: coords.z});
+        const clicks = CandleTileReplacer.coordsList.get({
+          x: coords.x,
+          y: coords.y,
+          z: coords.z,
+        });
 
         if (endChar >= Candle.CANDLE_MAX_DATA) {
           return;
@@ -96,22 +107,26 @@ class Candle extends FBlock {
 
         CandleTileReplacer.initialize(coords.x, coords.y, coords.z);
 
-        clicks && 
-        CandleTileReplacer.coordsList.set({x: coords.x, y: coords.y, z: coords.z}, clicks + 1 || 1);
-           return;
+        clicks &&
+          CandleTileReplacer.coordsList.set(
+            { x: coords.x, y: coords.y, z: coords.z },
+            clicks + 1 || 1
+          );
+        return;
       }
     });
 
     Candle.meshes.forEach((v, i) => this.setupBlockModelFromMesh(v, i));
+    BlockRenderer.setCustomCollisionShape(BlockID[id], -1, Candle.shape)
   }
 
   public static getCount(region: BlockSource | WorldRegion, coords: Vector) {
     const block = region.getBlock(coords.x, coords.y, coords.z);
-    return Number(
-      String(IDRegistry.getIdInfo(block.id).split(":"))[1].includes("candle")
+
+     return getIdByNumber(block.id).includes("candle")
         ? block.data + 1
         : 1
-    );
+    
   }
 }
 
@@ -135,7 +150,6 @@ class CandleTileReplacer {
       return;
     }
 
-
     this.coordsList.set({ x, y, z }, 1);
 
     Updatable.addLocalUpdatable({
@@ -147,30 +161,33 @@ class CandleTileReplacer {
         const block = region.getBlock(this.x, this.y, this.z);
 
         if (World.getThreadTime() % 60 === 0) {
-          if (
-            !String(IDRegistry.getNameByID(block.id)).includes("candle")
-          ) {
+          if (!String(IDRegistry.getNameByID(block.id)).includes("candle")) {
             CandleTileReplacer.clear(this.x, this.y, this.z, block);
             this.remove = true;
           }
         }
 
         if (World.getThreadTime() % 200 === 0) {
-
           if (
             (region.canSeeSky(this.x, this.y + 1, this.z) &&
-              World.getWeather().rain >= 5) ||
+              World.getWeather().rain > 0) ||
             region.getBlockId(this.x, this.y + 1, this.z) !== 0
           ) {
             CandleTileReplacer.clear(this.x, this.y, this.z, block);
             this.remove = true;
-          };
+          }
         }
 
         if (World.getThreadTime() % 5 === 0) {
-          const clicks = CandleTileReplacer.coordsList.get({x: this.x, y: this.y, z: this.z}) || 1;
+          const clicks =
+            CandleTileReplacer.coordsList.get({
+              x: this.x,
+              y: this.y,
+              z: this.z,
+            }) || 1;
 
-          clicks >= 1 && block.data >= 0 &&
+          clicks >= 1 &&
+            block.data >= 0 &&
             Particles.addParticle(
               EParticleType.FLAME,
               this.x + 0.5,
@@ -181,7 +198,8 @@ class CandleTileReplacer {
               0
             );
 
-            clicks >= 2 && block.data >= 1 &&
+          clicks >= 2 &&
+            block.data >= 1 &&
             Particles.addParticle(
               EParticleType.FLAME,
               this.x + 0.8,
@@ -192,7 +210,8 @@ class CandleTileReplacer {
               0
             );
 
-            clicks >= 3 && block.data >= 2 &&
+          clicks >= 3 &&
+            block.data >= 2 &&
             Particles.addParticle(
               EParticleType.FLAME,
               this.x + 0.2,
@@ -203,7 +222,8 @@ class CandleTileReplacer {
               0
             );
 
-            clicks >= 4 && block.data >= 3 &&
+          clicks >= 4 &&
+            block.data >= 3 &&
             Particles.addParticle(
               EParticleType.FLAME,
               this.x + 0.5,
@@ -214,7 +234,8 @@ class CandleTileReplacer {
               0
             );
 
-            clicks >= 5 && block.data >= 4 &&
+          clicks >= 5 &&
+            block.data >= 4 &&
             Particles.addParticle(
               EParticleType.FLAME,
               this.x + 0.5,

@@ -174,9 +174,9 @@ class UnlitTorchTile extends TileEntityBase {
       const speed = lightlevel < 4 ? 0.2 : lightlevel / 35;
 
 
-      const stringIdTop = String(
-        IDRegistry.getIdInfo(region.getBlockId(this.x, this.y + 1, this.z))
-      ).split(":")[1];
+      const stringIdTop = 
+        getIdByNumber(region.getBlockId(this.x, this.y + 1, this.z))
+      
 
 
       if (stringIdTop.includes("glass")) {
@@ -188,7 +188,7 @@ class UnlitTorchTile extends TileEntityBase {
 
         CursedLightning.clouds(this.x, this.y, this.z);
         CursedLightning.rain(this.x, this.y, this.z, speed);
-        
+
       }
 
       if (lightlevel >= 3) {
