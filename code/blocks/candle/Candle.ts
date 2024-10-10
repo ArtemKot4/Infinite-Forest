@@ -10,7 +10,6 @@ class Candle extends FBlock {
     });
 
     one.setBlockTexture("candle", 0);
-    //  this.setupBlockModelFromMesh(one, 0);
 
     const small = new RenderMesh();
     small.importFromFile(MODELSDIR + "block/candle_min.obj", "obj", {
@@ -22,23 +21,17 @@ class Candle extends FBlock {
 
     const two = one.clone();
     two.addMesh(small, 0.3, 0, 0);
-    // two.setBlockTexture("candle", 0);
-    //  this.setupBlockModelFromMesh(two, 1);
 
     const three = two.clone();
     three.addMesh(small, -0.3, 0, 0);
-    //  three.setBlockTexture("candle", 0);
-    // this.setupBlockModelFromMesh(three, 2);
 
     const four = three.clone();
     four.addMesh(small, 0, 0, 0.3);
     four.setBlockTexture("candle", 0);
-    //  this.setupBlockModelFromMesh(four, 3);
 
     const five = four.clone();
     five.addMesh(small, 0, 0, -0.3);
-    // five.setBlockTexture("candle", 0);
-    //   this.setupBlockModelFromMesh(five, 4);
+
     return [one, two, three, four, five];
   })();
 
@@ -47,7 +40,7 @@ class Candle extends FBlock {
       id,
       [
         {
-          inCreative: true,
+          inCreative: false,
           name: "block.infinite_forest.candle",
           texture: [["salt", 0]],
         },
@@ -58,14 +51,20 @@ class Candle extends FBlock {
     Block.registerClickFunction(id, (coords, item, block, player) => {
       const region = BlockSource.getDefaultForActor(player);
 
-      if (item.id === block.id && block.data < Candle.CANDLE_MAX_DATA) {
+      if (
+        item.id === BlockID["candle_unlit"] &&
+        block.data < Candle.CANDLE_MAX_DATA
+      ) {
         region.setBlock(coords.x, coords.y, coords.z, block.id, block.data + 1);
+
         return;
       }
 
       if (item.id === VanillaItemID.flint_and_steel) {
         const stringId = String(IDRegistry.getIdInfo(block.id)).split(":")[1];
         const endChar = Number(stringId[stringId.length - 1]);
+
+        const clicks = CandleTileReplacer.coordsList.get({x: coords.x, y: coords.y, z: coords.z});
 
         if (endChar >= Candle.CANDLE_MAX_DATA) {
           return;
@@ -96,6 +95,10 @@ class Candle extends FBlock {
         );
 
         CandleTileReplacer.initialize(coords.x, coords.y, coords.z);
+
+        clicks && 
+        CandleTileReplacer.coordsList.set({x: coords.x, y: coords.y, z: coords.z}, clicks + 1 || 1);
+           return;
       }
     });
 
@@ -112,7 +115,7 @@ class Candle extends FBlock {
   }
 }
 
-namespace ELightCandes {
+namespace ELightCandles {
   export const none = new Candle("candle_unlit", 0).create();
   export const three = new Candle("candle_lit_1", 3).create();
   export const six = new Candle("candle_lit_2", 6).create();
@@ -126,16 +129,16 @@ Translation.addTranslation("block.infinite_forest.candle", {
 });
 
 class CandleTileReplacer {
-  public static coordsList = new Set<Vector>();
+  public static coordsList = new Map<Vector, int>();
   public static initialize(x: int, y: int, z: int) {
     if (this.coordsList.has({ x, y, z })) {
       return;
     }
 
-    this.coordsList.add({ x, y, z });
+
+    this.coordsList.set({ x, y, z }, 1);
 
     Updatable.addLocalUpdatable({
-      flames: 0,
       x,
       y,
       z,
@@ -145,26 +148,29 @@ class CandleTileReplacer {
 
         if (World.getThreadTime() % 60 === 0) {
           if (
-            !String(IDRegistry.getNameByID(block.id)).startsWith("candle_lit")
+            !String(IDRegistry.getNameByID(block.id)).includes("candle")
           ) {
-            CandleTileReplacer.clear(this.x, this.y, this.z);
+            CandleTileReplacer.clear(this.x, this.y, this.z, block);
             this.remove = true;
           }
         }
 
         if (World.getThreadTime() % 200 === 0) {
+
           if (
-            (World.getWeather().rain > 0 &&
-              region.canSeeSky(this.x, this.y + 1, this.z)) ||
-            region.getBlockId(this.x, this.y + 1, this.z) === 0
+            (region.canSeeSky(this.x, this.y + 1, this.z) &&
+              World.getWeather().rain >= 5) ||
+            region.getBlockId(this.x, this.y + 1, this.z) !== 0
           ) {
-            CandleTileReplacer.clear(this.x, this.y, this.z);
+            CandleTileReplacer.clear(this.x, this.y, this.z, block);
             this.remove = true;
-          }
+          };
         }
 
         if (World.getThreadTime() % 5 === 0) {
-          block.data >= 0 &&
+          const clicks = CandleTileReplacer.coordsList.get({x: this.x, y: this.y, z: this.z}) || 1;
+
+          clicks >= 1 && block.data >= 0 &&
             Particles.addParticle(
               EParticleType.FLAME,
               this.x + 0.5,
@@ -175,44 +181,44 @@ class CandleTileReplacer {
               0
             );
 
-          block.data >= 1 &&
+            clicks >= 2 && block.data >= 1 &&
             Particles.addParticle(
               EParticleType.FLAME,
               this.x + 0.8,
-              this.y + 0.65,
+              this.y + 0.6,
               this.z + 0.5,
               0,
               0.005,
               0
             );
 
-          block.data >= 2 &&
+            clicks >= 3 && block.data >= 2 &&
             Particles.addParticle(
               EParticleType.FLAME,
               this.x + 0.2,
-              this.y + 0.65,
+              this.y + 0.6,
               this.z + 0.5,
               0,
               0.005,
               0
             );
 
-          block.data >= 3 &&
+            clicks >= 4 && block.data >= 3 &&
             Particles.addParticle(
               EParticleType.FLAME,
               this.x + 0.5,
-              this.y + 0.65,
+              this.y + 0.6,
               this.z + 0.8,
               0,
               0.005,
               0
             );
 
-          block.data >= 4 &&
+            clicks >= 5 && block.data >= 4 &&
             Particles.addParticle(
               EParticleType.FLAME,
               this.x + 0.5,
-              this.y + 0.65,
+              this.y + 0.6,
               this.z + 0.2,
               0,
               0.005,
@@ -227,7 +233,14 @@ class CandleTileReplacer {
     return CandleTileReplacer.coordsList.has({ x, y, z });
   }
 
-  public static clear(x: int, y: int, z: int) {
+  public static clear(x: int, y: int, z: int, block: Tile) {
+    BlockSource.getDefaultForActor(Player.getLocal()).setBlock(
+      x,
+      y,
+      z,
+      ELightCandles.none.getID(),
+      block.data
+    );
     this.coordsList.delete({ x, y, z });
   }
 }

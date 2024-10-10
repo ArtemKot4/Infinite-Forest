@@ -4,7 +4,7 @@ const EMPTY_BOTTLE = new FBlock("bottle", [
   {
     name: "block.infinite_forest.bottle",
     texture: [["glass", 0]],
-    inCreative: true,
+    inCreative: false,
   },
 ])
   .create().setDestroyTime(0.5)
@@ -20,7 +20,7 @@ const FULL_BOTTLE = new FBlock("fireflies_bottle", [
   {
     name: "block.infinite_forest.fireflies_bottle",
     texture: [["glass", 0]],
-    inCreative: true,
+    inCreative: false,
   },
 ])
   .create().setDestroyTime(0.5)
@@ -192,7 +192,7 @@ Block.registerNeighbourChangeFunctionForID(
 Block.setRandomTickCallback(
   BlockID["fireflies_bottle"],
   (x, y, z, id, data, region) => {
-    if (y >= 130 && ColdCurse.has()) {
+    if (y >= 130 && ColdCurse.allowHas()) {
       region.destroyBlock(x, y, z, false);
     }
   }

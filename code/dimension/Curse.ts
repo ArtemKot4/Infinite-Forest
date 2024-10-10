@@ -72,20 +72,27 @@ abstract class ColdCurse extends Curse {
 
   public static open() {
     ColdCurse.UI.open();
+
     let alpha = 0;
+
     ColdCurse.UI.layout.setAlpha(alpha);
+
     Threading.initThread("thread.infinite_forest.cold_curse_ui", () => {
       while(alpha < 1) {
         alpha += 0.005;
          ColdCurse.UI.layout.setAlpha(alpha)
+         java.lang.Thread.sleep(5);
       }
     })
   }
 
  public static close() {
   ColdCurse.UI.open();
+
   let alpha = 1;
+
   ColdCurse.UI.layout.setAlpha(alpha);
+
   Threading.initThread("thread.infinite_forest.cold_curse_ui", () => {
     while(alpha > 0) {
       alpha -= 0.005;
@@ -93,7 +100,9 @@ abstract class ColdCurse extends Curse {
 
        if(alpha >= 1) {
         ColdCurse.UI.close
-       }
+       };
+       
+       java.lang.Thread.sleep(5);
     }
   })
  }

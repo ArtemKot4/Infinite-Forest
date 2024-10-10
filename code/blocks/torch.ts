@@ -80,7 +80,13 @@ const ICE_TORCH = new Torch("ice", "ice_dust");
 
 abstract class CursedLightning extends Curse {
   public identifier = "lightning";
-  public static speedGlowworm(x: int, y: int, z: int, region: BlockSource, color: int) {
+  public static speedGlowworm(
+    x: int,
+    y: int,
+    z: int,
+    region: BlockSource,
+    color: int
+  ) {
     const entities = region.listEntitiesInAABB(
       x - 32,
       y - 8,
@@ -96,44 +102,35 @@ abstract class CursedLightning extends Curse {
       (v) => Entity.getType(v) === Native.EntityType.PLAYER
     );
     for (const player of players) {
-      ParticlePacket.send(
-        color,
-        x + 0.5,
-        y + 2.5,
-        z + 0.5,
-        0,
-        -0.1,
-        0,
-        player
-      );
+      ParticlePacket.send(color, x + 0.5, y + 2.5, z + 0.5, 0, -0.1, 0, player);
     }
-  };
+  }
 
   public static clouds(x: int, y: int, z: int) {
     for (let i = 0; i <= 6; i++) {
       Particles.addParticle(
         EForestParticle.CLOUD,
-        x + randomInt(0.3, 0.6),
+        x - 0.5 + randomInt(0.3, 0.6),
         y + 2.5,
-        z + randomInt(0.3, 0.6),
+        z - 0.5 + randomInt(0.3, 0.6),
         0,
         0,
         0
       );
     }
-  };
+  }
 
-  public static rain(x: int, y: int, z: int,speed: int) {
+  public static rain(x: int, y: int, z: int, speed: int) {
     Particles.addParticle(
       EForestParticle.VANILLA_RAIN,
-      x + randomInt(0.3, 0.6),
+      x - 0.5 + randomInt(0.3, 0.6),
       y + 2.1,
-      z + randomInt(0.3, 0.5),
+      z - 0.5 + randomInt(0.3, 0.5),
       0.01,
       -speed,
-      0.01,
+      0.01
     );
-  };
+  }
 
   public static send(coords: Vector, speed: int, player: int) {
     CursedLightning.clouds(coords.x, coords.y, coords.z);
@@ -144,13 +141,8 @@ abstract class CursedLightning extends Curse {
 class UnlitTorchTile extends TileEntityBase {
   public static scaled(x: int, y: int, z: int, speed: int) {
     const vectors = [
-      [x + 1, y, z],
-      [x - 1, y, z],
-      [x, y, z - 1],
-      [x, y, z + 1],
-      [x - 1, y, z + 1],
-      [x + 1, y, z - 1],
-    ];
+      [x + 0.5, y, z],
+    ]; //TODO: OLD
     for (const vector of vectors) {
       return (
         CursedLightning.clouds(vector[0], vector[1], vector[2]),
@@ -162,43 +154,50 @@ class UnlitTorchTile extends TileEntityBase {
   clientTick(): void {
     const region = BlockSource.getCurrentClientRegion();
 
-
-
     if (region.getDimension() !== InfiniteForest.id) return;
 
-    if(!CursedLightning.worldIs()) {
+    if (!CursedLightning.worldIs()) {
       return;
     }
 
     if (World.getThreadTime() % 5 === 0) {
-
-      if(World.getWeather().rain > 0 && region.canSeeSky(this.x, this.y + 1, this.z)) {
+      if (
+        World.getWeather().rain > 0 &&
+        region.canSeeSky(this.x, this.y + 1, this.z)
+      ) {
         return;
-      };
-
-
-      const lightlevel = this.blockSource.getLightLevel(this.x, this.y, this.z);
-      const speed = lightlevel < 4 ? 0.2 : lightlevel / 35;
-      
-      const stringIdTop = String(IDRegistry.getIdInfo(region.getBlockId(this.x, this.y + 1, this.z))).split(":")[1];
-
-      if (lightlevel >= 3) {
-        UnlitTorchTile.scaled(this.x, this.y, this.z, speed);
       }
-  
-      if(stringIdTop.includes("glass")) {
+
+      let height = this.y;
+
+      const lightlevel = region.getLightLevel(this.x, this.y, this.z);
+      const speed = lightlevel < 4 ? 0.2 : lightlevel / 35;
+
+
+      const stringIdTop = String(
+        IDRegistry.getIdInfo(region.getBlockId(this.x, this.y + 1, this.z))
+      ).split(":")[1];
+
+
+      if (stringIdTop.includes("glass")) {
+        height = this.y + 2;
+        CursedLightning.clouds(this.x, height, this.z);
+        CursedLightning.rain(this.x, height, this.z, speed);
+
+      } else {
 
         CursedLightning.clouds(this.x, this.y, this.z);
         CursedLightning.rain(this.x, this.y, this.z, speed);
+        
+      }
 
-        return;
-      };
-      
-      CursedLightning.clouds(this.x, this.y + 1.5, this.z);
-      CursedLightning.rain(this.x, this.y + 1.5, this.z, speed);
-   
+      if (lightlevel >= 3) {
+        UnlitTorchTile.scaled(this.x, height, this.z, speed);
+      }
+
+     
     }
-  };
+  }
 
   static {
     TileEntity.registerPrototype(
@@ -222,7 +221,6 @@ Block.setRandomTickCallback(
   BlockID["eucalyptus_torch"],
   (x, y, z, id, data, region) => {
     Entity.spawn(x, y, z, EEntityType.LIGHTNING_BOLT);
-
   }
 );
 

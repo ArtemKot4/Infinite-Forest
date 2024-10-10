@@ -1,9 +1,10 @@
 IMPORT("BlockEngine");
 IMPORT("ItemAnimHelper");
-IMPORT("SoundAPI");
 IMPORT("RenderUtil");
 IMPORT("BlockAnimator");
 IMPORT("ConnectedTexture");
+IMPORT("SoundLib");
+
 
 const ERROR_WARNING =
   "Error! please send issue on https://github.com/Artem0n4/Infinite-Forest";
@@ -164,7 +165,7 @@ function randomizeHotbarSlot(player) {
 }
 
 function iceItemProtectFunction(player) {
-  if (ColdCurse.has(player)) {
+  if (ColdCurse.allowHas(player)) {
     randomizeHotbarSlot(player);
     Entity.damageEntity(player, 3);
   }

@@ -18,7 +18,7 @@ class DungeonBlock extends FBlock {
     player: number
   ) {
     if(!DungeonBlock.list.includes(block.id)) return;
-    if (DungeonCurse.has(player)) {
+    if (DungeonCurse.allowHas(player)) {
       Game.prevent();
     };
   }

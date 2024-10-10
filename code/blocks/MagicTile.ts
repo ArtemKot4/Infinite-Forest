@@ -5,7 +5,7 @@ class MagicTile extends TileEntityBase {
         const state = ForestBiomes.ForestBiome.getState(blockSource.getBiome(coords.x, coords.z));
         let status = true;
             switch(state) {
-            case EForestState.ICE: status = ColdCurse.has()
+            case EForestState.ICE: status = ColdCurse.allowHas()
             break;
             case EForestState.FIRE: status = false;
             break;

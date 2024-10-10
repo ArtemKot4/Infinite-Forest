@@ -10,7 +10,7 @@ class DungeonKey extends FItem {
     super(id, stack, name, texture, meta, isTech);
   }
   public isValid(item: ItemInstance, player: int) {
-    if (ColdCurse.has(player)) {
+    if (ColdCurse.allowHas(player)) {
       BlockEngine.sendUnlocalizedMessage(
         Network.getClientForPlayer(player),
         Native.Color.BLUE,
