@@ -49,17 +49,20 @@ abstract class Forest {
 }
 
 abstract class Curse {
-  public static idenitifier: string;
+  public static idenitifier: string = "none";
 
   public static initialize = () => {
     const flag = (Forest.getFlag("curse") || {}) as {};
 
+    const identifier = this.idenitifier;
+Game.message(identifier);
+
     if (!flag[this.idenitifier]) {
-      Game.message("Добавлен: -> " + this.idenitifier)
+
       return Forest.addFlag(
         "curse",
         Object.assign(flag, {
-          [this.idenitifier]: true,
+          identifier: true,
         })
       );
     }

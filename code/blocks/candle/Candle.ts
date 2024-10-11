@@ -24,10 +24,7 @@ class CandleTileReplacer {
         }
 
         if (World.getThreadTime() % 200 === 0) {
-          Game.message(
-            "click count in candleTile: ->" +
-              CandleTileReplacer.coordsList.get(`${x} ${y} ${z}`)
-          );
+   
           if (
             (region.canSeeSky(this.x, this.y + 1, this.z) &&
               World.getWeather().rain > 0) ||
@@ -230,8 +227,6 @@ class Candle extends FBlock {
         );
 
         CandleTileReplacer.initialize(coords.x, coords.y, coords.z);
-
-        Game.message("clicks: -> " + clicks);
 
         CandleTileReplacer.coordsList.set(
           `${coords.x} ${coords.y} ${coords.z}`,
