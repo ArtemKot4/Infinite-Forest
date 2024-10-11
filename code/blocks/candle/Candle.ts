@@ -162,6 +162,7 @@ class CandleTileReplacer {
       update() {
         const region = BlockSource.getCurrentClientRegion();
         const block = region.getBlock(this.x, this.y, this.z);
+        const biome = region.getBiome(this.x, this.z);
 
         if (World.getThreadTime() % 60 === 0) {
           if (getIdByNumber(block.id).includes("candle")) {
@@ -180,7 +181,7 @@ class CandleTileReplacer {
           if (
             (region.canSeeSky(this.x, this.y + 1, this.z) &&
               World.getWeather().rain > 0) ||
-            region.getBlockId(this.x, this.y + 1, this.z) !== 0
+            region.getBlockId(this.x, this.y + 1, this.z) !== 0 || biome === ForestBiomes.WinterForest.id || this.y >= 130
           ) {
             CandleTileReplacer.clear(this.x, this.y, this.z, block);
             this.remove = true;
