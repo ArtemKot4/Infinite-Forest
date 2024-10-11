@@ -199,6 +199,10 @@ namespace PlayerHelper {
 
 function getIdByNumber(id: int) {
  return String(IDRegistry.getIdInfo(id).split(":"))[1]//.split("#")[0];
+};
+
+function hasWordInID(id: int, word: string) {
+   return getIdByNumber(id).includes(word);
 }
 
 namespace ConfigManager {

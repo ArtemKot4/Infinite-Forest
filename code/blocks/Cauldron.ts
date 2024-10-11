@@ -37,6 +37,7 @@ class Caulron extends TileEntityBase {
     .createWithRotation()
     .setupBlockModel({ model: "block/iron_cauldron", texture: "iron_cauldron" })
     .setDestroyLevel(MiningLevel.STONE);
+    
   public animation: Animation.Base;
   public item_animations: Animation.Item[];
   public static TIMER_MAX = 250;

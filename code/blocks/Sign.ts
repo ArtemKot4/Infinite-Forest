@@ -1,3 +1,4 @@
+
 namespace Sign {
   export const list: Record<string, int> = {
     crystal: 1,

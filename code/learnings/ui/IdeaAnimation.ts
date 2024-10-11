@@ -150,6 +150,6 @@ abstract class IdeaAnimation {
   
   Callback.addCallback("ItemUse", (c, i, b, ise, p) => {
     if(i.id === VanillaItemID.charcoal) {
-      Book.SignSection.givePage(p, "sign", "question");
+      Book.SignSection.givePage(p, "sign", ["question", "fire", "snow", "crystal", "forest"]);
     }
   })
