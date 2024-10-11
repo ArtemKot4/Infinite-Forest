@@ -24,6 +24,7 @@ Callback.addCallback("LocalTick", () => {
 
   if (World.getThreadTime() % 30 === 0) {
     ColdCurse.sendMessage(pos);
+   
   };
 
   ColdCurse.subscribe(() => {
@@ -40,7 +41,10 @@ Callback.addCallback("LocalTick", () => {
       }
       return;
     }
-  })
+  });
+  if(World.getThreadTime() % 200 === 0) {
+    ColdCurse.subscribe(() => Game.message("Я работаю, проклятие есть!)"))
+  }
   return;
 })
    

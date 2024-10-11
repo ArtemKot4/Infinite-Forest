@@ -1,10 +1,18 @@
 Callback.addCallback("LevelDisplayed", () => {
+
+ ColdCurse.initialize();
+ DungeonCurse.initialize();
+ CursedLightning.initialize();
+
   const players = Network.getConnectedPlayers();
   for (const i in players) {
     const name = Entity.getNameTag(players[i]);
     Book.GraphicUI.initializeSections(name);
     Game.message(JSON.stringify(Book.GraphicUI.pagesList[name]));
-  }
+  };
+
+ Game.message("curse flag: -> " + JSON.stringify(Forest.getFlag("curse")));
+
 });
 
 Translation.addTranslation("group.infinite_forest.lightning", {

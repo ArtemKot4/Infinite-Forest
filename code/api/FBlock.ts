@@ -18,6 +18,11 @@ class FBlock {
     return this;
   }
 
+  public setTile<T extends TileEntityBase>(tile: T ) {
+    TileEntity.registerPrototype(this.getID(), tile);
+    return this;
+  }
+
   public setItemModel(
     model: string,
     texture: string,

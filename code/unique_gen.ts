@@ -25,7 +25,7 @@ const UniqueGen = {
           data,
           params.size,
           false,
-          random.nextInt()
+//          random.nextInt()
         );
       }
     },

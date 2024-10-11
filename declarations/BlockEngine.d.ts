@@ -1787,7 +1787,7 @@ declare namespace IDConverter {
     export function getData(stringId: string): number;
     export {};
 }
-declare abstract class TileEntityBase implements TileEntity {
+declare abstract class TileEntityBase implements Partial<TileEntity> {
     constructor();
     __clientMethods: {
         [key: string]: boolean;
@@ -1931,7 +1931,7 @@ declare namespace LiquidItemRegistry {
      * @amount liquid amount able to be extracted
      * @storage liquid storage of items registered by BlockEngine.
      */
-    type EmptyData = {
+    export type EmptyData = {
         id: number;
         data: number;
         liquid: string;

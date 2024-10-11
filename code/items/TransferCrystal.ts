@@ -117,7 +117,7 @@ abstract class TransferCrystal {
     TransferCrystal.ORANGE.onUse(TransferCrystal.onUseOrange);
     Saver.addSavesScope(
       "infinite_forest.defaultDimension.list",
-      function read(scope) {
+      function read(scope: any) {
         TransferCrystal.worldList = scope.worldList || {};
       },
       function save() {

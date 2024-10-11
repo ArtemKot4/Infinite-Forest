@@ -1,12 +1,11 @@
-
 class CandleTileReplacer {
-  public static coordsList = new Map<Vector, int>();
+  public static coordsList = new Map<string, int>();
   public static initialize(x: int, y: int, z: int) {
-    if (this.coordsList.has({ x, y, z })) {
+    if (this.coordsList.has(`${x} ${y} ${z}`)) {
       return;
     }
 
-    CandleTileReplacer.coordsList.set({ x, y, z }, 1);
+    CandleTileReplacer.coordsList.set(`${x} ${y} ${z}`, 1);
 
     Updatable.addLocalUpdatable({
       x,
@@ -27,17 +26,13 @@ class CandleTileReplacer {
         if (World.getThreadTime() % 200 === 0) {
           Game.message(
             "click count in candleTile: ->" +
-              CandleTileReplacer.coordsList.get({
-                x,
-                y,
-                z,
-              })
+              CandleTileReplacer.coordsList.get(`${x} ${y} ${z}`)
           );
           if (
             (region.canSeeSky(this.x, this.y + 1, this.z) &&
               World.getWeather().rain > 0) ||
             region.getBlockId(this.x, this.y + 1, this.z) !== 0 ||
-            biome === ForestBiomes.WinterForest.id ||
+            (ColdCurse.worldIs() && biome === ForestBiomes.WinterForest.id) ||
             this.y >= 130
           ) {
             CandleTileReplacer.clear(this.x, this.y, this.z, block);
@@ -47,11 +42,7 @@ class CandleTileReplacer {
 
         if (World.getThreadTime() % 5 === 0) {
           const clicks =
-            CandleTileReplacer.coordsList.get({
-              x: this.x,
-              y: this.y,
-              z: this.z,
-            }) || 1;
+            CandleTileReplacer.coordsList.get(`${x} ${y} ${z}`) || 1;
 
           clicks >= 1 &&
             block.data >= 0 &&
@@ -118,7 +109,7 @@ class CandleTileReplacer {
   }
 
   public static isCandleFlamed(x: int, y: int, z: int) {
-    return CandleTileReplacer.coordsList.has({ x, y, z });
+    return CandleTileReplacer.coordsList.has(`${x} ${y} ${z}`);
   }
 
   public static clear(x: int, y: int, z: int, block: Tile) {
@@ -129,14 +120,14 @@ class CandleTileReplacer {
       BlockID["candle_unlit"],
       block.data
     );
-    this.coordsList.delete({ x, y, z });
+    CandleTileReplacer.coordsList.delete(`${x} ${y} ${z}`);
   }
 }
 
 class Candle extends FBlock {
   public static readonly CANDLE_MAX = 5;
   public static readonly CANDLE_MAX_DATA = 4;
-  
+
   public static meshes = (() => {
     const one = new RenderMesh();
     one.importFromFile(MODELSDIR + "block/candle_max.obj", "obj", {
@@ -208,11 +199,7 @@ class Candle extends FBlock {
         const stringId = String(IDRegistry.getIdInfo(block.id)).split(":")[1];
         const endChar = Number(stringId[stringId.length - 1]);
 
-        const clicks = CandleTileReplacer.coordsList.get({
-          x: coords.x,
-          y: coords.y,
-          z: coords.z,
-        });
+        const clicks = CandleTileReplacer.coordsList.get(`${coords.x} ${coords.y} ${coords.z}`);
 
         if (endChar >= Candle.CANDLE_MAX_DATA) {
           return;
@@ -247,7 +234,7 @@ class Candle extends FBlock {
         Game.message("clicks: -> " + clicks);
 
         CandleTileReplacer.coordsList.set(
-          { x: coords.x, y: coords.y, z: coords.z },
+          `${coords.x} ${coords.y} ${coords.z}`,
           clicks + 1 || 1
         );
 

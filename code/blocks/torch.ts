@@ -97,7 +97,7 @@ abstract class CursedLightning extends Curse {
       EEntityType.PLAYER,
       false
     );
-    entities.forEach((v) => Game.message(Entity.getTypeName(v)));
+    //TODO: DEBUG -> entities.forEach((v) => Game.message(Entity.getTypeName(v)));
     const players = entities.filter(
       (v) => Entity.getType(v) === Native.EntityType.PLAYER
     );
@@ -140,9 +140,7 @@ abstract class CursedLightning extends Curse {
 
 class UnlitTorchTile extends TileEntityBase {
   public static scaled(x: int, y: int, z: int, speed: int) {
-    const vectors = [
-      [x + 0.5, y, z],
-    ]; //TODO: OLD
+    const vectors = [[x + 0.5, y, z]]; //TODO: OLD
     for (const vector of vectors) {
       return (
         CursedLightning.clouds(vector[0], vector[1], vector[2]),
@@ -156,46 +154,39 @@ class UnlitTorchTile extends TileEntityBase {
 
     if (region.getDimension() !== InfiniteForest.id) return;
 
-    if (!CursedLightning.worldIs()) {
-      return;
-    }
-
     if (World.getThreadTime() % 5 === 0) {
-      if (
-        World.getWeather().rain > 0 &&
-        region.canSeeSky(this.x, this.y + 1, this.z)
-      ) {
-        return;
-      }
 
-      let height = this.y;
+      CursedLightning.subscribe(() => {
+        if (
+          World.getWeather().rain > 0 &&
+          region.canSeeSky(this.x, this.y + 1, this.z)
+        ) {
+          return;
+        }
 
-      const lightlevel = region.getLightLevel(this.x, this.y, this.z);
-      const speed = lightlevel < 4 ? 0.2 : lightlevel / 35;
+        let height = this.y;
 
+        const lightlevel = region.getLightLevel(this.x, this.y, this.z);
+        const speed = lightlevel < 4 ? 0.2 : lightlevel / 35;
 
-      const stringIdTop = 
-        getIdByNumber(region.getBlockId(this.x, this.y + 1, this.z))
+        const stringIdTop = getIdByNumber(
+          region.getBlockId(this.x, this.y + 1, this.z)
+        );
+
+        if (stringIdTop.includes("glass")) {
+          height = this.y + 2;
+          CursedLightning.clouds(this.x, height, this.z);
+          CursedLightning.rain(this.x, height, this.z, speed);
+        } else {
+          CursedLightning.clouds(this.x, this.y, this.z);
+          CursedLightning.rain(this.x, this.y, this.z, speed);
+        }
+
+        if (lightlevel >= 3) {
+          UnlitTorchTile.scaled(this.x, height, this.z, speed);
+        }
+      });
       
-
-
-      if (stringIdTop.includes("glass")) {
-        height = this.y + 2;
-        CursedLightning.clouds(this.x, height, this.z);
-        CursedLightning.rain(this.x, height, this.z, speed);
-
-      } else {
-
-        CursedLightning.clouds(this.x, this.y, this.z);
-        CursedLightning.rain(this.x, this.y, this.z, speed);
-
-      }
-
-      if (lightlevel >= 3) {
-        UnlitTorchTile.scaled(this.x, height, this.z, speed);
-      }
-
-     
     }
   }
 

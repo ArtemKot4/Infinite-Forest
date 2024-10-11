@@ -11,10 +11,11 @@ abstract class Forest {
   public static flags = {};
 
   public static addFlag<T>(name: string, value?: T) {
-    Network.sendToServer("packet.infinite_forest.world_flags", {
-      name,
-      value,
-    } satisfies IWorldFlagData);
+    Forest.flags[name] = (value || true);
+    // Network.sendToServer("packet.infinite_forest.world_flag_add", {
+    //   name,
+    //   value, 
+    // } satisfies IWorldFlagData);
   }
 
   public static hasFlag(name: string) {
@@ -26,7 +27,8 @@ abstract class Forest {
   }
 
   public static deleteFlag(name: string) {
-    Network.sendToServer("packet.infinite_forest.world_flags", { name });
+    delete Forest.flags[name];
+    // Network.sendToServer("packet.infinite_forest.world_flag_delete", { name });
   }
 
   static {
@@ -49,10 +51,11 @@ abstract class Forest {
 abstract class Curse {
   public static idenitifier: string;
 
-  protected static initialize = (() => {
+  public static initialize = () => {
     const flag = (Forest.getFlag("curse") || {}) as {};
 
-    if (flag[this.idenitifier] === undefined) {
+    if (!flag[this.idenitifier]) {
+      Game.message("Добавлен: -> " + this.idenitifier)
       return Forest.addFlag(
         "curse",
         Object.assign(flag, {
@@ -61,10 +64,11 @@ abstract class Curse {
       );
     }
     return;
-  })();
+  };
 
   public static worldIs() {
-    return !!Forest.getFlag("curse")[this.idenitifier];
+    const flag = Forest.getFlag("curse");
+    return flag && !!flag[this.idenitifier];
   }
 
   public static allowHas(player?: int) {

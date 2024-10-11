@@ -208,3 +208,7 @@ function hasWordInID(id: int, word: string) {
 namespace ConfigManager {
    export const IdeaAnimation = __config__.getBool("idea_animation") || true;
 }
+
+const NetworkEvent = BlockEngine.Decorators.NetworkEvent;
+const ContainerEvent = BlockEngine.Decorators.ContainerEvent;
+const ClientSide = BlockEngine.Decorators.ClientSide;
