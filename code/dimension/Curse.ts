@@ -1,14 +1,73 @@
+interface IWorldFlagData {
+  name: string;
+  value: any;
+}
+
+abstract class Forest {
+  private constructor() {}
+  /** World tags for server
+   *
+   */
+  public static flags = {};
+
+  public static addFlag<T>(name: string, value?: T) {
+    Network.sendToServer("packet.infinite_forest.world_flags", {
+      name,
+      value,
+    } satisfies IWorldFlagData);
+  }
+
+  public static hasFlag(name: string) {
+    return !!Forest.flags[name];
+  }
+
+  public static getFlag(name: string) {
+    return Forest.flags[name];
+  }
+
+  public static deleteFlag(name: string) {
+    Network.sendToServer("packet.infinite_forest.world_flags", { name });
+  }
+
+  static {
+    Network.addClientPacket(
+      "packet.infinite_forest.world_flag_add",
+      (data: IWorldFlagData) => {
+        Forest.flags[data.name] ??= data.value || true;
+      }
+    );
+
+    Network.addClientPacket(
+      "packet.infinite_forest.world_flag_delete",
+      (data: Omit<IWorldFlagData, "value">) => {
+        delete Forest.flags[data.name];
+      }
+    );
+  }
+}
+
 abstract class Curse {
-  private static readonly list: name[] = [];
-  private static readonly stateList: Record<name, boolean> = {};
-  public static onTick: (...args) => void;
   public static idenitifier: string;
-  public static addIdentifierToList = (() =>
-    Curse.list.push(this.idenitifier))();
+
+  protected static initialize = (() => {
+    const flag = (Forest.getFlag("curse") || {}) as {};
+
+    if (flag[this.idenitifier] === undefined) {
+
+      return Forest.addFlag(
+        "curse",
+        Object.assign(flag, {
+          [this.idenitifier]: true,
+        })
+      );
+
+    }
+    return;
+  })();
+
 
   public static worldIs() {
-    return (Curse.stateList[this.idenitifier] =
-      Curse.stateList[this.idenitifier] || true);
+    return !!Forest.getFlag("curse")[this.idenitifier];
   }
 
   public static allowHas(player?: int) {
@@ -17,26 +76,32 @@ abstract class Curse {
       if (actor.getGameMode() === EGameMode.CREATIVE) {
         return false;
       }
-    }
-    return (Curse.stateList[this.idenitifier] =
-      Curse.stateList[this.idenitifier] || true);
-  }
+    };
+    return this.worldIs();
+  };
+
   public static hasList(player: int, list: name[]) {
-    const name = Entity.getNameTag(player);
     const actor = new PlayerActor(player);
+
     if (actor.getGameMode() === EGameMode.CREATIVE) {
       return false;
     }
     for (let element of list) {
-      if (!Curse.stateList[element]) return false;
+      if (Forest.getFlag("curse")?.[element] == false) return false;
     }
     return true;
-  }
+  };
+
   public static getCurseList() {
-    return Curse.list;
-  }
+    return Object.keys(Forest.getFlag("curse"));
+  };
+
   public static getStatelist() {
-    return Curse.stateList;
+    return Forest.getFlag("curse");
+  }
+
+  public static subscribe(callback: () => void, player?: int) {
+    return (player && this.allowHas(player)) || (this.worldIs() && callback());
   }
 }
 
@@ -78,34 +143,34 @@ abstract class ColdCurse extends Curse {
     ColdCurse.UI.layout.setAlpha(alpha);
 
     Threading.initThread("thread.infinite_forest.cold_curse_ui", () => {
-      while(alpha < 1) {
+      while (alpha < 1) {
         alpha += 0.005;
-         ColdCurse.UI.layout.setAlpha(alpha)
-         java.lang.Thread.sleep(5);
+        ColdCurse.UI.layout.setAlpha(alpha);
+        java.lang.Thread.sleep(5);
       }
-    })
+    });
   }
 
- public static close() {
-  ColdCurse.UI.open();
+  public static close() {
+    ColdCurse.UI.open();
 
-  let alpha = 1;
+    let alpha = 1;
 
-  ColdCurse.UI.layout.setAlpha(alpha);
+    ColdCurse.UI.layout.setAlpha(alpha);
 
-  Threading.initThread("thread.infinite_forest.cold_curse_ui", () => {
-    while(alpha > 0) {
-      alpha -= 0.005;
-       ColdCurse.UI.layout.setAlpha(alpha);
+    Threading.initThread("thread.infinite_forest.cold_curse_ui", () => {
+      while (alpha > 0) {
+        alpha -= 0.005;
+        ColdCurse.UI.layout.setAlpha(alpha);
 
-       if(alpha >= 1) {
-        ColdCurse.UI.close
-       };
-       
-       java.lang.Thread.sleep(5);
-    }
-  })
- }
+        if (alpha >= 1) {
+          ColdCurse.UI.close;
+        }
+
+        java.lang.Thread.sleep(5);
+      }
+    });
+  }
 
   public static runSnow(x: int, y: int, z: int, radius = 16, count = 16) {
     if (World.getThreadTime() % 8 === 0) {
@@ -146,11 +211,13 @@ abstract class ColdCurse extends Curse {
       ColdCurse.COLD_MESSAGE = true;
     }
   }
+
   public static damage(player: int) {
     Entity.damageEntity(player, 1);
     Entity.addEffect(player, EPotionEffect.DIG_SLOWDOWN, 3, 10, false, false);
     return;
   }
+
   // public static onTick(ticker: int, player: int): void {
   //   if (this.has(player) === false) return;
   //   const pos = Entity.getPosition(player);
