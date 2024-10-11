@@ -53,18 +53,15 @@ abstract class Curse {
     const flag = (Forest.getFlag("curse") || {}) as {};
 
     if (flag[this.idenitifier] === undefined) {
-
       return Forest.addFlag(
         "curse",
         Object.assign(flag, {
           [this.idenitifier]: true,
         })
       );
-
     }
     return;
   })();
-
 
   public static worldIs() {
     return !!Forest.getFlag("curse")[this.idenitifier];
@@ -76,9 +73,9 @@ abstract class Curse {
       if (actor.getGameMode() === EGameMode.CREATIVE) {
         return false;
       }
-    };
+    }
     return this.worldIs();
-  };
+  }
 
   public static hasList(player: int, list: name[]) {
     const actor = new PlayerActor(player);
@@ -90,18 +87,18 @@ abstract class Curse {
       if (Forest.getFlag("curse")?.[element] == false) return false;
     }
     return true;
-  };
+  }
 
   public static getCurseList() {
     return Object.keys(Forest.getFlag("curse"));
-  };
+  }
 
   public static getStatelist() {
     return Forest.getFlag("curse");
   }
 
   public static subscribe(callback: () => void, player?: int) {
-    return (player && this.allowHas(player)) || (this.worldIs() && callback());
+    return ((player && this.allowHas(player)) || this.worldIs()) && callback();
   }
 }
 
