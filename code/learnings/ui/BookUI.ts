@@ -154,21 +154,14 @@ export abstract class GraphicUI {
       .concat(GraphicUI.content.drawing)
       .concat(existingContent.drawing);
 
-  Game.message("concatedElements: -> " + __debug_typecheck__(concatedElements));
-  Game.message("concatedDrawings: -> " + __debug_typecheck__(concatedDrawings));
-  Game.message("existingContent: -> " + __debug_typecheck__(existingContent));
-  Game.message("GraphicUI.getButtonsContentFor(section): -> " + __debug_typecheck__(GraphicUI.getButtonsContentFor(section)));
-  Game.message("existingContent.elements: -> " + __debug_typecheck__(existingContent.elements));
-  Game.message("GraphicUI.content.elements: -> " + __debug_typecheck__(   GraphicUI.content.elements));
-  Game.message("GraphicUI.content.drawing: -> " + __debug_typecheck__(GraphicUI.content.drawing));
-  Game.message("existingContent.drawing: -> " + __debug_typecheck__(existingContent.drawing));
-
-    GraphicUI.UI.setContent(
-      Object.assign(
-        {},
-        { elements: concatedElements, drawing: concatedDrawings }
-      )// as UI.WindowContent
-    );
+  const content = GraphicUI.UI.getContent();
+  content.elements = concatedElements; //
+  content.drawing = concatedDrawings;
+  //{ elements: , drawing:  };
+    //GraphicUI.UI.setContent(
+    
+        // as UI.WindowContent
+      //)
 
     GraphicUI.drawPageNumbers(section);
     GraphicUI.UI.forceRefresh();

@@ -198,7 +198,7 @@ namespace PlayerHelper {
 }
 
 function getIdByNumber(id: int) {
- return String(IDRegistry.getIdInfo(id).split(":"))[1]//.split("#")[0];
+ return String(IDRegistry.getIdInfo(id)).split(":")[1]//.split("#")[0];
 };
 
 function hasWordInID(id: int, word: string) {
@@ -213,4 +213,3 @@ const NetworkEvent = BlockEngine.Decorators.NetworkEvent;
 const ContainerEvent = BlockEngine.Decorators.ContainerEvent;
 const ClientSide = BlockEngine.Decorators.ClientSide;
 
-TagRegistry

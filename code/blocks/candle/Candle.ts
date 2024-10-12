@@ -84,7 +84,7 @@ class Candle extends FBlock {
         let newID = "candle_lit_1";
 
         if (block.id !== BlockID["candle_unlit"]) {
-          if (typeof endChar === "number" && endChar < Candle.CANDLE_MAX_DATA) {
+          if (typeof endChar === "number" && endChar < Candle.CANDLE_MAX_DATA && endChar === clicks) {
             newID = "candle_lit_" + (endChar + 1);
           }
         }
