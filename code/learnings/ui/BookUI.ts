@@ -167,21 +167,33 @@ export abstract class GraphicUI {
     GraphicUI.UI.forceRefresh();
   }
 
-  public static initializeSections(playerName: name) {
-    const data = GraphicUI.pagesList[playerName] ??= {} as ISectionList;
+  @onLevelDisplayed
+  public static initializeSections() {
 
-    for(const section of Object.keys(Section.list)) {
+    const players = Network.getConnectedPlayers();
+
+    for (const i in players) {
       
-      if(!data[section]) {
-        data[section] = {
-          pages: []
+      const name = Entity.getNameTag(players[i]);
+  
+      const data = GraphicUI.pagesList[name] ??= {} as ISectionList;
+
+      for(const section of Object.keys(Section.list)) {
+        
+        if(!data[section]) {
+          data[section] = {
+            pages: []
+          }
         }
       }
-    }
+  
+    if(data.default.pages.length === 0) {
+      data.default.pages.push("main_title")
+    };
 
-  if(data.default.pages.length === 0) {
-    data.default.pages.push("main_title")
-  }
+      Game.message(JSON.stringify(Book.GraphicUI.pagesList[name])); //TODO: DEBUG
+    };
+  
 
     }
 
@@ -214,50 +226,5 @@ export abstract class GraphicUI {
   }
 }
 
-/*
- 
-  Threading.initThread("thread.infinite_forest.idea_animation", () => {
-      while (y < 1300) {
-          if (frame < this.FRAME_MAX && timer <= 0) {
-            frame++;
-              IdeaUI.redrawImage(frame, this.IMAGE_SCALE);
-              java.lang.Thread.sleep(50);
-          }
-          else {
-            if(timer > 5 && frame > 0) {
-              this.clearRune();
-              IdeaUI.redrawImage(frame--, this.IMAGE_SCALE);
-              java.lang.Thread.sleep(50);
-            }
-              if (timer < 5) {
-                this.drawRune(Array.isArray(rune) ? MathHelper.randomValueFromArray(rune) : rune);
-                  timer++;
-                  java.lang.Thread.sleep(1000);
-              }
-              else if (frame <= 0) {
-                  if (scale < 12.5) {
-                      if (x < this.WIDTH_LOCATION * 3) {
-                          IdeaUI.redrawImage(0, scale -= 0.06, x += 0.8, y += 0.3);
-                      }
-                      else {
-                          IdeaUI.redrawImage(0, scale -= 0.03, x, y += 0.8);
-                      }
-                  }
-                  else {
-                      IdeaUI.redrawImage(0, scale -= 0.05, x, y += 0.2);
-                      java.lang.Thread.sleep(4);
-                  }
-                  ;
-                 if(y >= 1300) {
-                     this.close();
-                     break;
-                 };
-                  java.lang.Thread.sleep(2);
-              }
-          }
-      }
-  });
-
- */
 
 }

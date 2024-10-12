@@ -39,7 +39,8 @@ namespace Sign {
       if (this.animation) {
         this.animation.destroy();
       }
-    }
+    };
+    
     @BlockEngine.Decorators.NetworkEvent(Side.Client)
     public releaseAnimation(data: { item: ItemStack }) {
       const animation = (this.animation = new Animation.Item(

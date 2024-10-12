@@ -213,3 +213,11 @@ const NetworkEvent = BlockEngine.Decorators.NetworkEvent;
 const ContainerEvent = BlockEngine.Decorators.ContainerEvent;
 const ClientSide = BlockEngine.Decorators.ClientSide;
 
+//Marker decorators:
+
+/**
+ * @marker that declared that function must be used in LevelDisplayed Callback  
+ */
+
+function onLevelDisplayed(target: any, key: string | symbol, descriptor?: PropertyDescriptor) {
+};

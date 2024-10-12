@@ -51,15 +51,11 @@ abstract class Forest {
 abstract class Curse {
   public static identifier: string = "none";
 
-  public static initIdentifier = ((identifier) => this.identifier = identifier)(this.identifier)
-
-  public static initialize = () => {
+  @onLevelDisplayed
+  public static initialize = (identifier: string) => {
     const flag = (Forest.getFlag("curse") || {}) as {};
 
-    const identifier = this.identifier;
-Game.message(identifier);
-
-    if (!flag[this.identifier]) {
+    if (!flag[identifier]) {
 
       return Forest.addFlag(
         "curse",
@@ -67,6 +63,7 @@ Game.message(identifier);
           [identifier]: true,
         })
       );
+
     }
     return;
   };
