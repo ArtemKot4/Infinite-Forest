@@ -7,7 +7,7 @@ namespace ForestGeneration {
       player: number
     ) {
       if (!GreatWall.list.includes(block.id)) return;
-      if (!Curse.hasList(player, Curse.getCurseList())) {
+      if (!Curse.hasList(Curse.getList(), player)) {
         Game.prevent();
       }
     }

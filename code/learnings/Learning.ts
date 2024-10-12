@@ -2,14 +2,19 @@ type playerName = string;
 type message = string;
 
 class Learning {
+
   public static list: Record<name, message> = {};
   public static playerList: Record<playerName, Set<name>> = {};
+
   constructor(public name: string, public message: string = name) {
     Learning.list[name] = message;
   }
+
   public static sendMessage(name: string, player: int, color: Native.Color) {
     const client = Network.getClientForPlayer(player);
+    
     if (!client) return;
+
     BlockEngine.sendUnlocalizedMessage(
       client,
       `<${Entity.getNameTag(player)}> ${color}${Translation.translate(
@@ -17,6 +22,7 @@ class Learning {
       )}`
     );
   }
+
   public static send(
     name: string,
     player: int,
@@ -25,10 +31,15 @@ class Learning {
     sign: string | string[] = "question",
     section: keyof Book.ISectionList = "default"
   ) {
+
     if (Learning.has(player, name) === true) return;
+
     const playerName = Entity.getNameTag(player);
+
     Learning.sendMessage(name, player, color);
+
     Learning.playerList[playerName].add(name);
+    
     if (page) {
       Book.Section.givePage(player, page, section, sign);
       Reflection.sendMessage(player);

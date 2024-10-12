@@ -134,7 +134,7 @@ abstract class Curse {
   * @returns name of exists curses
   */ 
 
-  public static getCurseList() {
+  public static getList() {
     return Object.keys(Forest.getFlag("curse"));
   }
 
@@ -172,9 +172,11 @@ Saver.addSavesScope(
 );
 
 abstract class ColdCurse extends Curse {
+
   public static COLD_HEIGHT = 130;
   public static COLD_MESSAGE: boolean = true;
   public static identifier: string = "cold";
+
   public static UI = new UI.Window({
     drawing: [
       {
@@ -226,11 +228,15 @@ abstract class ColdCurse extends Curse {
         java.lang.Thread.sleep(5);
       }
     });
+
   }
 
   public static runSnow(x: int, y: int, z: int, radius = 16, count = 16) {
+
     if (World.getThreadTime() % 8 === 0) {
+
       for (let n = -count; n <= count; n++) {
+
         ParticlePacket.send(
           EForestParticle.SNOWFALL,
           x + n,
@@ -241,6 +247,7 @@ abstract class ColdCurse extends Curse {
           0,
           Player.getLocal()
         );
+        
         ParticlePacket.send(
           EForestParticle.SNOWFALL,
           x + randomInt(-radius, radius),
@@ -254,16 +261,22 @@ abstract class ColdCurse extends Curse {
       }
     }
   }
+
   public static sendMessage(coords: Vector) {
+    
     if (coords.y >= 115) {
+
       ColdCurse.COLD_MESSAGE === true &&
         Game.message(
           `<${Entity.getNameTag(Player.getLocal())}> ${
             Native.Color.BLUE
           }${Translation.translate("message.infinite_forest.cold_myself")}`
         );
+
       ColdCurse.COLD_MESSAGE = false;
+
     } else {
+
       ColdCurse.COLD_MESSAGE = true;
     }
   }
