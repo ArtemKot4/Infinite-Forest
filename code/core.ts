@@ -212,3 +212,5 @@ namespace ConfigManager {
 const NetworkEvent = BlockEngine.Decorators.NetworkEvent;
 const ContainerEvent = BlockEngine.Decorators.ContainerEvent;
 const ClientSide = BlockEngine.Decorators.ClientSide;
+
+TagRegistry

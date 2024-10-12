@@ -49,20 +49,22 @@ abstract class Forest {
 }
 
 abstract class Curse {
-  public static idenitifier: string = "none";
+  public static identifier: string = "none";
+
+  public static initIdentifier = ((identifier) => this.identifier = identifier)(this.identifier)
 
   public static initialize = () => {
     const flag = (Forest.getFlag("curse") || {}) as {};
 
-    const identifier = this.idenitifier;
+    const identifier = this.identifier;
 Game.message(identifier);
 
-    if (!flag[this.idenitifier]) {
+    if (!flag[this.identifier]) {
 
       return Forest.addFlag(
         "curse",
         Object.assign(flag, {
-          identifier: true,
+          [identifier]: true,
         })
       );
     }
@@ -71,7 +73,7 @@ Game.message(identifier);
 
   public static worldIs() {
     const flag = Forest.getFlag("curse");
-    return flag && !!flag[this.idenitifier];
+    return flag && !!flag[this.identifier];
   }
 
   public static allowHas(player?: int) {
@@ -122,7 +124,7 @@ Saver.addSavesScope(
 abstract class ColdCurse extends Curse {
   public static COLD_HEIGHT = 130;
   public static COLD_MESSAGE: boolean = true;
-  public static idenitifier: string = "cold";
+  public static identifier: string = "cold";
   public static UI = new UI.Window({
     drawing: [
       {

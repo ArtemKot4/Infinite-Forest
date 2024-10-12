@@ -4,6 +4,8 @@ Callback.addCallback("LevelDisplayed", () => {
  DungeonCurse.initialize();
  CursedLightning.initialize();
 
+  LevelDisplayedFunctions.initCandles();
+
   const players = Network.getConnectedPlayers();
   for (const i in players) {
     const name = Entity.getNameTag(players[i]);

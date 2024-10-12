@@ -142,7 +142,6 @@ export abstract class GraphicUI {
    
     const playerName = Entity.getNameTag(Player.getLocal());
     const existingContent = BookPage.resultPages[GraphicUI.getPagesFor(playerName)[pageNumber]];
-
     const concatedElements = Object.assign(
       {},
       GraphicUI.content.elements,
@@ -154,6 +153,15 @@ export abstract class GraphicUI {
     const concatedDrawings = []
       .concat(GraphicUI.content.drawing)
       .concat(existingContent.drawing);
+
+  Game.message("concatedElements: -> " + __debug_typecheck__(concatedElements));
+  Game.message("concatedDrawings: -> " + __debug_typecheck__(concatedDrawings));
+  Game.message("existingContent: -> " + __debug_typecheck__(existingContent));
+  Game.message("GraphicUI.getButtonsContentFor(section): -> " + __debug_typecheck__(GraphicUI.getButtonsContentFor(section)));
+  Game.message("existingContent.elements: -> " + __debug_typecheck__(existingContent.elements));
+  Game.message("GraphicUI.content.elements: -> " + __debug_typecheck__(   GraphicUI.content.elements));
+  Game.message("GraphicUI.content.drawing: -> " + __debug_typecheck__(GraphicUI.content.drawing));
+  Game.message("existingContent.drawing: -> " + __debug_typecheck__(existingContent.drawing));
 
     GraphicUI.UI.setContent(
       Object.assign(

@@ -80,6 +80,9 @@ blocks/Cauldron.ts
 
 blocks/TransferStorage.ts
 
+
+blocks/candle/Tile.ts
+
 blocks/candle/Candle.ts
 
 
@@ -137,4 +140,7 @@ blocks/Sign.ts
 
 server/PlayerTick.ts
 dimension/InfiniteTick.ts
+
+tag_register.ts
+
 final.ts
