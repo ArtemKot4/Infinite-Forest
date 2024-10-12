@@ -112,7 +112,7 @@ dimension/generation/underground/crystal.ts
 
 dimension/generation/generation_all.ts
 
-
+dimension/generation/dungeon/Labyrinth.ts
 
 core/callbacks/native_command.ts
 core/callbacks/level_displayed.ts
