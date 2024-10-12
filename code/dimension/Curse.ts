@@ -48,8 +48,22 @@ abstract class Forest {
   }
 }
 
+/** Abstract class to create a forest curses, influencing on player and forest 
+ * 
+ */
+
 abstract class Curse {
+
+  /** identifier of your curse
+   * 
+   */
+
   public static identifier: string = "none";
+
+  /**
+   * function that need call in LevelDisplayed Callback
+   * @param identifier your Curse.identifier
+   */
 
   @onLevelDisplayed
   public static initialize = (identifier: string) => {
@@ -68,10 +82,21 @@ abstract class Curse {
     return;
   };
 
+  /**
+   * Checks, contain forest your curse or his was broken
+   * @returns boolean
+   */
+
   public static worldIs() {
     const flag = Forest.getFlag("curse");
     return flag && !!flag[this.identifier];
   }
+
+  /** Checks, contain forest your curse or his was broken, if player in creative, returns false. 
+   * Usings if curse have a influence to player for validation
+   * @param player player id, optional
+   * @returns boolean
+   */
 
   public static allowHas(player?: int) {
     if (player) {
@@ -83,25 +108,53 @@ abstract class Curse {
     return this.worldIs();
   }
 
-  public static hasList(player: int, list: name[]) {
+  /** Checks, that curses from list has'nt broken. If can a player param, if player in creative, return false;
+   * @param list list of names of your curses
+   * @param player player id, optional
+   */
+
+  public static hasList(list: name[], player?: int) {
     const actor = new PlayerActor(player);
 
-    if (actor.getGameMode() === EGameMode.CREATIVE) {
+    if (actor.isValid() && actor.getGameMode() === EGameMode.CREATIVE) {
       return false;
-    }
+    };
+
     for (let element of list) {
-      if (Forest.getFlag("curse")?.[element] == false) return false;
-    }
+      if (Forest.getFlag("curse")?.[element] === false) {
+        return false;
+      }
+    };
+
     return true;
   }
+
+ /** Returns name of all curses
+  * 
+  * @returns name of exists curses
+  */ 
 
   public static getCurseList() {
     return Object.keys(Forest.getFlag("curse"));
   }
 
+ /** Returns list of all curses, name and states
+   * 
+   * @returns Record<name, boolean>
+   */
+
+
   public static getStatelist() {
     return Forest.getFlag("curse");
   }
+
+  /** Subscribe on your curse
+   * 
+   * @param callback your callback
+   * @param player player id, optional
+   * @returns your call of callback, if world has a curse. 
+   * If player param is exists and player in creative, callback can't be called
+   */
 
   public static subscribe(callback: () => void, player?: int) {
     return ((player && this.allowHas(player)) || this.worldIs()) && callback();

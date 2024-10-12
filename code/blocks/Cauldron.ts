@@ -18,7 +18,7 @@ namespace Cauldron {
     return mesh;
   })();
 
-  export function createWaterOverlay(tile, height?: int) {
+  export function createWaterOverlay(tile: TileEntityBase & {waterAnimation: Animation.Base}, height?: int) {
     const description = {
       mesh: waterMesh,
       skin: "terrain-atlas/water/water_0.png",
@@ -108,6 +108,7 @@ namespace Cauldron {
         });
 
         this.setWaterCount(WATER_LEVELS_MAX);
+        return;
       };
       this.takeWater(emptyItem);
       return;

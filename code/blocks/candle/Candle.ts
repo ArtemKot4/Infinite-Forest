@@ -72,7 +72,7 @@ class Candle extends FBlock {
       }
 
       if (item.id === VanillaItemID.flint_and_steel) {
-        const stringId = String(IDRegistry.getIdInfo(block.id)).split(":")[1];
+        const stringId = getIdByNumber(block.id);
         const endChar = Number(stringId[stringId.length - 1]);
 
         const clicks = CandleTileReplacer.coordsList.get(`${coords.x} ${coords.y} ${coords.z}`);
