@@ -6,7 +6,9 @@ Callback.addCallback("LevelDisplayed", () => {
 
   CandleTileReplacer.initCandles();
 
-  Book.GraphicUI.initializeSections();
+  ServerPlayer.initialize();
+
+  Book.MainUI.initializeSections();
 
   Game.message("curse flag: -> " + JSON.stringify(Forest.getFlag("curse")));
 });

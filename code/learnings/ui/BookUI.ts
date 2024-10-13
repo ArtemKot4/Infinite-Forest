@@ -12,7 +12,82 @@ export interface ISectionList {
   }
 }
 
-export abstract class GraphicUI {
+export abstract class MainUI {
+  protected constructor() {};
+ 
+  protected static content = {
+    drawing: [
+      {
+        type: "background",
+        color: android.graphics.Color.argb(38, 22, 22, 22),
+      },
+      {
+        type: "bitmap",
+        bitmap: "book.learning_book_background",
+        x: UI.getScreenHeight() / 3,
+        y: 30,
+        scale: 2,
+      },
+    ],
+    elements: {
+      closeButton: {
+        type: "closeButton",
+        x: UI.getScreenHeight() - 274,
+        y: 90,
+        scale: 1.9,
+        bitmap: "close_button",
+      },
+      buttonRight: {
+        type: "button",
+        x: UI.getScreenHeight() * 1.5,
+        y: 372.5,
+        scale: 3,
+        bitmap: "book.right_button",
+        bitmap2: "book.right_button_pressed",
+        clicker: {
+          onClick: () => GraphicUI.rightOnClick,
+        },
+      },
+      buttonLeft: {
+        type: "button",
+        x: UI.getScreenHeight() / 1.75,
+        y: 372.5,
+        scale: 3,
+        bitmap: "book.left_button",
+        bitmap2: "book.left_button_pressed",
+        clicker: {
+          onClick: () => GraphicUI.leftOnClick,
+        },
+      },
+
+      number1: {
+        type: "text",
+        x: UI.getScreenHeight() / 1.35,
+        y: 375,
+        font: {
+          size: 15,
+          color: android.graphics.Color.parseColor("#B8AC8F"),
+        },
+        text: ERROR_WARNING,
+      },
+      number2: {
+        type: "text",
+        x: UI.getScreenHeight() * 1.35,
+        y: 375,
+        font: {
+          size: 15,
+          color: android.graphics.Color.parseColor("#B8AC8F"),
+        },
+        text: ERROR_WARNING,
+      },
+    },
+  } as UI.WindowContent;
+
+  protected static UI = new UI.Window(this.content)
+
+}
+
+export abstract class GraphicUIDeprecated {
   public static pagesList: Record<playerName, ISectionList> = {};
   protected constructor() {}
   protected static content = {

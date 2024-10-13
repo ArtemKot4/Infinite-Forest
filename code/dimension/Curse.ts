@@ -10,7 +10,7 @@ abstract class Forest {
    */
   public static flags = {};
 
-  public static addFlag<T>(name: string, value?: T) {
+  public static setFlag<T>(name: string, value?: T) {
     Forest.flags[name] = value || true;
     // Network.sendToServer("packet.infinite_forest.world_flag_add", {
     //   name,
@@ -27,24 +27,34 @@ abstract class Forest {
   }
 
   public static deleteFlag(name: string) {
-    delete Forest.flags[name];
+     Forest.flags[name] = undefined;
     // Network.sendToServer("packet.infinite_forest.world_flag_delete", { name });
+  };
+
+  public static setFlagClient<T>(name: string, value?: T) {
+      Network.sendToServer("packet.infinite_forest.Forest.setFlag", {name, value})
+  };
+
+  public static deleteFlagClient<T>(name: string) {
+    Network.sendToServer("packet.infinite_forest.Forest.deleteFlag", {name})
   }
 
   static {
+
     Network.addClientPacket(
-      "packet.infinite_forest.world_flag_add",
+      "packet.infinite_forest.Forest.setFlag",
       (data: IWorldFlagData) => {
-        Forest.flags[data.name] ??= data.value || true;
+        Forest.flags[data.name] = data.value || true;
       }
     );
 
     Network.addClientPacket(
-      "packet.infinite_forest.world_flag_delete",
-      (data: Omit<IWorldFlagData, "value">) => {
+      "packet.infinite_forest.Forest.deleteFlag",
+      (data: Pick<IWorldFlagData, 'name'>) => {
         delete Forest.flags[data.name];
       }
     );
+
   }
 }
 
@@ -69,7 +79,7 @@ abstract class Curse {
     const flag = (Forest.getFlag("curse") || {}) as {};
 
     if (!flag[identifier]) {
-      return Forest.addFlag(
+      return Forest.setFlag(
         "curse",
         Object.assign(flag, {
           [identifier]: true,
