@@ -17,8 +17,8 @@ class CandleTileReplacer {
         const biome = region.getBiome(this.x, this.z);
 
         if (World.getThreadTime() % 60 === 0) {
-          if (!hasWordInID(block.id, "candle")) {
-            CandleTileReplacer.coordsList.delete(`${x} ${y} ${z}`);
+          if (!ForestUtils.hasWordInID(block.id, "candle")) {
+            CandleTileReplacer.coordsList?.delete(`${x} ${y} ${z}`);
             this.remove = true;
           }
         }
@@ -116,7 +116,7 @@ class CandleTileReplacer {
       BlockID["candle_unlit"],
       block.data
     );
-    CandleTileReplacer.coordsList.delete(`${x} ${y} ${z}`);
+    CandleTileReplacer.coordsList?.delete(`${x} ${y} ${z}`);
   }
 
   @onLevelDisplayed

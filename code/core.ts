@@ -5,7 +5,6 @@ IMPORT("BlockAnimator");
 IMPORT("ConnectedTexture");
 IMPORT("SoundLib");
 
-
 const ERROR_WARNING =
   "Error! please send issue on https://github.com/Artem0n4/Infinite-Forest";
 
@@ -32,7 +31,7 @@ const BLOCK_TYPE_GLASS = Block.createSpecialType({
   lightopacity: 1,
   destroytime: 60,
   renderlayer: 1,
-  sound: "glass"
+  sound: "glass",
 });
 
 const BLOCK_TYPE_FIRE = Block.createSpecialType({
@@ -86,7 +85,7 @@ const BLOCK_TYPE_TRANSLURENT = Block.createSpecialType({
   destroytime: 0,
   explosionres: 0,
   translucency: 1,
-  material: 4
+  material: 4,
 });
 
 /**
@@ -144,32 +143,14 @@ function breakHasAir(id: int) {
   );
 }
 
-function parseID(id: string) {
-  return ItemID[id] || VanillaItemID[id] || BlockID[id] || VanillaBlockID[id];
-}
-
 enum EForestState {
   ICE = -1,
   BALANCE = 0,
   FIRE = 1,
 }
 
-const ForestConfiguration = {};
 
-function randomizeHotbarSlot(player) {
-  const randomSlot = randomInt(0, 8);
-  const actor = new PlayerEntity(player);
-  actor.setSelectedSlot(randomSlot);
-  actor.setCarriedItem(actor.getInventorySlot(actor.getSelectedSlot()));
-  return;
-}
 
-function iceItemProtectFunction(player) {
-  if (ColdCurse.allowHas(player)) {
-    randomizeHotbarSlot(player);
-    Entity.damageEntity(player, 3);
-  }
-}
 
 const ServerPlayerDamage = (count: int = 1) =>
   Network.sendToServer("infinite_forest.damage_player", { count: count });
@@ -193,31 +174,80 @@ namespace PlayerHelper {
   };
 
   Callback.addCallback("ItemUseNoTarget", (item, player) => {
-    Game.message(JSON.stringify(PlayerHelper.getPointed()))
-  })
-}
-
-function getIdByNumber(id: int) {
- return String(IDRegistry.getIdInfo(id)).split(":")[1]//.split("#")[0];
-};
-
-function hasWordInID(id: int, word: string) {
-   return getIdByNumber(id).includes(word);
+    Game.message(JSON.stringify(PlayerHelper.getPointed()));
+  });
 }
 
 namespace ConfigManager {
-   export const IdeaAnimation = __config__.getBool("idea_animation") || true;
+  export const IdeaAnimation = __config__.getBool("idea_animation") || true;
 }
 
 const NetworkEvent = BlockEngine.Decorators.NetworkEvent;
 const ContainerEvent = BlockEngine.Decorators.ContainerEvent;
 const ClientSide = BlockEngine.Decorators.ClientSide;
 
+
+
+namespace ForestUtils {
+  export function sendMessageFromName(
+    player: int | [Native.Color, int],
+    text: string
+  ) {
+    player = !Array.isArray(player) ? [Native.Color.WHITE, player] : player;
+
+    const client = Network.getClientForPlayer(player[1]);
+
+    if (!client) return;
+
+    const name = Entity.getNameTag(player[1]);
+
+    BlockEngine.sendUnlocalizedMessage(
+      client,
+      `<${player[0]}${name}> ${Native.Color.WHITE}${text}`
+    );
+    return;
+  }
+
+  export function getIdByNumber(id: int) {
+    return String(IDRegistry.getIdInfo(id)).split(":")[1]; //.split("#")[0];
+  }
+
+  export function hasWordInID(id: int, word: string) {
+    return getIdByNumber(id).includes(word);
+  }
+
+  export function parseID(id: string) {
+    return ItemID[id] || VanillaItemID[id] || BlockID[id] || VanillaBlockID[id];
+  };
+
+  export function randomizeHotbarSlot(player) {
+    const randomSlot = randomInt(0, 8);
+    const actor = new PlayerEntity(player);
+    actor.setSelectedSlot(randomSlot);
+    actor.setCarriedItem(actor.getInventorySlot(actor.getSelectedSlot()));
+    return;
+  }
+  
+}
+
 //Marker decorators:
 
 /**
- * @marker that declared that function must be used in LevelDisplayed Callback  
+ * @marker that declared that function must be used in LevelDisplayed Callback
  */
 
-function onLevelDisplayed(target: any, key: string | symbol, descriptor?: PropertyDescriptor) {
-};
+function onLevelDisplayed(
+  target: any,
+  key: string | symbol,
+  descriptor?: PropertyDescriptor
+) {}
+
+/**
+ * @marker that declared that function must be used in any tick Callback
+ */
+
+function onTick(
+  target: any,
+  key: string | symbol,
+  descriptor?: PropertyDescriptor
+) {}

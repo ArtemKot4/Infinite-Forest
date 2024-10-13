@@ -2,7 +2,6 @@ type playerName = string;
 type message = string;
 
 class Learning {
-
   public static list: Record<name, message> = {};
   public static playerList: Record<playerName, Set<name>> = {};
 
@@ -11,13 +10,9 @@ class Learning {
   }
 
   public static sendMessage(name: string, player: int, color: Native.Color) {
-    const client = Network.getClientForPlayer(player);
-    
-    if (!client) return;
-
-    BlockEngine.sendUnlocalizedMessage(
-      client,
-      `<${Entity.getNameTag(player)}> ${color}${Translation.translate(
+    return ForestUtils.sendMessageFromName(
+      player,
+      `${color}${Translation.translate(
         "learning.infinite_forest." + Learning.list[name]
       )}`
     );
@@ -28,10 +23,9 @@ class Learning {
     player: int,
     color: Native.Color = Native.Color.DARK_GREEN,
     page?: name,
-    sign: string | string[] = "question",
+    sign: string | string[] = null,
     section: keyof Book.ISectionList = "default"
   ) {
-
     if (Learning.has(player, name) === true) return;
 
     const playerName = Entity.getNameTag(player);
@@ -39,7 +33,7 @@ class Learning {
     Learning.sendMessage(name, player, color);
 
     Learning.playerList[playerName].add(name);
-    
+
     if (page) {
       Book.Section.givePage(player, page, section, sign);
       Reflection.sendMessage(player);

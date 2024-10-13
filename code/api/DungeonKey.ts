@@ -44,7 +44,7 @@ class DungeonKey extends FItem {
 
 namespace DungeonKeyList {
   export const IceKey = new DungeonKey("ice_dungeon_key");
-  IceKey.registerHandFunction(iceItemProtectFunction);
+  IceKey.registerHandFunction(ColdCurse.onInventory);
 }
 
 Callback.addCallback("ItemUse", (c, i, b, isE, p) => {

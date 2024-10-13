@@ -11,10 +11,10 @@ abstract class Forest {
   public static flags = {};
 
   public static addFlag<T>(name: string, value?: T) {
-    Forest.flags[name] = (value || true);
+    Forest.flags[name] = value || true;
     // Network.sendToServer("packet.infinite_forest.world_flag_add", {
     //   name,
-    //   value, 
+    //   value,
     // } satisfies IWorldFlagData);
   }
 
@@ -48,14 +48,13 @@ abstract class Forest {
   }
 }
 
-/** Abstract class to create a forest curses, influencing on player and forest 
- * 
+/** Abstract class to create a forest curses, influencing on player and forest
+ *
  */
 
 abstract class Curse {
-
   /** identifier of your curse
-   * 
+   *
    */
 
   public static identifier: string = "none";
@@ -70,14 +69,12 @@ abstract class Curse {
     const flag = (Forest.getFlag("curse") || {}) as {};
 
     if (!flag[identifier]) {
-
       return Forest.addFlag(
         "curse",
         Object.assign(flag, {
           [identifier]: true,
         })
       );
-
     }
     return;
   };
@@ -92,7 +89,7 @@ abstract class Curse {
     return flag && !!flag[this.identifier];
   }
 
-  /** Checks, contain forest your curse or his was broken, if player in creative, returns false. 
+  /** Checks, contain forest your curse or his was broken, if player in creative, returns false.
    * Usings if curse have a influence to player for validation
    * @param player player id, optional
    * @returns boolean
@@ -118,41 +115,40 @@ abstract class Curse {
 
     if (actor.isValid() && actor.getGameMode() === EGameMode.CREATIVE) {
       return false;
-    };
+    }
 
     for (let element of list) {
       if (Forest.getFlag("curse")?.[element] === false) {
         return false;
       }
-    };
+    }
 
     return true;
   }
 
- /** Returns name of all curses
-  * 
-  * @returns name of exists curses
-  */ 
+  /** Returns name of all curses
+   *
+   * @returns name of exists curses
+   */
 
   public static getList() {
     return Object.keys(Forest.getFlag("curse"));
   }
 
- /** Returns list of all curses, name and states
-   * 
+  /** Returns list of all curses, name and states
+   *
    * @returns Record<name, boolean>
    */
-
 
   public static getStatelist() {
     return Forest.getFlag("curse");
   }
 
   /** Subscribe on your curse
-   * 
+   *
    * @param callback your callback
    * @param player player id, optional
-   * @returns your call of callback, if world has a curse. 
+   * @returns your call of callback, if world has a curse.
    * If player param is exists and player in creative, callback can't be called
    */
 
@@ -172,7 +168,6 @@ Saver.addSavesScope(
 );
 
 abstract class ColdCurse extends Curse {
-
   public static COLD_HEIGHT = 130;
   public static COLD_MESSAGE: boolean = true;
   public static identifier: string = "cold";
@@ -228,15 +223,11 @@ abstract class ColdCurse extends Curse {
         java.lang.Thread.sleep(5);
       }
     });
-
   }
 
   public static runSnow(x: int, y: int, z: int, radius = 16, count = 16) {
-
     if (World.getThreadTime() % 8 === 0) {
-
       for (let n = -count; n <= count; n++) {
-
         ParticlePacket.send(
           EForestParticle.SNOWFALL,
           x + n,
@@ -247,7 +238,7 @@ abstract class ColdCurse extends Curse {
           0,
           Player.getLocal()
         );
-        
+
         ParticlePacket.send(
           EForestParticle.SNOWFALL,
           x + randomInt(-radius, radius),
@@ -263,20 +254,17 @@ abstract class ColdCurse extends Curse {
   }
 
   public static sendMessage(coords: Vector) {
-    
     if (coords.y >= 115) {
-
       ColdCurse.COLD_MESSAGE === true &&
-        Game.message(
-          `<${Entity.getNameTag(Player.getLocal())}> ${
-            Native.Color.BLUE
-          }${Translation.translate("message.infinite_forest.cold_myself")}`
+        ForestUtils.sendMessageFromName(
+          Player.getLocal(),
+          `${Native.Color.BLUE}${Translation.translate(
+            "message.infinite_forest.cold_myself"
+          )}`
         );
 
       ColdCurse.COLD_MESSAGE = false;
-
     } else {
-
       ColdCurse.COLD_MESSAGE = true;
     }
   }
@@ -285,7 +273,19 @@ abstract class ColdCurse extends Curse {
     Entity.damageEntity(player, 1);
     Entity.addEffect(player, EPotionEffect.DIG_SLOWDOWN, 3, 10, false, false);
     return;
-  }
+  };
+
+  @onTick
+  public static onInventory(player: int) {
+
+    return ColdCurse.subscribe(() => {
+       ForestUtils.randomizeHotbarSlot(player);
+       Entity.damageEntity(player, 3);
+       return;
+     }, player)
+       
+     }
+   
 
   // public static onTick(ticker: int, player: int): void {
   //   if (this.has(player) === false) return;

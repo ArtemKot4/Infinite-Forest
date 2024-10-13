@@ -169,11 +169,9 @@ class UnlitTorchTile extends TileEntityBase {
         const lightlevel = region.getLightLevel(this.x, this.y, this.z);
         const speed = lightlevel < 4 ? 0.2 : lightlevel / 35;
 
-        const stringIdTop = getIdByNumber(
-          region.getBlockId(this.x, this.y + 1, this.z)
-        );
 
-        if (stringIdTop.includes("glass")) {
+
+        if (ForestUtils.hasWordInID(region.getBlockId(this.x, this.y + 1, this.z), "glass")) {
           height = this.y + 2;
           CursedLightning.clouds(this.x, height, this.z);
           CursedLightning.rain(this.x, height, this.z, speed);

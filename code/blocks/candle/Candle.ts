@@ -72,7 +72,7 @@ class Candle extends FBlock {
       }
 
       if (item.id === VanillaItemID.flint_and_steel) {
-        const stringId = getIdByNumber(block.id);
+        const stringId = ForestUtils.getIdByNumber(block.id);
         const endChar = Number(stringId[stringId.length - 1]);
 
         const clicks = CandleTileReplacer.coordsList.get(`${coords.x} ${coords.y} ${coords.z}`);
@@ -123,7 +123,7 @@ class Candle extends FBlock {
   public static getCount(region: BlockSource | WorldRegion, coords: Vector) {
     const block = region.getBlock(coords.x, coords.y, coords.z);
 
-    return hasWordInID(block.id, "candle") ? block.data + 1 : 1;
+    return ForestUtils.hasWordInID(block.id, "candle") ? block.data + 1 : 1;
   }
 }
 

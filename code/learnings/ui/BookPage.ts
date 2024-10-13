@@ -96,7 +96,7 @@ class BookPage {
           scale: image.scale,
           bitmap: "unknown",
           visual: true,
-          source: {id: parseID(image.texture), count: 1, data: 0}
+          source: {id: ForestUtils.parseID(image.texture), count: 1, data: 0}
         };
       }
     }
