@@ -92,7 +92,10 @@ abstract class IdeaAnimation {
     let signIndex = 0;
 
     Threading.initThread("thread.infinite_forest.idea_animation", () => {
+
       while (y < 1300) {
+
+        try {
 
         if (frame < this.FRAME_MAX && timer <= 0) {
           frame++;
@@ -149,7 +152,13 @@ abstract class IdeaAnimation {
             java.lang.Thread.sleep(1);
           }
         }
-      }
+      
+    } catch (error) {
+       Game.message(Translation.translate("message.infinite_forest.idea_animation_broken") + error);
+       IdeaAnimation.close();
+       break;
+    }
+  }
     });
   }
 
@@ -175,3 +184,8 @@ Callback.addCallback("ItemUse", (c, i, b, ise, p) => {
     ]);
   }
 });
+
+Translation.addTranslation("message.infinite_forest.idea_animation_broken", {
+  en: "Ups... You get error with animation, his has been broken and closed. Please, send issue to https://github.com/Artem0n4/Infinite-Forest\nError: ",
+  ru: "Упс... У вас возникла ошибка с анимацией, поэтому она закрылась. Пожалуйста, сообщите нам в виде issue в репозитории https://github.com/Artem0n4/Infinite-Forest\nОшибка: "
+})

@@ -13,6 +13,9 @@ export interface ISectionList {
 }
 
 export abstract class MainUI {
+
+  protected static page = 0;
+
   protected constructor() {};
  
   protected static content = {
@@ -87,7 +90,16 @@ export abstract class MainUI {
 
   public static getUI(): UI.Window {
     return MainUI.UI
+  };
+
+  public static draw() {
+    
   }
+
+  public static openFor(player: int) {
+      
+  }
+
 }
 
 export abstract class GraphicUIDeprecated {

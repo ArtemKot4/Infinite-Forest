@@ -39,16 +39,16 @@ class ServerPlayer {
     });
   }
 
-  public static getFlag(player: int, name: string) {
-    return ServerPlayer.flags[Entity.getNameTag(player)][name];
+  public static getFlag<T>(player: int, name: string, fallback?: T) {
+    return ServerPlayer.flags[Entity.getNameTag(player)][name] || fallback;
   }
 
-  public static getFlagFromServer(player: int, name: string) {
+  public static getFlagFromServer<T>(player: int, name: string, fallback?: T) {
     Network.getClientForPlayer(player).send(
       "packet.infinite_forest.ServerPlayer.getFlag",
       { player, name }
     );
-    return ServerPlayer.flags[Entity.getNameTag(player)][name];
+    return this.getFlag(player, name, fallback);
   }
 
   static {

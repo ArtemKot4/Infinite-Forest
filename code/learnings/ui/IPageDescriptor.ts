@@ -17,23 +17,19 @@ type pageContent = {
   images?: pageImage[];
 };
 
-type pageDirection = {
-  name: string;
+type pageDirection = Record<name, {
   texture?: string;
-  content: pageContent;
-};
+  content: pageContent & {learning?: string};
+}>;
 
 
 interface IPageDescriptor {
-  left: pageContent;
-  /**
-   * directions can't be used if you use a right page
+    /**
+   * directions
    */
-  right: pageContent & {
-    directions?: {
-      first: pageDirection;
-      second?: pageDirection;
-      third?: pageDirection;
-    };
-  };
+  directions?: pageDirection;
+  left: pageContent;
+
+  right: pageContent 
+
 };

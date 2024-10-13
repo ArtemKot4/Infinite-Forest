@@ -1,4 +1,9 @@
 namespace Book {
+  export interface IPlayerPageList {
+    direction: Nullable<string>;
+    section: keyof ISectionList;
+  }
+
   export class Section {
     public static list: Record<name, { texture: string[]; icon: string }> = {};
 
@@ -7,15 +12,16 @@ namespace Book {
     constructor(
       public name: keyof ISectionList,
       public icon: string,
-      public texture: string[] = ["book.default_section", "book.default_section_larged"]
+      public texture: string[] = [
+        "book.default_section",
+        "book.default_section_larged",
+      ]
     ) {
       Section.list[name] = { texture, icon };
     }
 
     public givePage(player: int, page: name, sign: string | string[]) {
-      IdeaAnimation.init(sign);
-      (GraphicUI.pagesList[Entity.getNameTag(player)][this.name].pages ??=
-        []).push(page);
+      Section.givePage(player, page, this.name, sign);
     }
 
     public static givePage(
@@ -25,8 +31,14 @@ namespace Book {
       sign: string | string[]
     ) {
       IdeaAnimation.init(sign);
-      (GraphicUI.pagesList[Entity.getNameTag(player)][section].pages ??=
-        []).push(page);
+
+      const flag = ServerPlayer.getFlag(player, "pages", {}) as IPlayerPageList;
+
+      ServerPlayer.setFlag<IPlayerPageList>(
+        player,
+        "pages",
+        (flag[page] = { section, direction: null })
+      );
     }
 
     public static drawSectionButton(section: keyof ISectionList, y: int) {
@@ -73,36 +85,28 @@ namespace Book {
         const elementList = Object.values(GraphicUI.UI.content.elements);
 
         if (data[section as keyof ISectionList].pages.length > 0) {
-
           const last = []
             .concat(elementList)
             .reverse()
-            .find((v) => String(v.bitmap as string).endsWith("tab")); 
+            .find((v) => String(v.bitmap as string).endsWith("tab"));
 
-          const coords = (last && last.y ? distanceY + last.y : 120);
+          const coords = last && last.y ? distanceY + last.y : 120;
 
-          Section.drawSectionButton(
-            section as keyof ISectionList,
-            coords
-          );
+          Section.drawSectionButton(section as keyof ISectionList, coords);
         }
       }
-    };
+    }
 
     public static setCurrent(section: keyof ISectionList) {
-        Section.current = section;
-    };
+      Section.current = section;
+    }
 
     public static getCurrent() {
       return Section.current;
-    };
-
+    }
   }
 
   export const DefaultSection = new Section("default", "book.glowworm");
-  export const CauldronSection = new Section(
-    "cauldron",
-    "book.cauldron_tab"
-  );
+  export const CauldronSection = new Section("cauldron", "book.cauldron_tab");
   export const SignSection = new Section("sign", "book.left_button");
 }
