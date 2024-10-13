@@ -3,7 +3,6 @@ type message = string;
 
 class Learning {
   public static list: Record<name, message> = {};
-  public static playerList: Record<playerName, Set<name>> = {};
 
   constructor(public name: string, public message: string = name) {
     Learning.list[name] = message;
@@ -26,24 +25,31 @@ class Learning {
     sign: string | string[] = null,
     section: keyof Book.ISectionList = "default"
   ) {
-    if (Learning.has(player, name) === true) return;
-
-    const playerName = Entity.getNameTag(player);
+    if (Learning.has(player, name)) return;
 
     Learning.sendMessage(name, player, color);
 
-    Learning.playerList[playerName].add(name);
+    const list: Set<string> = ServerPlayer.getFlag(player, "learnings");
+
+    list.add(name);
 
     if (page) {
       Book.Section.givePage(player, page, section, sign);
       Reflection.sendMessage(player);
     }
-  }
+  };
+
 
   public static has(player: int, name: string) {
-    return (Learning.playerList[Entity.getNameTag(player)] ??= new Set()).has(
-      name
-    );
+    let current: Nullable<Set<string>> = ServerPlayer.getFlag(player, "learnings");
+
+    if(!current) {
+      ServerPlayer.setFlag(player, name, new Set());
+      current = ServerPlayer.getFlag(player, "learnings");
+    };
+
+   return current.has(name);
+    
   }
 
   public static clickerList: { block: Tile; name: name }[] = [];
@@ -70,10 +76,10 @@ class Learning {
   }
 }
 
-Callback.addCallback("LevelDisplayed", () => {
-  const name = Entity.getNameTag(Player.getLocal());
-  Learning.playerList[name] ??= new Set();
-});
+// Callback.addCallback("LevelDisplayed", () => {
+//   const name = Entity.getNameTag(Player.getLocal());
+//   Learning.playerList[name] ??= new Set();
+// });
 
 namespace LearningList {
   export const FIRE_UNLIT = new Learning("fire_unlit");

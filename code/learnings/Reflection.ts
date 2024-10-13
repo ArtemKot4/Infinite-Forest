@@ -1,16 +1,14 @@
+interface IReflection {
+  message: string;
+  bookPage: string;
+  learnings: string[];
+  sign: string | string[];
+}
+
 class Reflection {
-  public static list: Record<
-    name,
-    {
-      message: string;
-      bookPage: string;
-      learnings: string[];
-      sign: string | string[];
-    }
-  > = {};
+  public static list: Record<name, IReflection> = {};
 
-  public static playerList: Record<name, Set<name>> = {};
-
+  
   constructor(
     public name: string,
     public message: string,
@@ -23,7 +21,6 @@ class Reflection {
   }
 
   public static hasLearnings(player: int, learnings: string[]) {
-    const list = (Learning.playerList[player] ??= new Set());
 
     for (const learning of learnings) {
       if (Learning.has(player, learning) === false) {
@@ -35,9 +32,15 @@ class Reflection {
   }
 
   public static has(player: int, name: string) {
-    return (Reflection.playerList[Entity.getNameTag(player)] ??= new Set()).has(
-      name
-    );
+    let current: Nullable<Set<string>> = ServerPlayer.getFlag(player, "reflections");
+
+    if(!current) {
+      ServerPlayer.setFlag(player, name, new Set());
+      current = ServerPlayer.getFlag(player, "reflections");
+    };
+
+   return current.has(name);
+    
   }
 
   public static send(
@@ -45,7 +48,7 @@ class Reflection {
     name: string,
     section: keyof Book.ISectionList = "default"
   ) {
-    if (Reflection.has(player, name) === true) return;
+    if (Reflection.has(player, name)) return;
 
     if (!Reflection.hasLearnings(player, Reflection.list[name].learnings)) {
       return;
@@ -53,9 +56,9 @@ class Reflection {
 
     Reflection.sendMessage(player);
 
-    const playerName = Entity.getNameTag(player);
+    const list = ServerPlayer.getFlag(player, "reflections");
 
-    Reflection.playerList[playerName].add(name);
+    list.add(name);
 
     Book.Section.givePage(
       player,
@@ -65,7 +68,6 @@ class Reflection {
     );
   }
   public static sendMessage(player: int) {
-
     return ForestUtils.sendMessageFromName(
       player,
       `${Native.Color.DARK_GREEN}${Translation.translate(

@@ -85,6 +85,9 @@ export abstract class MainUI {
 
   protected static UI = new UI.Window(this.content)
 
+  public static getUI(): UI.Window {
+    return MainUI.UI
+  }
 }
 
 export abstract class GraphicUIDeprecated {

@@ -1,16 +1,20 @@
-interface IPagePosition {
+namespace Book {
+
+export interface IPagePosition {
   text: int;
   title: int;
   subtitle: int;
 }
 
-class BookPage {
+export class Page {
   constructor(public description: IPageDescriptor) {
-    const content = BookPage.constructContent(description)
-    BookPage.resultPages[description.left.elements.title] =
+    const content = Page.constructContent(description)
+    Page.resultPages[description.left.elements.title] =
       {elements: content.elements, drawing: content.drawing};
-  }
+  };
+
   public static resultPages: Record<string, {elements: UI.ElementSet, drawing: UI.DrawingSet}> = {};
+
   public static separateText(text: string) {
     let result = "";
     for (let i = 0; i < text.length; i++) {
@@ -20,7 +24,8 @@ class BookPage {
       }
     }
     return result;
-  }
+  };
+
   public static constructText(
     elements: UI.ElementSet,
     description: pageElements,
@@ -28,7 +33,9 @@ class BookPage {
     side: "left" | "right"
   ) {
     if (!description) return;
+
     const translatedTitle = Translation.translate(description.title);
+
     elements[side + "Title"] = {
       type: "text",
       font: {
@@ -39,8 +46,9 @@ class BookPage {
         pos.title +
         (translatedTitle.length < 14 ? translatedTitle.length * 4.5 : 0),
       y: 60,
-      text: BookPage.separateText(translatedTitle),
+      text: Page.separateText(translatedTitle),
     };
+
     elements[side + "Subtitle"] = {
       type: "text",
       font: {
@@ -49,8 +57,9 @@ class BookPage {
       },
       x: pos.subtitle,
       y: 85,
-      text: BookPage.separateText(Translation.translate(description.subtitle)),
+      text: Page.separateText(Translation.translate(description.subtitle)),
     };
+
     elements[side + "Text"] = {
       type: "text",
       font: {
@@ -59,18 +68,22 @@ class BookPage {
       },
       x: pos.text,
       y: 110,
-      text: BookPage.separateText(Translation.translate(description.text)),
+      text: Page.separateText(Translation.translate(description.text)),
       multiline: true,
       clicker: {
         onLongClick(position, container, tileEntity, window, canvas, scale) {
-          //TODO: DELETE
-          Book.GraphicUI.UI.content.elements[side + "Text"].x = position.x;
-          Book.GraphicUI.UI.content.elements[side + "Text"].y = position.y;
-          Book.GraphicUI.UI.forceRefresh();
+          const UI = MainUI.getUI(); 
+
+          UI.content.elements[side + "Text"].x = position.x;
+          UI.content.elements[side + "Text"].y = position.y;
+
+          UI.forceRefresh();
+          //TODO: IT IS TEST, DELETE IF IS NOT VALID
         },
       },
     };
-  }
+  };
+
   public static constructImage(
     drawing: UI.DrawingSet,
     elements: UI.ElementSet,
@@ -105,7 +118,7 @@ class BookPage {
     const elements = {} as UI.ElementSet;
     const drawing = [] as UI.DrawingSet;
     if (description.left) {
-      BookPage.constructText(
+      Page.constructText(
         elements,
         description.left.elements,
         {
@@ -115,7 +128,7 @@ class BookPage {
         },
         "left"
       );
-      BookPage.constructImage(
+      Page.constructImage(
         drawing,
         elements,
         description.left.images,
@@ -124,7 +137,7 @@ class BookPage {
       );
     }
     if (description.right) {
-      BookPage.constructText(
+      Page.constructText(
         elements,
         description.right.elements,
         {
@@ -134,7 +147,7 @@ class BookPage {
         },
         "right"
       );
-      BookPage.constructImage(
+      Page.constructImage(
         drawing,
         elements,
         description.right.images,
@@ -144,10 +157,12 @@ class BookPage {
     }
 
     return {elements, drawing};
-  }
+  };
+
   public static constructDirection(x: int, y: int, image: int) {
     const onClick = function () {};
-  }
+  };
+  
   public static readFromJSON() {
     const DIRS = FileTools.GetListOfFiles(
       __dir__ + "resources/assets/pages/",
@@ -157,14 +172,16 @@ class BookPage {
       const takeJSON = JSON.parse(
         FileTools.ReadText(dir.getAbsolutePath())
       ) as IPageDescriptor;
-      const content = BookPage.constructContent(takeJSON);
-      BookPage.resultPages[takeJSON.left.elements.title] =
+      const content = Page.constructContent(takeJSON);
+      Page.resultPages[takeJSON.left.elements.title] =
         {elements: content.elements, drawing: content.drawing};
     }
     //TODO: description.directions write logic
   }
 
   static {
-    BookPage.readFromJSON();
+    Page.readFromJSON();
   }
+}
+
 }
