@@ -1,12 +1,12 @@
 abstract class IdeaAnimation {
   protected constructor() {}
 
-  protected static readonly FRAME_MAX = 10;
-  protected static readonly IMAGE_SCALE = 22.5;
-  protected static readonly HEIGHT_LOCATION = 23.5;
-  protected static readonly WIDTH_LOCATION = 310;
+  protected static readonly FRAME_MAX: int = 10;
+  protected static readonly IMAGE_SCALE: int = 22.5;
+  protected static readonly HEIGHT_LOCATION: int = 23.5;
+  protected static readonly WIDTH_LOCATION: int = 310;
 
-  protected static GUI = new UI.Window({
+  protected static GUI: UI.Window = new UI.Window({
     drawing: [
       { type: "background", color: android.graphics.Color.argb(0, 0, 0, 0) },
     ],
@@ -21,7 +21,7 @@ abstract class IdeaAnimation {
     },
   });
 
-  protected static redrawImage(frame: int, scale: int, x?: int, y?: int) {
+  protected static redrawImage(frame: int, scale: int, x?: int, y?: int): void {
     IdeaAnimation.GUI.content.elements["image"] = {
       type: "image",
       x: x || this.WIDTH_LOCATION,
@@ -33,14 +33,14 @@ abstract class IdeaAnimation {
     return;
   }
 
-  protected static setOffset(x: int, y: int) {
+  protected static setOffset(x: int, y: int): void {
     IdeaAnimation.GUI.content.elements["image"].x = x;
     IdeaAnimation.GUI.content.elements["image"].y = y;
     IdeaAnimation.GUI.forceRefresh();
     return;
   }
 
-  protected static drawSign(sign: string) {
+  protected static drawSign(sign: string): void {
     IdeaAnimation.GUI.content.elements["sign"] = {
       type: "image",
       bitmap: "sign." + sign,
@@ -51,21 +51,21 @@ abstract class IdeaAnimation {
     IdeaAnimation.GUI.forceRefresh();
   }
 
-  protected static clearSign() {
+  protected static clearSign(): void {
     IdeaAnimation.GUI.content.elements["sign"].bitmap = "unknown";
   }
 
-  protected static close() {
+  protected static close(): void {
     IdeaAnimation.GUI.close();
   }
 
-  protected static open() {
+  protected static open(): void {
     IdeaAnimation.setOffset(this.WIDTH_LOCATION, this.HEIGHT_LOCATION);
     IdeaAnimation.redrawImage(0, this.IMAGE_SCALE);
     IdeaAnimation.GUI.open();
   }
 
-  public static init(sign: string | string[]) {
+  public static init(sign: Nullable<string | string[]>): void {
     if (sign === null) {
       return;
     };
@@ -80,16 +80,16 @@ abstract class IdeaAnimation {
     
     this.open();
 
-    const timerMax = [].concat(sign).length - 1;
+    const timerMax: int = [].concat(sign).length - 1;
 
-    let x = this.WIDTH_LOCATION;
-    let y = this.HEIGHT_LOCATION;
-    let frame = 0;
-    let timer = 0;
-    let scale = this.IMAGE_SCALE;
-    let alpha = 1;
+    let x: int = this.WIDTH_LOCATION;
+    let y: int = this.HEIGHT_LOCATION;
+    let scale: int = this.IMAGE_SCALE;
 
-    let signIndex = 0;
+    let frame: int = 0;
+    let timer: int = 0;
+    let alpha: int = 1;
+    let signIndex: int = 0;
 
     Threading.initThread("thread.infinite_forest.idea_animation", () => {
 
@@ -154,8 +154,10 @@ abstract class IdeaAnimation {
         }
       
     } catch (error) {
+
        Game.message(Translation.translate("message.infinite_forest.idea_animation_broken") + error);
        IdeaAnimation.close();
+
        break;
     }
   }
@@ -168,7 +170,7 @@ abstract class IdeaAnimation {
     this.GUI.setBlockingBackground(true);
   };
 
-  public static getGUI() {
+  public static getGUI(): UI.Window {
     return IdeaAnimation.GUI;
   }
 }

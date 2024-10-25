@@ -20,7 +20,7 @@ class ServerPlayer {
     ServerPlayer.flags[playerName][name] = value;
   }
 
-  public static setFlagClient<T>(player: int, name: string, value: T) {
+  public static setFlagFromClient<T>(player: int, name: string, value: T) {
     Network.sendToServer("packet.infinite_forest.ServerPlayer.setFlag", {
       player,
       name,

@@ -1,7 +1,7 @@
 namespace Book {
   export interface IPlayerPageList {
     direction: Nullable<string>;
-    section: keyof ISectionList;
+    page: string;
   }
 
   export class Section {
@@ -32,12 +32,12 @@ namespace Book {
     ) {
       IdeaAnimation.init(sign);
 
-      const flag = ServerPlayer.getFlag(player, "pages", {}) as IPlayerPageList;
+      const flag = ServerPlayer.getFlag(player, "pages", {}) as Record<keyof ISectionList, IPlayerPageList>;
 
-      ServerPlayer.setFlag<IPlayerPageList>(
+      ServerPlayer.setFlagFromClient<IPlayerPageList>(
         player,
         "pages",
-        (flag[page] = { section, direction: null })
+        Object.assign(flag[section], {[page]: {direction: null}})
       );
     }
 

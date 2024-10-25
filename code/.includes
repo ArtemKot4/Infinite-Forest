@@ -5,6 +5,8 @@ core.ts
 unique_gen.ts
 
 dimension/Curse.ts
+dimension/ColdCurse.ts
+
 
 particles.ts
 

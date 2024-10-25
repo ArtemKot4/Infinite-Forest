@@ -5,19 +5,25 @@ namespace Book {
     subtitle: int;
   }
 
+  export interface resultPageDescriptor {
+    elements: UI.ElementSet;
+    drawing: UI.DrawingSet;
+    directions?: pageDirection;
+  }
+
   export class Page {
+
     constructor(public description: IPageDescriptor) {
       const content = Page.constructContent(description);
+
       Page.resultPages[description.left.elements.title] = {
         elements: content.elements,
         drawing: content.drawing,
+        ...description.directions && {directions: description.directions}
       };
     }
 
-    public static resultPages: Record<
-      string,
-      { elements: UI.ElementSet; drawing: UI.DrawingSet, directions?: pageDirection }
-    > = {};
+    public static resultPages: Record<string, resultPageDescriptor> = {};
 
     public static separateText(text: string) {
       let result = "";
@@ -190,12 +196,12 @@ namespace Book {
       }
     }
 
-   public static getPage(name: string) {
-    return Page.resultPages[name]
-   };
+    public static getPage(name: string): Nullable<resultPageDescriptor> {
+      return Page.resultPages[name] || null;
+    }
 
     static {
       Page.readFromJSON();
-    };
+    }
   }
 }
