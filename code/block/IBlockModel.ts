@@ -1,0 +1,3 @@
+interface IBlockModel {
+    getModel?(): BlockModel;
+};

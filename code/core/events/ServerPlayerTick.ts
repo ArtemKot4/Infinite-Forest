@@ -1,7 +1,8 @@
 Callback.addCallback("ServerPlayerTick", (playerUid: number) => {
-    const player = new PlayerEntity(playerUid);
 
       if(World.getThreadTime() % 8 === 0) {
+
+         const player = new PlayerEntity(playerUid);
 
          const selectedItemStack = player.getInventorySlot(player.getSelectedSlot());
          const carriedItemStack = player.getCarriedItem();

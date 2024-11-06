@@ -39,15 +39,15 @@ class ItemForest implements ItemBehavior, ItemHandComponent {
         return ItemCategory.ITEMS;
     };
 
-    public getExplodable(): boolean {
+    public isExplodable(): boolean {
         return true;
     };
 
-    public getFireResistant(): boolean {
+    public isFireResistant(): boolean {
         return false;
     };
 
-    public getShouldDespawn(): boolean {
+    public isShouldDespawn(): boolean {
         return true;
     }
 
@@ -63,7 +63,7 @@ class ItemForest implements ItemBehavior, ItemHandComponent {
          return true;
     }
 
-    public create() {
+    public create(): void {
         const textureData = this.getTexture();
 
         const itemTexture = Object.assign(
@@ -89,15 +89,15 @@ class ItemForest implements ItemBehavior, ItemHandComponent {
               frames : range(0, frames));
         };
 
-        if(this.getFireResistant()) {
+        if(this.isFireResistant()) {
             Item.setFireResistant(this.id, true);
         };
 
-        if(this.getExplodable()) {
+        if(this.isExplodable()) {
             Item.setExplodable(this.id, true);
         };
 
-        if(this.getShouldDespawn()) {
+        if(this.isShouldDespawn()) {
             Item.setShouldDespawn(this.id, true);
         };
 
