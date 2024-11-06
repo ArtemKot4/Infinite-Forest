@@ -163,8 +163,8 @@ class Wood {
         name,
         texture: [
           [name, 0],
-          [name, 0],
-          [name, 1],
+          [name, 0], //top
+          [name, 1], //side
           [name, 1],
           [name, 1],
           [name, 1],
