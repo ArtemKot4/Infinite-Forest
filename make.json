@@ -18,10 +18,6 @@
 			"type": "resource_directory"
 		},
 		{
-			"path": "models",
-			"type": "resource_directory"
-		},
-		{
 			"path": "assets/gui",
 			"type": "gui"
 		}
@@ -42,16 +38,6 @@
 			"source": "lib/*",
 			"type": "library",
 			"language": "javascript"
-		}
-	],
-	"compile": [
-		{
-			"source": "native",
-			"type": "native"
-		},
-		{
-			"source": "java",
-			"type": "java"
 		}
 	],
 	"additional": [
