@@ -21,7 +21,7 @@ class ItemForest implements ItemBehavior, ItemHandComponent {
         this.stringID = stringID;
         this.maxStack = stack;
         this.texture = texture;
-     };
+    };
 
     public getMaxStack(): number {
         return this.maxStack;
@@ -120,6 +120,8 @@ class ItemForest implements ItemBehavior, ItemHandComponent {
     public onUsingReleased?(item: ItemStack, ticks: number, player: number): void;
 
     public onUsingComplete?(item: ItemStack, player: number): void;
+
+    public onItemUse?(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, player: number): void;
 
     public onHand?(item: ItemStack): void; 
     

@@ -9,11 +9,15 @@ item/ItemHandComponent.ts
 
 item/ItemForest.ts
 
+item/TransferCrystal.ts
+
 block/IBlockModel.ts
 block/BlockModel.ts
 
 block/BlockForest.ts
 
 core/events/ServerPlayerTick.ts
+
+core/dimension/InfiniteForest.ts
 
 final.ts
