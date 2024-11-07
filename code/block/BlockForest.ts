@@ -1,144 +1,202 @@
 class BlockForest implements BlockBehavior, IBlockModel {
+  public readonly variations: Block.BlockVariation[];
 
-    public readonly variations: Block.BlockVariation[];
+  public readonly id: number;
+  public readonly stringID: string;
 
-    public readonly id: number;
-    public readonly stringID: string;
+  public constructor(stringID: string, variations: Block.BlockVariation[]) {
+    this.id = IDRegistry.genBlockID(stringID);
 
-    public constructor(stringID: string, variations: Block.BlockVariation[]) {
-        this.id = IDRegistry.genBlockID(stringID);
- 
-        this.stringID = stringID;
-        this.variations = variations;
-    };
+    this.stringID = stringID;
+    this.variations = variations;
+  }
 
-    public build() {
-       BlockRegistry.registerBlockFuncs(this.id, this);
+  public build() {
+    BlockRegistry.registerBlockFuncs(this.id, this);
 
-       if('getModel' in this) {
-          this.setModel(this.getModel());
-       };
+    if ("getModel" in this) {
+      const modelList: BlockModel[] = [].concat(this.getModel());
 
-       if('getDestroyTime' in this) {
-          Block.setDestroyTime(this.id, this.getDestroyTime());
-       };
+      if (modelList.length === 1) {
+        this.setModel(modelList[0], -1);
+        return;
+      }
 
-       if('getSoundType' in this) {
-          BlockRegistry.setSoundType(this.id, this.getSoundType());
-       };
+      for (let i: number = 0; i < modelList.length; i++) {
+        const data: number = modelList[i].getBlockData();
+        this.setModel(modelList[i], data > -1 ? data : i);
+      }
+    }
 
-       if('getFriction' in this) {
-          BlockRegistry.setFriction(this.id, this.getFriction());
-       };
+    if ("getDestroyTime" in this) {
+      Block.setDestroyTime(this.id, this.getDestroyTime());
+    }
 
-       if('getLightLevel' in this) {
-          BlockRegistry.setLightLevel(this.id, this.getLightLevel());
-       };
+    if ("getSoundType" in this) {
+      BlockRegistry.setSoundType(this.id, this.getSoundType());
+    }
 
-       if('getLightOpacity' in this) {
-          BlockRegistry.setLightOpacity(this.id, this.getLightOpacity());
-       };
+    if ("getFriction" in this) {
+      BlockRegistry.setFriction(this.id, this.getFriction());
+    }
 
-       if('getExplosionResistance' in this) {
-          BlockRegistry.setExplosionResistance(this.id, this.getExplosionResistance());
-       };
+    if ("getLightLevel" in this) {
+      BlockRegistry.setLightLevel(this.id, this.getLightLevel());
+    }
 
-       if('getMapColor' in this) {
-          BlockRegistry.setMapColor(this.id, this.getMapColor());
-       };
+    if ("getLightOpacity" in this) {
+      BlockRegistry.setLightOpacity(this.id, this.getLightOpacity());
+    }
 
-       if('getMaterial' in this) {
-          Block.setBlockMaterial(this.id, this.getMaterial(), this.getDestroyLevel());
-       };
+    if ("getExplosionResistance" in this) {
+      BlockRegistry.setExplosionResistance(
+        this.id,
+        this.getExplosionResistance()
+      );
+    }
 
-       if('getRenderLayer' in this) {
-          BlockRegistry.setRenderLayer(this.id, this.getRenderLayer());
-       };
+    if ("getMapColor" in this) {
+      BlockRegistry.setMapColor(this.id, this.getMapColor());
+    }
 
-       if('getTranslurency' in this) {
-          BlockRegistry.setTranslucency(this.id, this.getTranslurency());
-       };
+    if ("getMaterial" in this) {
+      Block.setBlockMaterial(
+        this.id,
+        this.getMaterial(),
+        this.getDestroyLevel()
+      );
+    }
 
-       if('getTileEntity' in this) {
-          this.setTileEntity(new (this.getTileEntity())());
-       }
+    if ("getRenderLayer" in this) {
+      BlockRegistry.setRenderLayer(this.id, this.getRenderLayer());
+    }
 
-       Block.setDestroyLevel(this.id, this.getDestroyLevel());
+    if ("getTranslurency" in this) {
+      BlockRegistry.setTranslucency(this.id, this.getTranslurency());
+    }
 
-    };
+    if ("getTileEntity" in this) {
+      this.setTileEntity(new (this.getTileEntity())());
+    }
 
-    public create(): void {
-       Block.createBlock(this.stringID, this.variations,)
-       this.build();
-    };
+    Block.setDestroyLevel(this.id, this.getDestroyLevel());
+  }
 
-    public createWithRotation(): void {
-       this.build();
-    };
+  public create(): void {
+    Block.createBlock(this.stringID, this.variations);
+    this.build();
+  }
 
-    public setModel(model: BlockModel): this {
-       const render: ICRender.Model = new ICRender.Model();
+  public createWithRotation(): void {
+    this.build();
+  }
 
-       render.addEntry(new BlockRenderer.Model(model.getRenderMesh()));
-       BlockRenderer.setStaticICRender(this.id, model.getBlockData(), render);
+  public setModel(model: BlockModel, data: number): this {
+    const render: ICRender.Model = new ICRender.Model();
 
-       return this;
-    };
+    render.addEntry(new BlockRenderer.Model(model.getRenderMesh()));
+    BlockRenderer.setStaticICRender(
+      this.id,
+      data ?? model.getBlockData(),
+      render
+    );
 
-    public getModel?(): BlockModel;
+    return this;
+  }
 
-    public getDrop?(coords: Callback.ItemUseCoordinates, block: Tile, diggingLevel: number, enchant: ToolAPI.EnchantData, item: ItemStack, region: BlockSource): ItemInstanceArray[];
+  public getModel?(): BlockModel | BlockModel[];
 
-    public onDestroy?(coords: Vector, block: Tile, region: BlockSource, player: number): void;
+  public getDrop?(
+    coords: Callback.ItemUseCoordinates,
+    block: Tile,
+    diggingLevel: number,
+    enchant: ToolAPI.EnchantData,
+    item: ItemStack,
+    region: BlockSource
+  ): ItemInstanceArray[];
 
-    public onBreak?(coords: Vector, block: Tile, region: BlockSource): void;
+  public onDestroy?(
+    coords: Vector,
+    block: Tile,
+    region: BlockSource,
+    player: number
+  ): void;
 
-    public onPlace?(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, player: number, region: BlockSource): Vector | void;
+  public onBreak?(coords: Vector, block: Tile, region: BlockSource): void;
 
-    public onNeighbourChange?(coords: Vector, block: Tile, changeCoords: Vector, region: BlockSource): void;
+  public onPlace?(
+    coords: Callback.ItemUseCoordinates,
+    item: ItemStack,
+    block: Tile,
+    player: number,
+    region: BlockSource
+  ): Vector | void;
 
-    public onEntityInside?(coords: Vector, block: Tile, entity: number): void;
+  public onNeighbourChange?(
+    coords: Vector,
+    block: Tile,
+    changeCoords: Vector,
+    region: BlockSource
+  ): void;
 
-    public onEntityStepOn?(coords: Vector, block: Tile, entity: number): void;
+  public onEntityInside?(coords: Vector, block: Tile, entity: number): void;
 
-    public onRandomTick?(x: number, y: number, z: number, block: Tile, region: BlockSource): void;
+  public onEntityStepOn?(coords: Vector, block: Tile, entity: number): void;
 
-    public onAnimateTick?(x: number, y: number, z: number, id: number, data: number): void;
+  public onRandomTick?(
+    x: number,
+    y: number,
+    z: number,
+    block: Tile,
+    region: BlockSource
+  ): void;
 
-    public onClick?(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, player: number): void;
+  public onAnimateTick?(
+    x: number,
+    y: number,
+    z: number,
+    id: number,
+    data: number
+  ): void;
 
-    public getDestroyTime?(): number;
-    
-    public getSoundType?(): Block.Sound;
+  public onClick?(
+    coords: Callback.ItemUseCoordinates,
+    item: ItemStack,
+    block: Tile,
+    player: number
+  ): void;
 
-    public getFriction?(): number;
+  public getDestroyTime?(): number;
 
-    public getLightLevel?(): number;
+  public getSoundType?(): Block.Sound;
 
-    public getLightOpacity?(): number;
+  public getFriction?(): number;
 
-    public getExplosionResistance?(): number;
+  public getLightLevel?(): number;
 
-    public getMapColor?(): number;
+  public getLightOpacity?(): number;
 
-    public getMaterial?(): string;
+  public getExplosionResistance?(): number;
 
-    public getRenderLayer?(): number;
+  public getMapColor?(): number;
 
-    public getRenderType?(): number;
+  public getMaterial?(): string;
 
-    public getTranslurency?(): number;
+  public getRenderLayer?(): number;
 
-    public getDestroyLevel(): MiningLevel {
-        return MiningLevel.STONE;
-    };
+  public getRenderType?(): number;
 
-    public getTileEntity?<T extends new () => TileEntityBase>(): T;
+  public getTranslurency?(): number;
 
-    public setTileEntity(tileEntity: TileEntityBase) {
-        TileEntity.registerPrototype(this.id, tileEntity);
-    };
+  public getDestroyLevel(): MiningLevel {
+    return MiningLevel.STONE;
+  }
 
-    public isSolid?(): boolean;
+  public getTileEntity?<T extends new () => TileEntityBase>(): T;
 
-};
+  public setTileEntity(tileEntity: TileEntityBase) {
+    TileEntity.registerPrototype(this.id, tileEntity);
+  }
+
+  public isSolid?(): boolean;
+}

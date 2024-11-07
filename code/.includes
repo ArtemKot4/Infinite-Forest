@@ -16,8 +16,22 @@ block/BlockModel.ts
 
 block/BlockForest.ts
 
-core/events/ServerPlayerTick.ts
+core/dimension/biome/BiomeDetectComponent.ts
+core/dimension/biome/BiomeForest.ts
+core/dimension/biome/FirefliesForest.ts
+core/dimension/biome/WinterForest.ts
+core/dimension/biome/HeartForest.ts
+
+ForestBiomeList.ts
 
 core/dimension/InfiniteForest.ts
 
+ForestBlockList.ts
+ForestItemList.ts
+
+core/events/ServerPlayerTick.ts
+
+core/events/LocalTick.ts
+
 final.ts
+

@@ -14,7 +14,7 @@ class InfiniteForest {
 
   public static getGenerator(): Dimensions.CustomGenerator {
     return Dimensions.newGenerator({
-      // biome: ForestBiomes.FirefliesForest.id, // ForestBiomes.FirefliesForest.getID(),
+      biome: ForestBiomeList.FIREFLIES_FOREST.id, 
 
       layers: this.layerList.concat({
         minY: 0,

@@ -1,3 +1,3 @@
 interface IBlockModel {
-    getModel?(): BlockModel;
+    getModel?(): BlockModel | BlockModel[];
 };

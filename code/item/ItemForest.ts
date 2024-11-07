@@ -21,6 +21,8 @@ class ItemForest implements ItemBehavior, ItemHandComponent {
         this.stringID = stringID;
         this.maxStack = stack;
         this.texture = texture;
+
+        this.create();
     };
 
     public getMaxStack(): number {
