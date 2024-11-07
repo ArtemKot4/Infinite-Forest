@@ -15,6 +15,13 @@ block/IBlockModel.ts
 block/BlockModel.ts
 
 block/BlockForest.ts
+block/BlockLight.ts
+block/BlockPlant.ts
+block/BlockBush.ts
+
+block/Fironia.ts
+block/IceFlower.ts
+
 
 core/dimension/biome/BiomeDetectComponent.ts
 core/dimension/biome/BiomeForest.ts

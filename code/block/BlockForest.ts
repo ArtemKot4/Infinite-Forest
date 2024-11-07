@@ -1,14 +1,14 @@
 class BlockForest implements BlockBehavior, IBlockModel {
-  public readonly variations: Block.BlockVariation[];
+  public readonly variationList: Block.BlockVariation[];
 
   public readonly id: number;
   public readonly stringID: string;
 
-  public constructor(stringID: string, variations: Block.BlockVariation[]) {
+  public constructor(stringID: string, variationList: Block.BlockVariation[]) {
     this.id = IDRegistry.genBlockID(stringID);
 
     this.stringID = stringID;
-    this.variations = variations;
+    this.variationList = variationList;
   }
 
   public build() {
@@ -79,11 +79,16 @@ class BlockForest implements BlockBehavior, IBlockModel {
       this.setTileEntity(new (this.getTileEntity())());
     }
 
+    if ("getCreativeGroup" in this) {
+      const group = this.getCreativeGroup();
+      Item.addCreativeGroup(group, Translation.translate(group), [this.id]);
+    }
+
     Block.setDestroyLevel(this.id, this.getDestroyLevel());
   }
 
   public create(): void {
-    Block.createBlock(this.stringID, this.variations);
+    Block.createBlock(this.stringID, this.variationList);
     this.build();
   }
 
@@ -191,6 +196,8 @@ class BlockForest implements BlockBehavior, IBlockModel {
   public getDestroyLevel(): MiningLevel {
     return MiningLevel.STONE;
   }
+
+  public getCreativeGroup?(): string;
 
   public getTileEntity?<T extends new () => TileEntityBase>(): T;
 
