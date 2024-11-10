@@ -1,4 +1,4 @@
-class FirefliesForest extends BiomeForest {
+class FirefliesForest extends BiomeBase {
   public constructor() {
     super("fireflies_forest");
   }

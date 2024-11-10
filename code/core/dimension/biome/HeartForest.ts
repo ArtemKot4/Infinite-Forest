@@ -1,4 +1,4 @@
-class HeartForest extends BiomeForest {
+class HeartForest extends BiomeBase {
     public constructor() {
         super("heart_forest");
     };
