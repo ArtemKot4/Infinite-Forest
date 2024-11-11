@@ -2,6 +2,8 @@
 
 translations.ts
 
+core/world/Flags.ts
+
 header.ts
 core.ts
 
