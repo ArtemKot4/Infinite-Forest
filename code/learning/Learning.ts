@@ -16,14 +16,13 @@ class LearningBase<T extends (...args: any[]) => boolean> {
 
     public getName(): string {
         return this.name;
-    }
+    };
 
 };
 
 
-
 class ItemLearning extends LearningBase<LearningType.Item> {
-    constructor(name: string, protected item: number) {
+    constructor(name: string, protected item: number, public type?: "click" | "hand") {
         super(name);
     };
 
@@ -32,19 +31,24 @@ class ItemLearning extends LearningBase<LearningType.Item> {
     }
 };
 
-type learningList = {
-   item: Record<string, ItemLearning>
-};
 
 class Learning {
-    public static list: learningList = {
-        "item": {}
+    public static list = {
+        "item": {
+            "click": {},
+            "hand": {}
+        }
     };
 
     public static add<T extends LearningBase<any>>(learning: T) {
 
         if(learning instanceof ItemLearning) {
-            Learning.list.item[learning.getName()] = learning;
+
+            if(learning.type && learning.type === "click") {
+                Learning.list.item.click[learning.getName()] = learning;
+            } else {
+                Learning.list.item.hand[learning.getName()] = learning;
+            }
         };
 
     };
@@ -80,4 +84,4 @@ class Learning {
 
     };
 
-}
+};

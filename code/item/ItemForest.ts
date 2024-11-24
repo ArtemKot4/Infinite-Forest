@@ -5,7 +5,7 @@ interface IItemTextureDescription {
   meta: number
 };
 
-class ItemForest implements ItemBehavior, ItemHandComponent {
+class ItemForest implements ItemBehavior {
 
     public static itemOnHandFuncs: Map<number, (item: ItemStack) => void> = new Map();
 
@@ -110,7 +110,7 @@ class ItemForest implements ItemBehavior, ItemHandComponent {
         ItemRegistry.registerItemFuncs(this.id, this);
 
         if('onHand' in this) {
-           ItemForest.itemOnHandFuncs.set(this.id, this.onHand);
+           ItemForest.itemOnHandFuncs.set(this.id, this.onHand as any);
         };
 
     };
@@ -124,7 +124,5 @@ class ItemForest implements ItemBehavior, ItemHandComponent {
     public onUsingComplete?(item: ItemStack, player: number): void;
 
     public onItemUse?(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, player: number): void;
-
-    public onHand?(item: ItemStack): void; 
     
 };

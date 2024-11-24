@@ -2,12 +2,12 @@
 
 translations.ts
 
+learning/Book.ts
+
 core/world/Flags.ts
 
 header.ts
 core.ts
-
-learning/Learning.ts
 
 item/ItemHandComponent.ts
 
@@ -39,6 +39,9 @@ core/dimension/InfiniteForest.ts
 
 ForestBlockList.ts
 ForestItemList.ts
+
+
+learning/Learning.ts
 
 core/events/ServerPlayerTick.ts
 
