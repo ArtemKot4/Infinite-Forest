@@ -26,6 +26,7 @@ block/BlockBush.ts
 block/Fironia.ts
 block/IceFlower.ts
 
+block/tile_entity/EucalyptusWorkbench.ts
 
 core/dimension/biome/BiomeBehaviour.ts
 core/dimension/biome/BiomeBase.ts
@@ -40,8 +41,13 @@ core/dimension/InfiniteForest.ts
 ForestBlockList.ts
 ForestItemList.ts
 
+learning/LearningBase.ts
+learning/ItemLearning.ts
+learning/CraftBuildLearning.ts
 
 learning/Learning.ts
+
+learning/Book.ts
 
 core/events/ServerPlayerTick.ts
 
