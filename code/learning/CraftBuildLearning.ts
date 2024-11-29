@@ -24,7 +24,11 @@ class CraftBuildLearning extends LearningBase<LearningType.CraftBuild> {
 
           };
 
-         return items
+         return items;
          
-      }
+      };
+
+      public getType(): string {
+        return "craft_build";
+      };
 }

@@ -1,6 +1,6 @@
 
 
-class LearningBase<T extends (...args: any[]) => boolean> {
+abstract class LearningBase<T extends (...args: any[]) => boolean> {
     constructor(protected name: string) {}
 
     public condition?: T;
@@ -19,5 +19,7 @@ class LearningBase<T extends (...args: any[]) => boolean> {
     public onComplete(callback: (player: number) => any) {
         this.complete = callback;
     };
+
+    abstract getType(): string;
 
 };

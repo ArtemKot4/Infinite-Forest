@@ -1,4 +1,4 @@
-type pageBook = Record<string, number>;
+type IPlayerPage = Record<string, number>;
 
 declare type playerData = {
     /**
@@ -17,7 +17,7 @@ declare type playerData = {
         /**
          * sectionList has a list of writed pages in current sections
          */
-        sectionList: Record<string, pageBook>
+        sectionList: Record<string, IPlayerPage>
     }
 }
 

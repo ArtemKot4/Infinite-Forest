@@ -6,45 +6,21 @@ declare namespace LearningType {
 };
 
 class Learning {
-    public static list = {
-        "item": {
-            "click": {},
-            "hand": {}
-        },
-        "learning": {
-            "craft": {}
-        }
-    };
+    public static list = {} as Record<string, Record<string, LearningBase<any>>>;
 
-    public static add<T extends LearningBase<any>>(learning: T) {
+    public static add<T extends LearningBase<any>>(learning: T): void {
 
-        if(learning instanceof ItemLearning) {
+        const list = Learning.list[learning.getType()] ??= {};
 
-            if(learning.type && learning.type === "hand") {
-                
-                Learning.list.item.hand[learning.getName()] = learning;
-               
-            } else {
-
-                Learning.list.item.click[learning.getName()] = learning;
-
-            };
-
-        };
-
-        if(learning instanceof CraftBuildLearning) {
-
-               Learning.list.learning.craft[learning.getName()] = learning;
-
-        }
+        list[learning.getName()] ??= learning;
 
     };
 
-    public static has(player: number, name: string) {
+    public static has(player: number, name: string): boolean {
         return Flags.getFor(player).learningList.has(name);
     };
 
-    public static isValid(name: string) {
+    public static isValid(name: string): boolean {
         
         return !!Learning.find(name);
 
@@ -54,7 +30,7 @@ class Learning {
 
         for(const i in Learning.list) {
 
-            const find = Object.values(Learning.list[i]).find((v: {}) => name in v);
+            const find = Object.values(Learning.list[i]).find((v) => name in v);
 
             if(!!find) {
                 return find[name];
@@ -65,7 +41,7 @@ class Learning {
         return null;
     }
     
-    public static addFor<T extends LearningBase<any>>(player: number, learning: string | T) {
+    public static addFor<T extends LearningBase<any>>(player: number, learning: string | T): void {
         const list = Flags.getFor(player).learningList;
 
         const name = typeof learning === "string" ? learning : learning.getName();
@@ -90,23 +66,7 @@ class Learning {
       
         list.add(name);
 
-    };
-
-    static {
-
-        Callback.addCallback("ItemUse", (coords, item, block, isExternal, player) => {
-             for(const i in Learning.list.item) {
-
-                   const learning = Learning.list.item[i];
-
-                      if(item.id !== learning.getItem()) continue;
-
-                   if(learning.condition && !learning.condition(coords, item, block, player)) continue;
-                
-                Learning.addFor(player, learning);
-            };
-        });
-
+        return;
     };
 
 };
