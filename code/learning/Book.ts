@@ -1,5 +1,7 @@
 class Book {
 
+    protected constructor() {};
+
     protected static readonly content = {
         drawing: [
             {
@@ -16,7 +18,7 @@ class Book {
         ],
         
         elements: {
-          closeButton: {
+          close_button: {
               type: "closeButton",
               x: UI.getScreenHeight() - 274,
               y: 90,
@@ -24,7 +26,7 @@ class Book {
               bitmap: "unknown",
           },
 
-          buttonRight: {
+          right_button: {
               type: "button",
               x: UI.getScreenHeight() * 1.5,
               y: 372.5,
@@ -36,7 +38,7 @@ class Book {
               },
           },
 
-          buttonLeft: {
+          left_button: {
               type: "button",
               x: UI.getScreenHeight() / 1.75,
               y: 372.5,
@@ -81,7 +83,8 @@ class Book {
         Window.setBlockingBackground(true);
         Window.setDynamic(true);
 
-        Window.setContent(Book.content);
+        Window.setContent({...Book.content});
+
         return Window;
     })();
 
@@ -94,15 +97,22 @@ class Book {
     };
 
     protected static close() {
-       Book.UI.setContent(Book.content);
+       Book.UI.setContent({...Book.content});
     };
 
     protected static Page = class {
 
-        public static list: Record<string, IPageDescription> = {};
+        public static list: Record<string, Record<string, IPageDescription>> = {
+            "default": {},
+            "cauldron": {}
+        };
 
         constructor(public name: string, public description: IPageDescription) {
-            Book.Page.list[name] = description;
+           
+            (Book.Page.list[description.section || "default"] ??= {})[name] = description;
+
+            Book.Page.translatePage(description);
+
         };
 
         public static translateElements(elements: IPageCustomElement[]): void {
@@ -111,13 +121,50 @@ class Book {
                 if(element.type === "text") {
                     
                     if(element.text) {
-                        Translation.addTranslation(element.text.en, element.text as JSONLang);
-                    }
-                }
+                        this.translateJSONLang(element.text);
+                    };
+
+                };
+
             };
         };
 
-        public static readFromJSON(dir: string) {
+        public static translateJSONLang(lang: JSONLang) {
+
+           if(lang && lang instanceof Object && "en" in lang) {
+               Translation.addTranslation(lang.en, lang); 
+           };
+           
+        };
+
+        public static translatePage(description: IPageDescription) {
+            if(description.left) {
+
+                Book.Page.translateJSONLang(description.left.title.text);
+                Book.Page.translateJSONLang(description.left.subtitle.text);
+                Book.Page.translateJSONLang(description.left.text.text);
+
+                if(description.left.elements) {
+                    Book.Page.translateElements(description.left.elements)
+                };
+                
+            };
+
+            if(description.right) {
+                  
+                Book.Page.translateJSONLang(description.right.title.text);
+                Book.Page.translateJSONLang(description.right.subtitle.text);
+                Book.Page.translateJSONLang(description.right.text.text);
+
+
+                if(description.right.elements) {
+                    Book.Page.translateElements(description.right.elements)
+                };
+                
+            };
+        }
+
+        public static loadFromJSON(dir: string) {
 
             const FilesList = FileTools.GetListOfFiles(
                 dir,
@@ -131,31 +178,12 @@ class Book {
                 if(!!instance) {
 
                      if(!instance.name) {
-                         throw new NoSuchFieldException("reading book pages error: name is not defined!");
+                         throw new NoSuchFieldException("load book pages error: name is not defined!");
                      };
                      
-                     Book.Page.list[instance.name] = instance;
-               
+                     (Book.Page.list[instance.section || "default"] ??= {})[instance.name] = instance;
                      
-                      if(instance.left) {
-                          Translation.addTranslation(instance.left.title.text.en, instance.left.title.text);
-                          Translation.addTranslation(instance.left.subtitle.text.en, instance.left.subtitle.text);
-                          Translation.addTranslation(instance.left.text.text.en, instance.left.text.text);
-
-                          if(instance.left.elements) {
-                            this.translateElements(instance.left.elements)
-                          };
-                      };
-
-                      if(instance.right) {
-                          Translation.addTranslation(instance.right.title.text.en, instance.right.title.text);
-                          Translation.addTranslation(instance.right.subtitle.text.en, instance.right.subtitle.text);
-                          Translation.addTranslation(instance.right.text.text.en, instance.right.text.text);
-
-                          if(instance.right.elements) {
-                            this.translateElements(instance.right.elements)
-                          };
-                      };
+                      Book.Page.translatePage(instance);
 
                 }
         
@@ -254,19 +282,24 @@ class Book {
             };
 
             if(picture.link) {
-                content.clicker = {
-                    onLongClick: (position, container) => {
 
-                        const [section, name] = picture.link.split(":");
+                const [section, name] = picture.link.split(":");
 
-                        const list = Flags.getFor(Player.getLocal()).book.sectionList;
+                if(!(section in Book.Page.list)) {
+                     throw new NoSuchFieldException("link page error: section is not exists");
+                };
+
+                const list = Flags.getFor(Player.getLocal()).book.sectionList;
     
-                        if(section in list) {
-                            const index = Object.keys(list[section]).findIndex((v) => v == name);
+                if(section in list) {
+                    const index = Object.keys(list[section]).findIndex((v) => v == name);
     
-                            !!index && Book.Page.drawAll(section, index);
-                        }
-                    }
+                    if(!!index) {
+                        
+                    content.clicker = {
+                        onLongClick: (position, container) => Book.Page.drawAll(section, index)
+                    };
+
                 }
             };
 
@@ -279,8 +312,9 @@ class Book {
 
             Book.UI.getContent().elements[`picture.${picture.texture}:${Math.random()}`] = content;
 
-          }
-      };
+            }
+         };
+      } 
 
       public static drawElements(filling: IPageFilling) {
         if(!filling.elements) return;
@@ -312,9 +346,11 @@ class Book {
              return;
          };
 
+         Book.UI.setContent({...Book.content});
+
          const [name, direction] = page;
 
-         const context = Book.Page.list[name];
+         const context = Book.Page.list[section][name];
 
          if(!context) {
             throw new NoSuchFieldException("Error! Page is not exists in system");
@@ -337,8 +373,6 @@ class Book {
 
          this.drawIndexes(index);
 
-         Book.UI.setContent(Book.content);
-
          Book.UI.forceRefresh();
  
       }
@@ -360,11 +394,13 @@ class Book {
                 if(entity === EEntityType.PLAYER) {
                     const player = new PlayerEntity(entity);
 
-                    if([player.getCarriedItem().id, Entity.getOffhandItem(entity).id].includes(Book.Item.instance.getID())) {
+                    const itemsInHands = [player.getCarriedItem().id, Entity.getOffhandItem(entity).id];
+
+                    if(itemsInHands.includes(Book.Item.instance.getID())) {
                         return;
                     };
 
-                    for(let i = 0; i < 35; i++) {
+                    for(let i = 0; i < 36; i++) {
                         if(player.getInventorySlot(i).id === Book.Item.instance.getID()) {
                             return;
                         };
@@ -382,6 +418,8 @@ class Book {
             onOpen: Book.open,
             onClose: Book.close
         });
+
+        Book.Page.loadFromJSON(__dir__ + "resources/assets/pages/");
 
     };
 
@@ -421,11 +459,12 @@ interface IPageDescription {
     left?: IPageFilling,
     right?: IPageFilling,
 
-    directions: {
+    directions?: {
         first: IPageDirection,
-        second: IPageDirection,
-        third: IPageDirection,
+        second?: IPageDirection,
+        third?: IPageDirection,
         side?: IBookSide
-    }
+    };
 
+    section?: string
 }

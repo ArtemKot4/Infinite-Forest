@@ -18,7 +18,7 @@ class CraftBuildLearning extends LearningBase<LearningType.CraftBuild> {
 
           const actor = new PlayerActor(player);
 
-           for(let i = 0; i < 35; i++) {
+           for(let i = 0; i < 36; i++) {
 
               items.push(new ItemStack(actor.getInventorySlot(i)));
 
