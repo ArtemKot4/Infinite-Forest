@@ -17,7 +17,7 @@ class BookPage {
         for(const element of elements) {
 
             if(element.type === "native_text") {
-                
+
                 if(element.text) {
                     this.translateJSONLang(element.text);
                 };
@@ -71,7 +71,7 @@ class BookPage {
             if(!!instance) {
 
                 if(!instance.name) {
-                     throw new NoSuchFieldException("load book pages error: name is not defined!");
+                    throw new NoSuchFieldException("load book pages error: name is not defined!");
                 };
                  
                 (BookPage.list[instance.section || "default"] ??= {})[instance.name] = instance;
@@ -157,7 +157,7 @@ class BookPage {
     public static initLink(content: UI.Elements, link: string) {
         if(!link) return;
 
-        const [section, name] = link.split(":");
+        const [section, name] = link.split(":", 2);
 
         if(!(section in BookPage.list)) {
             throw new NoSuchFieldException("link page error: section is not exists");
@@ -175,7 +175,7 @@ class BookPage {
                 };
 
             };
-        };
+       };
     };
 
     public static drawPictures(filling: IPageFilling, default_x: number, default_y: number) {
@@ -225,10 +225,7 @@ class BookPage {
                 content = this.getTextContent(element.text.en, content.x, content.y, element.size, element.color, element.align, element.alignment, element.bold, element.cursive, element.underline, element.shadow)
             };
 
-            if("link" in element) {
-                BookPage.initLink(content, element.link);
-            };
-
+            BookPage.initLink(content, element.link);
             Book.UI.getContent().elements[`element:${element.type}:Math.random()`] = content;
        
         };
@@ -302,17 +299,15 @@ class Book {
                 scale: 2,
             },
         ],
-        
         elements: {
             close_button: {
                 type: "closeButton",
                 x: UI.getScreenHeight() - 274,
                 y: 90,
                 scale: 1.9,
-                bitmap: "unknown",
-          },
-
-          right_button: {
+                bitmap: "unknown"
+            },
+            right_button: {
                 type: "button",
                 x: UI.getScreenHeight() * 1.5,
                 y: 372.5,
@@ -321,9 +316,8 @@ class Book {
                 bitmap2: "book.right_button_pressed",
                 clicker: {
                     onClick: () => BookPage.drawAll(Book.currentSection, Book.pageIndex > 0 ? Book.pageIndex-- : Book.pageIndex)
-                },
+                }
             },
-
             left_button: {
                 type: "button",
                 x: UI.getScreenHeight() / 1.75,
@@ -333,9 +327,8 @@ class Book {
                 bitmap2: "book.left_button_pressed",
                 clicker: {
                     onClick: () => BookPage.drawAll(Book.currentSection, Book.pageIndex++)
-                },
+                }
             },
-  
             index_1: {
                 type: "text",
                 x: UI.getScreenHeight() / 1.35,
@@ -344,9 +337,8 @@ class Book {
                     size: 15,
                     color: android.graphics.Color.parseColor("#B8AC8F"),
                 },
-                text: "undefined",
+                text: "-1"
             },
-          
             index_2: {
                 type: "text",
                 x: UI.getScreenHeight() * 1.35,
@@ -355,7 +347,7 @@ class Book {
                     size: 15,
                     color: android.graphics.Color.parseColor("#B8AC8F"),
                 },
-                text: "undefined",
+                text: "-1"
             }
         } 
     } as UI.WindowContent;
@@ -418,7 +410,7 @@ class BookItem extends ItemForest {
 
     public onNameOverride(item: ItemInstance, translation: string, name: string): string {
         return Native.Color.GREEN + Translation.translate(name)
-    }
+    };
 
     static {
         Callback.addCallback("EntityAdded", (entity) => {
@@ -441,9 +433,9 @@ class BookItem extends ItemForest {
 
                 player.addItemToInventory(BookItem.instance.getID(), 1, 0);
                 
-            }
+            };
         });
-    }
+    };
 };
 
 
