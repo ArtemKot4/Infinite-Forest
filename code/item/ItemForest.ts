@@ -124,5 +124,7 @@ class ItemForest implements ItemBehavior {
     public onUsingComplete?(item: ItemStack, player: number): void;
 
     public onItemUse?(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, player: number): void;
+
+    public onNameOverride?(item: ItemInstance, translation: string, name: string): string
     
 };

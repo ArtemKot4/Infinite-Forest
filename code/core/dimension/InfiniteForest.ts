@@ -57,5 +57,12 @@ class InfiniteForest {
       },
     });
 
-  }
+  };
+
+  static {
+      Callback.addCallback("PlayerChangedDimension", (player, currentId, lastId) => {
+        Book.givePageFor(player, "default", "infinite_forest_is_real")
+      })  
+  };
+
 }

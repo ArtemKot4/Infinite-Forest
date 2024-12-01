@@ -52,9 +52,9 @@ Translation.addTranslation("item.infinite_forest.orange_crystal", {
   en: "§6Flame crystal",
 });
 
-Translation.addTranslation("item.infinite_forest.learning_book", {
-  ru: Native.Color.GREEN + "Дневник исследователя",
-  en: Native.Color.GREEN + "Diary of researcher",
+Translation.addTranslation("item.infinite_forest.forest_diary", {
+  ru: "Дневник",
+  en: "Diary",
 });
 
 Translation.addTranslation("item.infinite_forest.insight_eye", {

@@ -31,14 +31,14 @@ abstract class Flags {
     };
 
    public static getFor(player: number): playerData {
-       return Flags.list[player];
+       return Flags.list.playerData[Entity.getTypeName(player)];
    }
 
     static {
 
          Callback.addCallback("EntityAdded", (entity) => {
 
-            if(entity === EEntityType.PLAYER) {
+            if(Entity.getType(entity) === Native.EntityType.PLAYER) {
 
                 Flags.list.playerData[Entity.getTypeName(entity)] ??= {
                     "book": {

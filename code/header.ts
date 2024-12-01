@@ -68,3 +68,8 @@ namespace ForestUtils {
     render.addEntry(model);
   }
 }
+
+type JSONLang = {
+  en: string,
+  ru: string
+}

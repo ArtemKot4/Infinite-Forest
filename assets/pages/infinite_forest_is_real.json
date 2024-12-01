@@ -1,50 +1,38 @@
 {
+  "name": "infinite_forest_is_real",
+  "section": "default",
   "left": {
-    "elements": {
-      "title": "forest_title",
-      "subtitle": "forest_subtitle",
-      "text": "forest_text"
+      "title": {
+        "text": {
+          "en": "It's curse?",
+          "ru": "Проклятие?"
+        }
+      },
+      "subtitle": {
+        "text": {
+          "en": "Cold",
+          "ru": "Прохлада"
+        }
+      },
+      "text": {
+        "text": {
+          "en": "It has been not just a dream? It is place.. I'm feel myself native. Here small cold, but it is cold becomes glad me. I see a flames, and, might be here not enough a dark, fireflies gives me place to walking, opens view at all entity of forest. In long i see a cold flowers, but in near flowers, that, guess flames better. Interesting place, i will to see around.", 
+          "ru": "Неужели это был не просто сон? Это место.. оно мне знако, кажется родно. Здесь прохладно, но эта прохлада мне приятна. Вижу огоньки, и, кажется, тут не так уж и темно, светлячки расступаются передо мной, будто бы открывая взор на всю обитель леса. Вдали я вижу хладные цветы, а совсем рядом те, что, кажется пылают, сильно, ясно. Интересное место, пойду осмотрюсь."
+        }
     },
     "images": [
       {
-        "type": "default",
         "x": 190,
         "y": 170,
         "scale": 1.6,
         "texture": "glowworm"
       },
       {
-        "type": "default",
         "x": 90,
         "y": 210,
         "scale": 1.6,
         "texture": "glowworm"
       }
     ]
-  },
-
-  "right": {
-    "directions": {
-      "first": {
-        "name": "dream",
-        "content": {
-          "elements": {
-            "title": "place_of_dream",
-            "subtitle": "or_curse",
-            "text": "dream_text"
-          }
-        }
-      },
-      "second": {
-        "name": "different_curse",
-        "content": {
-          "elements": {
-            "title": "coldest_curse",
-            "subtitle": "fireflies_light",
-            "text": "forest_is_curse_text"
-          }
-        }
-      }
-    }
   }
 }
