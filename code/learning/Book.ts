@@ -101,6 +101,7 @@ class BookPage {
     public static getTextContent(text: string, x: number, y: number, size: number, color: number, align: number, alignment: number, bold: boolean, cursive: boolean, underline: boolean, shadow: number): UI.UITextElement {
         return {
             type: "text",
+            multiline: true,
             font: {
                size: size,
                 color: color,
@@ -240,14 +241,11 @@ class BookPage {
             throw new NoSuchFieldException("Error in section find: section is not exists in system")
         }
    
-        const page = Object.entries(list[section])[index];
+        const pagesList = Object.entries(list[section]);
 
-        if(!page) {
-            alert(`Error! Page ${section + ":" + index} is not contains in player data`);
-            return;
-        };
+        const nearIndex = Math.min(pagesList.length - 1, index);
 
-        Book.UI.setContent({...Book.content});
+        const page = pagesList[nearIndex];
 
         const [name, direction] = page;
 
@@ -257,7 +255,12 @@ class BookPage {
             throw new NoSuchFieldException("Error! Page is not exists in system");
         };
 
-        Game.message(JSON.stringify(context))
+        Book.UI.setContent({...Book.content});
+
+        Book.UI.forceRefresh();
+
+        Book.pageIndex = nearIndex;
+        Book.currentSection = section;
 
         this.drawTitle("left", context.left, UI.getScreenHeight() / 1.95, 60);
         this.drawTitle("right", context.right, UI.getScreenHeight() * 1.1, 60);
@@ -295,17 +298,17 @@ class Book {
                 type: "bitmap",
                 bitmap: "book.background",
                 x: UI.getScreenHeight() / 3,
-                y: 30,
-                scale: 2,
+                y: 15,
+                scale: 2.1,
             },
         ],
         elements: {
             close_button: {
                 type: "closeButton",
-                x: UI.getScreenHeight() - 274,
-                y: 90,
+                x: UI.getScreenHeight() - 263,
+                y: 235,
                 scale: 1.9,
-                bitmap: "unknown"
+                bitmap: "close_button"
             },
             right_button: {
                 type: "button",
@@ -315,7 +318,7 @@ class Book {
                 bitmap: "book.right_button",
                 bitmap2: "book.right_button_pressed",
                 clicker: {
-                    onClick: () => BookPage.drawAll(Book.currentSection, Book.pageIndex > 0 ? Book.pageIndex-- : Book.pageIndex)
+                    onClick: () => BookPage.drawAll(Book.currentSection, Book.pageIndex + 1)
                 }
             },
             left_button: {
@@ -326,7 +329,7 @@ class Book {
                 bitmap: "book.left_button",
                 bitmap2: "book.left_button_pressed",
                 clicker: {
-                    onClick: () => BookPage.drawAll(Book.currentSection, Book.pageIndex++)
+                    onClick: () => BookPage.drawAll(Book.currentSection, Book.pageIndex - 1)
                 }
             },
             index_1: {
@@ -357,6 +360,7 @@ class Book {
         
         Window.setCloseOnBackPressed(true);
         Window.setBlockingBackground(true);
+        Window.setTouchable(true);
         Window.setDynamic(true);
 
         Window.setContent({...Book.content});
@@ -369,11 +373,13 @@ class Book {
     public static currentSection = "default";
 
     public static open() {
-       BookPage.drawAll(Book.currentSection, 0);
+        Book.UI.open();
+        BookPage.drawAll(Book.currentSection, 0);
     };
 
     public static close() {
-       Book.UI.setContent({...Book.content});
+        Book.UI.close();
+        Book.UI.setContent({...Book.content});
     };
    
     public static givePageFor(player: number, section: string, page: string) {

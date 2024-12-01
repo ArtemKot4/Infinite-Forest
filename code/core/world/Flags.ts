@@ -51,8 +51,6 @@ abstract class Flags {
                     "learningList": new Set(),
                     "revelationList": {}
                 }
-                    
-                Game.message(JSON.stringify(Flags.list.playerData[entity]));
                 
             }
          })
