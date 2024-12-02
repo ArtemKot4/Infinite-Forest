@@ -41,32 +41,15 @@ class Learning {
         return null;
     }
     
-    public static addFor<T extends LearningBase<any>>(player: number, learning: string | T): void {
-        const list = Flags.getFor(player).learningList;
+    public static addFor(player: number, learning: string, ...args: unknown[]): void {
+            const findLearning = Learning.find(learning);
 
-        const name = typeof learning === "string" ? learning : learning.getName();
-
-        if(list.has(name)) return;
-
-        if(typeof learning === "string") {
-
-            if(!this.isValid(learning)) {
-                throw new NoSuchFieldException("Learning.addFor error! Learning is not exists")
+            if(!findLearning) {
+                throw new NoSuchFieldException("error with adding learning for player: learning is not exists")
             };
 
-              const instance = Learning.find(learning);
-
-            if(instance) {
-                if(instance.complete) instance.complete(player)
-            };
-
-        } else {
-            if(learning.complete) learning.complete(player);
-        };
-      
-        list.add(name);
-
-        return;
+            findLearning.complete(player, args);
+            return;
     };
 
 };
