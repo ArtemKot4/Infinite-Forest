@@ -84,15 +84,16 @@ class BookPage {
     };
 
     public static separateText(text: string) {
+        let wordList = text.split(" ");
+
         let result = "";
-
-        for (let i = 0; i < text.length; i++) {
-               result += text[i];
-
-            if ((i + 1) % 25 === 0) {
-               result += result[i] === " " ? "\n" : "-\n";
-            };
-
+    
+        for(const i in wordList) {
+            result += wordList[i] + " ";
+    
+            if(Number(i) > 0 && Number(i) % 3 == 0) {
+                result += "\n";
+            }
         };
 
         return result;
@@ -124,7 +125,7 @@ class BookPage {
 
         const {x, y, color, size, shadow, alignment, align, cursive, underline, bold} = filling.title.data ?? {};
 
-        Book.UI.getContent().elements[side + "_title"] = BookPage.getTextContent(Translation.translate(filling.title.text.en), (x || 0) + default_x, (y || 0) + default_y, size || 20, color || android.graphics.Color.parseColor("#00A416"), align, alignment, bold, cursive, underline, shadow);
+        Book.UI.getContent().elements[side + "_title"] = BookPage.getTextContent(Translation.translate(filling.title.text.en), (x || 0) + default_x, (y || 0) + default_y, size || 20, color || android.graphics.Color.parseColor("#00A416"), align, alignment, bold || true, cursive, underline, shadow || 0.5);
 
     };
 
@@ -263,16 +264,16 @@ class BookPage {
         Book.currentSection = section;
 
         this.drawTitle("left", context.left, UI.getScreenHeight() / 1.95, 60);
-        this.drawTitle("right", context.right, UI.getScreenHeight() * 1.1, 60);
+        this.drawTitle("right", context.right, UI.getScreenHeight() * 1.1 + 5, 60);
 
-        this.drawSubtitle("left", context.left, UI.getScreenHeight() / 1.8, 85);
-        this.drawSubtitle("right", context.right, UI.getScreenHeight() * 1.15, 85);
+        this.drawSubtitle("left", context.left, UI.getScreenHeight() / 1.95, 85); //UI.getScreenHeight() / 1.8
+        this.drawSubtitle("right", context.right, UI.getScreenHeight() * 1.1 + 5, 85); //UI.getScreenHeight() * 1.15
 
         this.drawText("left", context.left, UI.getScreenHeight() / 1.95, 110);
-        this.drawText("right", context.right, UI.getScreenHeight() * 1.1, 110);
+        this.drawText("right", context.right, UI.getScreenHeight() * 1.1 + 5, 110);
 
         this.drawPictures(context.left, UI.getScreenHeight() / 2.7, 120);
-        this.drawPictures(context.right, UI.getScreenHeight(), 120);
+        this.drawPictures(context.right, UI.getScreenHeight() + 45, 120);
 
         this.drawElements(context.left, UI.getScreenHeight() / 1.95, 110);
         this.drawElements(context.right, UI.getScreenHeight() * 1.1, 110);
@@ -307,7 +308,7 @@ class Book {
                 type: "closeButton",
                 x: UI.getScreenHeight() - 263,
                 y: 235,
-                scale: 1.9,
+                scale: 1.8,
                 bitmap: "close_button"
             },
             right_button: {
