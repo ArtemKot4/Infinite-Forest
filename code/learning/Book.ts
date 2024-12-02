@@ -84,19 +84,23 @@ class BookPage {
     };
 
     public static separateText(text: string) {
-        let wordList = text.split(" ");
-
-        let result = "";
+        let result = [];
+        let line = "";
     
-        for(const i in wordList) {
-            result += wordList[i] + " ";
-    
-            if(Number(i) > 0 && Number(i) % 3 == 0) {
-                result += "\n";
+        for (let word of text.split(" ")) {
+            if (line.length + word.length <= 25) {
+                line += word + " ";
+            } else {
+                result.push(line.trim());
+                line = word + " ";
             }
-        };
-
-        return result;
+        }
+    
+        if (line) {
+            result.push(line.trim());
+        }
+    
+        return result.join("\n"); //это функция, предоставленная спонсором ChatGPT. Если вы хотите связаться с нашим спонсором, вы можете оформить подписку размером в 25$ ежемесячно. Если остались вопросы, оставьте их при себе, либо спросите у спонсора.
     };
 
     public static getTextContent(text: string, x: number, y: number, size: number, color: number, align: number, alignment: number, bold: boolean, cursive: boolean, underline: boolean, shadow: number): UI.UITextElement {
@@ -125,7 +129,7 @@ class BookPage {
 
         const {x, y, color, size, shadow, alignment, align, cursive, underline, bold} = filling.title.data ?? {};
 
-        Book.UI.getContent().elements[side + "_title"] = BookPage.getTextContent(Translation.translate(filling.title.text.en), (x || 0) + default_x, (y || 0) + default_y, size || 20, color || android.graphics.Color.parseColor("#00A416"), align, alignment, bold || true, cursive, underline, shadow || 0.5);
+        Book.UI.content.elements[side + "_title"] = BookPage.getTextContent(Translation.translate(filling.title.text.en), (x || 0) + default_x, (y || 0) + default_y, size || 20, color || android.graphics.Color.parseColor("#00A416"), align, alignment, bold || true, cursive, underline, shadow);
 
     };
 
@@ -135,7 +139,7 @@ class BookPage {
 
         const {x, y, color, size, shadow, alignment, align, cursive, underline, bold} = filling.subtitle.data ?? {};
 
-        Book.UI.getContent().elements[side + "_subtitle"] = BookPage.getTextContent(Translation.translate(filling.subtitle.text.en), (x || 0) + default_x, (y || 0) + default_y, size || 16.5, color || android.graphics.Color.parseColor("#194D33"), align, alignment, bold, cursive, underline, shadow);
+        Book.UI.content.elements[side + "_subtitle"] = BookPage.getTextContent(Translation.translate(filling.subtitle.text.en), (x || 0) + default_x, (y || 0) + default_y, size || 16.5, color || android.graphics.Color.parseColor("#194D33"), align, alignment, bold, cursive, underline, shadow);
 
     };
 
@@ -145,12 +149,12 @@ class BookPage {
 
         const {x, y, color, size, shadow, alignment, align, cursive, underline, bold} = filling.text.data ?? {};
 
-        Book.UI.getContent().elements[side + "_text"] = BookPage.getTextContent(Translation.translate(filling.text.text.en), (x || 0) + default_x, (y || 0) + default_y, size || 12.5, color || android.graphics.Color.parseColor("#9E9E9E"), align, alignment, bold, cursive, underline, shadow);
+        Book.UI.content.elements[side + "_text"] = BookPage.getTextContent(Translation.translate(filling.text.text.en), (x || 0) + default_x, (y || 0) + default_y, size || 12.5, color || android.graphics.Color.parseColor("#9E9E9E"), align, alignment, bold, cursive, underline, shadow);
 
     };
 
     public static drawIndexes(index: number) {
-        const content = Book.UI.getContent();
+        const content = Book.UI.content;
 
         content.elements.index_1.text = index;
         content.elements.index_2.text = index + 1;
@@ -207,7 +211,7 @@ class BookPage {
             };
 
             BookPage.initLink(content, picture.link);
-            Book.UI.getContent().elements[`picture.${picture.texture}:${Math.random()}`] = content;
+            Book.UI.content.elements[`picture.${picture.texture}:${Math.random()}`] = content;
 
         };
     }
@@ -228,7 +232,7 @@ class BookPage {
             };
 
             BookPage.initLink(content, element.link);
-            Book.UI.getContent().elements[`element:${element.type}:Math.random()`] = content;
+            Book.UI.content.elements[`element:${element.type}:Math.random()`] = content;
        
         };
     };
@@ -256,10 +260,6 @@ class BookPage {
             throw new NoSuchFieldException("Error! Page is not exists in system");
         };
 
-        Book.UI.setContent({...Book.content});
-
-        Book.UI.forceRefresh();
-
         Book.pageIndex = nearIndex;
         Book.currentSection = section;
 
@@ -281,6 +281,8 @@ class BookPage {
         this.drawIndexes(index);
 
         Book.UI.forceRefresh();
+
+        Game.message("Контент для страницы: " + name + " -> " + "\n" + JSON.stringify(Book.UI.content)); //todo: debug
 
     }
 };
@@ -305,11 +307,14 @@ class Book {
         ],
         elements: {
             close_button: {
-                type: "closeButton",
-                x: UI.getScreenHeight() - 263,
+                type: "button",
+                x: UI.getScreenHeight() - 260,
                 y: 235,
                 scale: 1.8,
-                bitmap: "close_button"
+                bitmap: "close_button",
+                clicker: {
+                    onClick: (position, container) => Book.close()
+                }
             },
             right_button: {
                 type: "button",
@@ -359,7 +364,6 @@ class Book {
     public static readonly UI: UI.Window = (() => {
         const Window = new UI.Window();
         
-        Window.setCloseOnBackPressed(true);
         Window.setBlockingBackground(true);
         Window.setTouchable(true);
         Window.setDynamic(true);
@@ -390,15 +394,6 @@ class Book {
             (list[section] ??= {})[page] ??= 0;
         };
         
-    };
-
-    static {
-
-        Book.UI.setEventListener({
-            onOpen: Book.open,
-            onClose: Book.close
-        });
-
     };
 
 };

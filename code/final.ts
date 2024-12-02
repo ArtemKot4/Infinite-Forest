@@ -6,4 +6,5 @@ Callback.addCallback("ItemUse", (coords, item, block, isE, player) => {
 
 Callback.addCallback("LevelDisplayed", () => {
     BookPage.loadFromJSON(__dir__ + "resources/assets/pages/");
+    Game.message(JSON.stringify(BookPage.list["default"])) //todo: debug;
 })
