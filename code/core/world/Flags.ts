@@ -26,15 +26,28 @@ abstract class Flags {
    private constructor() {};
 
    protected static list = {
-        curses: [],
+        curses: new Set<string>(),
         playerData: {} as Record<string, playerData>
     };
 
    public static getFor(player: number): playerData {
        return Flags.list.playerData[Entity.getTypeName(player)];
+   };
+
+   public static synchronizeCurses() {
+     Network.sendToServer("packet.infinite_forest.push_curse_local", {});
+   };
+
+   public static getCurseList() {
+     return this.list.curses;
+   };
+
+   public static getCurseListLocal() {
+     this.synchronizeCurses();
+     return this.getCurseList();
    }
 
-    static {
+   static {
 
          Callback.addCallback("EntityAdded", (entity) => {
 
@@ -50,9 +63,22 @@ abstract class Flags {
                     },
                     "learningList": new Set(),
                     "revelationList": {}
+                };
+
+                if(Flags.list.curses.size === 0) {
+                    Flags.list.curses = Curse.identifiers;
                 }
                 
             }
+         });
+
+
+         Network.addServerPacket("packet.infinite_forest.push_curse_local", (client, data) => {
+            client.send("packet.infinite_forest.get_curse", {list: Flags.list.curses})
+         });
+
+         Network.addClientPacket("packet.infinite_forest.synchronize_curse", (data: {list: Set<string>}) => {
+            Flags.list.curses = data.list;
          })
     };
 };

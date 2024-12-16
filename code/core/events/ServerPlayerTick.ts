@@ -11,8 +11,8 @@ Callback.addCallback("ServerPlayerTick", (playerUid: number) => {
          const handFunction = ItemForest.itemOnHandFuncs.get(selectedItemStack.id);
 
          if(selectedItemStack.id == carriedItemStack.id && handFunction !== undefined) {
-              return handFunction(selectedItemStack);
-           };
+            return handFunction(selectedItemStack);
+         };
       };
 
       if (Player.getDimension() !== InfiniteForest.id) {
@@ -26,7 +26,7 @@ Callback.addCallback("ServerPlayerTick", (playerUid: number) => {
       const params = AbstractBiome.data[biome] as AbstractBiome & BiomeBehaviour;
 
       if(!params) {
-        return;
+            return;
       };
     
       const time = World.getThreadTime();
@@ -34,5 +34,5 @@ Callback.addCallback("ServerPlayerTick", (playerUid: number) => {
       if(params.getServerUpdate && time % params.getServerUpdate() == 0 && params.onServerTick) {
             return params.onServerTick(playerUid, region, pos.x, pos.y, pos.z);
       };
-      
+
 });

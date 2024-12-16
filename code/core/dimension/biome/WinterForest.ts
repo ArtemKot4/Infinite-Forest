@@ -1,4 +1,4 @@
-class WinterForest extends AbstractBiome {
+class WinterForest extends AbstractBiome implements BiomeBehaviour {
   public constructor() {
     super("winter_forest");
   }
@@ -18,5 +18,45 @@ class WinterForest extends AbstractBiome {
   public override getRuntimeFogColor(): RGB {
       return {r: 255, g: 255, b: 255};
   };
+
+  public runSnowInRadius(x: number, y: number, z: number, radius = 16, count = 16) {
+    if (World.getThreadTime() % 8 === 0) {
+      for (let n = -count; n <= count; n++) {
+        Particles.addParticle(
+          EForestParticle.SNOWFALL,
+          x + n,
+          y,
+          z + randomInt(-radius, radius),
+          0.05,
+          -0.1,
+          0
+        );
+
+        Particles.addParticle(
+          EForestParticle.SNOWFALL,
+          x + randomInt(-radius, radius),
+          y,
+          z + n,
+          0.05,
+          -0.1,
+          0
+        );
+      }
+    }
+  };
+
+  public onLocalTick(): void {
+    const pos = Player.getPosition();
+    
+    if(!ColdCurse.hasLocal()) {
+      return;
+    };
+
+    this.runSnowInRadius(pos.x, pos.y + 12.5, pos.z, 64, 24);
+  };
+
+  public getLocalUpdate(): number {
+    return 20;
+  }
   
 }

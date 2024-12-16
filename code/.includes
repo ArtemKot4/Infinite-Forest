@@ -40,6 +40,7 @@ core/dimension/biome/HeartForest.ts
 
 ForestBiomeList.ts
 
+core/world/Curse.ts
 core/dimension/InfiniteForest.ts
 
 ForestBlockList.ts
