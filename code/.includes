@@ -21,13 +21,19 @@ block/BlockLight.ts
 block/BlockPlant.ts
 block/BlockBush.ts
 
+block/wood/RotatableLog.ts
+block/wood/Log.ts
+block/wood/Bark.ts
+block/wood/Hewn.ts
+block/wood/Planks.ts
+
 block/Fironia.ts
 block/IceFlower.ts
 
 block/tile_entity/EucalyptusWorkbench.ts
 
 core/dimension/biome/BiomeBehaviour.ts
-core/dimension/biome/BiomeBase.ts
+core/dimension/biome/AbstractBiome.ts
 core/dimension/biome/FirefliesForest.ts
 core/dimension/biome/WinterForest.ts
 core/dimension/biome/HeartForest.ts
@@ -48,8 +54,8 @@ learning/Learning.ts
 learning/Book.ts
 
 core/events/ServerPlayerTick.ts
-
 core/events/LocalTick.ts
+core/events/PlayerChangedDimension.ts
 
 final.ts
 

@@ -100,7 +100,7 @@ class BookPage {
             result.push(line.trim());
         }
     
-        return result.join("\n"); //это функция, предоставленная спонсором ChatGPT. Если вы хотите связаться с нашим спонсором, вы можете оформить подписку размером в 25$ ежемесячно. Если остались вопросы, оставьте их при себе, либо спросите у спонсора.
+        return result.join("\n");
     };
 
     public static getTextContent(text: string, x: number, y: number, size: number, color: number, align: number, alignment: number, bold: boolean, cursive: boolean, underline: boolean, shadow: number): UI.UITextElement {
@@ -190,7 +190,7 @@ class BookPage {
         for(const picture of filling.pictures) {
 
             if(!picture.texture) {
-               throw new NoSuchFieldException(`drawing pictures error! title of page: ${Translation.translate(filling.text.text.en)}`)
+                throw new NoSuchFieldException(`drawing pictures error! title of page: ${Translation.translate(filling.text.text.en)}`)
             };
 
             let content = {
@@ -201,7 +201,7 @@ class BookPage {
             } as UI.UIImageElement | UI.UISlotElement;
 
             if(picture.scale) {
-               content.scale = picture.scale;
+                content.scale = picture.scale;
             };
 
             if(picture.type && picture.type === "item") {
@@ -240,7 +240,10 @@ class BookPage {
     public static drawAll(section: string, index: number) {
         const list = Flags.getFor(Player.getLocal()).book.sectionList;
 
-        if(!(section in list)) return;
+        if(!(section in list)) {
+            Game.message(Object.keys(list));
+            return;
+        };
     
         if(!(section in BookPage.list)) {
             throw new NoSuchFieldException("Error in section find: section is not exists in system")
@@ -284,6 +287,8 @@ class BookPage {
 
         Game.message("Контент для страницы: " + name + " -> " + "\n" + JSON.stringify(Book.UI.content)); //todo: debug
 
+        Game.message("nearIndex: -> " + nearIndex)
+
     }
 };
 
@@ -291,75 +296,77 @@ class Book {
 
     protected constructor() {};
 
-    public static readonly content = {
-        drawing: [
-            {
-                type: "background",
-                color: android.graphics.Color.argb(38, 22, 22, 22),
-            },
-            {
-                type: "bitmap",
-                bitmap: "book.background",
-                x: UI.getScreenHeight() / 3,
-                y: 15,
-                scale: 2.1,
-            },
-        ],
-        elements: {
-            close_button: {
-                type: "button",
-                x: UI.getScreenHeight() - 260,
-                y: 235,
-                scale: 1.8,
-                bitmap: "close_button",
-                clicker: {
-                    onClick: (position, container) => Book.close()
-                }
-            },
-            right_button: {
-                type: "button",
-                x: UI.getScreenHeight() * 1.5,
-                y: 372.5,
-                scale: 3,
-                bitmap: "book.right_button",
-                bitmap2: "book.right_button_pressed",
-                clicker: {
-                    onClick: () => BookPage.drawAll(Book.currentSection, Book.pageIndex + 1)
-                }
-            },
-            left_button: {
-                type: "button",
-                x: UI.getScreenHeight() / 1.75,
-                y: 372.5,
-                scale: 3,
-                bitmap: "book.left_button",
-                bitmap2: "book.left_button_pressed",
-                clicker: {
-                    onClick: () => BookPage.drawAll(Book.currentSection, Book.pageIndex - 1)
-                }
-            },
-            index_1: {
-                type: "text",
-                x: UI.getScreenHeight() / 1.35,
-                y: 375,
-                font: {
-                    size: 15,
-                    color: android.graphics.Color.parseColor("#B8AC8F"),
+    public static getDefaultContent(): UI.WindowContent {
+        return {
+             drawing: [
+                {
+                    type: "background",
+                    color: android.graphics.Color.argb(38, 22, 22, 22),
                 },
-                text: "-1"
-            },
-            index_2: {
-                type: "text",
-                x: UI.getScreenHeight() * 1.35,
-                y: 375,
-                font: {
-                    size: 15,
-                    color: android.graphics.Color.parseColor("#B8AC8F"),
+                {
+                    type: "bitmap",
+                    bitmap: "book.background",
+                    x: UI.getScreenHeight() / 3,
+                    y: 15,
+                    scale: 2.1,
                 },
-                text: "-1"
-            }
-        } 
-    } as UI.WindowContent;
+            ],
+            elements: {
+                close_button: {
+                    type: "button",
+                    x: UI.getScreenHeight() - 260,
+                    y: 235,
+                    scale: 1.8,
+                    bitmap: "close_button",
+                    clicker: {
+                        onClick: (position, container) => Book.close()
+                    }
+                },
+                right_button: {
+                    type: "button",
+                    x: UI.getScreenHeight() * 1.5,
+                    y: 372.5,
+                    scale: 3,
+                    bitmap: "book.right_button",
+                    bitmap2: "book.right_button_pressed",
+                    clicker: {
+                        onClick: () => BookPage.drawAll(Book.currentSection, Book.pageIndex + 1)
+                    }
+                },
+                left_button: {
+                    type: "button",
+                    x: UI.getScreenHeight() / 1.75,
+                    y: 372.5,
+                    scale: 3,
+                    bitmap: "book.left_button",
+                    bitmap2: "book.left_button_pressed",
+                    clicker: {
+                        onClick: () => BookPage.drawAll(Book.currentSection, Book.pageIndex - 1)
+                    }
+                },
+                index_1: {
+                    type: "text",
+                    x: UI.getScreenHeight() / 1.35,
+                    y: 375,
+                    font: {
+                        size: 15,
+                        color: android.graphics.Color.parseColor("#B8AC8F"),
+                    },
+                    text: "-1"
+                },
+                index_2: {
+                    type: "text",
+                    x: UI.getScreenHeight() * 1.35,
+                    y: 375,
+                    font: {
+                        size: 15,
+                        color: android.graphics.Color.parseColor("#B8AC8F"),
+                    },
+                    text: "-1"
+                }
+            } 
+        };
+    };
 
     public static readonly UI: UI.Window = (() => {
         const Window = new UI.Window();
@@ -368,7 +375,7 @@ class Book {
         Window.setTouchable(true);
         Window.setDynamic(true);
 
-        Window.setContent({...Book.content});
+        Window.setContent(Book.getDefaultContent());
 
         return Window;
     })();
@@ -384,7 +391,7 @@ class Book {
 
     public static close() {
         Book.UI.close();
-        Book.UI.setContent({...Book.content});
+        Book.UI.setContent(Book.getDefaultContent());
     };
    
     public static givePageFor(player: number, section: string, page: string) {

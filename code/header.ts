@@ -44,17 +44,12 @@ declare namespace com.zhekasmirnov.innercore.api.NativeAPI {
 
 const NativeAPI = com.zhekasmirnov.innercore.api.NativeAPI;
 
-class RGB {
-  public constructor(public r: number, public g: number, public b: number) {}
-
-  public get() {
-    return { r: this.r, g: this.g, b: this.b };
-  };
-
-  public static equals(first: RGB, second: RGB) {
-      return first.r == second.r && first.g == second.g && first.b == second.b;
-  }
-}
+interface RGB {
+  r: number,
+  g: number,
+  b: number,
+  alpha?: number 
+};
 
 namespace ForestUtils {
   export function setEmptyBlockCollision(id: number) {
@@ -66,10 +61,17 @@ namespace ForestUtils {
     entry.addBox(0, 0, 0, 0, 0, 0);
     BlockRenderer.setCustomCollisionShape(id, -1, shape);
     render.addEntry(model);
+  };
+
+  export function getBiomeState(x: number, z: number, region: BlockSource): EBiomeState {
+    const biome = AbstractBiome.getFor(region.getBiome(x, z));
+    return biome && biome.getBiomeState ? biome.getBiomeState() : EBiomeState.BALANCE  
   }
 }
 
 type JSONLang = {
   en: string,
   ru: string
-}
+};
+
+const recipesToInitList: Map<[id: number, count: number], ItemInstance[]> = new Map()

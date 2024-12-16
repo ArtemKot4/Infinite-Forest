@@ -1,0 +1,3 @@
+class Hewn extends RotatableLog {
+    
+}

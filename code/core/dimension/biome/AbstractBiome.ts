@@ -1,6 +1,6 @@
-abstract class BiomeBase {
+abstract class AbstractBiome {
 
-  public static readonly data: Record<number, BiomeBase> = {};
+  public static readonly data: Record<number, AbstractBiome> = {};
 
   public readonly id: number;
   public readonly stringID: string;
@@ -12,7 +12,8 @@ abstract class BiomeBase {
     this.stringID = stringID;
     this.id = this.biome.id;
 
-    BiomeBase.data[this.id] = this;
+    AbstractBiome.data[this.id] = this;
+    this.getPlantList = () => Object.entries(this.getPlantList()).map((v) => [parseBlockID(v[0]), v[1]]);
   }
 
   abstract getBiomeState(): EBiomeState;
@@ -25,7 +26,7 @@ abstract class BiomeBase {
   public getWaterColor?(): RGB;
   public getFoliageColor?(): RGB;
 
-  abstract getPlantList(): Record<string, number>;
+  abstract getPlantList(): Record<string, number> | [number, number][][];
 
   public getBiome(): CustomBiome {
     return this.biome;
@@ -37,5 +38,9 @@ abstract class BiomeBase {
 
   public getID(): number {
     return this.id;
+  };
+
+  public static getFor(biome: number): AbstractBiome {
+    return AbstractBiome.data[biome];
   }
 }

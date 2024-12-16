@@ -1,0 +1,3 @@
+class Bark extends RotatableLog {
+
+};

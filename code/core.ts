@@ -2,7 +2,7 @@ function range(min: number, max: number): number[] {
   const list = [];
 
   for (let i = min; i < max; i++) {
-    list.push(i);
+     list.push(i);
   }
 
   return list;
@@ -18,6 +18,10 @@ function parseItemID(id: string): number {
 
 function parseID(id: string): number {
   return parseBlockID(id) ?? parseItemID(id);
+}
+
+function randomInt(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 const enum EBiomeState {
@@ -39,11 +43,6 @@ type CraftField = {
       slot_8?: PartialItemInstance,
       slot_9?: PartialItemInstance,
 };
-
-
-function randomInt(min: number, max: number): number {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
 
 const RuntimeException = java.lang.RuntimeException;
 const NullPointerException = java.lang.NullPointerException;

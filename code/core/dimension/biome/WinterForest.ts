@@ -1,4 +1,4 @@
-class WinterForest extends BiomeBase {
+class WinterForest extends AbstractBiome {
   public constructor() {
     super("winter_forest");
   }
@@ -12,11 +12,11 @@ class WinterForest extends BiomeBase {
   };
 
   public override getRuntimeSkyColor(): RGB {
-      return new RGB(255, 255, 255);
+      return {r: 255, g: 255, b: 255};
   };
 
   public override getRuntimeFogColor(): RGB {
-      return new RGB(255, 255, 255);
+      return {r: 255, g: 255, b: 255};
   };
   
 }

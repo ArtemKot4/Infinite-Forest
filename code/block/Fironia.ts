@@ -8,6 +8,10 @@ class Fironia extends BlockPlant {
     };
 
     public getLightLevel(): number {
-        return 6;
+        return 8;
+    };
+
+    public getBiomeState(): EBiomeState {
+        return EBiomeState.BALANCE;
     };
 };

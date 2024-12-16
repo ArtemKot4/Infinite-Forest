@@ -1,6 +1,6 @@
 type IPlayerPage = Record<string, number>;
 
-declare type playerData = {
+type playerData = {
     /**
      * List of learnings
      */

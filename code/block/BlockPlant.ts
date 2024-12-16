@@ -10,6 +10,15 @@ abstract class BlockPlant extends BlockForest {
     constructor(stringID: string, variationList: Block.BlockVariation[]) {
         super(stringID, variationList);
         ForestUtils.setEmptyBlockCollision(this.id);
+        
+        if(this.getBiomeState) {
+            this.onRandomTick = (x, y, z, block, region) => {
+                const condition = ForestUtils.getBiomeState(x, z, region) == this.getBiomeState();
+                if(condition) {
+                    region.destroyBlock(x, y, z, false);
+                };
+            };
+        };
     };
 
     public getCreativeGroup(): string {
@@ -18,16 +27,20 @@ abstract class BlockPlant extends BlockForest {
 
     public onNeighbourChange(coords: Vector, block: Tile, changeCoords: Vector, region: BlockSource): void {
         if(!BlockPlant.allowedBlockList.has(region.getBlockId(coords.x, coords.y - 1, coords.z))) {
-             region.destroyBlock(coords.x, coords.y, coords.z);
-        }
+            region.destroyBlock(coords.x, coords.y, coords.z);
+        };
     };
 
     public onPlace(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, player: number, region: BlockSource): void | Vector {
-        if(BlockPlant.allowedBlockList.has(region.getBlockId(coords.x, coords.y, coords.z)) &&
-         region.getBlockId(coords.x, coords.y + 1, coords.z) === VanillaTileID.air) {
+        const upperBlock = region.getBlockId(coords.x, coords.y + 1, coords.z);
+        const isAllowedBlock = BlockPlant.allowedBlockList.has(region.getBlockId(coords.x, coords.y, coords.z));
+
+        if(isAllowedBlock && upperBlock === VanillaTileID.air) {
             region.setBlock(coords.x, coords.y + 1, coords.z, this.id, 0);
-        }
+        };
     };
+
+    public getBiomeState?(): EBiomeState;
 
 };
 

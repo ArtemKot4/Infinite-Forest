@@ -87,13 +87,15 @@ class BlockForest implements BlockBehavior, IBlockModel {
     Block.setDestroyLevel(this.id, this.getDestroyLevel());
   }
 
-  public create(): void {
+  public create(): this {
     Block.createBlock(this.stringID, this.variationList);
     this.build();
+    return this;
   }
 
-  public createWithRotation(): void {
+  public createWithRotation(): this {
     this.build();
+    return this;
   }
 
   public setModel(model: BlockModel, data: number): this {

@@ -1,38 +1,38 @@
 {
-  "name": "infinite_forest_is_real",
-  "section": "default",
-  "left": {
-      "title": {
+    "name": "infinite_forest_is_real",
+    "section": "default",
+    "left": {
+        "title": {
+            "text": {
+                "en": "It's curse?",
+                "ru": "Проклятие?"
+            }
+        },
+        "subtitle": {
+            "text": {
+                "en": "Cold",
+                "ru": "Прохлада"
+            }
+        },
         "text": {
-          "en": "It's curse?",
-          "ru": "Проклятие?"
-        }
-      },
-      "subtitle": {
-        "text": {
-          "en": "Cold",
-          "ru": "Прохлада"
-        }
-      },
-      "text": {
-        "text": {
-          "en": "It has been not just a dream? It is place.. I'm feel myself native. Here small cold, but it is cold becomes glad me. I see a flames, and, might be here not enough a dark, fireflies gives me place to walking, opens view at all entity of forest. In long i see a cold flowers, but in near flowers, that, guess flames better. Interesting place, i will to see around.", 
-          "ru": "Неужели это был не просто сон? Это место.. оно мне знако, даже, родно? Здесь прохладно, но эта прохлада мне приятна. Вижу огоньки, и, кажется, тут не так уж и темно, светлячки расступаются передо мной, будто бы открывая взор на всю обитель леса. Вдали я вижу хладные цветы, а совсем рядом те, что, кажется пылают, сильно, ясно. Интересное место, пойду осмотрюсь."
-        }
-    },
-    "pictures": [
-      {
-        "x": 190,
-        "y": 170,
-        "scale": 1.6,
-        "texture": "glowworm"
-      },
-      {
-        "x": 90,
-        "y": 210,
-        "scale": 1.6,
-        "texture": "glowworm"
-      }
-    ]
-  }
+            "text": {
+                "en": "It has been not just a dream? It is place.. I'm feel myself native. Here small cold, but it is cold becomes glad me. I see a flames, and, might be here not enough a dark, fireflies gives me place to walking, opens view at all entity of forest. In long i see a cold flowers, but in near flowers, that, guess flames better. Interesting place, i will to see around.", 
+                "ru": "Неужели это был не просто сон? Это место.. оно мне знако, даже, родно? Здесь прохладно, но эта прохлада мне приятна. Вижу огоньки, и, кажется, тут не так уж и темно, светлячки расступаются передо мной, будто бы открывая взор на всю обитель леса. Вдали я вижу хладные цветы. Кажется, не видел их во сне. Интересное место, пойду осмотрюсь."
+            }
+        },
+        "pictures": [
+          {
+            "x": 190,
+            "y": 170,
+            "scale": 1.6,
+            "texture": "glowworm"
+          },
+          {
+            "x": 90,
+            "y": 210,
+            "scale": 1.6,
+            "texture": "glowworm"
+          }
+        ]
+    }
 }
