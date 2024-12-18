@@ -17,7 +17,7 @@ class PlantGenerator {
         const biome = AbstractBiome.getFor(World.getBiome(coords.x, coords.z)); 
 
         if(!biome) {
-            return this.init(chunkX, chunkZ);
+            throw new NoSuchFieldException("Unregistered biome!")
         };
 
         const plantList = biome.getPlantList();
@@ -36,6 +36,7 @@ class PlantGenerator {
                 coords = GenerationUtils.findSurface(randomCoords.x, 90, randomCoords.z);
 
                 if(coords.y < 54) continue; 
+
                 if(plant.tile && !!plant.tile) {
                     TileEntity.addTileEntity(coords.x, coords.y, coords.z, BlockSource.getCurrentWorldGenRegion());
                 };
