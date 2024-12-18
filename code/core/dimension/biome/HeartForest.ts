@@ -7,7 +7,9 @@ class HeartForest extends AbstractBiome {
         return EBiomeState.COLD;
     };
 
-    public override getPlantList(): Record<string, number> {
-        return {"wither_rose": 0.3};
+    public override getPlantList() {
+        return {
+            wither_rose: {rarity: 0.3}
+        };
     };
 }

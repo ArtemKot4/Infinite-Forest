@@ -7,7 +7,7 @@ class WinterForest extends AbstractBiome implements BiomeBehaviour {
     return EBiomeState.COLD;
   }
 
-  public override getPlantList(): Record<string, number> {
+  public override getPlantList() {
     return null;
   };
 
@@ -46,12 +46,10 @@ class WinterForest extends AbstractBiome implements BiomeBehaviour {
   };
 
   public onLocalTick(): void {
-    const pos = Player.getPosition();
-    
     if(!ColdCurse.hasLocal()) {
       return;
     };
-
+    const pos = Player.getPosition();
     this.runSnowInRadius(pos.x, pos.y + 12.5, pos.z, 64, 24);
   };
 

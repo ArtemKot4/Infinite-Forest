@@ -25,7 +25,7 @@ abstract class AbstractBiome {
   public getWaterColor?(): RGB;
   public getFoliageColor?(): RGB;
 
-  abstract getPlantList(): Nullable<Record<string, {rarity: number, count: number, data?: number, tile?: boolean}>>;
+  abstract getPlantList(): Nullable<Record<string, {rarity: number, count?: number, data?: number, tile?: boolean}>>;
 
   public getBiome(): CustomBiome {
     return this.biome;

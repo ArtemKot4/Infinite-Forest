@@ -37,10 +37,11 @@ class PlantGenerator {
 
                 if(coords.y < 54) continue; 
 
+                this.place(coords, id, plant.data || 0);
+                
                 if(plant.tile && !!plant.tile) {
                     TileEntity.addTileEntity(coords.x, coords.y, coords.z, BlockSource.getCurrentWorldGenRegion());
                 };
-                this.place(coords, id, plant.data || 0);
             };
         };
         return;
