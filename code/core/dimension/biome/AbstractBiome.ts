@@ -13,7 +13,6 @@ abstract class AbstractBiome {
     this.id = this.biome.id;
 
     AbstractBiome.data[this.id] = this;
-    this.getPlantList = () => Object.entries(this.getPlantList()).map((v) => [parseBlockID(v[0]), v[1]]);
   }
 
   abstract getBiomeState(): EBiomeState;
@@ -26,7 +25,7 @@ abstract class AbstractBiome {
   public getWaterColor?(): RGB;
   public getFoliageColor?(): RGB;
 
-  abstract getPlantList(): Record<string, number> | [number, number][][];
+  abstract getPlantList(): Nullable<Record<string, {rarity: number, count: number, data?: number, tile?: boolean}>>;
 
   public getBiome(): CustomBiome {
     return this.biome;

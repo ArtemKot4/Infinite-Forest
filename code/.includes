@@ -46,6 +46,8 @@ core/dimension/InfiniteForest.ts
 ForestBlockList.ts
 ForestItemList.ts
 
+core/dimension/generation/PlantGenerator.ts
+
 learning/LearningBase.ts
 learning/ItemLearning.ts
 learning/CraftBuildLearning.ts
