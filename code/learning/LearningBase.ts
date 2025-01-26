@@ -1,54 +1,42 @@
+abstract class LearningBase {
+    constructor(public name: string, public page: string, public section: string = "default") {};
 
-
-abstract class LearningBase<T extends (...args: any[]) => boolean> {
-    constructor(protected name: string) {}
+    abstract type: string;
 
     public dependenceList: string[];
 
-    public condition?: T;
+    public static condition?(...args: unknown[]): boolean;
 
-    public completeEvent: (player: number) => any;
+    public static completeEvent?(player: number, ...args: Parameters<typeof this.condition>): any;
 
-    public setCondition(condition: T): this {
-        this.condition = condition;
-        return this;
-    };
+    public static complete<T extends LearningBase>(learning: T, player: number, ...args: Parameters<typeof this.condition>): void {
+        const list = ObjectPlayer.get(player).learningList;
 
-    public getName(): string {
-        return this.name;
-    };
-
-    public setCompleteEvent(callback: (player: number) => any) {
-        this.completeEvent = callback;
-    };
-
-    public setDependences(...learnings: (string | LearningBase<any>)[]) {
-        this.dependenceList = [];
-        this.dependenceList.push(...learnings.map((v) => v instanceof LearningBase ? v.getName() : v));
-    };
-
-    abstract getType(): string;
-
-    public complete(player: number, ...args: Parameters<T>) {
-        const list = Flags.getFor(player).learningList;
-
-        if(list.has(this.getName())) {
+        if (learning.name in list) {
             return;
-        };
-        
-        if(Array.isArray(this.dependenceList) && this.dependenceList.length > 0) {
-            for(const dependence of this.dependenceList) {
-                if(!list.has(dependence)) {
+        }
+
+        if (Array.isArray(learning.dependenceList) && learning.dependenceList.length > 0) {
+            for (const dependence of learning.dependenceList) {
+                if (!(dependence in list)) {
                     return;
-                };
-            };
-        };
+                }
+            }
+        }
 
-        if(!this.condition(...args)) {
+        if (this.condition && !this.condition(...args)) {
             return;
         };
 
-        list.add(this.getName());
-    };
+        if(this.completeEvent) {
+            this.completeEvent(player, ...args);
+        };
 
+        ObjectPlayer.addLearning(player, learning.name);
+        return;
+    };
+};
+
+class EventLearning extends LearningBase {
+    public type: string = "event";
 };

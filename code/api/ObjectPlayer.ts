@@ -44,7 +44,9 @@ class ObjectPlayer {
     public name: string;
 
     /**
-     * list of player learnings. Key is name of learning, value is number of direction of page linked with this learning;
+     * list of player learnings. 
+     * @key string name of learning;
+     * @value number number of direction of page linked with this learning, -1 is not selected;
      */
 
     public learningList: Record<string, number> = {};
@@ -69,7 +71,7 @@ class ObjectPlayer {
     public static appendList(player: ObjectPlayer) {
         const key = ObjectPlayer.list[player.id];
 
-        if(key) {
+        if(!key) {
             ObjectPlayer.list[player.id] = player;
         } else {
             key.name = Entity.getNameTag(player.id);
@@ -110,7 +112,7 @@ class ObjectPlayer {
     };
 
     public static getOrCreate(id: number): ObjectPlayer {
-        return this.list[id] || new ObjectPlayer(id);
+        return this.list[id] ??= new ObjectPlayer(id);
     }
 
     /**
@@ -153,14 +155,19 @@ class ObjectPlayer {
      * @param direction direction of page;
      */
 
-    public static addLearning(id: number, learning: Learning, direction: number): void {
+    public static addLearning(id: number, learning_name: string, direction: number = -1): void {
+        if(!Learning.get(learning_name)) {
+            Debug.message(`Server: ${learning_name} is not a learning. All exists learnings: ${Object.keys(Learning.list)}`);
+            return;
+        };
+
         const player = this.getOrCreate(id);
-        const hasLearning = player.learningList[learning.name];
+        const hasLearning = player.learningList[learning_name];
 
         if(typeof hasLearning === "number" && hasLearning != direction) {
-            player.learningList[learning.name] = direction;
+            player.learningList[learning_name] = direction;
 
-            this.sendToClient(id);
+            return this.sendToClient(id);
         };
     };
 
@@ -194,7 +201,7 @@ class ObjectPlayer {
             page_direction: page_direction || 0
         };
 
-        this.sendToClient(id);
+        return this.sendToClient(id);
     };
 
     /**
@@ -217,6 +224,8 @@ class ObjectPlayer {
         this.sendToClient(id);
     };
 
+    //next danger functions, mustn't to realize
+
     /**
      * Client function to append learning list of player in both sides;
      * @param id numeric id of player;
@@ -224,9 +233,9 @@ class ObjectPlayer {
      * @param direction of page;
      */
 
-    public static addLearningToServer(id: number, learning: Learning, direction: number): void {
-        Network.sendToServer("packet.infinite_forest.add_learning_player", { id, learning, direction });
-    };
+    // public static addLearningToServer(id: number, learning: string, direction: number): void {
+    //     Network.sendToServer("packet.infinite_forest.add_learning_player", { id, learning, direction });
+    // };
 
     /**
      * Client function to append reflection list of player in both sides;
@@ -236,9 +245,9 @@ class ObjectPlayer {
      * @param page_direction direction of page;
      */
 
-    public static addReflectionToServer(id: number, reflection: Reflection, progress: number, page_direction: number): void {
-        Network.sendToServer("packet.infinite_forest.add_reflection_player", { id, reflection, progress, page_direction });
-    };
+    // public static addReflectionToServer(id: number, reflection: Reflection, progress: number, page_direction: number): void {
+    //     Network.sendToServer("packet.infinite_forest.add_reflection_player", { id, reflection, progress, page_direction });
+    // };
 
     /**
      * Client function to append pagesMyself list of player in both sides;
@@ -248,9 +257,9 @@ class ObjectPlayer {
      * @param text text of page;
      */
 
-    public static addMyPageToServer(id: number, title: string, subtitle: string, text: string): void {
-        Network.sendToServer("packet.infinite_forest.add_my_page_player", { id, title, subtitle, text });
-    };
+    // public static addMyPageToServer(id: number, title: string, subtitle: string, text: string): void {
+    //     Network.sendToServer("packet.infinite_forest.add_my_page_player", { id, title, subtitle, text });
+    // };
 };
 
 Network.addServerPacket("packet.infinite_forest.create_object_player", (client: NetworkClient, data: { id: number }) => {
@@ -267,7 +276,7 @@ Network.addClientPacket("packet.infinite_forest.get_object_player", (data: { pla
 
 Network.addServerPacket("packet.infinite_forest.add_learning_player", (client: NetworkClient, data: { 
     id: number, 
-    learning: Learning, 
+    learning: string, 
     direction: number 
 }) => {
     return ObjectPlayer.addLearning(data.id, data.learning, data.direction);

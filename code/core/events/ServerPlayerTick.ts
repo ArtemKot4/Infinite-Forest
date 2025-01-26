@@ -8,7 +8,7 @@ Callback.addCallback("ServerPlayerTick", (playerUid: number) => {
          const selectedItemStack = player.getInventorySlot(player.getSelectedSlot());
          const carriedItemStack = player.getCarriedItem();
 
-         const handFunction = ItemForest.itemOnHandFuncs.get(selectedItemStack.id);
+         const handFunction = ItemForest.handFunctions.get(selectedItemStack.id);
 
          if(selectedItemStack.id == carriedItemStack.id && handFunction !== undefined) {
             return handFunction(selectedItemStack);

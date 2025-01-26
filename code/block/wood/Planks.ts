@@ -10,15 +10,15 @@ class Planks extends BlockForest {
     public build(): void {
         super.build();
         
-        recipesToInitList.set([this.id, 4], [
+        initRecipes.set([this.id, 4], [
             new ItemStack(BlockID[this.log_id], 1, 0)
         ]);
 
-        recipesToInitList.set([this.id, 4], [
+        initRecipes.set([this.id, 4], [
             new ItemStack(BlockID[this.bark_id], 1, 0)
         ]);
 
-        recipesToInitList.set([this.id, 4], [
+        initRecipes.set([this.id, 4], [
             new ItemStack(BlockID[this.hewn_id], 1, 0)
         ]);
     }

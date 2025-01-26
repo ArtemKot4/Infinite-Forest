@@ -9,11 +9,11 @@ abstract class BlockPlant extends BlockForest {
 
     constructor(stringID: string, variationList: Block.BlockVariation[]) {
         super(stringID, variationList);
-        ForestUtils.setEmptyBlockCollision(this.id);
+        Utils.setEmptyBlockCollision(this.id);
         
         if(this.getBiomeState) {
             this.onRandomTick = (x, y, z, block, region) => {
-                const condition = ForestUtils.getBiomeState(x, z, region) == this.getBiomeState();
+                const condition = Utils.getBiomeState(x, z, region) == this.getBiomeState();
                 if(condition) {
                     region.destroyBlock(x, y, z, false);
                 };
@@ -42,5 +42,32 @@ abstract class BlockPlant extends BlockForest {
 
     public getBiomeState?(): EBiomeState;
 
-};
+    public isSolid(): boolean {
+        return false;
+    };
 
+    public getRenderLayer(): number {
+        return 3;
+    };
+
+    public getTranslucency(): number {
+        return 0;
+    };
+
+    public getLightOpacity(): number {
+        return 0;
+    };
+
+    public getDestroyTime(): number {
+        return 0;
+    };
+
+    public getSoundType(): Block.Sound {
+        return "grass";
+    };
+
+    public getRenderType(): number {
+        return 1;
+    }
+
+};

@@ -40,7 +40,7 @@ Callback.addCallback("PlayerChangedDimension", function (playerUid: number, from
 
         InventorySaver.replace(playerUid);
         
-        Book.givePageFor(playerUid, "default", "infinite_forest_is_real");
+        ObjectPlayer.addLearning(playerUid, "first_point");
     } else {
         Commands.exec("/gamerule doDaylightCycle true");
         Commands.exec("/gamerule doWeatherCycle true");

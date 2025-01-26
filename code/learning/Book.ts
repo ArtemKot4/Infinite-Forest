@@ -108,14 +108,14 @@ class BookPage {
             type: "text",
             multiline: true,
             font: {
-               size: size,
-                color: color,
+                size: size,
+                 color: color,
                   align: align || UI.Font.ALIGN_DEFAULT,
                    alignment: alignment || UI.Font.ALIGN_DEFAULT,
                    bold: bold || false,
                   cursive: cursive || false,
                  underline: underline || false,
-               shadow: shadow || 0
+                shadow: shadow || 0
             },
             x: x,
             y: y,
@@ -129,7 +129,19 @@ class BookPage {
 
         const {x, y, color, size, shadow, alignment, align, cursive, underline, bold} = filling.title.data ?? {};
 
-        Book.UI.content.elements[side + "_title"] = BookPage.getTextContent(Translation.translate(filling.title.text.en), (x || 0) + default_x, (y || 0) + default_y, size || 20, color || android.graphics.Color.parseColor("#00A416"), align, alignment, bold || true, cursive, underline, shadow);
+        Book.UI.content.elements[side + "_title"] = BookPage.getTextContent(
+            Translation.translate(filling.title.text.en), 
+             (x || 0) + default_x, 
+              (y || 0) + default_y, 
+               size || 20, 
+                color || android.graphics.Color.parseColor("#00A416"), 
+                align, 
+                alignment, 
+               bold || true, 
+              cursive, 
+             underline, 
+            shadow
+        );
 
     };
 
@@ -139,7 +151,19 @@ class BookPage {
 
         const {x, y, color, size, shadow, alignment, align, cursive, underline, bold} = filling.subtitle.data ?? {};
 
-        Book.UI.content.elements[side + "_subtitle"] = BookPage.getTextContent(Translation.translate(filling.subtitle.text.en), (x || 0) + default_x, (y || 0) + default_y, size || 16.5, color || android.graphics.Color.parseColor("#194D33"), align, alignment, bold, cursive, underline, shadow);
+        Book.UI.content.elements[side + "_subtitle"] = BookPage.getTextContent(
+            Translation.translate(filling.subtitle.text.en), 
+             (x || 0) + default_x, 
+              (y || 0) + default_y, 
+               size || 16.5, 
+                color || android.graphics.Color.parseColor("#194D33"), 
+                align, 
+                alignment, 
+               bold, 
+              cursive, 
+             underline, 
+            shadow
+        );
 
     };
 
@@ -149,7 +173,19 @@ class BookPage {
 
         const {x, y, color, size, shadow, alignment, align, cursive, underline, bold} = filling.text.data ?? {};
 
-        Book.UI.content.elements[side + "_text"] = BookPage.getTextContent(Translation.translate(filling.text.text.en), (x || 0) + default_x, (y || 0) + default_y, size || 12.5, color || android.graphics.Color.parseColor("#9E9E9E"), align, alignment, bold, cursive, underline, shadow);
+        Book.UI.content.elements[side + "_text"] = BookPage.getTextContent(
+            Translation.translate(filling.text.text.en), 
+             (x || 0) + default_x, 
+              (y || 0) + default_y, 
+               size || 12.5, 
+                color || android.graphics.Color.parseColor("#9E9E9E"), 
+                align, 
+                alignment, 
+               bold, 
+              cursive, 
+             underline, 
+            shadow
+        );
 
     };
 
@@ -169,19 +205,19 @@ class BookPage {
             throw new NoSuchFieldException("link page error: section is not exists");
         };
 
-        const list = Flags.getFor(Player.getLocal()).book.sectionList;
+    //     const list = Flags.getFor(Player.getLocal()).book.sectionList;
 
-        if(section in list) {
-            const index = Object.keys(list[section]).findIndex((v) => v == name);
+    //     if(section in list) {
+    //         const index = Object.keys(list[section]).findIndex((v) => v == name);
 
-            if(index >= 0) {
+    //         if(index >= 0) {
                     
-                content.clicker = {
-                    onLongClick: (position, container) => BookPage.drawAll(section, index)
-                };
+    //             content.clicker = {
+    //                 onLongClick: (position, container) => BookPage.drawAll(section, index)
+    //             };
 
-            };
-       };
+    //         };
+    //    };
     };
 
     public static drawPictures(filling: IPageFilling, default_x: number, default_y: number) {
@@ -228,7 +264,19 @@ class BookPage {
             }) as UI.Elements;
 
             if(element.type === "native_text" && element.text instanceof Object) {
-                content = this.getTextContent(element.text.en, content.x, content.y, element.size, element.color, element.align, element.alignment, element.bold, element.cursive, element.underline, element.shadow)
+                content = this.getTextContent(
+                    element.text.en, 
+                     content.x, 
+                      content.y, 
+                       element.size, 
+                        element.color, 
+                        element.align, 
+                        element.alignment, 
+                       element.bold, 
+                      element.cursive, 
+                     element.underline, 
+                    element.shadow
+                );
             };
 
             BookPage.initLink(content, element.link);
@@ -238,18 +286,11 @@ class BookPage {
     };
 
     public static drawAll(section: string, index: number) {
-        const list = Flags.getFor(Player.getLocal()).book.sectionList;
-
-        if(!(section in list)) {
-            Game.message(Object.keys(list));
-            return;
-        };
-    
         if(!(section in BookPage.list)) {
             throw new NoSuchFieldException("Error in section find: section is not exists in system")
         }
    
-        const pagesList = Object.entries(list[section]);
+        const pagesList = Book.getPagesForSection(section);
 
         const nearIndex = Math.min(pagesList.length - 1, index);
 
@@ -269,8 +310,8 @@ class BookPage {
         this.drawTitle("left", context.left, UI.getScreenHeight() / 1.95, 60);
         this.drawTitle("right", context.right, UI.getScreenHeight() * 1.1 + 5, 60);
 
-        this.drawSubtitle("left", context.left, UI.getScreenHeight() / 1.95, 85); //UI.getScreenHeight() / 1.8
-        this.drawSubtitle("right", context.right, UI.getScreenHeight() * 1.1 + 5, 85); //UI.getScreenHeight() * 1.15
+        this.drawSubtitle("left", context.left, UI.getScreenHeight() / 1.95, 85); 
+        this.drawSubtitle("right", context.right, UI.getScreenHeight() * 1.1 + 5, 85); 
 
         this.drawText("left", context.left, UI.getScreenHeight() / 1.95, 110);
         this.drawText("right", context.right, UI.getScreenHeight() * 1.1 + 5, 110);
@@ -295,6 +336,34 @@ class BookPage {
 class Book {
 
     protected constructor() {};
+
+    private static getPageListWithObj(obj: Record<string, number>, section: string) {
+        const list = [];
+
+        for(const learning_name in obj) {
+            const learning = Learning.get(learning_name);
+
+            if(learning && learning.section === section) {
+                list.push([learning.name, obj[learning_name]]);
+            }
+        };
+
+        return list;
+    }
+    public static getPagesForSection(section: string): [string, number][] {
+        const objectPlayer = ObjectPlayer.get(Player.getLocal());
+
+        if(!objectPlayer) {
+            return [];
+        };
+
+                
+        let list: ReturnType<typeof this.getPagesForSection> = []
+        .concat(this.getPageListWithObj(objectPlayer.learningList, section))
+        //.concat(this.getPageListWithObj(objectPlayer.reflectionList, section));
+        
+        return list;
+    }
 
     public static getDefaultContent(): UI.WindowContent {
         return {
@@ -392,15 +461,6 @@ class Book {
     public static close() {
         Book.UI.close();
         Book.UI.setContent(Book.getDefaultContent());
-    };
-   
-    public static givePageFor(player: number, section: string, page: string) {
-        const list = Flags.getFor(player).book.sectionList;
-
-        if(section in BookPage.list && page in BookPage.list[section]) {
-            (list[section] ??= {})[page] ??= 0;
-        };
-        
     };
 
 };

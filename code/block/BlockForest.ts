@@ -93,6 +93,7 @@ class BlockForest implements BlockBehavior, IBlockModel {
     }
 
     public createWithRotation(): this {
+        Block.createBlockWithRotation(this.stringID, this.variationList);
         this.build();
         return this;
     }

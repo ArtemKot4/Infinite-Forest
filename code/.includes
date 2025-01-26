@@ -4,6 +4,7 @@ translations.ts
 
 api/Flags.ts
 api/ObjectPlayer.ts
+api/Curse.ts
 
 header.ts
 core.ts
