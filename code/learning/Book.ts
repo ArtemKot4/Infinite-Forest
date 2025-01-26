@@ -250,8 +250,7 @@ class BookPage {
             Book.UI.content.elements[`picture.${picture.texture}:${Math.random()}`] = content;
 
         };
-    }
-
+    };
 
     public static drawElements(filling: IPageFilling, default_x: number, default_y: number) {
         if(!filling.elements) return;
@@ -337,8 +336,12 @@ class Book {
 
     protected constructor() {};
 
-    private static getPageListWithObj(obj: Record<string, number>, section: string) {
+    private static getPageListWithObj(obj: Record<string, number>, section: string): [string, number][] {
         const list = [];
+
+        if(!obj) {
+            return list;
+        };
 
         for(const learning_name in obj) {
             const learning = Learning.get(learning_name);
@@ -349,9 +352,10 @@ class Book {
         };
 
         return list;
-    }
+    };
+
     public static getPagesForSection(section: string): [string, number][] {
-        const objectPlayer = ObjectPlayer.get(Player.getLocal());
+        const objectPlayer = ObjectPlayer.get();
 
         if(!objectPlayer) {
             return [];
@@ -363,7 +367,7 @@ class Book {
         //.concat(this.getPageListWithObj(objectPlayer.reflectionList, section));
         
         return list;
-    }
+    };
 
     public static getDefaultContent(): UI.WindowContent {
         return {

@@ -68,6 +68,6 @@ abstract class BlockPlant extends BlockForest {
 
     public getRenderType(): number {
         return 1;
-    }
+    };
 
 };

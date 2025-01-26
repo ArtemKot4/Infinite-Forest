@@ -9,7 +9,7 @@ class InfiniteForest {
     public static addLayer(layer: Dimensions.TerrainLayerParams): void {
         this.layerList.push(layer);
         this.dimension.setGenerator(this.getGenerator());
-    }
+    };
 
     public static getGenerator(): Dimensions.CustomGenerator {
         return Dimensions.newGenerator({
@@ -20,9 +20,9 @@ class InfiniteForest {
                 maxY: 1,
                 yConversion: [[0.7, 1]],
                 material: { base: VanillaBlockID.bedrock },
-            }),
+            })
         });
-    }
+    };
 
     static {
         this.dimension.setSkyColor(21 / 255, 96 / 255, 189 / 255);
@@ -57,5 +57,5 @@ class InfiniteForest {
         });
 
         TagRegistry.addCommonObject("dimensions", this.id, ["nature", "magic", "forest"]);
-    }
-}
+    };
+};

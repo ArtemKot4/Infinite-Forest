@@ -107,7 +107,7 @@ class ObjectPlayer {
      * @param id numeric id of player;
      */
 
-    public static get(id: number): Nullable<ObjectPlayer> {
+    public static get(id: number = Player.getLocal()): Nullable<ObjectPlayer> {
         return this.list[id] || null;
     };
 
@@ -272,6 +272,7 @@ Network.addServerPacket("packet.infinite_forest.set_object_player", (client: Net
 
 Network.addClientPacket("packet.infinite_forest.get_object_player", (data: { player: ObjectPlayer }) => {
     ObjectPlayer.appendList(data.player);
+    Game.message("my data: -> " + JSON.stringify(ObjectPlayer.get()));
 });
 
 Network.addServerPacket("packet.infinite_forest.add_learning_player", (client: NetworkClient, data: { 
@@ -288,4 +289,9 @@ Network.addServerPacket("packet.infinite_forest.add_reflection_player", (client:
 
 Network.addServerPacket("packet.infinite_forest.add_my_page_player", (client: NetworkClient, data: { id: number, title: string, subtitle: string, text: string }) => {
     return ObjectPlayer.addMyPage(data.id, data.title, data.subtitle, data.text);
+});
+
+Callback.addCallback("ServerPlayerLoaded", (player) => {
+    ObjectPlayer.create(player);
+    ObjectPlayer.sendToClient(player);
 });
