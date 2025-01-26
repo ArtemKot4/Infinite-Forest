@@ -1,4 +1,22 @@
-{ "translurency:entity_alphatest_custom": {
-      "-defines": ["ALPHA_TEST"]
-}
+{
+	"entity_alphatest_blending:entity_alphatest_custom": {
+		"+states": [
+			"Blending",
+			"DisableDepthTest"
+		],
+		"fragmentShader": "./dynamic_highlight.fragment"
+	},
+	"translucent:entity_alphatest_custom": {
+		"+states": [
+			"Blending",
+			"DisableAlphaWrite",
+			"DisableDepthTest"
+		],
+		"-defines": ["ALPHA_TEST"],
+		"blendSrc": "SourceAlpha",
+		"blendDst": "OneMinusSrcAlpha"
+	},
+	"dynamic_highlight:translucent": {
+		"fragmentShader": "./dynamic_highlight.fragment"
+	}
 }

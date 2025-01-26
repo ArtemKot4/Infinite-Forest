@@ -7,7 +7,7 @@ interface IItemTextureDescription {
 
 class ItemForest implements ItemBehavior {
 
-    public static itemOnHandFuncs: Map<number, (item: ItemStack) => void> = new Map();
+    public static handFunctions: Map<number, (item: ItemStack) => void> = new Map();
 
     public maxStack: number = 64;
     public texture: IItemTextureDescription;
@@ -62,33 +62,43 @@ class ItemForest implements ItemBehavior {
     };
 
     public inCreative(): boolean {
-         return true;
-    }
+        return true;
+    };
+
+    public getTags?(): string[] {
+        return null;
+    };
 
     public create(): void {
+        const tags = this.getTags();
+
+        if(tags) {
+            TagRegistry.addCommonObject("items", this.id, tags);
+        };
+
         const textureData = this.getTexture();
 
         const itemTexture = Object.assign(
-             textureData,
-             textureData.name instanceof Array && {texture: textureData.name[0]}
+            textureData,
+            textureData.name instanceof Array && {texture: textureData.name[0]}
         );
 
-        Item.createItem(this.stringID, `item.infinite_forest.${this.stringID}`,
-          itemTexture as Item.TextureData,
-             {
+        Item.createItem(this.stringID, `item.infinite_forest.${this.stringID}`, itemTexture as Item.TextureData,
+            {
                 stack: this.getMaxStack(),
                 isTech: !this.inCreative(),
                 category: this.getItemCategory()
-             });
+            }
+        );
 
         if(textureData.name instanceof Array) { 
-          const [texture, frames, interval] = textureData.name;
+            const [texture, frames, interval] = textureData.name;
 
-          IAHelper.makeAdvancedAnim(this.id, 
-              texture, 
-              interval,
-              frames instanceof Array ? 
-              frames : range(0, frames));
+            IAHelper.makeAdvancedAnim(this.id, 
+                texture, 
+                interval,
+                frames instanceof Array ? frames : range(0, frames)
+            );
         };
 
         if(this.isFireResistant()) {
@@ -110,7 +120,7 @@ class ItemForest implements ItemBehavior {
         ItemRegistry.registerItemFuncs(this.id, this);
 
         if('onHand' in this) {
-           ItemForest.itemOnHandFuncs.set(this.id, this.onHand as any);
+            ItemForest.handFunctions.set(this.id, this.onHand as any);
         };
 
     };
@@ -126,5 +136,4 @@ class ItemForest implements ItemBehavior {
     public onItemUse?(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, player: number): void;
 
     public onNameOverride?(item: ItemInstance, translation: string, name: string): string
-    
 };

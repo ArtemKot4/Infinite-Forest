@@ -2,7 +2,8 @@
 
 translations.ts
 
-core/world/Flags.ts
+api/Flags.ts
+api/ObjectPlayer.ts
 
 header.ts
 core.ts
@@ -38,13 +39,13 @@ core/dimension/biome/FirefliesForest.ts
 core/dimension/biome/WinterForest.ts
 core/dimension/biome/HeartForest.ts
 
-ForestBiomeList.ts
+BiomeList.ts
 
 core/world/Curse.ts
 core/dimension/InfiniteForest.ts
 
-ForestBlockList.ts
-ForestItemList.ts
+BlockList.ts
+ItemList.ts
 
 core/dimension/generation/PlantGenerator.ts
 

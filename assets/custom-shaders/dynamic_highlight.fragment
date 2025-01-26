@@ -1,0 +1,40 @@
+// __multiversion__
+
+#include "fragmentVersionCentroidUV.h"
+#include "uniformEntityConstants.h"
+
+#include "uniformShaderConstants.h"
+#include "util.h"
+
+LAYOUT_BINDING(0) uniform sampler2D TEXTURE_0;
+
+uniform float TRANSLUCENCY;
+
+varying vec4 light;
+varying vec4 fogColor;
+
+void main()
+{
+	vec4 color = vec4(1.0);
+
+#ifndef NO_TEXTURE
+#if !defined(TEXEL_AA) || !defined(TEXEL_AA_FEATURE)
+	color = texture2D( TEXTURE_0, uv );
+#else
+	color = texture2D_AA( TEXTURE_0, uv );
+#endif // !defined(TEXEL_AA) || !defined(TEXEL_AA_FEATURE)
+#endif // NO_TEXTURE
+
+#ifdef USE_EMISSIVE
+	//make glowy stuff
+	color *= mix( vec4(1.0), light, color.a );
+#else
+	color *= light;
+#endif
+
+	//apply fog
+	color.rgb = mix( color.rgb, fogColor.rgb, fogColor.a );
+	color.a *= TRANSLUCENCY;
+
+	gl_FragColor = color;
+}
