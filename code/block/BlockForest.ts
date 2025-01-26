@@ -1,4 +1,5 @@
 class BlockForest implements BlockBehavior, IBlockModel {
+    public static destroyContinueFunctions: Record<number, Callback.DestroyBlockContinueFunction> = {};
     public readonly variationList: Block.BlockVariation[];
 
     public readonly id: number;
@@ -16,11 +17,11 @@ class BlockForest implements BlockBehavior, IBlockModel {
 
         const tags = this.getTags();
 
-        if (tags) {
+        if(tags) {
             TagRegistry.addCommonObject("blocks", this.id, tags);
-        }
+        };
 
-        if ("getModel" in this) {
+        if("getModel" in this) {
             const modelList: BlockModel[] = [].concat(this.getModel());
 
             if (modelList.length === 1) {
@@ -31,56 +32,68 @@ class BlockForest implements BlockBehavior, IBlockModel {
             for (let i: number = 0; i < modelList.length; i++) {
                 const data: number = modelList[i].getBlockData();
                 this.setModel(modelList[i], data > -1 ? data : i);
-            }
-        }
+            };
+        };
 
-        if ("getDestroyTime" in this) {
+        if("getDestroyTime" in this) {
             Block.setDestroyTime(this.id, this.getDestroyTime());
-        }
+        };
 
-        if ("getSoundType" in this) {
+        if("getSoundType" in this) {
             BlockRegistry.setSoundType(this.id, this.getSoundType());
-        }
+        };
 
-        if ("getFriction" in this) {
+        if("getFriction" in this) {
             BlockRegistry.setFriction(this.id, this.getFriction());
-        }
+        };
 
-        if ("getLightLevel" in this) {
+        if("getLightLevel" in this) {
             BlockRegistry.setLightLevel(this.id, this.getLightLevel());
-        }
+        };
 
-        if ("getLightOpacity" in this) {
+        if("getLightOpacity" in this) {
             BlockRegistry.setLightOpacity(this.id, this.getLightOpacity());
-        }
+        };
 
-        if ("getExplosionResistance" in this) {
+        if("getExplosionResistance" in this) {
             BlockRegistry.setExplosionResistance(this.id, this.getExplosionResistance());
-        }
+        };
 
-        if ("getMapColor" in this) {
+        if("getMapColor" in this) {
             BlockRegistry.setMapColor(this.id, this.getMapColor());
-        }
+        };
 
-        if ("getMaterial" in this) {
+        if("getMaterial" in this) {
             Block.setBlockMaterial(this.id, this.getMaterial(), this.getDestroyLevel());
-        }
+        };
 
-        if ("getRenderLayer" in this) {
+        if("getRenderLayer" in this) {
             BlockRegistry.setRenderLayer(this.id, this.getRenderLayer());
-        }
+        };
 
-        if ("getTranslurency" in this) {
+        if("getTranslurency" in this) {
             BlockRegistry.setTranslucency(this.id, this.getTranslurency());
-        }
+        };
 
-        if ("getTileEntity" in this) {
+        if("isSolid" in this) {
+            BlockRegistry.setSolid(this.id, this.isSolid());
+        };
+
+        if("getRenderType" in this) {
+            BlockRegistry.setRenderType(this.id, this.getRenderType());
+        };
+
+        if("getTileEntity" in this) {
             this.setTileEntity(new (this.getTileEntity())());
-        }
+        };
 
-        if ("getCreativeGroup" in this) {
+        if("getCreativeGroup" in this) {
             const group = this.getCreativeGroup();
             Item.addCreativeGroup(group, Translation.translate(group), [this.id]);
+        };
+
+        if("onDestroyContinue" in this) {
+            BlockForest.destroyContinueFunctions[this.id] = this.onDestroyContinue;
         }
 
         Block.setDestroyLevel(this.id, this.getDestroyLevel());
@@ -116,6 +129,8 @@ class BlockForest implements BlockBehavior, IBlockModel {
     public getDrop?(coords: Callback.ItemUseCoordinates, block: Tile, diggingLevel: number, enchant: ToolAPI.EnchantData, item: ItemStack, region: BlockSource): ItemInstanceArray[];
 
     public onDestroy?(coords: Vector, block: Tile, region: BlockSource, player: number): void;
+
+    public onDestroyContinue?(coords: Callback.ItemUseCoordinates, block: Tile, progress: number): void;
 
     public onBreak?(coords: Vector, block: Tile, region: BlockSource): void;
 
@@ -168,4 +183,12 @@ class BlockForest implements BlockBehavior, IBlockModel {
     }
 
     public isSolid?(): boolean;
-}
+};
+
+Callback.addCallback("DestroyBlockContinue", (coords, block, progress) => {
+    const hasFunction = BlockForest.destroyContinueFunctions[block.id];
+
+    if(hasFunction) {
+        hasFunction(coords, block, progress);
+    }
+})

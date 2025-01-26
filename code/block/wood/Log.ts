@@ -1,6 +1,7 @@
 class Log extends RotatableLog {
     constructor(id: string, public hewn_id: string) {
         super(id);
+        this.create();
     };
 
     public onClick(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, player: number): void {

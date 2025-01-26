@@ -50,7 +50,7 @@ abstract class BlockPlant extends BlockForest {
         return 3;
     };
 
-    public getTranslucency(): number {
+    public getTranslurency(): number {
         return 0;
     };
 

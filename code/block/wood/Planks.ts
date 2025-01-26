@@ -5,6 +5,7 @@ class Planks extends BlockForest {
             inCreative: true,
             texture: [[id, 0]]
         }]);
+        this.create();
     };
 
     public build(): void {

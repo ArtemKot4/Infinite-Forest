@@ -3,8 +3,9 @@ Translation.addTranslation("Iron cauldron", {
   ru: "Железный котёл",
 });
 
-Translation.addTranslation("Electric pain!", {
-  ru: "Бьёт током!",
+Translation.addTranslation("message.infinite_forest.electric_danger", {
+  en: Native.Color.RED + "Electricity is danger",
+  ru: Native.Color.RED + "Электричество опасно"
 });
 
 Translation.addTranslation("Its hot!", {

@@ -1,6 +1,7 @@
 class ForestBlockList {
     public static FIRONIA: BlockPlant = new Fironia().create();
     public static ICE_FLOWER: BlockPlant = new IceFlower().create();
+    public static ELECTRIC_MUSHROOM: BlockPlant = new ElectricMushroom().create();
 
     public static PINK_HEWN = new Hewn("pink_hewn");
     public static PINK_LOG = new Log("pink_log", this.PINK_HEWN.stringID);

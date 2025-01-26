@@ -19,7 +19,7 @@ Callback.addCallback("LocalTick", () => {
     };
 
     if(params.getLocalUpdate && time % params.getLocalUpdate() == 0 && params.onLocalTick) {
-      return params.onLocalTick();
+      return params.onLocalTick(pos, time);
     };
 
 });

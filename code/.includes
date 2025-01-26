@@ -31,6 +31,7 @@ block/wood/Planks.ts
 
 block/Fironia.ts
 block/IceFlower.ts
+block/ElectricMushroom.ts
 
 block/tile_entity/EucalyptusWorkbench.ts
 
@@ -49,6 +50,16 @@ BlockList.ts
 ItemList.ts
 
 core/dimension/generation/PlantGenerator.ts
+
+core/dimension/generation/different/column.ts
+core/dimension/generation/different/ground_caves.ts
+core/dimension/generation/different/kelps.ts
+core/dimension/generation/different/seagrass.ts
+core/dimension/generation/different/lake_bottom.ts
+core/dimension/generation/different/mystic_path.ts
+core/dimension/generation/different/beach.ts
+
+core/dimension/generation/main.ts
 
 learning/LearningBase.ts
 learning/ItemLearning.ts

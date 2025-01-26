@@ -75,6 +75,10 @@ namespace Utils {
     export function getDimensionTags(id: number): string[] {
         return TagRegistry.getTagsFor("dimensions", id);
     };
+
+    export function actionbarMessage(player: number, message: string): void {
+        Commands.exec("/title " + Entity.getNameTag(player) + " actionbar " + message);
+    };
 }
 
 type JSONLang = {
@@ -104,8 +108,6 @@ const glowwormColors = [
         }
     })
 );
-
-const randomGlowworm = randomInt.bind({}, 0, glowwormColors.length);
 
 const cloud = Particles.registerParticleType({
     texture: "flame",
@@ -233,4 +235,73 @@ enum EForestParticle {
     POISON = poison,
     SNOWFALL = snowfall,
     INSIGHT_VIEW = insight_view,
+};
+
+namespace ParticleHelper {
+    export function getSign(n: number) {
+        if (n > 0) return 1;
+        if (n == 0) return 0;
+        if (n < 0) return -1;
+    };
+
+    export function random(min: number, max: number) {
+        const random = Math.random();
+        const dot = getSign(Math.random() * 2 - 1);
+    
+        return Math.floor(random * (max - min) * dot + min * dot);
+    };
+
+    export function getMinDistance(min, max) {
+        const x = random(0, max);
+        const z = random(0, max);
+    
+        if (x * x + z * z > min * min) {
+            return { x: x, z: z };
+        } else {
+            return getMinDistance(min, max);
+        };
+    };
+};
+
+  
+function addFire(coords) {
+    var xz = ParticleHelper.getMinDistance(3, 10);
+    var x = xz.x;
+    var y = ParticleHelper.random(0, 1);
+    var z = xz.z;
+
+    return Particles.addParticle(
+        EParticleType.FLAME,
+        coords.x + x,
+        coords.y + y,
+        coords.z + z,
+        0.03,
+        0.03,
+        0
+    );
+};
+  
+function addGlowworm(coords: Vector, color: EForestParticle) {
+    var xz = ParticleHelper.getMinDistance(30, 80);
+    var x = xz.x;
+    var y = ParticleHelper.random(0, 1);
+    var z = xz.z;
+    var xz = ParticleHelper.getMinDistance(3, 5);
+    var xV = xz.x / 80;
+    var yV = ParticleHelper.random(3, 5) / 600;
+    var zV = xz.z / 80;
+
+    return Particles.addParticle(
+        color,
+        coords.x + x,
+        coords.y + y,
+        coords.z + z,
+        xV,
+        yV,
+        zV
+    );
+};
+
+namespace ForestGenerator {
+    export const structurePool = new StructurePool("infinite_forest_structure_pool");
 };

@@ -8,8 +8,8 @@ interface BiomeBehaviour {
      * @param y position of player in a current tick with y 
      * @param z position of player in a current tick with z 
      */
-    onServerTick?(player: number, region: BlockSource, x: number, y: number, z: number): void
-    onLocalTick?(): void
+    onServerTick?(player: number, region: BlockSource, x: number, y: number, z: number, time: number): void
+    onLocalTick?(position: Vector, time: number): void
 
     getLocalUpdate?(): number;
     getServerUpdate?(): number;
