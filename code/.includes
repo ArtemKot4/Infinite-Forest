@@ -39,6 +39,8 @@ block/ElectricMushroom.ts
 
 block/tile_entity/EucalyptusWorkbench.ts
 
+EffectList.ts
+
 core/dimension/biome/BiomeBehaviour.ts
 core/dimension/biome/AbstractBiome.ts
 core/dimension/biome/FirefliesForest.ts

@@ -75,12 +75,12 @@ class EffectHud {
         return this.container.isOpened();
     };
 
-    public static setScale(value: number) {
-        this.container.setScale("scale", value / Effect.PROGRESS_MAX);
+    public static setScale(value: number, max: number) {
+        this.container.setScale("scale", value / max);
     };
 
     public static clear() {
-        this.setScale(0);
+        this.setScale(0, 0);
 
         if(this.container.isOpened()) {
             this.UI.layout.setAlpha(0);

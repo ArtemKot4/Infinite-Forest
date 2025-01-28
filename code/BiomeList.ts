@@ -1,5 +1,5 @@
 class BiomeList {
-    public static readonly FIREFLIES_FOREST: AbstractBiome = new FirefliesForest();
-    public static readonly WINTER_FOREST: AbstractBiome = new WinterForest();
-    public static readonly HEART_FOREST: AbstractBiome = new HeartForest();
+    public static readonly FIREFLIES_FOREST: FirefliesForest = new FirefliesForest();
+    public static readonly WINTER_FOREST: WinterForest = new WinterForest();
+    public static readonly HEART_FOREST: HeartForest = new HeartForest();
 }

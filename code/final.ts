@@ -13,3 +13,14 @@ Callback.addCallback("LevelDisplayed", () => {
     };
     
 });
+
+
+ModAPI.addAPICallback("InfiniteDepth", function(InfiniteDepth) {
+    InfiniteDepth.fromJson({
+        [InfiniteForest.stringID]: {
+             height: 500
+        }
+    });
+});
+
+

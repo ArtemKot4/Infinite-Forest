@@ -1,9 +1,9 @@
 Callback.addCallback("ServerPlayerTick", (playerUid: number) => {
     if(World.getThreadTime() % 8 === 0) {
-        const player = new PlayerEntity(playerUid);
+        const entity = new PlayerEntity(playerUid);
 
-        const selectedItemStack = player.getInventorySlot(player.getSelectedSlot());
-        const carriedItemStack = player.getCarriedItem();
+        const selectedItemStack = entity.getInventorySlot(entity.getSelectedSlot());
+        const carriedItemStack = entity.getCarriedItem();
 
         const handFunction = ItemForest.handFunctions.get(selectedItemStack.id);
 
@@ -17,6 +17,9 @@ Callback.addCallback("ServerPlayerTick", (playerUid: number) => {
     };
 
     const pos = Entity.getPosition(playerUid);
+
+    const time = World.getThreadTime();
+
     const region = BlockSource.getDefaultForDimension(InfiniteForest.id);
     const biome = region.getBiome(pos.x, pos.z);
 
@@ -26,8 +29,15 @@ Callback.addCallback("ServerPlayerTick", (playerUid: number) => {
         return;
     };
 
-    const time = World.getThreadTime();
+    if(time % 20 === 0 && params.getBiomeState() !== EBiomeState.COLD && pos.y >= 200) {
+        
+        if(time % 40 === 0) {
+            EffectList.WINTER.init(playerUid, pos.y / 6);
+        };
 
+        BiomeList.WINTER_FOREST.runSnowInRadius(pos.x, pos.y + 12.5, pos.z, 64, 24);
+    };
+    
     if(params.getServerUpdate && time % params.getServerUpdate() == 0 && params.onServerTick) {
         return params.onServerTick(playerUid, region, pos.x, pos.y, pos.z, time);
     };
