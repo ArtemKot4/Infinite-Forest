@@ -29,13 +29,13 @@ Callback.addCallback("ServerPlayerTick", (playerUid: number) => {
         return;
     };
 
-    if(time % 20 === 0 && params.getBiomeState() !== EBiomeState.COLD && pos.y >= 200) {
+    if(time % 20 === 0 && Curse.has("cold") && params.getBiomeState() !== EBiomeState.COLD && pos.y >= 200) {
         
         if(time % 40 === 0) {
             EffectList.WINTER.init(playerUid, pos.y / 6);
         };
 
-        BiomeList.WINTER_FOREST.runSnowInRadius(pos.x, pos.y + 12.5, pos.z, 64, 24);
+        BiomeList.WINTER_FOREST.runSnowInRadius(pos.x, pos.y + 12.5, pos.z, 64, pos.y - (200 - 24));
     };
     
     if(params.getServerUpdate && time % params.getServerUpdate() == 0 && params.onServerTick) {
