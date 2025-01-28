@@ -17,7 +17,8 @@ abstract class Effect {
 
         this.timer = Effect.TIMER_MAX;
 
-        if(this.isLocked || EffectHud.isOpened()// todo: removed for debug: || Utils.isCreativePlayer(player) 
+        if(this.isLocked || EffectHud.isOpened() || 
+            (!ConfigManager.EFFECT_SCALE_IN_CREATIVE && Utils.isCreativePlayer(player))
         ) {
             return;
         };
@@ -105,7 +106,7 @@ class WinterEffect extends Effect {
     };
 };
 
-class ElecticEffect extends Effect {
+class ElectricEffect extends Effect {
     public override progress_max: number = 50;
 
     public override onTick(player: number): void {
@@ -113,6 +114,6 @@ class ElecticEffect extends Effect {
     };
 
     public override getHud(): EffectHud {
-        return new EffectHud("effect.electic_icon", "effect.electic_scale");
+        return new EffectHud("effect.electric_icon", "effect.electric_scale");
     }
 }

@@ -311,3 +311,7 @@ function addGlowworm(coords: Vector, color: EForestParticle) {
 namespace ForestGenerator {
     export const structurePool = new StructurePool("infinite_forest_structure_pool");
 };
+
+namespace ConfigManager {
+    export const EFFECT_SCALE_IN_CREATIVE = __config__.getBool("effect_scale_in_creative");
+}

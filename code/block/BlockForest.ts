@@ -1,5 +1,7 @@
 class BlockForest implements BlockBehavior, IBlockModel {
     public static destroyContinueFunctions: Record<number, Callback.DestroyBlockContinueFunction> = {};
+    public static destroyStartFunctions: Record<number, Callback.DestroyBlockFunction> = {};
+
     public readonly variationList: Block.BlockVariation[];
 
     public readonly id: number;
@@ -84,7 +86,7 @@ class BlockForest implements BlockBehavior, IBlockModel {
         };
 
         if("getTileEntity" in this) {
-            this.setTileEntity(new (this.getTileEntity())());
+            this.setTileEntity(this.getTileEntity());
         };
 
         if("getCreativeGroup" in this) {
@@ -94,6 +96,10 @@ class BlockForest implements BlockBehavior, IBlockModel {
 
         if("onDestroyContinue" in this) {
             BlockForest.destroyContinueFunctions[this.id] = this.onDestroyContinue;
+        };
+
+        if("onDestroyStart" in this) {
+            BlockForest.destroyStartFunctions[this.id] = this.onDestroyStart;
         }
 
         Block.setDestroyLevel(this.id, this.getDestroyLevel());
@@ -131,6 +137,8 @@ class BlockForest implements BlockBehavior, IBlockModel {
     public onDestroy?(coords: Vector, block: Tile, region: BlockSource, player: number): void;
 
     public onDestroyContinue?(coords: Callback.ItemUseCoordinates, block: Tile, progress: number): void;
+    
+    public onDestroyStart?(coords: Callback.ItemUseCoordinates, block: Tile, player: number);
 
     public onBreak?(coords: Vector, block: Tile, region: BlockSource): void;
 
@@ -176,7 +184,7 @@ class BlockForest implements BlockBehavior, IBlockModel {
 
     public getCreativeGroup?(): string;
 
-    public getTileEntity?<T extends new () => TileEntityBase>(): T;
+    public getTileEntity?(): TileEntityBase;
 
     public setTileEntity(tileEntity: TileEntityBase) {
         TileEntity.registerPrototype(this.id, tileEntity);
@@ -191,4 +199,12 @@ Callback.addCallback("DestroyBlockContinue", (coords, block, progress) => {
     if(hasFunction) {
         hasFunction(coords, block, progress);
     }
-})
+});
+
+Callback.addCallback("DestroyBlockStart", (coords, block, player) => {
+    const hasFunction = BlockForest.destroyStartFunctions[block.id];
+
+    if(hasFunction) {
+        hasFunction(coords, block, player);
+    };
+});

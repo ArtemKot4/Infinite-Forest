@@ -1,3 +1,4 @@
 {
-    "enabled": true
+    "enabled": true,
+    "effect_scale_in_creative": true
 }

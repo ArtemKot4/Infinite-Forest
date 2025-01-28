@@ -15,8 +15,20 @@ class IceFlower extends BlockPlant {
         return EBiomeState.COLD;
     };
 
-    public onClick(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, player: number): void {
-        EffectList.WINTER.init(player, 50);
+    public onDestroyStart(coords: Callback.ItemUseCoordinates, block: Tile, player: number) {
+        if(Curse.has("cold")) {
+            Block.setDestroyTime(block.id, (20 * 60) * 60);
+        } else {
+            Block.setDestroyTime(block.id, 1);
+        };
     };
+
+    public onDestroyContinue(coords: Callback.ItemUseCoordinates, block: Tile, progress: number): void {
+        EffectList.WINTER.init(Player.getLocal(), 50);
+    };
+
+    public getDestroyTime(): number {
+        return 20;
+    }
 
 }

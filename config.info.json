@@ -5,6 +5,16 @@
                 "en": "Enable",
                 "ru": "Активировать"
             }
-          }
+        },
+        "effect_scale_in_creative": {
+            "name": {
+                "en": "Effect scale in creative",
+                "ru": "Показ эффектов в креативе"
+            },
+            "description": {
+                "en": "If truth, effect scale will show in creative",
+                "ru": "Если включено, отображается шкала эффектов в креативе"
+            }
         }
     }
+}

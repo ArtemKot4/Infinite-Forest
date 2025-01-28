@@ -10,6 +10,11 @@ api/Curse.ts
 api/effect/EffectHud.ts
 api/effect/Effect.ts
 
+api/render/RenderHelper.ts
+
+api/animation/RenderSide.ts
+api/animation/BlockAnimation.ts
+
 header.ts
 core.ts
 
@@ -38,6 +43,9 @@ block/IceFlower.ts
 block/ElectricMushroom.ts
 
 block/tile_entity/EucalyptusWorkbench.ts
+
+block/tile_entity/wind_mill/WindmillStation.ts
+block/tile_entity/wind_mill/WindmillBlades.ts
 
 EffectList.ts
 

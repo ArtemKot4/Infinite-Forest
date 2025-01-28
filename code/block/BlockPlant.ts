@@ -46,14 +46,6 @@ abstract class BlockPlant extends BlockForest {
         return false;
     };
 
-    public getRenderLayer(): number {
-        return 3;
-    };
-
-    public getTranslurency(): number {
-        return 0;
-    };
-
     public getLightOpacity(): number {
         return 0;
     };

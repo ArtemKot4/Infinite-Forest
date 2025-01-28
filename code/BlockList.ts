@@ -17,4 +17,6 @@ class ForestBlockList {
     public static WINTER_LOG = new Log("winter_log", this.WINTER_HEWN.stringID);
     public static WINTER_BARK = new Bark("winter_bark");
     public static WINTER_PLANKS = new Planks("winter_planks", this.WINTER_LOG.stringID, this.WINTER_BARK.stringID, this.WINTER_HEWN.stringID);
+
+    public static WINDMILL_BLADES = new WindmillBlades().create();
 }
