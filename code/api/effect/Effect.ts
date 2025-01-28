@@ -104,3 +104,15 @@ class WinterEffect extends Effect {
         return new EffectHud("effect.winter_icon", "effect.winter_scale");
     };
 };
+
+class ElecticEffect extends Effect {
+    public override progress_max: number = 50;
+
+    public override onTick(player: number): void {
+        Entity.damageEntity(player, 1);
+    };
+
+    public override getHud(): EffectHud {
+        return new EffectHud("effect.electic_icon", "effect.electic_scale");
+    }
+}

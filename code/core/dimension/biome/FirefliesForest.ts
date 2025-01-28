@@ -16,6 +16,7 @@ class FirefliesForest extends AbstractBiome implements BiomeBehaviour {
             red_flower: { rarity: 0.5, count: 4 },
             fironia: { rarity: 0.1, count: 3 },
             ice_flower: { rarity: 0.1, count: 3 },
+            electric_mushroom: { rarity: 0.05, count: 3 }
         };
     };
 
@@ -75,7 +76,11 @@ class FirefliesForest extends AbstractBiome implements BiomeBehaviour {
     };
 
     public onLocalTick(position: Vector, time: number): void {
-        if(time % 15 === 0) {
+        if(position.y >= 300) {
+            return;
+        };
+
+        if(time % 15 === 0 && position.y <= 100) {
             addFire(position);
         };
 

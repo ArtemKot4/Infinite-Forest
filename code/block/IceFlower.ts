@@ -15,4 +15,8 @@ class IceFlower extends BlockPlant {
         return EBiomeState.COLD;
     };
 
+    public onClick(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, player: number): void {
+        EffectList.WINTER.init(player, 50);
+    };
+
 }
