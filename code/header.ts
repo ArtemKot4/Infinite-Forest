@@ -79,6 +79,12 @@ namespace Utils {
     export function actionbarMessage(player: number, message: string): void {
         Commands.exec("/title " + Entity.getNameTag(player) + " actionbar " + message);
     };
+
+    export function isCreativePlayer(player: number) {
+        const gamemode = new PlayerActor(player).getGameMode();
+        
+        return gamemode === EGameMode.CREATIVE || gamemode === EGameMode.SPECTATOR;
+    }
 }
 
 type JSONLang = {

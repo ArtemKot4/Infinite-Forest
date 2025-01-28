@@ -6,6 +6,10 @@ api/Flags.ts
 api/ObjectPlayer.ts
 api/Curse.ts
 
+
+api/effect/EffectHud.ts
+api/effect/Effect.ts
+
 header.ts
 core.ts
 

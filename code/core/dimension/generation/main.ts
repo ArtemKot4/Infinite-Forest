@@ -23,8 +23,14 @@ Callback.addCallback("GenerateCustomDimensionChunk", (chunkX, chunkZ, random, di
     PlantGenerator.init(chunkX, chunkZ);
 
     for(const biome_id in AbstractBiome.data) {
-        const structures = AbstractBiome.data[biome_id].getStructures();
+        const biome_data = AbstractBiome.data[biome_id];
 
+        if(!biome_data.getStructures) continue;
+
+        const structures = biome_data.getStructures();
+
+        if(!structures) continue;
+        
         for(let i in structures) {
             const structure = structures[i];
 
@@ -42,20 +48,18 @@ Callback.addCallback("GenerateCustomDimensionChunk", (chunkX, chunkZ, random, di
                 if (Math.random() > structure.chance) continue;
                 
                 Structure.set(
-                 ForestGenerator.structurePool.get(structure.name),
+                    ForestGenerator.structurePool.get(structure.name),
                     coords.x,
                     coords.y + 1,
                     coords.z,
-               BlockSource.getCurrentWorldGenRegion()
+                BlockSource.getCurrentWorldGenRegion()
                 );
                 
             };
         };
     };
-
-
+        
     return;
-
 });
 
 namespace ForestGenerator {
@@ -94,11 +98,11 @@ Callback.addCallback("GenerateBiomeMap",(chunkX, chunkZ, random, dimensionId, ch
     if (perlinNoise > 0.7 - 12 / 128) {
 
         ForestGenerator.generateCustomBiome(
-    BiomeList.WINTER_FOREST.id,
+        BiomeList.WINTER_FOREST.id,
             chunkX,
             chunkZ,
             dimensionSeed,
-  0.7 - 12 / 128
+    0.7 - 12 / 128
         );
 
     };

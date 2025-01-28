@@ -1,6 +1,7 @@
 Callback.addCallback("ItemUse", (coords, item, block, isE, player) => {
-    if(Entity.getSneaking(player)) {
-    };
+    // if(Entity.getSneaking(player)) {
+    //     EffectList.WINTER.init(player);
+    // };
 });
 
 Callback.addCallback("LevelDisplayed", () => {
@@ -11,4 +12,4 @@ Callback.addCallback("LevelDisplayed", () => {
         Recipes.addShapeless(new ItemStack(recipe[0][0], recipe[0][1]), recipe[1]);
     };
     
-})
+});
