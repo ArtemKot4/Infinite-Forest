@@ -1,4 +1,4 @@
-class ForestBlockList {
+class BlockList {
     public static FIRONIA: BlockPlant = new Fironia().create();
     public static ICE_FLOWER: BlockPlant = new IceFlower().create();
     public static ELECTRIC_MUSHROOM: BlockPlant = new ElectricMushroom().create();
@@ -19,4 +19,5 @@ class ForestBlockList {
     public static WINTER_PLANKS = new Planks("winter_planks", this.WINTER_LOG.stringID, this.WINTER_BARK.stringID, this.WINTER_HEWN.stringID);
 
     public static WINDMILL_BLADES = new WindmillBlades().createWithRotation();
+    public static WINDMILL_STATION = new WindmillStation().create();
 }

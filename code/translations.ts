@@ -21,6 +21,16 @@ Translation.addTranslation("Bark Pink Log", {
   ru: "Обтёсанное розовое дерево",
 });
 
+Translation.addTranslation("block.infinite_forest.windmill_station", {
+  en: "Windmill Station",
+  ru: "Станция мельницы",
+});
+
+Translation.addTranslation("block.infinite_forest.windmill_blades", {
+  en: "Windmill Blades",
+  ru: "Лопасти мельницы"
+});
+
 Translation.addTranslation("eucalyptus_log", { ru: "§2Эвкалипт" });
 
 Translation.addTranslation("pink_log", { ru: "§dРозовое Дерево" });

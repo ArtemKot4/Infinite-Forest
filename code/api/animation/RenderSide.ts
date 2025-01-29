@@ -8,10 +8,15 @@ class RenderSide<T extends string | RenderMesh> {
         public importParams: RenderMesh.ImportParams = null
     ) {
         const rotations: number[][] = [
-            [0, 0, 0],
             [0, -Math.PI, 0],
-            [0, -Math.PI / 2, 0],
-            [0, Math.PI / 2, 0]
+            [0, Math.PI, 0],
+            [0, Math.PI / 2, 0],
+            [0, -Math.PI / 2, 0]
+
+            // [0, 0, 0],
+            // [0, -Math.PI, 0],
+            // [0, Math.PI / 2, 0],
+            // [0, -Math.PI / 2, 0]
         ];
 
         if(model instanceof RenderMesh) {

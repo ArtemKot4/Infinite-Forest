@@ -126,11 +126,15 @@ class BlockForest implements BlockBehavior, IBlockModel {
         return this;
     }
 
+    public getID() {
+        return BlockID[this.stringID]
+    };
+    
     public getModel?(): BlockModel | BlockModel[];
 
     public getTags?(): string[] {
         return null;
-    }
+    };
 
     public getDrop?(coords: Callback.ItemUseCoordinates, block: Tile, diggingLevel: number, enchant: ToolAPI.EnchantData, item: ItemStack, region: BlockSource): ItemInstanceArray[];
 
