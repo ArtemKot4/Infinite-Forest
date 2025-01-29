@@ -38,7 +38,7 @@ class WindmillBladesTile extends TileEntityBase {
         .getBlockData(this.x, this.y, this.z);
 
         const move_coords = {
-            x: speed / speed + 10,
+            x: speed / speed + 30,
             z: 0
         };
 

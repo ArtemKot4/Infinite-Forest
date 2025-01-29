@@ -48,19 +48,27 @@ class EffectHud {
                     bitmap: hud.icon,
                     x: 10,
                     y: 5,
-                    scale: 3.7
+                    width: 9 * 3.7,
+                    height: 9 * 3.7
+                },
+                {
+                    type: "bitmap",
+                    x: 50,
+                    y: 8,
+                    width: 76 * 3,
+                    height: 9 * 3,
+                    bitmap: hud.scale_bitmap_background
                 }
-
             ],
             elements: {
                 scale: {
                     type: "scale",
                     x: 50,
                     y: 8,
-                    scale: 3,
+                    width: 76 * 3,
+                    height: 9 * 3,
                     direction: 0,
-                    bitmap: hud.scale_bitmap,
-                    background: hud.scale_bitmap_background
+                    bitmap: hud.scale_bitmap
                 }
             }
         } satisfies UI.WindowContent;
@@ -82,7 +90,7 @@ class EffectHud {
     public static clear() {
         this.setScale(0, 0);
 
-        if(this.container.isOpened()) {
+        if(this.isOpened()) {
             this.UI.layout.setAlpha(0);
         };
     };
