@@ -15,6 +15,8 @@ api/render/RenderHelper.ts
 api/animation/RenderSide.ts
 api/animation/BlockAnimation.ts
 
+api/Factory.ts
+
 header.ts
 core.ts
 
