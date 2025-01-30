@@ -243,6 +243,16 @@ enum EForestParticle {
     INSIGHT_VIEW = insight_view,
 };
 
+interface IParticleSender {
+    type: EForestParticle | EParticleType,
+    x: number,
+    y: number,
+    z: number,
+    vx: number,
+    vy: number,
+    vz: number
+}
+
 namespace ParticleHelper {
     export function getSign(n: number) {
         if (n > 0) return 1;
@@ -267,8 +277,41 @@ namespace ParticleHelper {
             return getMinDistance(min, max);
         };
     };
+
+    export function sendWithRadius(x1: number, y1: number, z1: number, x2: number, y2: number, z2: number, region: BlockSource, particle: IParticleSender) {
+        const playerList = region.listEntitiesInAABB(x1, y1, z1, x2, y2, z2, EEntityType.PLAYER, false);
+
+        for(const player of playerList) {
+            if(Entity.getType(player) !== Native.EntityType.PLAYER) continue;
+
+            const client = Network.getClientForPlayer(player);
+            
+            if(client) {
+                client.send("packet.infinite_forest.send_particle", particle)
+            };
+        };
+    };
+
+    export function send(type: EForestParticle | EParticleType, x: number, y: number, z: number, vx: number, vy: number, vz: number, player: number) {
+        const client = Network.getClientForPlayer(player);
+        
+        if(client) {
+            client.send("packet.infinite_forest.send_particle", {
+                type: type,
+                x: x,
+                y: y,
+                z: z,
+                vx: vx,
+                vy: vy,
+                vz: vz
+            });
+        };
+    };
 };
 
+Network.addClientPacket("packet.infinite_forest.send_particle", (data: IParticleSender) => {
+    Particles.addParticle(data.type, data.x, data.y, data.z, data.vx, data.vy, data.vz);
+})
   
 function spawnFire(coords) {
     var xz = ParticleHelper.getMinDistance(3, 10);

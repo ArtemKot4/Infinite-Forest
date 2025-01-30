@@ -14,10 +14,6 @@
 			"type": "resource_directory"
 		},
 		{
-			"path": "structures",
-			"type": "resource_directory"
-		},
-		{
 			"path": "assets/gui",
 			"type": "gui"
 		}

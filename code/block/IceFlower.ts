@@ -18,8 +18,10 @@ class IceFlower extends BlockPlant {
     public onDestroyStart(coords: Callback.ItemUseCoordinates, block: Tile, player: number) {
         if(Curse.has("cold")) {
             Block.setDestroyTime(block.id, (20 * 60) * 60);
+            BlockRegistry.setSoundType(block.id, "glass");
         } else {
             Block.setDestroyTime(block.id, 1);
+            BlockRegistry.setSoundType(block.id, "grass");
         };
     };
 

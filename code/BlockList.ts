@@ -20,4 +20,7 @@ class BlockList {
 
     public static WINDMILL_BLADES = new WindmillBlades().createWithRotation();
     public static WINDMILL_STATION = new WindmillStation().create();
+
+    public static BOTTLE = new Bottle().create();
+    public static FIREFLIES_BOTTLE = new FirefliesBottle().create();
 }

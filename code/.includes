@@ -48,6 +48,7 @@ block/tile_entity/EucalyptusWorkbench.ts
 
 block/tile_entity/wind_mill/WindmillStation.ts
 block/tile_entity/wind_mill/WindmillBlades.ts
+block/tile_entity/Bottle.ts
 
 EffectList.ts
 
