@@ -26,11 +26,19 @@ class WindmillStationTile extends TileEntityBase {
     public data: typeof this.defaultValues;
 
     public setUpperItems(): void {
-        const itemEntities = this.blockSource.listEntitiesInAABB(this.x, this.y + 1, this.z, this.x, this.y + 1, this.z, EEntityType.ITEM, false)
-        .filter(v => Entity.getType(v) === Native.EntityType.ITEM) || [];
+        const itemEntities = this.blockSource.listEntitiesInAABB(
+            this.x, this.y + 1, this.z,
+            this.x + 1, this.y + 2, this.z + 1, 
+            EEntityType.ITEM, false
+        );
 
         if(itemEntities.length > 0) {
             for(const item_entity of itemEntities) {
+
+                if(Entity.getType(item_entity) !== Native.EntityType.ITEM) {
+                    continue;
+                };
+
                 const item = Entity.getDroppedItem(item_entity);
 
                 if(!item) {
@@ -46,8 +54,8 @@ class WindmillStationTile extends TileEntityBase {
                 this.addItem(item);
                 
                 Entity.remove(item_entity);                
-            }
-        }
+            };
+        };
     };
 
     public addItem(instance: ItemInstance): void {
@@ -67,7 +75,7 @@ class WindmillStationTile extends TileEntityBase {
 
     public isValidItem(): boolean {
         return this.data.input_id !== 0;
-    }
+    };
 
     public decrease(): void {
         if(this.data.input_count > 0) {
@@ -112,9 +120,22 @@ class WindmillStationTile extends TileEntityBase {
         return Object.values(BlockList.WINDMILL_STATION.factory.field).includes(this.data.input_id);
     };
 
-    public onItemUse(coords: Callback.ItemUseCoordinates, item: ItemStack, player: number) {
-        Game.message(JSON.stringify(this.data));
-    }
+    public override destroyBlock(coords: Callback.ItemUseCoordinates, player: number): void {
+        const vectors = [
+            [this.x, this.z + 1],
+            [this.x, this.z - 1],
+            [this.x + 1, this.z],
+            [this.x - 1, this.z] 
+        ];
+
+        for(const i in vectors) {
+            const id = this.blockSource.getBlockID(vectors[i][0], this.y, vectors[i][1]);
+
+            if(id === BlockList.WINDMILL_BLADES.getID()) {
+                this.blockSource.destroyBlock(vectors[i][0], this.y, vectors[i][1]);
+            };
+        };
+    } 
 };
 
 class WindmillStation extends BlockForest {

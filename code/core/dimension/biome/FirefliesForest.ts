@@ -16,7 +16,9 @@ class FirefliesForest extends AbstractBiome implements BiomeBehaviour {
             red_flower: { rarity: 0.5, count: 4 },
             fironia: { rarity: 0.1, count: 3 },
             ice_flower: { rarity: 0.1, count: 3 },
-            electric_mushroom: { rarity: 0.05, count: 3 }
+            electric_mushroom: { rarity: 0.03, count: 3 },
+            brown_mushroom: { rarity: 0.01, count: 3 },
+            red_mushroom: { rarity: 0.01, count: 3 }
         };
     };
 
@@ -85,11 +87,10 @@ class FirefliesForest extends AbstractBiome implements BiomeBehaviour {
         };
 
         if(position.y < 110) {
-            addGlowworm(position, MathHelper.randomFromArray(glowwormColors));
-            addGlowworm(position, MathHelper.randomFromArray(glowwormColors));
-            addGlowworm(position, MathHelper.randomFromArray(glowwormColors));
+            for(let i = 0; i < 7; i++) {
+                addGlowworm(position, MathHelper.randomFromArray(glowwormColors));
+            };
         };
-        
     };
 
     public getLocalUpdate(): number {

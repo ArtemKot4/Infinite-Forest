@@ -43,6 +43,6 @@ class BlockAnimation {
     };
 
     public exists() {
-        return this.animation.exists;
+        return !!this.animation;
     };
 };

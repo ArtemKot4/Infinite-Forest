@@ -110,7 +110,7 @@ class ElectricEffect extends Effect {
     public override progress_max: number = 50;
 
     public override onTick(player: number): void {
-        Entity.damageEntity(player, 1);
+        Entity.damageEntity(player, 3);
     };
 
     public override getHud(): EffectHud {

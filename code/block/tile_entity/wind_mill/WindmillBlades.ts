@@ -39,8 +39,6 @@ class WindmillBladesTile extends TileEntityBase {
         const move_coords = {
             x: speed / speed + 30,
             z: 0
-            // x: 0,
-            // z: speed / speed + 30 //они были наоборот
         };
 
         if(data === 0 || data === 1) {
@@ -63,8 +61,9 @@ class WindmillBladesTile extends TileEntityBase {
         };
     };
 
-    public override destroyBlock(coords: Callback.ItemUseCoordinates, player: number): void {
-        return this.switchStationMode(false);
+    public override destroy(): boolean {
+        this.switchStationMode(false);
+        return false;
     };
 
     public switchStationMode(value: boolean): void {
@@ -130,4 +129,4 @@ class WindmillBlades extends BlockForest {
 
 Callback.addCallback("ItemUse", (c, i, block) => {
     Game.message("дата: -> " + block.data)
-})
+});
