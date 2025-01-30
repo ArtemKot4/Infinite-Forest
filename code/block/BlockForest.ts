@@ -195,6 +195,12 @@ class BlockForest implements BlockBehavior, IBlockModel {
     }
 
     public isSolid?(): boolean;
+
+    public static deepDestroy(x: number, y: number, z: number, blockSource: BlockSource) {
+        TileEntity.destroyTileEntityAtCoords(x, y, z, blockSource);
+        blockSource.destroyBlock(x, y, z, true);
+        return;
+    };
 };
 
 Callback.addCallback("DestroyBlockContinue", (coords, block, progress) => {

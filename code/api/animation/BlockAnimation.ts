@@ -7,11 +7,15 @@ class BlockAnimation {
         return;
     }
 
-    public load() {
+    public load(): void {
+        if(this.animation.exists()) {
+            this.animation.destroy();
+        };
+
         return this.animation.load();
     };
 
-    public describe(mesh: RenderMesh | RenderSide<string>, texture: string, scale: number = 1, material?: string) {
+    public describe(mesh: RenderMesh | RenderSide<string>, texture: string, scale: number = 1, material?: string): void {
         return this.animation.describe({
             mesh: mesh instanceof RenderSide ? mesh.getForTile(this.tile_entity) : mesh,
             skin: "terrain-atlas/" + texture + ".png",
@@ -20,29 +24,29 @@ class BlockAnimation {
         });
     };
 
-    public rotate(x: number, y: number, z: number) {
+    public rotate(x: number, y: number, z: number): NativeRendererTransform {
         return this.animation.transform().rotate(x, y, z);
     };
 
-    public scale(x: number, y: number, z: number) {
+    public scale(x: number, y: number, z: number): NativeRendererTransform {
         return this.animation.transform().scale(x, y, z);
     };
 
-    public setPos(x: number, y: number, z: number) {
+    public setPos(x: number, y: number, z: number): void {
         return this.animation.setPos(x, y, z);
     };
 
-    public refresh() {
+    public refresh(): void {
         return this.animation.refresh();
     };
 
-    public destroy() {
+    public destroy(): void {
         if(this.exists()) {
             return this.animation.destroy();
         };
     };
 
-    public exists() {
+    public exists(): boolean {
         return !!this.animation;
     };
 };

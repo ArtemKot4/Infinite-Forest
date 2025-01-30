@@ -29,8 +29,6 @@ class WindmillStationTile extends TileEntityBase {
                     continue;
                 };
 
-                Game.message(JSON.stringify(item));
-
                 if(this.isValidItem() && this.data.input_id !== item.id) {
                     continue;
                 };
@@ -106,15 +104,21 @@ class WindmillStationTile extends TileEntityBase {
 
     public override clientTick(): void {
         if(World.getThreadTime() % 5 === 0) {
-            const id = this.networkData.getInt("input_id", null);
+            let id = this.networkData.getInt("input_id", 0);
             const isEnabled = this.networkData.getBoolean("enable", false);
 
             if(!isEnabled) {
                 return;
             };
 
-            if(id) {
-               return Particles.addBreakingItemParticle(id, 0, this.x + 0.5, this.y - 1.08, this.z + 0.5);
+            if(id != 0) {
+               return Particles.addBreakingItemParticle(
+                Network.serverToLocalId(id), 
+                    0, 
+                    this.x + 0.5, 
+                    this.y - 1.08, 
+                    this.z + 0.5
+                );
             };
 
             spawnElectric(this);
@@ -137,8 +141,7 @@ class WindmillStationTile extends TileEntityBase {
             const id = this.blockSource.getBlockID(vectors[i][0], this.y, vectors[i][1]);
 
             if(id === BlockList.WINDMILL_BLADES.getID()) {
-                TileEntity.destroyTileEntityAtCoords(vectors[i][0], this.y, vectors[i][1], this.blockSource);
-                this.blockSource.destroyBlock(vectors[i][0], this.y, vectors[i][1], true);
+                BlockForest.deepDestroy(vectors[i][0], this.y, vectors[i][1], this.blockSource);
             };
         };
 

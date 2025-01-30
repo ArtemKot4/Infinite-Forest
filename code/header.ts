@@ -326,4 +326,6 @@ namespace ForestGenerator {
 
 namespace ConfigManager {
     export const EFFECT_SCALE_IN_CREATIVE = __config__.getBool("effect_scale_in_creative");
-}
+};
+
+type NativeRendererTransform = com.zhekasmirnov.innercore.api.NativeRenderer.Transform;
