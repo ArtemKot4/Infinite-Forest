@@ -120,7 +120,7 @@ class FirefliesBottle extends BlockForest {
 
         BlockList.BOTTLE.addFireflies(
             coords.x, 
-            coords.y, 
+            coords.y + 1, 
             coords.z, 
             BlockSource.getDefaultForActor(player), 
             color
