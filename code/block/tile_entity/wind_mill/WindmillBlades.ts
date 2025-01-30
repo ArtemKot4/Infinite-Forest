@@ -33,8 +33,8 @@ class WindmillBladesTile extends TileEntityBase {
             return;
         };
 
-        const source = BlockSource.getCurrentClientRegion();
-        const data = source.getBlockData(this.x, this.y, this.z);
+        const blockSource = BlockSource.getCurrentClientRegion();
+        const data = blockSource.getBlockData(this.x, this.y, this.z);
 
         const move_coords = {
             x: speed / speed + 30,
@@ -127,6 +127,6 @@ class WindmillBlades extends BlockForest {
     };
 };
 
-Callback.addCallback("ItemUse", (c, i, block) => {
-    Game.message("дата: -> " + block.data)
-});
+// Callback.addCallback("ItemUse", (c, i, block) => {
+//     Game.message("дата: -> " + block.data)
+// });

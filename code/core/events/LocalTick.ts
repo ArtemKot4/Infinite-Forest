@@ -1,6 +1,6 @@
 Callback.addCallback("LocalTick", () => {
     if (Player.getDimension() !== InfiniteForest.id) {
-      return;
+        return;
     };
 
     const pos = Player.getPosition();
@@ -9,7 +9,7 @@ Callback.addCallback("LocalTick", () => {
     const params = AbstractBiome.data[biome] as AbstractBiome & BiomeBehaviour;
 
     if(!params) {
-      return;
+        return;
     };
 
     const time = World.getThreadTime();
@@ -18,8 +18,8 @@ Callback.addCallback("LocalTick", () => {
 
     };
 
-    if(params.getLocalUpdate && time % params.getLocalUpdate() == 0 && params.onLocalTick) {
-      return params.onLocalTick(pos, time);
+    if(params.getLocalUpdate && time % params.getLocalUpdate() == 0 && params.insideLocalTick) {
+        return params.insideLocalTick(pos, time);
     };
 
 });

@@ -270,7 +270,7 @@ namespace ParticleHelper {
 };
 
   
-function addFire(coords) {
+function spawnFire(coords) {
     var xz = ParticleHelper.getMinDistance(3, 10);
     var x = xz.x;
     var y = ParticleHelper.random(0, 1);
@@ -287,7 +287,7 @@ function addFire(coords) {
     );
 };
   
-function addGlowworm(coords: Vector, color: EForestParticle) {
+function spawnGlowworm(coords: Vector, color: EForestParticle) {
     var xz = ParticleHelper.getMinDistance(30, 80);
     var x = xz.x;
     var y = ParticleHelper.random(0, 1);
@@ -307,6 +307,18 @@ function addGlowworm(coords: Vector, color: EForestParticle) {
         zV
     );
 };
+
+function spawnElectric(coords: Vector) {
+    Particles.addParticle(
+        EForestParticle.ELECTRIC,
+        coords.x + 0.5,
+        coords.y,
+        coords.z + 0.5,
+        Math.random() / 20,
+        Math.random() / 20,
+        Math.random() / 20
+    );
+}
 
 namespace ForestGenerator {
     export const structurePool = new StructurePool("infinite_forest_structure_pool");

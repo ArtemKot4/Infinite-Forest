@@ -14,7 +14,7 @@ abstract class BlockPlant extends BlockForest {
         
         if(this.getBiomeState) {
             this.onRandomTick = (x, y, z, block, region) => {
-                const condition = Utils.getBiomeState(x, z, region) == this.getBiomeState();
+                const condition = Utils.getBiomeState(x, z, region) !== this.getBiomeState();
                 if(condition) {
                     region.destroyBlock(x, y, z, false);
                 };

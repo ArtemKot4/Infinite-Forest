@@ -57,7 +57,6 @@ core/dimension/biome/HeartForest.ts
 
 BiomeList.ts
 
-core/world/Curse.ts
 core/dimension/InfiniteForest.ts
 
 BlockList.ts
@@ -86,6 +85,8 @@ learning/Book.ts
 core/events/ServerPlayerTick.ts
 core/events/LocalTick.ts
 core/events/PlayerChangedDimension.ts
+
+recipes.ts
 
 final.ts
 

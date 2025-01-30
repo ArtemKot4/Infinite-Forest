@@ -1,3 +1,9 @@
+class ElectricMushroomTile extends TileEntityBase {
+    public override clientTick() {
+        spawnElectric({x: this.x + 0.5, y: this.y + 0.4, z: this.z + 0.5});
+    };
+}
+
 class ElectricMushroom extends BlockPlant {
     constructor() {
         super("electric_mushroom", [{
@@ -25,6 +31,10 @@ class ElectricMushroom extends BlockPlant {
 
         GameController.attack(player);
         ElectricMushroom.dangerMessage(player);
+    };
+
+    public getTileEntity(): TileEntityBase {
+        return new ElectricMushroomTile();
     };
 };
 

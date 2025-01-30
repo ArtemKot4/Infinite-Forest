@@ -35,7 +35,7 @@ class RotatableLog extends BlockForest {
                 break;
         };
 
-        region.setBlock(coords.x, coords.y, coords.z, this.id, data);
+        region.setBlock(coords.x, coords.y + 1, coords.z, this.id, data);
     }
     public override getSoundType(): Block.Sound {
         return "wood";

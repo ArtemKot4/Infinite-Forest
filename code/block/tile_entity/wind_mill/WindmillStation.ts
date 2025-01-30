@@ -88,7 +88,7 @@ class WindmillStationTile extends TileEntityBase {
         };
     };
 
-    public onTick(): void {
+    public override onTick(): void {
         if(!this.data.enable) return;
 
         if(World.getThreadTime() % 20 === 0) {
@@ -99,6 +99,11 @@ class WindmillStationTile extends TileEntityBase {
             if(!this.isRightItem()) {
                 return this.drop(this.data.input_id);
             };
+
+            this.networkData.putInt("input_id", this.data.input_id);
+            this.networkData.putBoolean("enable", this.data.enable);
+
+            this.networkData.sendChanges();
 
             BlockList.WINDMILL_STATION.factory.forEach((result, input) => {
                 if(this.data.input_id === input) {
@@ -112,7 +117,23 @@ class WindmillStationTile extends TileEntityBase {
                 
                 return;
             });
+        };
+    };
 
+    public override clientTick(): void {
+        if(World.getThreadTime() % 5 === 0) {
+            const id = this.networkData.getInt("input_id", null);
+            const isEnabled = this.networkData.getBoolean("enable", false);
+
+            if(!isEnabled) {
+                return;
+            };
+
+            if(id) {
+               return Particles.addBreakingItemParticle(id, 0, this.x + 0.5, this.y - 1.08, this.z + 0.5);
+            };
+
+            spawnElectric(this);
         };
     };
 
@@ -132,10 +153,25 @@ class WindmillStationTile extends TileEntityBase {
             const id = this.blockSource.getBlockID(vectors[i][0], this.y, vectors[i][1]);
 
             if(id === BlockList.WINDMILL_BLADES.getID()) {
-                this.blockSource.destroyBlock(vectors[i][0], this.y, vectors[i][1]);
+                TileEntity.destroyTileEntityAtCoords(vectors[i][0], this.y, vectors[i][1], this.blockSource);
+                this.blockSource.destroyBlock(vectors[i][0], this.y, vectors[i][1], true);
             };
         };
-    } 
+
+        this.dropAll();
+    };
+
+    public dropAll(): void {
+        if(!this.isValidItem()) return;
+
+        const stack = new ItemStack(this.data.input_id, this.data.input_count);
+
+        this.data.input_id = 0;
+        this.data.input_count = 0;
+
+        this.region.dropItem(new Vector3(this.x + 0.5, this.y + 0.5, this.z + 0.5), stack);
+        return;
+    }
 };
 
 class WindmillStation extends BlockForest {
@@ -153,7 +189,3 @@ class WindmillStation extends BlockForest {
         return new WindmillStationTile();
     };
 };
-
-Callback.addCallback("LevelDisplayed", () => {
-    BlockList.WINDMILL_STATION.factory.addRecipe(VanillaItemID.coal, VanillaItemID.diamond);
-});

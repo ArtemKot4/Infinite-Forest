@@ -38,7 +38,7 @@ Callback.addCallback("ServerPlayerTick", (playerUid: number) => {
         BiomeList.WINTER_FOREST.runSnowInRadius(pos.x, pos.y + 12.5, pos.z, 64, 24);
     };
     
-    if(params.getServerUpdate && time % params.getServerUpdate() == 0 && params.onServerTick) {
-        return params.onServerTick(playerUid, region, pos.x, pos.y, pos.z, time);
+    if(params.getServerUpdate && time % params.getServerUpdate() == 0 && params.insideServerTick) {
+        return params.insideServerTick(playerUid, region, pos.x, pos.y, pos.z, time);
     };
 });
