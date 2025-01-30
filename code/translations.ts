@@ -22,13 +22,18 @@ Translation.addTranslation("Bark Pink Log", {
 });
 
 Translation.addTranslation("block.infinite_forest.windmill_station", {
-  en: "Windmill Station",
+  en: "Windmill station",
   ru: "Станция мельницы",
 });
 
 Translation.addTranslation("block.infinite_forest.windmill_blades", {
-  en: "Windmill Blades",
+  en: "Windmill blades",
   ru: "Лопасти мельницы"
+});
+
+Translation.addTranslation("block.infinite_forest.electric_mushroom", {
+  en: "Electric mushroom",
+  ru: "Электрический гриб"
 });
 
 Translation.addTranslation("eucalyptus_log", { ru: "§2Эвкалипт" });

@@ -308,16 +308,18 @@ function spawnGlowworm(coords: Vector, color: EForestParticle) {
     );
 };
 
-function spawnElectric(coords: Vector) {
-    Particles.addParticle(
-        EForestParticle.ELECTRIC,
-        coords.x + 0.5,
-        coords.y,
-        coords.z + 0.5,
-        Math.random() / 20,
-        Math.random() / 20,
-        Math.random() / 20
-    );
+function spawnElectric(x: number, y: number, z: number) {
+    for(let i = 0; i <= 5; i++) {
+        Particles.addParticle(
+            EForestParticle.ELECTRIC,
+            x,
+            y,
+            z,
+            Math.random() / 20,
+            Math.random() / 20,
+            Math.random() / 20
+        );
+    }
 }
 
 namespace ForestGenerator {

@@ -1,6 +1,6 @@
 class ElectricMushroomTile extends TileEntityBase {
     public override clientTick() {
-        spawnElectric({x: this.x + 0.5, y: this.y + 0.4, z: this.z + 0.5});
+        spawnElectric(this.x + 0.5, this.y + 0.4, this.z + 0.5);
     };
 }
 

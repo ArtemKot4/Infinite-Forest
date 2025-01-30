@@ -112,16 +112,18 @@ class WindmillStationTile extends TileEntityBase {
             };
 
             if(id != 0) {
-               return Particles.addBreakingItemParticle(
-                Network.serverToLocalId(id), 
-                    0, 
-                    this.x + 0.5, 
-                    this.y - 1.08, 
-                    this.z + 0.5
-                );
-            };
+                for(let i = 0; i < 3; i++) {
+                    Particles.addBreakingItemParticle(
+                        Network.serverToLocalId(id), 
+                        0, 
+                        this.x + 0.5, 
+                        this.y - 0.1, 
+                        this.z + 0.5
+                    );
+                };
+            };   
 
-            spawnElectric(this);
+            spawnElectric(this.x + 0.5, this.y + 1.05, this.z + 0.5);
         };
     };
 

@@ -3,7 +3,7 @@ class WindmillBladesTile extends TileEntityBase {
 
     public defaultValues = {
         enable: true, //false
-        speed: 3
+        speed: 0.05
     };
 
     public data: typeof this.defaultValues;
@@ -27,7 +27,7 @@ class WindmillBladesTile extends TileEntityBase {
 
     public override clientTick(): void {
         const isEnabled = this.networkData.getBoolean("enable", false);
-        const speed = this.networkData.getInt("speed", 20);
+        const speed = this.networkData.getFloat("speed", 0.2);
 
         if(!isEnabled || !this.animation.exists()) {
             return;
@@ -37,7 +37,7 @@ class WindmillBladesTile extends TileEntityBase {
         const data = blockSource.getBlockData(this.x, this.y, this.z);
 
         const move_coords = {
-            x: speed / speed + 30,
+            x: speed,
             z: 0
         };
 
@@ -51,8 +51,10 @@ class WindmillBladesTile extends TileEntityBase {
 
     public override onTick(): void {
         if(World.getThreadTime() % 60 === 0) {
+            const currentWeather = World.getWeather();
+
             this.networkData.putBoolean("enable", this.data.enable);
-            this.networkData.putInt("speed", this.data.speed);
+            this.networkData.putFloat("speed", currentWeather.rain > 0 ? this.data.speed * 2 : this.data.speed);
 
             this.switchStationMode(true);
 
@@ -86,8 +88,7 @@ class WindmillBladesTile extends TileEntityBase {
             const id = this.blockSource.getBlockID(vectors[i][0], this.y, vectors[i][1]);
 
             if(id === BlockList.WINDMILL_STATION.getID()) {
-                const tileEntity = TileEntity.getTileEntity(vectors[i][0], this.y, vectors[i][1], this.blockSource) as WindmillStationTile & TileEntity;
-                return tileEntity || null;
+                return TileEntity.getTileEntity(vectors[i][0], this.y, vectors[i][1], this.blockSource) as WindmillStationTile & TileEntity;;
             };
         };
         return null;
