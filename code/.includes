@@ -1,5 +1,6 @@
 # lib: esnext
 
+parseLang.ts
 translations.ts
 
 api/Flags.ts
@@ -49,6 +50,8 @@ block/tile_entity/EucalyptusWorkbench.ts
 block/tile_entity/wind_mill/WindmillStation.ts
 block/tile_entity/wind_mill/WindmillBlades.ts
 block/tile_entity/Bottle.ts
+
+block/tile_entity/Cauldron.ts
 
 EffectList.ts
 

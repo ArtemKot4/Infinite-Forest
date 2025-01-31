@@ -29,13 +29,13 @@ class Bottle extends BlockForest {
         const upperBlock = region.getBlockID(x, y + 1, z);
         const luckilyRandom = Math.random() > 0.4;
 
-        if(Block.getLightLevel(upperBlock) > 10) {
-            if(!luckilyRandom) {
-                region.breakBlock(x, y, z, false);
-                region.breakBlock(x, y + 1, z, true);
-                return;
-            };
-        } else return;
+        if(Block.getLightLevel(upperBlock) < 10) return;
+         
+        if(!luckilyRandom) {
+            region.breakBlock(x, y, z, false);
+            region.breakBlock(x, y + 1, z, true);
+            return;
+        };
 
         ParticleHelper.sendWithRadius(x - 30, y - 10, z - 30, x + 30, y + 10, z + 30, region, {
             type: color,
@@ -50,6 +50,7 @@ class Bottle extends BlockForest {
         region.setBlock(x, y, z, BlockList.FIREFLIES_BOTTLE.id);
 
         this.addTile(x, y, z, region, color);
+        return;
     };
 
     public addTile(x: number, y: number, z: number, region: BlockSource, color: number) {
@@ -118,12 +119,14 @@ class FirefliesBottle extends BlockForest {
             color = item.extra.getInt("color", color);
         };
 
-        BlockList.BOTTLE.addFireflies(
-            coords.x, 
-            coords.y + 1, 
-            coords.z, 
-            BlockSource.getDefaultForActor(player), 
-            color
+        return (
+            BlockList.BOTTLE.addFireflies(
+                coords.x, 
+                coords.y + 1, 
+                coords.z, 
+                BlockSource.getDefaultForActor(player), 
+                color
+            )
         );
     };
 

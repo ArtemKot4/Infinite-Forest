@@ -1,4 +1,4 @@
-class Factory<InputFormat extends Record<string, ItemInstance> | ItemInstance | number> {
+class Factory<InputFormat extends unknown> {
     public field: { [result_id: number]: InputFormat } = {};
 
     public addRecipe(result: number, input: InputFormat): this {

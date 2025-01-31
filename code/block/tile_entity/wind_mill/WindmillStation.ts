@@ -143,7 +143,7 @@ class WindmillStationTile extends TileEntityBase {
             const id = this.blockSource.getBlockID(vectors[i][0], this.y, vectors[i][1]);
 
             if(id === BlockList.WINDMILL_BLADES.getID()) {
-                BlockForest.deepDestroy(vectors[i][0], this.y, vectors[i][1], this.blockSource);
+                BlockForest.destroyWithTile(vectors[i][0], this.y, vectors[i][1], this.blockSource);
             };
         };
 
