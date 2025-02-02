@@ -40,6 +40,10 @@ declare namespace com.zhekasmirnov.innercore.api.NativeAPI {
 
 const NativeAPI = com.zhekasmirnov.innercore.api.NativeAPI;
 
+const NetworkEvent = BlockEngine.Decorators.NetworkEvent;
+const ContainerEvent = BlockEngine.Decorators.ContainerEvent;
+const ClientSide = BlockEngine.Decorators.ClientSide;
+
 interface RGB {
     r: number;
     g: number;

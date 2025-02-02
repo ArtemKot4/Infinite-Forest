@@ -48,63 +48,62 @@ class BlockForest implements BlockBehavior, IBlockModel {
         if("getModel" in this) {
             const modelList: BlockModel[] = [].concat(this.getModel());
 
-            if (modelList.length === 1) {
+            if(modelList.length === 1) {
                 this.setModel(modelList[0], -1);
-                return;
-            }
-
-            for (let i: number = 0; i < modelList.length; i++) {
-                const data: number = modelList[i].getBlockData();
-                this.setModel(modelList[i], data > -1 ? data : i);
+            } else {
+                for (let i: number = 0; i < modelList.length; i++) {
+                    const data: number = modelList[i].getBlockData();
+                    this.setModel(modelList[i], data > -1 ? data : i);
+                };
             };
         };
 
         if("getDestroyTime" in this) {
-            Block.setDestroyTime(this.id, this.getDestroyTime());
+            Block.setDestroyTime(this.stringID, this.getDestroyTime());
         };
 
         if("getSoundType" in this) {
-            BlockRegistry.setSoundType(this.id, this.getSoundType());
+            BlockRegistry.setSoundType(this.stringID, this.getSoundType());
         };
 
         if("getFriction" in this) {
-            BlockRegistry.setFriction(this.id, this.getFriction());
+            BlockRegistry.setFriction(this.stringID, this.getFriction());
         };
 
         if("getLightLevel" in this) {
-            BlockRegistry.setLightLevel(this.id, this.getLightLevel());
+            BlockRegistry.setLightLevel(this.stringID, this.getLightLevel());
         };
 
         if("getLightOpacity" in this) {
-            BlockRegistry.setLightOpacity(this.id, this.getLightOpacity());
+            BlockRegistry.setLightOpacity(this.stringID, this.getLightOpacity());
         };
 
         if("getExplosionResistance" in this) {
-            BlockRegistry.setExplosionResistance(this.id, this.getExplosionResistance());
+            BlockRegistry.setExplosionResistance(this.stringID, this.getExplosionResistance());
         };
 
         if("getMapColor" in this) {
-            BlockRegistry.setMapColor(this.id, this.getMapColor());
+            BlockRegistry.setMapColor(this.stringID, this.getMapColor());
         };
 
         if("getMaterial" in this) {
-            Block.setBlockMaterial(this.id, this.getMaterial(), this.getDestroyLevel());
+            Block.setBlockMaterial(this.stringID, this.getMaterial(), this.getDestroyLevel());
         };
 
         if("getRenderLayer" in this) {
-            BlockRegistry.setRenderLayer(this.id, this.getRenderLayer());
+            BlockRegistry.setRenderLayer(this.stringID, this.getRenderLayer());
         };
 
         if("getTranslurency" in this) {
-            BlockRegistry.setTranslucency(this.id, this.getTranslurency());
+            BlockRegistry.setTranslucency(this.stringID, this.getTranslurency());
         };
 
         if("isSolid" in this) {
-            BlockRegistry.setSolid(this.id, this.isSolid());
+            BlockRegistry.setSolid(this.stringID, this.isSolid());
         };
 
         if("getRenderType" in this) {
-            BlockRegistry.setRenderType(this.id, this.getRenderType());
+            BlockRegistry.setRenderType(this.stringID, this.getRenderType());
         };
 
         if("getTileEntity" in this) {
@@ -124,7 +123,7 @@ class BlockForest implements BlockBehavior, IBlockModel {
             BlockForest.destroyStartFunctions[this.id] = this.onDestroyStart;
         }
 
-        Block.setDestroyLevel(this.id, this.getDestroyLevel());
+        Block.setDestroyLevel(this.stringID, this.getDestroyLevel());
     };
 
     public setModel(model: BlockModel, data: number): this {

@@ -87,7 +87,7 @@ class AncientNote extends ItemForest {
 
     public onItemUse(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, player: number): void {
         const list = this.whichContains(player);
-        alert(list.keys);
+        Game.message(list);
         let text = item.extra && item.extra.getString("text");
 
         if(!text) {
@@ -125,7 +125,6 @@ class AncientNote extends ItemForest {
             name: "ancient_note",
             meta: 0 
         }, 1);
-        this.setupAllToCreative();
     };
 
     public inCreative(): boolean {
@@ -145,6 +144,11 @@ Translation.addTranslation("ancient_note.infinite_forest.contains", {
 
 AncientNote.add("unity_with_nature");
 AncientNote.add("flames");
+AncientNote.add("strange_walls");
+
+Translation.addTranslation("ancient_note.infinite_forest.strange_walls", {
+    ru: "Пока пусто"
+}); 
 
 Translation.addTranslation("ancient_note.infinite_forest.flames", {
     en: "I love glowworms. They so beautiful, and, seems, they not afraid of dark. I love them, and, seems, they love me.",
