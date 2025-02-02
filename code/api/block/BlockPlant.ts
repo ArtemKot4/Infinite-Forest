@@ -8,7 +8,7 @@ abstract class BlockPlant extends BlockForest {
         VanillaBlockID.mycelium
     ];
 
-    constructor(stringID: string, variationList: Block.BlockVariation[]) {
+    public constructor(stringID: string, variationList: Block.BlockVariation[]) {
         super(stringID, variationList);
         Utils.setEmptyBlockCollision(this.id);
         
@@ -22,44 +22,46 @@ abstract class BlockPlant extends BlockForest {
         };
     };
 
-    public getCreativeGroup(): string {
+    public override getCreativeGroup(): string {
         return "nature";
     };
 
-    public onNeighbourChange(coords: Vector, block: Tile, changeCoords: Vector, region: BlockSource): void {
-        if(!BlockPlant.allowedBlockList.includes(region.getBlockId(coords.x, coords.y - 1, coords.z))) {
-            region.destroyBlock(coords.x, coords.y, coords.z);
+    public override onNeighbourChange(coords: Vector, block: Tile, changeCoords: Vector, region: BlockSource): void {
+        const bottomBlock = region.getBlockID(coords.x, coords.y - 1, coords.z);
+
+        if(!BlockPlant.allowedBlockList.includes(bottomBlock)) {
+            return region.destroyBlock(coords.x, coords.y, coords.z, true);
         };
     };
 
-    public onPlace(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, player: number, region: BlockSource): void | Vector {
-        const upperBlock = region.getBlockId(coords.x, coords.y + 1, coords.z);
-        const isAllowedBlock = BlockPlant.allowedBlockList.includes(region.getBlockId(coords.x, coords.y, coords.z));
-
-        if(isAllowedBlock && upperBlock === VanillaTileID.air) {
-            region.setBlock(coords.x, coords.y + 1, coords.z, this.id, 0);
+    public override onPlace(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, player: number, region: BlockSource): void | Vector {
+        const upperBlock = region.getBlockID(coords.x, coords.y + 1, coords.z);
+        const isAllowedBlock = BlockPlant.allowedBlockList.includes(block.id);
+        
+        if(isAllowedBlock && upperBlock === 0) {
+            return region.setBlock(coords.x, coords.y + 1, coords.z, this.id, 0);
         };
     };
 
     public getBiomeState?(): EBiomeState;
 
-    public isSolid(): boolean {
+    public override isSolid(): boolean {
         return false;
     };
 
-    public getLightOpacity(): number {
+    public override getLightOpacity(): number {
         return 0;
     };
 
-    public getDestroyTime(): number {
+    public override getDestroyTime(): number {
         return 0;
     };
 
-    public getSoundType(): Block.Sound {
+    public override getSoundType(): Block.Sound {
         return "grass";
     };
 
-    public getRenderType(): number {
+    public override getRenderType(): number {
         return 1;
     };
 

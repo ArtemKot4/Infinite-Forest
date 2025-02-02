@@ -43,9 +43,9 @@ class ElectricMushroom extends BlockPlant {
 class BlueMushroomBlock extends BlockForest {
     public constructor() {
         super("blue_mushroom_block", [{
-                name: "block.infinite_forest.blue_mushroom_block",
-                texture: [["mushroom_block_skin_blue", 0]],
-                inCreative: true
+            name: "block.infinite_forest.blue_mushroom_block",
+            texture: [["mushroom_block_skin_blue", 0]],
+            inCreative: true
         }]);
     };
 
@@ -55,6 +55,10 @@ class BlueMushroomBlock extends BlockForest {
 
     public override getDestroyTime(): number {
         return 20;
+    };
+
+    public override getCreativeGroup(): string {
+        return "nature";
     };
 
     public override getDrop(coords: Callback.ItemUseCoordinates, block: Tile, diggingLevel: number, enchant: ToolAPI.EnchantData, item: ItemStack, region: BlockSource): ItemInstanceArray[] {

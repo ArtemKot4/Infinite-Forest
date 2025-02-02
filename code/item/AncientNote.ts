@@ -1,0 +1,158 @@
+class AncientNote extends ItemForest {
+    /**
+     * @key is a the text of the note
+     * @value is the learning name
+     */
+    public static list: Record<string, Nullable<string>> = {};
+
+    public static add(text: string, learning: string = null) {
+        AncientNote.list[text] = learning;
+    };
+
+    public UI: UI.Window = (() => {
+        const window = new UI.Window({
+            drawing: [
+                {
+                    type: "background",
+                    color: android.graphics.Color.argb(38, 22, 22, 22),
+                },
+                {
+                    type: "bitmap",
+                    bitmap: "lost_paper",
+                    x: UI.getScreenHeight() / 1.3,
+                    y: 30,
+                    scale: 2.1,
+                },
+            ],
+            elements: {
+                text: {
+                    type: "text",
+                    x: UI.getScreenHeight() / 1.17,
+                    y: 80,
+                    font: {
+                        size: 12.5,
+                        color: android.graphics.Color.parseColor("#9E9E9E"),
+                    },
+                    multiline: true,
+                    text: null
+                },
+                closeButton: {
+                    type: "button",
+                    scale: 1000,
+                    bitmap: "unknown",
+                    clicker: {}
+                }
+            }
+        });
+
+        window.setCloseOnBackPressed(true);
+        window.setBlockingBackground(true);
+        return window;
+    })();
+
+    public openFor(player: number, text: string) {
+        const content = this.UI.getContent();
+
+        content.elements.text.text = UIHelper.separateText(Translation.translate(`ancient_note.infinite_forest.${text}`));
+        content.elements.closeButton.clicker.onClick = (position, container) => {
+            let learning = AncientNote.list[text];
+
+            if(learning != null) {
+                ObjectPlayer.addLearning(player, learning)
+            };
+            this.UI.close();
+            return;
+        };
+
+        this.UI.setContent(content);
+        this.UI.forceRefresh();
+        this.UI.open();
+    };
+
+    public whichContains(player: number): Set<string> {
+        let list = new Set<string>();
+        let actor = new PlayerActor(player);
+
+        for(let i = 0; i < 36; i++) {
+            const current = actor.getInventorySlot(i);
+            if(current.id === this.id) {
+                const text = current.extra && current.extra.getString("text");
+                if(text != null) {
+                    list.add(text);
+                };
+            };
+        };
+        return list;
+    };
+
+    public onItemUse(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, player: number): void {
+        const list = this.whichContains(player);
+        alert(list.keys);
+        let text = item.extra && item.extra.getString("text");
+
+        if(!text) {
+            text = MathHelper.randomFromArray(Object.keys(AncientNote.list)
+            .filter((v) => !list.has(v)));
+
+            let extra = new ItemExtraData();
+            extra.putString("text", text || "ancient_note.infinite_forest.empty");
+
+            Entity.setCarriedItem(player, this.id, 1, 0, extra);
+        };
+
+        return this.openFor(player, text);
+    };
+
+    public onNameOverride(item: ItemInstance, translation: string, name: string): string {
+        let text = (item.extra && item.extra.getString("text")) || "???";
+        return Translation.translate(name) + "\n" + Native.Color.GRAY + Translation.translate("ancient_note.infinite_forest.contains") + text;
+    };
+
+    public setupAllToCreative() {
+        for(const text in AncientNote.list) {
+            const extra = new ItemExtraData();
+            extra.putString("text", text); 
+            Item.addToCreative(this.id, 1, 0, extra);
+        };
+    };
+
+    public constructor() {
+        super("ancient_note", {
+            name: "ancient_note",
+            meta: 0 
+        }, 1);
+        this.setupAllToCreative();
+    };
+
+    public inCreative(): boolean {
+        return false;
+    };
+};
+
+Translation.addTranslation("ancient_note.infinite_forest.empty", {
+    en: "This note is empty",
+    ru: "Эта записка пуста"
+});
+
+Translation.addTranslation("ancient_note.infinite_forest.contains", {
+    en: "This note contains: ",
+    ru: "Эта записка содержит: "
+})
+
+AncientNote.add("unity_with_nature");
+AncientNote.add("flames");
+
+Translation.addTranslation("ancient_note.infinite_forest.flames", {
+    en: "I love glowworms. They so beautiful, and, seems, they not afraid of dark. I love them, and, seems, they love me.",
+    ru: "Я люблю огоньки. Они так красиво светятся, и, кажется, они не боятся темноты. Я люблю их, и, кажется, они любят меня." 
+})
+
+Translation.addTranslation("ancient_note.infinite_forest.unity_with_nature", {
+    ru: "Мне нравятся наши места. Здесь теплее, чем в остальном лесу. Люблю посидеть у берега озера, и люблю, когда светлячки пролетают над ним. Очень красиво. И хоть здесь всегда темно, но есть в этом месте что-то такое, необыкновенное, не как в нашей деревне. Здесь я чувствую себя спокойно, только редкий ветер колышит траву, наполняя её присутствием..",
+    en: "I love our places. Here so more warm then in other forest. I like sitting in front of beach of lake, and i like, when fireflies will fly up him. Over beautiful. And although here always dark, but it place has something so, does not default, do not as in our village. Here i am felling peaceful myself, only rarely wind touches a grass, will contain his coming."
+});
+
+Translation.addTranslation("item.infinite_forest.ancient_note", {
+    en: "Ancient note",
+    ru: "Древняя записка"
+});

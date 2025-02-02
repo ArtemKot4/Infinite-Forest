@@ -33,6 +33,8 @@ class Fironia extends BlockPlant {
     };
 
     public onNeighbourChange(coords: Vector, block: Tile, changeCoords: Vector, region: BlockSource): void {
+        super.onNeighbourChange(coords, block, changeCoords, region);
+        
         this.spawnFlame(coords.x, coords.y, coords.z);
         this.spawnFlame(changeCoords.x, changeCoords.y, changeCoords.z);
     }

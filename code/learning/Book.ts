@@ -83,26 +83,6 @@ class BookPage {
         };
     };
 
-    public static separateText(text: string) {
-        let result = [];
-        let line = "";
-    
-        for (let word of text.split(" ")) {
-            if (line.length + word.length <= 25) {
-                line += word + " ";
-            } else {
-                result.push(line.trim());
-                line = word + " ";
-            }
-        }
-    
-        if (line) {
-            result.push(line.trim());
-        }
-    
-        return result.join("\n");
-    };
-
     public static getTextContent(text: string, x: number, y: number, size: number, color: number, align: number, alignment: number, bold: boolean, cursive: boolean, underline: boolean, shadow: number): UI.UITextElement {
         return {
             type: "text",
@@ -119,7 +99,7 @@ class BookPage {
             },
             x: x,
             y: y,
-            text: BookPage.separateText(text)
+            text: UIHelper.separateText(text)
         };
     };
 

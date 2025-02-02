@@ -20,7 +20,7 @@ class CauldronTile extends TileEntityBase {
 
     public defaultValues = {
         progress: 0,
-        water_level: 0.0, //max 5,
+        water_level: 0.0, //max 1.0,
         boiling: false,
         boiling_time: 0
     };
@@ -31,11 +31,11 @@ class CauldronTile extends TileEntityBase {
 
     public item_animations!: Animation.Item[];
 
-    public clientLoad(): void {
+    public override clientLoad(): void {
         const water_level = this.networkData.getFloat("water_level", 1.0);
         const boiling = this.networkData.getBoolean("boiling", false);
         
-        this.water_animation = new BlockAnimation(new Vector3(this.x + 0.5, this.y + water_level, this.z + 0.5), this);
+        this.water_animation = new BlockAnimation(new Vector3(this.x + water_level, this.y + water_level, this.z + 0.5), this);
 
         for(let i = 0; i < 9; i++) {
             this.item_animations.push(new Animation.Item(this.x + Math.random(), this.y + water_level, this.z + Math.random()))
@@ -44,8 +44,19 @@ class CauldronTile extends TileEntityBase {
         this.item_animations.forEach((v) => v.load());
     };
 
-    @BlockEngine.Decorators.ClientSide
-    public setItemAnimation(items: number[]): void {
+    public override clientUnload(): void {
+        this.item_animations.forEach((v) => v.destroy());
+        this.water_animation.destroy();
+    };
+
+    public spawnBubbles(water_level: number) {
+        for(let i = -0.8; i < 0.8; i++) {
+            Particles.addParticle(EParticleType.BUBBLE, this.x + i, this.y + water_level, this.z - i, 0, 0, 0);
+            Particles.addParticle(EParticleType.BUBBLE, this.x - i, this.y + water_level, this.z + i, 0, 0 ,0);
+        };
+    };
+
+    public describeItemAnimation(items: number[]): void {
         for(let i = 0; i < this.item_animations.length; i++) {
             let id = items[i];
 
@@ -62,24 +73,35 @@ class CauldronTile extends TileEntityBase {
         };
     };
 
-    public clientTick(): void {
+    public override clientTick(): void {
         const water_level = this.networkData.getFloat("water_level", 1.0);
         const boiling = this.networkData.getBoolean("boiling", false);
 
         const items = this.networkData.getString("items", "0");
 
         if(World.getThreadTime() % 20 === 0) {
-            this.setItemAnimation(items.split(":").map((v) => Number(v)));
+            this.describeItemAnimation(items.split(":").map((v) => Number(v)));
+        };
+
+        if(boiling) {
+            this.spawnBubbles(water_level);
+            this.setWaterAnimation({ water_level: water_level });
         };
     };
 
-    public onTick(): void {
+    public override onTick(): void {
+        if(this.data.water_level <= 0) {
+            this.water_animation.destroy();
+            return;
+        };
+
         const liquidFireBlock = TagRegistry.getAllWithTag("blocks", "fire")
         .includes(this.blockSource.getBlockID(this.x, this.y - 1, this.z));
 
         const time = World.getThreadTime();
 
         if(time % 20 === 0) {
+            Game.message("work")
             if(!this.data.boiling) {  
                 if(liquidFireBlock && this.data.boiling_time < CauldronTile.BOILING_TIME_MAX) {
                     this.data.boiling_time++;
@@ -88,8 +110,9 @@ class CauldronTile extends TileEntityBase {
                 };
             };
     
-            if(this.data.boiling && !liquidFireBlock) {
-                this.clearBoiling();
+            if(this.data.boiling) {
+                if(!liquidFireBlock) this.clearBoiling();
+                this.decreaseWaterLevel();
             };
         };
 
@@ -101,10 +124,35 @@ class CauldronTile extends TileEntityBase {
         this.networkData.putBoolean("boiling", true);
     };
 
+    public decreaseWaterLevel() {
+        if(this.data.water_level <= 0) {
+            return;
+        };
+
+        this.data.water_level -= 0.05;
+        this.networkData.putFloat("water_level", this.data.water_level);
+    };
+
     public clearBoiling() {
         this.data.boiling = false;
         this.data.boiling_time = 0;
         this.networkData.putBoolean("boiling", false)
+    };
+
+    public override onItemUse(coords: Callback.ItemUseCoordinates, item: ItemStack, player: number) {
+        Game.message(JSON.stringify(this.data) + "\n" + "работает"); //todo: debug
+        
+        const isWaterLiquidItem = !!LiquidItemRegistry.getFullItem(item.id, item.data, "water");
+
+        if(!isWaterLiquidItem) {
+            return Utils.actionbarMessage(player, Translation.translate("message.infinite_forest.is_not_valid_item"));
+        };
+
+        this.clearBoiling();
+        this.data.water_level = 1.0;
+
+        this.sendPacket("setWaterAnimation", { water_level: this.data.water_level });
+        return;
     };
 
     @BlockEngine.Decorators.NetworkEvent(Side.Client)
@@ -112,11 +160,12 @@ class CauldronTile extends TileEntityBase {
         const animation = this.water_animation;
 
         if(animation) {
+            animation.setPos(this.x, this.y + obj.water_level, this.z);
             animation.describe(CauldronTile.WATER_RENDERMESH, "water/water_0");
-            animation.load()
-        }
-    }
+            animation.refresh();
+        };
 
+    };
 };
 
 class Cauldron extends BlockForest {
@@ -130,11 +179,16 @@ class Cauldron extends BlockForest {
         }]);
     };
 
-    public getModel(): BlockModel | BlockModel[] {
+    public override getModel(): BlockModel | BlockModel[] {
         return new BlockModel("iron_cauldron", "iron_cauldron");
     };
 
-    public getTileEntity(): TileEntityBase {
+    public override getTileEntity(): TileEntityBase {
         return new CauldronTile();
     };
 };
+
+Translation.addTranslation("message.infinite_forest.is_not_valid_item", {
+    en: "This is not a valid item",
+    ru: "Это не подходящий предмет"
+})

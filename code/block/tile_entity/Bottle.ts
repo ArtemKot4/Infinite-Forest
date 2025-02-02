@@ -47,14 +47,14 @@ class Bottle extends BlockForest {
             vz: 0
         });
 
+        TileEntity.destroyTileEntityAtCoords(x, y, z, region);
         region.setBlock(x, y, z, BlockList.FIREFLIES_BOTTLE.id);
 
-        this.addTile(x, y, z, region, color);
+        Bottle.addTile(x, y, z, region, color);
         return;
     };
 
-    public addTile(x: number, y: number, z: number, region: BlockSource, color: number) {
-        TileEntity.destroyTileEntityAtCoords(x, y, z, region);
+    public static addTile(x: number, y: number, z: number, region: BlockSource, color: number) {
         TileEntity.addTileEntity(x, y, z, region);
 
         const tile = TileEntity.getTileEntity(x, y, z, region) as TileEntity & FirefliesBottleTile;
@@ -119,15 +119,17 @@ class FirefliesBottle extends BlockForest {
             color = item.extra.getInt("color", color);
         };
 
-        return (
-            BlockList.BOTTLE.addFireflies(
-                coords.x, 
-                coords.y + 1, 
-                coords.z, 
-                BlockSource.getDefaultForActor(player), 
-                color
-            )
+        region.setBlock(coords.relative.x, coords.relative.y, coords.relative.z, BlockList.FIREFLIES_BOTTLE.id, 0);
+
+        Bottle.addTile(
+            coords.relative.x, 
+            coords.relative.y + 1, 
+            coords.relative.z, 
+            BlockSource.getDefaultForActor(player), 
+            color
         );
+
+        return;
     };
 
     public getDrop(coords: Callback.ItemUseCoordinates, block: Tile, diggingLevel: number, enchant: ToolAPI.EnchantData, item: ItemStack, region: BlockSource): ItemInstanceArray[] {

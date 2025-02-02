@@ -155,19 +155,19 @@ class ObjectPlayer {
      * @param direction direction of page;
      */
 
-    public static addLearning(id: number, learning_name: string, direction: number = -1): void {
+    public static addLearning(player_uid: number, learning_name: string, direction: number = -1): void {
         if(!Learning.get(learning_name)) {
             Debug.message(`Server: ${learning_name} is not a learning. All exists learnings: ${Object.keys(Learning.list)}`);
             return;
         };
 
-        const player = this.getOrCreate(id);
+        const player = this.getOrCreate(player_uid);
         const hasLearning = player.learningList[learning_name];
 
         if(typeof hasLearning === "number" && hasLearning != direction) {
             player.learningList[learning_name] = direction;
 
-            return this.sendToClient(id);
+            return this.sendToClient(player_uid);
         };
     };
 

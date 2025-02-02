@@ -33,7 +33,7 @@
             },
             "description": {
                 "en": "Affect on count of fireflies in fireflies forest around player of each 5 ticks",
-                "ru": "Влияет на количество светлячков в светлячковом лесу вокруг игрока на каждые 5 тиков"
+                "ru": "Влияет на количество светлячков в светлячковом лесу вокруг игрока на каждые 5 тиков."
             }
         }
     }

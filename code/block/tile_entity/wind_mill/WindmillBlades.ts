@@ -23,8 +23,9 @@ class WindmillBladesTile extends TileEntityBase {
 
     public override onLoad(): void {
         const tile = this.getStationTile();
+        const height = this.findHeight();
 
-        if(!tile) {
+        if(!tile || height < 10) {
             this.blockSource.destroyBlock(this.x, this.y, this.z, true);
             this.selfDestroy();
             return;
@@ -37,14 +38,14 @@ class WindmillBladesTile extends TileEntityBase {
     }
 
     public override clientUnload(): void {
-        this.animation.destroy();
+        this.animation && this.animation.destroy();
     };
 
     public override clientTick(): void {
         const enabled = this.networkData.getBoolean("enabled", false);
         const speed = this.networkData.getFloat("speed", 0.2);
 
-        if(!enabled || !this.animation.exists()) {
+        if(!enabled) {
             return;
         };
 
@@ -106,13 +107,14 @@ class WindmillBladesTile extends TileEntityBase {
                 return TileEntity.getTileEntity(vectors[i][0], this.y, vectors[i][1], this.blockSource) as WindmillStationTile & TileEntity;;
             };
         };
+
         return null;
     };
 
-    public static findHeight(source: BlockSource, coords: Vector): number {
-        let height = 0;
+    public findHeight(): number {
+        let height = 1;
 
-        while(source.getBlockID(coords.x, coords.y-height, coords.z) === VanillaTileID.air) {
+        while(this.blockSource.getBlockID(this.x, this.y-height, this.z) === 0) {
             height++;
         };
 
@@ -147,6 +149,3 @@ class WindmillBlades extends BlockForest {
     };
 };
 
-// Callback.addCallback("ItemUse", (c, i, block) => {
-//     Game.message("дата: -> " + block.data)
-// });

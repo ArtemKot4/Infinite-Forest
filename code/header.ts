@@ -84,8 +84,8 @@ namespace Utils {
         const gamemode = new PlayerActor(player).getGameMode();
         
         return gamemode === EGameMode.CREATIVE || gamemode === EGameMode.SPECTATOR;
-    }
-}
+    };
+};
 
 type JSONLang = {
     en: string;
@@ -309,6 +309,28 @@ namespace ParticleHelper {
     };
 };
 
+namespace UIHelper {
+    export function separateText(text: string, each_chars: number = 25) {
+        let result = [];
+        let line = "";
+    
+        for (let word of text.split(" ")) {
+            if (line.length + word.length <= each_chars) {
+                line += word + " ";
+            } else {
+                result.push(line.trim());
+                line = word + " ";
+            }
+        }
+    
+        if (line) {
+            result.push(line.trim());
+        }
+    
+        return result.join("\n");
+    };
+}
+
 Network.addClientPacket("packet.infinite_forest.send_particle", (data: IParticleSender) => {
     Particles.addParticle(data.type, data.x, data.y, data.z, data.vx, data.vy, data.vz);
 })
@@ -383,3 +405,7 @@ namespace ToolAPI {
 };
 
 type NativeRendererTransform = com.zhekasmirnov.innercore.api.NativeRenderer.Transform;
+
+Callback.addCallback("ItemUse", (c, i, block, isE, player) => {
+    Entity.getSneaking(player) && Game.message(IDRegistry.getNameByID(block.id) + " | " + block.data)
+}); //todo: debug

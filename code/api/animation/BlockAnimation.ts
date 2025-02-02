@@ -16,7 +16,8 @@ class BlockAnimation {
     };
 
     public describe(mesh: RenderMesh | RenderSide<string>, texture: string, scale: number = 1, material?: string): void {
-        return this.animation.describe({
+
+        this.animation.describe({
             mesh: mesh instanceof RenderSide ? mesh.getForTile(this.tile_entity) : mesh,
             skin: "terrain-atlas/" + texture + ".png",
             scale: scale,
@@ -41,12 +42,7 @@ class BlockAnimation {
     };
 
     public destroy(): void {
-        if(this.exists()) {
-            return this.animation.destroy();
-        };
+        return this.animation.destroy();
     };
 
-    public exists(): boolean {
-        return this.animation instanceof Animation.Base; //need !!this.animation if is not work
-    };
 };
