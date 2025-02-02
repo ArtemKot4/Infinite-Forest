@@ -69,8 +69,8 @@ class AncientNote extends ItemForest {
         this.UI.open();
     };
 
-    public whichContains(player: number): Set<string> {
-        let list = new Set<string>();
+    public whichContains(player: number): string[] {
+        let list = [];
         let actor = new PlayerActor(player);
 
         for(let i = 0; i < 36; i++) {
@@ -78,7 +78,7 @@ class AncientNote extends ItemForest {
             if(current.id === this.id) {
                 const text = current.extra && current.extra.getString("text");
                 if(text != null) {
-                    list.add(text);
+                    list.push(text);
                 };
             };
         };
@@ -92,7 +92,7 @@ class AncientNote extends ItemForest {
 
         if(!text) {
             text = MathHelper.randomFromArray(Object.keys(AncientNote.list)
-            .filter((v) => !list.has(v)));
+            .filter((v) => !list.includes(v)));
 
             let extra = new ItemExtraData();
             extra.putString("text", text || "ancient_note.infinite_forest.empty");
@@ -101,6 +101,10 @@ class AncientNote extends ItemForest {
         };
 
         return this.openFor(player, text);
+    };
+
+    public onNoTargetUse(item: ItemStack, player: number): void {
+        return this.onItemUse(null, item, null, player);
     };
 
     public onNameOverride(item: ItemInstance, translation: string, name: string): string {
