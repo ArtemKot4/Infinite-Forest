@@ -15,6 +15,26 @@
                 "en": "If truth, effect scale will show in creative",
                 "ru": "Если включено, отображается шкала эффектов в креативе"
             }
+        },
+        "legacy_sky_color": {
+            "name": {
+                "en": "Legacy sky color",
+                "ru": "Старый цвет неба"
+            },
+            "description": {
+                "en": "If truth, sky color will be like in version mode of 2018 year",
+                "ru": "Если включено, цвет неба будет как в версии мода 2018 года"
+            }
+        },
+        "fireflies_count_around": {
+            "name": {
+                "en": "Fireflies count around",
+                "ru": "Количество светлячков вокруг"
+            },
+            "description": {
+                "en": "Affect on count of fireflies in fireflies forest around player of each 5 ticks",
+                "ru": "Влияет на количество светлячков в светлячковом лесу вокруг игрока на каждые 5 тиков"
+            }
         }
     }
 }

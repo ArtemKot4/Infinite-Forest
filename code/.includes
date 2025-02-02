@@ -1,6 +1,6 @@
 # lib: esnext
 
-parseLang.ts
+langParser.ts
 translations.ts
 
 api/Flags.ts
@@ -21,29 +21,31 @@ api/Factory.ts
 header.ts
 core.ts
 
-item/ItemHandComponent.ts
+api/item/ItemHandComponent.ts
 
-item/ItemForest.ts
+api/item/ItemForest.ts
 
 item/TransferCrystal.ts
 
-block/IBlockModel.ts
-block/BlockModel.ts
+api/block/IBlockModel.ts
+api/block/BlockModel.ts
 
-block/BlockForest.ts
-block/BlockLight.ts
-block/BlockPlant.ts
-block/BlockBush.ts
+api/block/BlockForest.ts
+api/block/BlockLight.ts
+api/block/BlockPlant.ts
+api/block/BlockBush.ts
 
-block/wood/RotatableLog.ts
-block/wood/Log.ts
-block/wood/Bark.ts
-block/wood/Hewn.ts
-block/wood/Planks.ts
+api/block/wood/RotatableLog.ts
+api/block/wood/Log.ts
+api/block/wood/Bark.ts
+api/block/wood/Hewn.ts
+api/block/wood/Planks.ts
 
-block/Fironia.ts
-block/IceFlower.ts
-block/ElectricMushroom.ts
+block/mine/Salt.ts
+
+block/plant/Fironia.ts
+block/plant/IceFlower.ts
+block/plant/ElectricMushroom.ts
 
 block/tile_entity/EucalyptusWorkbench.ts
 

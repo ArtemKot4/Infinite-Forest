@@ -1,6 +1,6 @@
 class WindmillStationTile extends TileEntityBase {
     public defaultValues = {
-        enable: false,
+        enabled: false,
         progress: 0,
         progress_max: 5,
         input_id: 0,
@@ -71,7 +71,7 @@ class WindmillStationTile extends TileEntityBase {
     };
 
     public override onTick(): void {
-        if(!this.data.enable) return;
+        if(!this.data.enabled) return;
 
         if(World.getThreadTime() % 20 === 0) {
             this.setUpperItems();
@@ -83,7 +83,7 @@ class WindmillStationTile extends TileEntityBase {
             };
 
             this.networkData.putInt("input_id", this.data.input_id);
-            this.networkData.putBoolean("enable", this.data.enable);
+            this.networkData.putBoolean("enabled", this.data.enabled);
 
             this.networkData.sendChanges();
 
@@ -105,9 +105,9 @@ class WindmillStationTile extends TileEntityBase {
     public override clientTick(): void {
         if(World.getThreadTime() % 5 === 0) {
             let id = this.networkData.getInt("input_id", 0);
-            const isEnabled = this.networkData.getBoolean("enable", false);
+            const enabled = this.networkData.getBoolean("enabled", false);
 
-            if(!isEnabled) {
+            if(!enabled) {
                 return;
             };
 

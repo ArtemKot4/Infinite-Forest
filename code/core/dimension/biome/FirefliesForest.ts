@@ -9,15 +9,39 @@ class FirefliesForest extends AbstractBiome implements BiomeBehaviour {
 
     public override getPlantList() {
         return {
-            tallgrass: { rarity: 0.99, count: 32 },
-            double_plant: { rarity: 0.4, count: 3 },
-            yellow_flower: { rarity: 0.2, count: 5 },
-            red_flower: { rarity: 0.5, count: 4 },
-            fironia: { rarity: 0.1, count: 3 },
-            ice_flower: { rarity: 0.1, count: 3 },
-            electric_mushroom: { rarity: 0.03, count: 3, tile: true },
-            brown_mushroom: { rarity: 0.01, count: 3 },
-            red_mushroom: { rarity: 0.01, count: 3 }
+            tallgrass: { 
+                rarity: 0.99,
+                count: 32
+            },
+            double_plant: { 
+                rarity: 0.4, 
+                count: 3 
+            },
+            yellow_flower: { 
+                rarity: 0.2, 
+                count: 5 
+            },
+            red_flower: { 
+                rarity: 0.5, 
+                count: 4 
+            },
+            fironia: { 
+                rarity: 0.1, 
+                count: 3 
+            },
+            electric_mushroom: { 
+                rarity: 0.03, 
+                count: 3, 
+                tile: true 
+            },
+            brown_mushroom: { 
+                rarity: 0.01, 
+                count: 3 
+            },
+            red_mushroom: { 
+                rarity: 0.01,
+                count: 3 
+            }
         };
     };
 
@@ -86,7 +110,7 @@ class FirefliesForest extends AbstractBiome implements BiomeBehaviour {
         };
 
         if(position.y < 110) {
-            for(let i = 0; i < 7; i++) {
+            for(let i = 0; i < ConfigManager.FIREFLIES_COUNT_AROUND; i++) {
                 spawnGlowworm(position, MathHelper.randomFromArray(glowwormColors));
             };
         };

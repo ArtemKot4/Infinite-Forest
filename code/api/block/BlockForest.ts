@@ -12,9 +12,31 @@ class BlockForest implements BlockBehavior, IBlockModel {
 
         this.stringID = stringID;
         this.variationList = variationList;
-    }
+
+        this.build();
+    };
+
+    public canRotate() {
+        return false;
+    };
 
     public build() {
+        const canRotate = this.canRotate();
+
+        if(canRotate) {
+            this.variationList.map((v) => {
+                if(v.texture.length < 6) {
+                    for(let i = v.texture.length; i < 6; i++) {
+                        v.texture.push(v.texture[v.texture.length - 1]);
+                    };
+                };
+                return v;
+            });
+            Block.createBlockWithRotation(this.stringID, this.variationList);
+        } else {
+            Block.createBlock(this.stringID, this.variationList);
+        };
+
         BlockRegistry.registerBlockFuncs(this.id, this);
 
         const tags = this.getTags();
@@ -103,19 +125,7 @@ class BlockForest implements BlockBehavior, IBlockModel {
         }
 
         Block.setDestroyLevel(this.id, this.getDestroyLevel());
-    }
-
-    public create(): this {
-        Block.createBlock(this.stringID, this.variationList);
-        this.build();
-        return this;
-    }
-
-    public createWithRotation(): this {
-        Block.createBlockWithRotation(this.stringID, this.variationList);
-        this.build();
-        return this;
-    }
+    };
 
     public setModel(model: BlockModel, data: number): this {
         const render: ICRender.Model = new ICRender.Model();
@@ -124,10 +134,10 @@ class BlockForest implements BlockBehavior, IBlockModel {
         BlockRenderer.setStaticICRender(this.id, data ?? model.getBlockData(), render);
 
         return this;
-    }
+    };
 
     public getID() {
-        return BlockID[this.stringID]
+        return BlockID[this.stringID];
     };
     
     public getModel?(): BlockModel | BlockModel[];

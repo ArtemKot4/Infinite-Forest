@@ -18,12 +18,13 @@ class Fironia extends BlockPlant {
     public spawnFlame(x: number, y: number, z: number) {
         Particles.addParticle(
             EParticleType.FLAME,
-            x + 0.5,
-            y + 0.5, 
-            z + 0.5, 
-            Math.random(), 
-            Math.random(), 
-            Math.random()
+            x + 0.45 + Math.random() / 10,
+            y + 0.75 + Math.random() / 10,
+            z + 0.45 + Math.random() / 10,
+            0,
+            0,
+            0,
+            1
         );
     };
 

@@ -25,8 +25,14 @@ class InfiniteForest {
     };
 
     static {
-        this.dimension.setSkyColor(21 / 255, 96 / 255, 189 / 255);
-        this.dimension.setFogColor(0 / 255, 128 / 255, 0 / 255);
+        let skyColor = [21 / 255, 96 / 255, 189 / 255], fogColor = [0, 128 / 255, 0];
+
+        if(ConfigManager.LEGACY_SKY_COLOR) {
+            skyColor = [.05,.2, .3], fogColor = [0, .6, .3];
+        };
+
+        this.dimension.setSkyColor(skyColor[0], skyColor[1], skyColor[2]);
+        this.dimension.setFogColor(fogColor[0], fogColor[1], fogColor[2]);
         this.dimension.setHasSkyLight(false);
 
         this.addLayer({

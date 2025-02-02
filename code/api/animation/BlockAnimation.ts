@@ -47,6 +47,6 @@ class BlockAnimation {
     };
 
     public exists(): boolean {
-        return !!this.animation;
+        return this.animation instanceof Animation.Base; //need !!this.animation if is not work
     };
 };

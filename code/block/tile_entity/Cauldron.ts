@@ -131,7 +131,7 @@ class Cauldron extends BlockForest {
     };
 
     public getModel(): BlockModel | BlockModel[] {
-        return new BlockModel("block/iron_cauldron", "iron_cauldron");
+        return new BlockModel("iron_cauldron", "iron_cauldron");
     };
 
     public getTileEntity(): TileEntityBase {

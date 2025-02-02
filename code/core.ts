@@ -6,28 +6,28 @@ function range(min: number, max: number): number[] {
     }
 
     return list;
-}
+};
 
 function parseBlockID(id: string): number {
     return BlockID[id] || VanillaBlockID[id];
-}
+};
 
 function parseItemID(id: string): number {
     return ItemID[id] || VanillaItemID[id];
-}
+};
 
 function parseID(id: string): number {
     return parseBlockID(id) ?? parseItemID(id);
-}
+};
 
 function randomInt(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+};
 
 const enum EBiomeState {
     BALANCE,
     COLD,
-    FIRE,
+    FIRE
 };
 
 type PartialItemInstance = Partial<ItemInstance>;

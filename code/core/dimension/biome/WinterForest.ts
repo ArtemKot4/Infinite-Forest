@@ -8,7 +8,20 @@ class WinterForest extends AbstractBiome implements BiomeBehaviour {
     };
 
     public override getPlantList() {
-        return null;
+        return {
+            "tallgrass:2": {
+                rarity: 0.4,
+                count: 32
+            },
+            "tallgrass": { 
+                rarity: 0.99,
+                count: 32
+            },
+            "ice_flower": { 
+                rarity: 0.1, 
+                count: 3 
+            }
+        };
     };
 
     public override getRuntimeSkyColor(): RGB {

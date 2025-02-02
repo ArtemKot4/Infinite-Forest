@@ -2,7 +2,7 @@ class WindmillBladesTile extends TileEntityBase {
     public static render_side: RenderSide<string> = new RenderSide("block/mill_blades");
 
     public defaultValues = {
-        enable: true, //false
+        enabled: false, //false
         speed: 0.05
     };
 
@@ -21,15 +21,30 @@ class WindmillBladesTile extends TileEntityBase {
         return;
     };
 
+    public override onLoad(): void {
+        const tile = this.getStationTile();
+
+        if(!tile) {
+            this.blockSource.destroyBlock(this.x, this.y, this.z, true);
+            this.selfDestroy();
+            return;
+        };
+
+        this.data.enabled = true;
+
+        this.networkData.putBoolean("enabled", this.data.enabled);
+        this.networkData.sendChanges();
+    }
+
     public override clientUnload(): void {
         this.animation.destroy();
     };
 
     public override clientTick(): void {
-        const isEnabled = this.networkData.getBoolean("enable", false);
+        const enabled = this.networkData.getBoolean("enabled", false);
         const speed = this.networkData.getFloat("speed", 0.2);
 
-        if(!isEnabled || !this.animation.exists()) {
+        if(!enabled || !this.animation.exists()) {
             return;
         };
 
@@ -53,7 +68,7 @@ class WindmillBladesTile extends TileEntityBase {
         if(World.getThreadTime() % 60 === 0) {
             const currentWeather = World.getWeather();
 
-            this.networkData.putBoolean("enable", this.data.enable);
+            this.networkData.putBoolean("enabled", this.data.enabled);
             this.networkData.putFloat("speed", currentWeather.rain > 0 ? this.data.speed * 2 : this.data.speed);
 
             this.switchStationMode(true);
@@ -72,7 +87,7 @@ class WindmillBladesTile extends TileEntityBase {
         const stationTile = this.getStationTile();
 
         if(stationTile != null) {
-            stationTile.data.enable = value;
+            stationTile.data.enabled = value;
         };                                         
     };
 
@@ -125,6 +140,10 @@ class WindmillBlades extends BlockForest {
 
     public getTileEntity(): TileEntityBase {
         return new WindmillBladesTile();
+    };
+
+    public canRotate(): boolean {
+        return true;
     };
 };
 

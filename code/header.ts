@@ -314,10 +314,10 @@ Network.addClientPacket("packet.infinite_forest.send_particle", (data: IParticle
 })
   
 function spawnFire(coords) {
-    var xz = ParticleHelper.getMinDistance(3, 10);
-    var x = xz.x;
-    var y = ParticleHelper.random(0, 1);
-    var z = xz.z;
+    const xz = ParticleHelper.getMinDistance(3, 10);
+    const x = xz.x;
+    const y = ParticleHelper.random(0, 1);
+    const z = xz.z;
 
     return Particles.addParticle(
         EParticleType.FLAME,
@@ -331,14 +331,15 @@ function spawnFire(coords) {
 };
   
 function spawnGlowworm(coords: Vector, color: EForestParticle) {
-    var xz = ParticleHelper.getMinDistance(30, 80);
-    var x = xz.x;
-    var y = ParticleHelper.random(0, 1);
-    var z = xz.z;
-    var xz = ParticleHelper.getMinDistance(3, 5);
-    var xV = xz.x / 80;
-    var yV = ParticleHelper.random(3, 5) / 600;
-    var zV = xz.z / 80;
+    let xz = ParticleHelper.getMinDistance(30, 80);
+    const x = xz.x;
+    const y = ParticleHelper.random(0, 1);
+    const z = xz.z;
+    
+    xz = ParticleHelper.getMinDistance(3, 5);
+    const xV = xz.x / 80;
+    const yV = ParticleHelper.random(3, 5) / 600;
+    const zV = xz.z / 80;
 
     return Particles.addParticle(
         color,
@@ -371,6 +372,14 @@ namespace ForestGenerator {
 
 namespace ConfigManager {
     export const EFFECT_SCALE_IN_CREATIVE = __config__.getBool("effect_scale_in_creative");
+    export const LEGACY_SKY_COLOR = __config__.getBool("legacy_sky_color");
+    export const FIREFLIES_COUNT_AROUND = __config__.getInteger("fireflies_count_around") || 7;
+};
+
+namespace ToolAPI {
+    export function isAxe(id: number): boolean {
+        return ToolAPI.getToolData(id)?.blockMaterials?.["wood"]
+    };
 };
 
 type NativeRendererTransform = com.zhekasmirnov.innercore.api.NativeRenderer.Transform;
