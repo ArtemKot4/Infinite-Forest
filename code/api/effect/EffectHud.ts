@@ -1,11 +1,24 @@
 class EffectHud {
-    public constructor(
-        public icon: string, 
-        public scale_bitmap: string, 
-        public scale_bitmap_background: string = "effect.default_scale_background"
-    ) {};
+    public static list: Record<string, EffectHud> = {};
 
-    public static UI: UI.Window = (() => {
+    public static count: number = 1;
+
+    public static increaseCount() {
+        this.count++;
+    };
+
+    public static decreaseCount() {
+        this.count = Math.max(1, this.count-1);
+    };
+
+    public constructor(
+        public icon: string,
+        public scale_bitmap: string,
+        public scale_bitmap_background: string = "effect.default_scale_background") {
+        EffectHud.list[icon] = this;
+    };
+
+    public UI: UI.Window = (() => {
         const window = new UI.Window();
         window.setAsGameOverlay(true);
         window.setTouchable(false);
@@ -13,25 +26,19 @@ class EffectHud {
         return window;
     })();
 
-    public static container: UI.Container = new UI.Container();
+    public container: UI.Container = new UI.Container();
 
     public static BORDER_SCALE: number = 3.3;
 
     public static HORIZONTAL_POSITION: number = UI.getScreenHeight() / 2 + 195;
 
-    public static VERTICAL_POSITION: number = 35;
+    public static VERTICAL_POSITION: number = 15;
 
-    public static openWith(hud: EffectHud) {
-        if(this.isOpened()) {
-            return;
-        };
-
+    public open(): void {
         const content = {
             location: {
-                // width: 400,
-                // height: 200,
-                x: this.HORIZONTAL_POSITION,
-                y: this.VERTICAL_POSITION
+                x: EffectHud.HORIZONTAL_POSITION,
+                y: EffectHud.VERTICAL_POSITION + 20 * EffectHud.count
             },
             drawing: [
                 {
@@ -41,11 +48,11 @@ class EffectHud {
                 {
                     type: "bitmap",
                     bitmap: "effect.border",
-                    scale: this.BORDER_SCALE,
+                    scale: EffectHud.BORDER_SCALE,
                 },
                 {
                     type: "bitmap",
-                    bitmap: hud.icon,
+                    bitmap: this.icon,
                     x: 10,
                     y: 5,
                     width: 9 * 3.7,
@@ -57,7 +64,7 @@ class EffectHud {
                     y: 8,
                     width: 76 * 3,
                     height: 9 * 3,
-                    bitmap: hud.scale_bitmap_background
+                    bitmap: this.scale_bitmap_background
                 }
             ],
             elements: {
@@ -68,7 +75,7 @@ class EffectHud {
                     width: 76 * 3,
                     height: 9 * 3,
                     direction: 0,
-                    bitmap: hud.scale_bitmap
+                    bitmap: this.scale_bitmap
                 }
             }
         } satisfies UI.WindowContent;
@@ -76,23 +83,75 @@ class EffectHud {
         this.UI.setContent(content);
         this.UI.forceRefresh();
 
-        this.container.openAs(this.UI);
+        if(!this.isOpened()) this.container.openAs(this.UI);
+        EffectHud.increaseCount();
     };
 
-    public static isOpened(): boolean {
+    public close() {
+        this.container.close();
+        EffectHud.decreaseCount();
+    };
+
+    public isOpened(): boolean {
         return this.container.isOpened();
     };
 
-    public static setScale(value: number, max: number) {
-        this.container.setScale("scale", value / max);
+    public setScale(value: number, max: number) {
+        return this.container.setScale("scale", value / max);
     };
 
-    public static clear() {
+    public clear() {
         this.setScale(0, 0);
 
         if(this.isOpened()) {
             this.UI.layout.setAlpha(0);
         };
+    };
+
+    public init() {
+        if(this.isOpened()) {
+            return;
+        };
+
+        if(!ConfigManager.EFFECT_SCALE_IN_CREATIVE && Utils.isCreativePlayer(Player.getLocal())) {
+            return;
+        };
+
+        this.open();
+        this.clear();
+
+        const self = this;
+        
+
+        Updatable.addLocalUpdatable({
+            update() {        
+                const data = Effect.clientData[self.icon];
+
+                self.setScale(data.progress, data.progress_max);
+
+                const alpha = self.UI.layout.getAlpha();
+                    
+                if(data.timer > 0) {
+
+                    if(alpha < 1) {
+                        self.UI.layout.setAlpha(alpha + 0.05);
+                    };
+
+                };
+
+                if(data.timer <= 0 && data.progress <= 0) {
+
+                    if(alpha > 0) {
+                        self.UI.layout.setAlpha(alpha - 0.05);
+                    } else {
+                        self.close();
+                        this.remove = true;
+                    };
+
+                };
+            }
+        });
+        return;
     };
     
 };

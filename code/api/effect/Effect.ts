@@ -1,4 +1,18 @@
+interface IClientEffectData {
+    timer: number;
+    progress: number;
+    progress_max: number;
+}
+
 abstract class Effect {
+    public static list: Record<string, Effect> = {};
+
+    public constructor() {
+        Effect.list[this.getHud().icon] = this;
+    };
+
+    public static clientData: { [name: string]: IClientEffectData } = {};
+
     public static readonly TIMER_MAX: number = 5;
 
     abstract readonly progress_max: number;
@@ -13,13 +27,33 @@ abstract class Effect {
 
     public isLocked: boolean = false;
 
+    public sendDataFor(player: number, progress_max: number): void {
+        const client = Network.getClientForPlayer(player);
+        if(client) {
+            client.send("packet.infinite_forest.effect_data_sync_for_client", {
+                scale: this.getHud().icon,
+                timer: this.timer,
+                progress: this.progress,
+                progress_max: progress_max
+            });
+        };
+    };
+
+    public openHudFor(player: number) {
+        const client = Network.getClientForPlayer(player);
+        if(client) {
+            client.send("packet.infinite_forest.effect_scale_open", {
+                name: this.getHud().icon
+            });
+        };
+        return;
+    }
+
     public init(player: number, unique_progress_max?: number): void {
 
         this.timer = Effect.TIMER_MAX;
 
-        if(this.isLocked || EffectHud.isOpened() || 
-            (!ConfigManager.EFFECT_SCALE_IN_CREATIVE && Utils.isCreativePlayer(player))
-        ) {
+        if(this.isLocked === true) {
             return;
         };
 
@@ -27,69 +61,43 @@ abstract class Effect {
 
         this.progress = 0;
 
-        EffectHud.openWith(this.getHud());        
-        EffectHud.clear();
+        const progress_max = unique_progress_max ? Math.floor(unique_progress_max) : this.progress_max;
+
+        this.sendDataFor(player, progress_max);
+        this.openHudFor(player);
 
         const self = this;
 
-        const progress_max = unique_progress_max ? ~~(unique_progress_max) : this.progress_max;
-
-        Updatable.addLocalUpdatable({
+        Updatable.addUpdatable({
             update() {
+                self.sendDataFor(player, progress_max);
+
                 const time = World.getThreadTime();
 
-
                 if(time % 20 === 0 && self.timer > 0) {
-                    self.timer = self.timer - 1;
+                    self.timer -= 1;
                 };
 
-                const alpha = EffectHud.UI.layout.getAlpha();
-
-                if(self.timer > 0) {
-
-                    if(alpha < 1) {
-                        EffectHud.UI.layout.setAlpha(alpha + 0.05);
-                    };
-
-                    if(self.progress <= progress_max) {
-                        EffectHud.setScale(self.progress, progress_max);
-                        self.progress += 1;
-                    };
-
+                if(self.timer > 0 && self.progress <= progress_max) {
+                    self.progress += 1;
                 };
 
                 if(self.timer <= Math.floor(Effect.TIMER_MAX / 2) && self.progress > 0) {
-                    EffectHud.setScale(self.progress, progress_max);
                     self.progress -= 1;
-                };
-
-                if(self.timer <= 0 && self.progress <= 0) {
-
-                    if(alpha > 0) {
-                        EffectHud.UI.layout.setAlpha(alpha - 0.05);
-                    } else {
-                        EffectHud.container.close();
-                    
-                        self.isLocked = false;
-                        this.remove = true;
-                    };
-                };
-            }
-        });
-
-        Updatable.addUpdatable({
-            update() {
-                if(World.getThreadTime() % 60 === 0 && !self.isLocked) {
-                    this.remove = true;
                 };
    
                 if(self.progress >= progress_max) {
-                    return self.onTick(player);
+                    self.onTick(player);
                 };
+
+                if(time % 60 === 0 && self.timer <= 0 && self.progress <= 0) {
+                    self.isLocked = false;
+                    this.remove = true;
+                };
+
+                return;
             }
         });
-
-        return;
     };
 
 };
@@ -106,14 +114,35 @@ class WinterEffect extends Effect {
     };
 };
 
-class ElectricEffect extends Effect {
-    public override progress_max: number = 50;
+// class ElectricEffect extends Effect {
+//     public override progress_max: number = 50;
 
-    public override onTick(player: number): void {
-        Entity.damageEntity(player, 3);
+//     public override onTick(player: number): void {
+//         Entity.damageEntity(player, 3);
+//     };
+
+//     public override getHud(): EffectHud {
+//         return new EffectHud("effect.electric_icon", "effect.electric_scale");
+//     };
+// };
+
+Network.addClientPacket("packet.infinite_forest.effect_data_sync_for_client", (data: { scale: string } & IClientEffectData) => {
+    Effect.clientData[data.scale] = {
+        timer: data.timer,
+        progress: data.progress,
+        progress_max: data.progress_max
     };
+    return;
+});
 
-    public override getHud(): EffectHud {
-        return new EffectHud("effect.electric_icon", "effect.electric_scale");
-    }
-}
+Network.addClientPacket("packet.infinite_forest.effect_scale_open", (data: { name: string }) => {
+    return EffectHud.list[data.name].init();
+});
+
+Callback.addCallback("EntityDeath", (entity) => {
+    if(Entity.getType(entity) === Native.EntityType.PLAYER) {
+        for(const i in Effect.list) {
+            Effect.list[i].timer = 0;
+        };
+    };
+});

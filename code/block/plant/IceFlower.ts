@@ -26,11 +26,23 @@ class IceFlower extends BlockPlant {
     };
 
     public onDestroyContinue(coords: Callback.ItemUseCoordinates, block: Tile, progress: number): void {
-        EffectList.WINTER.init(Player.getLocal(), 50);
+        Network.sendToServer("packet.infinite_forest.ice_flower.winter_effect_if_valid_condition", {
+            coords
+        });
+        return;
     };
 
     public getDestroyTime(): number {
         return 20;
-    }
+    };
 
-}
+};
+
+Network.addServerPacket("packet.infinite_forest.ice_flower.winter_effect_if_valid_condition", (client, data: { coords: Callback.ItemUseCoordinates }) => {
+    const blockSource = BlockSource.getDefaultForActor(client.getPlayerUid());
+    const blockID = blockSource.getBlockID(data.coords.x, data.coords.y, data.coords.z);
+    
+    if(blockID === BlockList.ICE_FLOWER.id) {
+        EffectList.WINTER.init(client.getPlayerUid(), 50);
+    };
+});
