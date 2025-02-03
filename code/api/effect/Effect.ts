@@ -47,7 +47,11 @@ abstract class Effect {
             });
         };
         return;
-    }
+    };
+
+    public onInit?(player: number, progress_max: number): void;
+
+    public onEnd?(player: number, progress_max: number): void;
 
     public init(player: number, unique_progress_max?: number): void {
 
@@ -62,6 +66,10 @@ abstract class Effect {
         this.progress = 0;
 
         const progress_max = unique_progress_max ? Math.floor(unique_progress_max) : this.progress_max;
+
+        if("onInit" in this) {
+            this.onInit(player, progress_max)
+        };
 
         this.sendDataFor(player, progress_max);
         this.openHudFor(player);
@@ -91,6 +99,11 @@ abstract class Effect {
                 };
 
                 if(time % 60 === 0 && self.timer <= 0 && self.progress <= 0) {
+                    
+                    if("onEnd" in this) {
+                        this.onEnd(player, progress_max);
+                    };
+
                     self.isLocked = false;
                     this.remove = true;
                 };
@@ -101,30 +114,6 @@ abstract class Effect {
     };
 
 };
-
-class WinterEffect extends Effect {
-    public override progress_max: number = 80;
-
-    public override onTick(player: number): void {
-        Entity.damageEntity(player, 1);
-    };
-
-    public override getHud(): EffectHud {
-        return new EffectHud("effect.winter_icon", "effect.winter_scale");
-    };
-};
-
-// class ElectricEffect extends Effect {
-//     public override progress_max: number = 50;
-
-//     public override onTick(player: number): void {
-//         Entity.damageEntity(player, 3);
-//     };
-
-//     public override getHud(): EffectHud {
-//         return new EffectHud("effect.electric_icon", "effect.electric_scale");
-//     };
-// };
 
 Network.addClientPacket("packet.infinite_forest.effect_data_sync_for_client", (data: { scale: string } & IClientEffectData) => {
     Effect.clientData[data.scale] = {
@@ -142,7 +131,9 @@ Network.addClientPacket("packet.infinite_forest.effect_scale_open", (data: { nam
 Callback.addCallback("EntityDeath", (entity) => {
     if(Entity.getType(entity) === Native.EntityType.PLAYER) {
         for(const i in Effect.list) {
-            Effect.list[i].timer = 0;
+            const effect = Effect.list[i];
+            effect.timer = 0;
+            effect.progress = 0;
         };
     };
 });

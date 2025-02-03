@@ -56,6 +56,9 @@ block/tile_entity/wind_mill/WindmillBlades.ts
 block/tile_entity/Bottle.ts
 block/tile_entity/Cauldron.ts
 
+effect/WinterEffect.ts
+effect/CalmingEffect.ts
+
 EffectList.ts
 
 core/dimension/biome/BiomeBehaviour.ts
