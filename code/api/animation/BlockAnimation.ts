@@ -18,7 +18,7 @@ class BlockAnimation {
     public describe(mesh: RenderMesh | RenderSide<string>, texture: string, scale: number = 1, material?: string): void {
 
         this.animation.describe({
-            mesh: mesh instanceof RenderSide && this.tile_entity ? mesh.getForTile(this.tile_entity) : mesh,
+            mesh: mesh instanceof RenderSide ? mesh.getForTile(this.tile_entity) : mesh,
             skin: "terrain-atlas/" + texture + ".png",
             scale: scale,
             ...(material && { material }),

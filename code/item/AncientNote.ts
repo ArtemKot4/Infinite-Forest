@@ -91,8 +91,15 @@ class AncientNote extends ItemForest {
         let text = item.extra && item.extra.getString("text");
 
         if(!text) {
-            text = MathHelper.randomFromArray(Object.keys(AncientNote.list)
-            .filter((v) => !list.includes(v)));
+            let unique_records = [];
+
+            for(const name in AncientNote.list) {
+                if(!list.includes(name)) {
+                    unique_records.push(name);
+                };
+            };
+
+            text = MathHelper.randomFromArray(unique_records);
 
             let extra = new ItemExtraData();
             extra.putString("text", text || "ancient_note.infinite_forest.empty");
@@ -125,10 +132,11 @@ class AncientNote extends ItemForest {
             name: "ancient_note",
             meta: 0 
         }, 1);
+        this.setupAllToCreative();
     };
 
     public inCreative(): boolean {
-        return false;
+        return true;
     };
 };
 
@@ -138,8 +146,8 @@ Translation.addTranslation("ancient_note.infinite_forest.empty", {
 });
 
 Translation.addTranslation("ancient_note.infinite_forest.contains", {
-    en: "This note contains: ",
-    ru: "Эта записка содержит: "
+    en: "Record: ",
+    ru: "Запись: "
 })
 
 AncientNote.add("unity_with_nature");
