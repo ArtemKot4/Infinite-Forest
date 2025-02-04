@@ -9,6 +9,14 @@ class WindmillBladesTile extends TileEntityBase {
     public data: typeof this.defaultValues;
 
     public animation!: BlockAnimation;
+
+    @NetworkEvent(Side.Client)
+    public breakParticlePacket() {
+        for(let i = 0; i < 3; i++) {
+            Particles.addParticle(EParticleType.CLOUD, this.x + 0.5, this.y + 0.5, this.z + 0.5, 0, 0.02, 0);
+        };
+        return;
+    };
     
     public override clientLoad(): void {
         this.animation = new BlockAnimation(
@@ -21,27 +29,44 @@ class WindmillBladesTile extends TileEntityBase {
         return;
     };
 
+    public initDestroy() {
+        this.blockSource.destroyBlock(this.x, this.y, this.z, true);
+        this.selfDestroy();
+        return;
+    };
+
     public override onLoad(): void {
-        const tile = this.getStationTile();
+        const stationTile = this.getStationTile();
         const height = this.findHeight();
 
-        if(!tile || height < 10) {
-            this.blockSource.destroyBlock(this.x, this.y, this.z, true);
-            this.selfDestroy();
+        if(!stationTile || height < 10) {
+            this.sendPacket("breakParticlePacket", {});
+            this.initDestroy();
             return;
         };
 
-        this.data.enabled = true;
+        if(Utils.getBiomeState(this.x, this.z, this.blockSource) !== EBiomeState.COLD) {
+            this.data.enabled = true;
+        };
 
         this.networkData.putBoolean("enabled", this.data.enabled);
         this.networkData.sendChanges();
-    }
+    };
 
     public override clientUnload(): void {
         this.animation && this.animation.destroy();
     };
 
     public override clientTick(): void {
+
+        if(World.getThreadTime() % 60 === 0) {
+            const height = this.networkData.getInt("height", 0);
+
+            if(height < 10) {
+                return;
+            };
+        };
+        
         const enabled = this.networkData.getBoolean("enabled", false);
         const speed = this.networkData.getFloat("speed", 0.2);
 
@@ -67,12 +92,20 @@ class WindmillBladesTile extends TileEntityBase {
 
     public override onTick(): void {
         if(World.getThreadTime() % 60 === 0) {
+            const height = this.findHeight();
             const currentWeather = World.getWeather();
 
             this.networkData.putBoolean("enabled", this.data.enabled);
             this.networkData.putFloat("speed", currentWeather.rain > 0 ? this.data.speed * 2 : this.data.speed);
+            this.networkData.putInt("height", height);
+            
+            const stationTile = this.getStationTile();
 
-            this.switchStationMode(true);
+            if(stationTile !== null) {
+                stationTile.data.height = height;
+            };
+
+            this.switchStationMode(this.data.enabled);
 
             this.networkData.sendChanges();
             return;
@@ -89,7 +122,10 @@ class WindmillBladesTile extends TileEntityBase {
 
         if(stationTile != null) {
             stationTile.data.enabled = value;
-        };                                         
+            stationTile.networkData.putBoolean("enabled", value);
+            stationTile.networkData.sendChanges()
+        };                 
+        return;                        
     };
 
     public getStationTile(): Nullable<WindmillStationTile & TileEntity> {

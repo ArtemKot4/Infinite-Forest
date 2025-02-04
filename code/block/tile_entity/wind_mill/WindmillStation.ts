@@ -2,9 +2,10 @@ class WindmillStationTile extends TileEntityBase {
     public defaultValues = {
         enabled: false,
         progress: 0,
-        progress_max: 5,
+        progress_max: 10,
         input_id: 0,
-        input_count: 0
+        input_count: 0,
+        height: 0
     };
 
     public data: typeof this.defaultValues;
@@ -82,6 +83,12 @@ class WindmillStationTile extends TileEntityBase {
                 return this.drop(this.data.input_id);
             };
 
+            const currentWeather = World.getWeather();
+
+            const progress_count = (
+                Math.floor(currentWeather.rain / 3) + Math.floor(currentWeather.thunder / 3)
+            ) + Math.min(7, this.data.height / 10);
+
             this.networkData.putInt("input_id", this.data.input_id);
             this.networkData.putBoolean("enabled", this.data.enabled);
 
@@ -89,7 +96,7 @@ class WindmillStationTile extends TileEntityBase {
 
             BlockList.WINDMILL_STATION.factory.forEach((result, input) => {
                 if(this.data.input_id === input) {
-                    this.data.progress += 1;
+                    this.data.progress += progress_count;
                 };
 
                 if(this.data.progress >= this.data.progress_max) {
@@ -104,7 +111,7 @@ class WindmillStationTile extends TileEntityBase {
 
     public override clientTick(): void {
         if(World.getThreadTime() % 5 === 0) {
-            let id = this.networkData.getInt("input_id", 0);
+            const id = this.networkData.getInt("input_id", 0);
             const enabled = this.networkData.getBoolean("enabled", false);
 
             if(!enabled) {
