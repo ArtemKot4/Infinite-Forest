@@ -1,7 +1,7 @@
 class ElectricMushroomTile extends TileEntityBase {
     public override clientTick() {
         if(World.getThreadTime() % 5 === 0) {
-            spawnElectric(this.x + 0.5, this.y + 0.4, this.z + 0.5);
+            ParticleHelper.spawnElectric(this.x + 0.5, this.y + 0.4, this.z + 0.5);
         };
     };
 }

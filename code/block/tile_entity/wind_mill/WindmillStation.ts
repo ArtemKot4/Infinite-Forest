@@ -111,7 +111,7 @@ class WindmillStationTile extends TileEntityBase {
                 return;
             };
 
-            spawnElectric(this.x + 0.5, this.y + 1.05, this.z + 0.5);
+            ParticleHelper.spawnElectric(this.x + 0.5, this.y + 1.05, this.z + 0.5);
 
             if(id != 0) {
                 for(let i = 0; i < 3; i++) {

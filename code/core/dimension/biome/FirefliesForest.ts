@@ -106,12 +106,12 @@ class FirefliesForest extends AbstractBiome implements BiomeBehaviour {
         };
 
         if(time % 15 === 0 && position.y <= 100) {
-            spawnFire(position);
+            ParticleHelper.spawnFire(position);
         };
 
         if(position.y < 110) {
             for(let i = 0; i < ConfigManager.FIREFLIES_COUNT_AROUND; i++) {
-                spawnGlowworm(position, MathHelper.randomFromArray(glowwormColors));
+                ParticleHelper.spawnGlowworm(position, MathHelper.randomFromArray(glowwormColors));
             };
         };
     };
