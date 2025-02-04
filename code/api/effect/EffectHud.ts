@@ -122,8 +122,10 @@ class EffectHud {
 
         const self = this;
 
-        Updatable.addLocalUpdatable({
-            update() {        
+        Threading.initThread("thread.infinite_forest.effect_scale", () => {
+            while(true) {
+                java.lang.Thread.sleep(50);
+
                 const data = Effect.clientData[self.icon];
 
                 self.setScale(data.progress, data.progress_max);
@@ -144,12 +146,41 @@ class EffectHud {
                         self.UI.layout.setAlpha(alpha - 0.05);
                     } else {
                         self.close();
-                        this.remove = true;
+                        return;
                     };
 
                 };
-            }
+            };
         });
+
+        // Updatable.addLocalUpdatable({
+        //     update() {        
+        //         const data = Effect.clientData[self.icon];
+
+        //         self.setScale(data.progress, data.progress_max);
+
+        //         const alpha = self.UI.layout.getAlpha();
+                    
+        //         if(data.timer > 0) {
+
+        //             if(alpha < 1) {
+        //                 self.UI.layout.setAlpha(alpha + 0.05);
+        //             };
+
+        //         };
+
+        //         if(data.timer <= 0 && data.progress <= 0) {
+
+        //             if(alpha > 0) {
+        //                 self.UI.layout.setAlpha(alpha - 0.05);
+        //             } else {
+        //                 self.close();
+        //                 this.remove = true;
+        //             };
+
+        //         };
+        //     }
+        // });
         return;
     };
     
