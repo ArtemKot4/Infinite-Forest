@@ -76,6 +76,9 @@ class ObjectPlayer {
      
     public effectList: Record<string, IEffectData> = {};
 
+    /**
+     * Server function to get effect object;
+     */
     public getEffect(name: string): IEffectData {
         return this.effectList[name] ??= {
             progress: 0,
@@ -83,6 +86,12 @@ class ObjectPlayer {
             timer: 0
         };
     };
+
+    /**
+     * Server function to update effect object;
+     * @param name of effect;
+     * @param data different data of effect; All is optional, e.g. it is assigning new data with previous data
+     */
 
     public setEffect(name: string, data: Partial<IEffectData>) {
         const previousData = this.effectList[name] || {

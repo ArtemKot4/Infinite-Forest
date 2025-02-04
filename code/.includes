@@ -18,8 +18,10 @@ api/animation/BlockAnimation.ts
 
 api/Factory.ts
 
+particles.ts
 header.ts
 core.ts
+
 
 api/item/ItemHandComponent.ts
 

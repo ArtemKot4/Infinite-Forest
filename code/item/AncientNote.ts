@@ -5,6 +5,12 @@ class AncientNote extends ItemForest {
      */
     public static list: Record<string, Nullable<string>> = {};
 
+    /**
+     * Function to add new various of ancient note text
+     * @param text is the text of the note
+     * @param learning is the learning name
+     */
+
     public static add(text: string, learning: string = null) {
         AncientNote.list[text] = learning;
     };
@@ -170,7 +176,7 @@ Network.addServerPacket("packet.infinite_forest.ancient_note.send_learning", (cl
         };
 
         if(text === data.text) {
-            ObjectPlayer.addLearning(player,learning);
+            return ObjectPlayer.addLearning(player,learning);
         };
     };
 });

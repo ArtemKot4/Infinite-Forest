@@ -50,7 +50,7 @@ const IllegalArgumentException = java.lang.IllegalArgumentException;
 const NoSuchFieldException = java.lang.NoSuchFieldException;
 
 namespace MathHelper {
-    export function randomFrom<T>(...elements: T[]) {
+    export function randomFrom<T>(...elements: T[]): T {
         return elements[Math.floor(Math.random() * elements.length)];
     };
 
