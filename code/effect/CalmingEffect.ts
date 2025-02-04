@@ -9,9 +9,7 @@ class CalmingEffect extends Effect {
     };
 
     public override onTick(player: number): void {
-        if(World.getThreadTime() % 20 === 0) {
-            Entity.addEffect(player, EPotionEffect.REGENERATION, 3, 20, true, true);
-        };
+        Entity.addEffect(player, EPotionEffect.REGENERATION, 3, 5, true, true);
     };
 
     public override getHud(): EffectHud {

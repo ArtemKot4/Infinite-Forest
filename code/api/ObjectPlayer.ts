@@ -10,6 +10,13 @@ interface IPlayerPage {
     text: string
 };
 
+interface IEffectData {
+    timer: number;
+    progress: number;
+    progress_max: number;
+    isLocked?: boolean;
+};
+
 interface Learning {
     name: string
 };
@@ -58,10 +65,34 @@ class ObjectPlayer {
     public reflectionList: { [reflection: string]: IPlayerReflection } = {};
 
     /**
-     * list of player self pages. Key is name of page, value is object with title, subtitle, text;
+     * list of player recorded pages. Key is name of page, value is object with title, subtitle, text;
      */
 
-    public pagesMyself: IPlayerPage[] = [];
+    public recordList: IPlayerPage[] = [];
+
+    /**
+     * list of player effects. Key is name of effect, value is object with timer, progress, progress_max, isLocked;
+     */
+     
+    public effectList: Record<string, IEffectData> = {};
+
+    public getEffect(name: string): IEffectData {
+        return this.effectList[name] ??= {
+            progress: 0,
+            progress_max: 100,
+            timer: 0
+        };
+    };
+
+    public setEffect(name: string, data: Partial<IEffectData>) {
+        const previousData = this.effectList[name] || {
+            progress: 0,
+            progress_max: 100,
+            timer: 0
+        } satisfies IEffectData;
+
+        this.effectList[name] = Object.assign(previousData, data);
+    };
 
     /**
      * Server function to append list of players;
@@ -212,10 +243,10 @@ class ObjectPlayer {
      * @param text text of page;
      */
 
-    public static addMyPage(id: number, title: string, subtitle: string, text: string): void {
+    public static addRecord(id: number, title: string, subtitle: string, text: string): void {
         const player = this.getOrCreate(id);
 
-        player.pagesMyself.push({
+        player.recordList.push({
             title,
             subtitle,
             text
@@ -288,7 +319,7 @@ Network.addServerPacket("packet.infinite_forest.add_reflection_player", (client:
 });
 
 Network.addServerPacket("packet.infinite_forest.add_my_page_player", (client: NetworkClient, data: { id: number, title: string, subtitle: string, text: string }) => {
-    return ObjectPlayer.addMyPage(data.id, data.title, data.subtitle, data.text);
+    return ObjectPlayer.addRecord(data.id, data.title, data.subtitle, data.text);
 });
 
 Callback.addCallback("ServerPlayerLoaded", (player) => {

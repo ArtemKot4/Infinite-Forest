@@ -9,7 +9,7 @@ class AncientNote extends ItemForest {
         AncientNote.list[text] = learning;
     };
 
-    public UI: UI.Window = (() => {
+    public static UI: UI.Window = (() => {
         const window = new UI.Window({
             drawing: [
                 {
@@ -51,22 +51,12 @@ class AncientNote extends ItemForest {
     })();
 
     public openFor(player: number, text: string) {
-        const content = this.UI.getContent();
-
-        content.elements.text.text = UIHelper.separateText(Translation.translate(`ancient_note.infinite_forest.${text}`));
-        content.elements.closeButton.clicker.onClick = (position, container) => {
-            let learning = AncientNote.list[text];
-
-            if(learning != null) {
-                ObjectPlayer.addLearning(player, learning)
-            };
-            this.UI.close();
-            return;
+        const client = Network.getClientForPlayer(player);
+        if(client) {
+            client.send("packet.infinite_forest.ancient_note.open_ui", {
+                text
+            });
         };
-
-        this.UI.setContent(content);
-        this.UI.forceRefresh();
-        this.UI.open();
     };
 
     public whichContains(player: number): string[] {
@@ -99,10 +89,10 @@ class AncientNote extends ItemForest {
                 };
             };
 
-            text = MathHelper.randomFromArray(unique_records);
+            text = MathHelper.randomFromArray(unique_records || ["ancient_note.infinite_forest.empty"]);
 
             let extra = new ItemExtraData();
-            extra.putString("text", text || "ancient_note.infinite_forest.empty");
+            extra.putString("text", text);
 
             Entity.setCarriedItem(player, this.id, 1, 0, extra);
         };
@@ -140,6 +130,51 @@ class AncientNote extends ItemForest {
     };
 };
 
+Network.addClientPacket("packet.infinite_forest.ancient_note.open_ui", (data: {
+    text: string
+}) => {
+    if(AncientNote.UI.isOpened()) return;
+
+    const content = AncientNote.UI.getContent();
+
+    content.elements.text.text = UIHelper.separateText(Translation.translate(`ancient_note.infinite_forest.${data.text}`));
+
+    content.elements.closeButton.clicker.onClick = (position, container) => {
+        AncientNote.UI.close();
+        Network.sendToServer("packet.infinite_forest.ancient_note.send_learning", data);
+        return;
+    };
+
+    AncientNote.UI.setContent(content);
+    AncientNote.UI.forceRefresh();
+    AncientNote.UI.open();
+});
+
+Network.addServerPacket("packet.infinite_forest.ancient_note.send_learning", (client, data: {
+    text: string
+}) => {
+    if(!client) return;
+
+    const learning = AncientNote.list[data.text];
+
+    if(!learning) return;
+    
+    const player = client.getPlayerUid();
+    const carriedItem = new PlayerEntity(player).getCarriedItem();
+
+    if(carriedItem.id === ItemList.ANCIENT_NOTE.id) {
+        const text = carriedItem.extra && carriedItem.extra.getString("text");
+
+        if(text === null) {
+            return;
+        };
+
+        if(text === data.text) {
+            ObjectPlayer.addLearning(player,learning);
+        };
+    };
+});
+
 Translation.addTranslation("ancient_note.infinite_forest.empty", {
     en: "This note is empty",
     ru: "Эта записка пуста"
@@ -172,3 +207,4 @@ Translation.addTranslation("item.infinite_forest.ancient_note", {
     en: "Ancient note",
     ru: "Древняя записка"
 });
+

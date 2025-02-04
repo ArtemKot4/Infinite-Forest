@@ -121,7 +121,6 @@ class EffectHud {
         this.clear();
 
         const self = this;
-        
 
         Updatable.addLocalUpdatable({
             update() {        
