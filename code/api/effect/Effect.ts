@@ -26,7 +26,8 @@ abstract class Effect {
                 scale: this.getHud().icon,
                 timer: data.timer,
                 progress: data.progress,
-                progress_max: progress_max
+                progress_max: progress_max,
+                isLocked: data.isLocked
             });
         };
     };
@@ -60,26 +61,25 @@ abstract class Effect {
             return;
         };
 
-        effect.isLocked = true;
-
-        effect.progress = 0;
-
-        player.setEffect(name, effect);
-
         const progress_max = unique_progress_max ? Math.floor(unique_progress_max) : this.progress_max;
+
+        player.setEffect(name, {
+            isLocked: true,
+            progress: 0
+        });
+
+        this.sendDataFor(player_uid, progress_max, effect);
+        this.openHudFor(player_uid);
 
         if("onInit" in this) {
             this.onInit(player_uid, progress_max);
         };
 
-        this.sendDataFor(player_uid, progress_max, effect);
-        this.openHudFor(player_uid);
-
         const self = this;
 
         Updatable.addUpdatable({
             update() {
-                self.sendDataFor(player_uid, progress_max, self.getFor(player_uid));
+                self.sendDataFor(player_uid, progress_max, effect);
 
                 const time = World.getThreadTime();
 
@@ -120,7 +120,8 @@ Network.addClientPacket("packet.infinite_forest.effect_data_sync_for_client", (d
     Effect.clientData[data.scale] = {
         timer: data.timer,
         progress: data.progress,
-        progress_max: data.progress_max
+        progress_max: data.progress_max,
+        isLocked: data.isLocked
     };
     return;
 });

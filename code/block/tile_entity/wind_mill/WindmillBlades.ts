@@ -45,7 +45,9 @@ class WindmillBladesTile extends TileEntityBase {
             return;
         };
 
-        if(Utils.getBiomeState(this.x, this.z, this.blockSource) !== EBiomeState.COLD) {
+        if(Utils.getBiomeState(this.x, this.z, this.blockSource) === EBiomeState.COLD) {
+            this.networkData.putFloat("speed", 0.005);
+        } else {
             this.data.enabled = true;
         };
 
@@ -67,12 +69,7 @@ class WindmillBladesTile extends TileEntityBase {
             };
         };
         
-        const enabled = this.networkData.getBoolean("enabled", false);
         const speed = this.networkData.getFloat("speed", 0.2);
-
-        if(!enabled) {
-            return;
-        };
 
         const blockSource = BlockSource.getCurrentClientRegion();
         const data = blockSource.getBlockData(this.x, this.y, this.z);

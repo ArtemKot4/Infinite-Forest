@@ -26,8 +26,6 @@ class EffectHud {
         return window;
     })();
 
-    public container: UI.Container = new UI.Container();
-
     public static BORDER_SCALE: number = 3.3;
 
     public static HORIZONTAL_POSITION: number = UI.getScreenHeight() / 2 + 195;
@@ -35,6 +33,8 @@ class EffectHud {
     public static VERTICAL_POSITION: number = 15;
 
     public open(): void {
+        if(this.isOpened()) return;
+
         const content = {
             location: {
                 x: EffectHud.HORIZONTAL_POSITION,
@@ -75,7 +75,7 @@ class EffectHud {
                     width: 76 * 3,
                     height: 9 * 3,
                     direction: 0,
-                    bitmap: this.scale_bitmap
+                    bitmap: this.scale_bitmap,
                 }
             }
         } satisfies UI.WindowContent;
@@ -83,21 +83,25 @@ class EffectHud {
         this.UI.setContent(content);
         this.UI.forceRefresh();
 
-        if(!this.isOpened()) this.container.openAs(this.UI);
+        this.UI.open();
         EffectHud.increaseCount();
+        return;
     };
 
     public close() {
-        this.container.close();
+        this.UI.close();
         EffectHud.decreaseCount();
+        return;
     };
 
     public isOpened(): boolean {
-        return this.container.isOpened();
+        return this.UI.isOpened();
     };
 
     public setScale(value: number, max: number) {
-        return this.container.setScale("scale", value / max);
+        this.UI.content.elements["scale"].value = value / max;
+        this.UI.forceRefresh();
+        return;
     };
 
     public clear() {
@@ -109,7 +113,9 @@ class EffectHud {
     };
 
     public init() {
-        if(this.isOpened()) {
+        const effect = Effect.clientData[this.icon];
+        
+        if(effect.isLocked === true) {
             return;
         };
 
@@ -120,68 +126,57 @@ class EffectHud {
         this.open();
         this.clear();
 
-        const self = this;
-
         Threading.initThread("thread.infinite_forest.effect_scale", () => {
             while(true) {
-                java.lang.Thread.sleep(50);
+                    java.lang.Thread.sleep(50);
 
-                const data = Effect.clientData[self.icon];
+                    if(!this.isOpened()) {
+                        continue;
+                    };
 
-                self.setScale(data.progress, data.progress_max);
-
-                const alpha = self.UI.layout.getAlpha();
-                    
-                if(data.timer > 0) {
-
-                    if(alpha < 1) {
-                        self.UI.layout.setAlpha(alpha + 0.05);
+                    const data = Effect.clientData[this.icon];
+    
+                    this.setScale(data.progress, data.progress_max);
+    
+                    const alpha = this.UI.layout.getAlpha();
+                        
+                    if(data.timer > 0) {
+    
+                        if(alpha < 1) {
+                            this.UI.layout.setAlpha(alpha + 0.05);
+                        };
+    
+                    };
+    
+                    if(data.timer <= 0 && data.progress <= 0) {
+    
+                        if(alpha > 0) {
+                            this.UI.layout.setAlpha(alpha - 0.05);
+                        } else {
+                            this.close();
+                            return;
+                        };
+    
                     };
 
                 };
-
-                if(data.timer <= 0 && data.progress <= 0) {
-
-                    if(alpha > 0) {
-                        self.UI.layout.setAlpha(alpha - 0.05);
-                    } else {
-                        self.close();
-                        return;
-                    };
-
-                };
-            };
-        });
-
-        // Updatable.addLocalUpdatable({
-        //     update() {        
-        //         const data = Effect.clientData[self.icon];
-
-        //         self.setScale(data.progress, data.progress_max);
-
-        //         const alpha = self.UI.layout.getAlpha();
-                    
-        //         if(data.timer > 0) {
-
-        //             if(alpha < 1) {
-        //                 self.UI.layout.setAlpha(alpha + 0.05);
-        //             };
-
-        //         };
-
-        //         if(data.timer <= 0 && data.progress <= 0) {
-
-        //             if(alpha > 0) {
-        //                 self.UI.layout.setAlpha(alpha - 0.05);
-        //             } else {
-        //                 self.close();
-        //                 this.remove = true;
-        //             };
-
-        //         };
-        //     }
-        // });
+            }
+        );
         return;
     };
-    
 };
+
+// Callback.addCallback("NativeGuiChanged", (screenName) => {
+//     for(const name in Effect.clientData) {
+//         const currentData = Effect.clientData[name];
+//         if(currentData.progress <= 0) continue;
+
+//         const currentHud = EffectHud.list[name];
+
+//         if(screenName === "in_game_play_screen" || screenName === "death_screen") {
+//             currentHud.open();    
+//         } else {
+//             currentHud.close();
+//         };
+//     };
+// });
