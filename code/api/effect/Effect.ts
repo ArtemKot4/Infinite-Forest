@@ -63,13 +63,13 @@ abstract class Effect {
 
         const progress_max = unique_progress_max ? Math.floor(unique_progress_max) : this.progress_max;
 
+        this.sendDataFor(player_uid, progress_max, effect);
+        this.openHudFor(player_uid);
+
         player.setEffect(name, {
             isLocked: true,
             progress: 0
         });
-
-        this.sendDataFor(player_uid, progress_max, effect);
-        this.openHudFor(player_uid);
 
         if("onInit" in this) {
             this.onInit(player_uid, progress_max);
