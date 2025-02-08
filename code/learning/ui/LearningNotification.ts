@@ -73,7 +73,7 @@ class LearningNotification {
                 text: {
                     type: "text",
                     x: 48 * this.SCALE,
-                    y: -this.HEIGHT + (this.HEIGHT / 2.3), // 1.9
+                    y: -this.HEIGHT + (this.HEIGHT / 2.4), // 1.9
                     text: Translation.translate("message.infinite_forest.new_learning") + Translation.translate(`learning.infinite_forest.${valid_learning.name}`),
                     font: {
                         size: 20,
@@ -110,7 +110,7 @@ class LearningNotification {
         const content = this.UI.getContent();
 
         content.elements.background.y = value;
-        content.elements.text.y = value + (this.HEIGHT / 2.3); //1.8
+        content.elements.text.y = value + (this.HEIGHT / 2.4); //1.8
         content.elements.image.y = value + (this.HEIGHT / 4);
         
         this.UI.forceRefresh();
