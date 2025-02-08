@@ -18,11 +18,6 @@ abstract class Learning {
 
 };
 
-
-
-Learning.registry(new ItemLearning("strange_dream", "main"));
-Learning.registry(new EventLearning("first_point", "infinite_forest_is_real"));
-
 class Reflection {
     public name: string;
     public page: string;

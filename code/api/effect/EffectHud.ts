@@ -26,6 +26,8 @@ class EffectHud {
         return window;
     })();
 
+    public lock: boolean = false;
+
     public static BORDER_SCALE: number = 3.3;
 
     public static HORIZONTAL_POSITION: number = UI.getScreenHeight() / 2 + 195;
@@ -88,7 +90,8 @@ class EffectHud {
         return;
     };
 
-    public close() {
+    public close(): void {
+        this.lock = false;
         this.UI.close();
         EffectHud.decreaseCount();
         return;
@@ -98,13 +101,13 @@ class EffectHud {
         return this.UI.isOpened();
     };
 
-    public setScale(value: number, max: number) {
+    public setScale(value: number, max: number): void {
         this.UI.content.elements["scale"].value = value / max;
         this.UI.forceRefresh();
         return;
     };
 
-    public clear() {
+    public clear(): void {
         this.setScale(0, 0);
 
         if(this.isOpened()) {
@@ -112,17 +115,12 @@ class EffectHud {
         };
     };
 
-    public init() {
-        const effect = Effect.clientData[this.icon];
-        
-        if(effect.isLocked === true) {
+    public init(): void {
+        if(!ConfigManager.EFFECT_SCALE_IN_CREATIVE && Utils.isCreativePlayer(Player.getLocal()) || this.lock) {
             return;
         };
 
-        if(!ConfigManager.EFFECT_SCALE_IN_CREATIVE && Utils.isCreativePlayer(Player.getLocal())) {
-            return;
-        };
-
+        this.lock = true;
         this.open();
         this.clear();
 
@@ -156,9 +154,8 @@ class EffectHud {
                             this.close();
                             return;
                         };
-    
-                    };
 
+                    };
                 };
             }
         );

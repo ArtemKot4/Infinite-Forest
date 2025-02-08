@@ -8,7 +8,7 @@ Callback.addCallback("ServerPlayerTick", (playerUid: number) => {
         const handFunction = ItemForest.handFunctions.get(selectedItemStack.id);
 
         if (selectedItemStack.id == carriedItemStack.id && handFunction !== undefined) {
-            return handFunction(selectedItemStack);
+            return handFunction(selectedItemStack, playerUid);
         };
     };
 

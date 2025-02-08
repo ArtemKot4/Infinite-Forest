@@ -1,3 +1,3 @@
 interface ItemHandComponent {
-    onHand?(item: ItemStack): void;
+    onHand?(item: ItemStack, player_uid: number): void;
 };

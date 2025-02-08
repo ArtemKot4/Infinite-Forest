@@ -1,5 +1,5 @@
 abstract class LearningBase {
-    constructor(public name: string, public page: string, public section: string = "default") {};
+    constructor(public name: string, public page: string, public section: string = "default", public icon?: string) {};
 
     abstract type: string;
 
@@ -40,3 +40,6 @@ abstract class LearningBase {
 class EventLearning extends LearningBase {
     public type: string = "event";
 };
+
+Learning.registry(new EventLearning("test", "test"));
+Learning.registry(new EventLearning("first_point", "infinite_forest_is_real"));

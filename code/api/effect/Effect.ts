@@ -27,7 +27,7 @@ abstract class Effect {
                 timer: data.timer,
                 progress: data.progress,
                 progress_max: progress_max,
-                isLocked: data.isLocked
+                lock: data.lock
             });
         };
     };
@@ -57,7 +57,7 @@ abstract class Effect {
 
         const effect = this.getFor(player_uid);
 
-        if(effect.isLocked === true) {
+        if(effect.lock === true) {
             return;
         };
 
@@ -67,7 +67,7 @@ abstract class Effect {
         this.openHudFor(player_uid);
 
         player.setEffect(name, {
-            isLocked: true,
+            lock: true,
             progress: 0
         });
 
@@ -105,7 +105,7 @@ abstract class Effect {
                         self.onEnd(player_uid, progress_max);
                     };
 
-                    effect.isLocked = false;
+                    effect.lock = false;
                     this.remove = true;
                 };
 
@@ -121,7 +121,7 @@ Network.addClientPacket("packet.infinite_forest.effect_data_sync_for_client", (d
         timer: data.timer,
         progress: data.progress,
         progress_max: data.progress_max,
-        isLocked: data.isLocked
+        lock: data.lock
     };
     return;
 });

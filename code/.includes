@@ -88,11 +88,12 @@ core/dimension/generation/different/beach.ts
 
 core/dimension/generation/main.ts
 
+learning/Learning.ts
+learning/ui/LearningNotification.ts
 learning/LearningBase.ts
 learning/ItemLearning.ts
 learning/CraftBuildLearning.ts
 
-learning/Learning.ts
 
 learning/Book.ts
 

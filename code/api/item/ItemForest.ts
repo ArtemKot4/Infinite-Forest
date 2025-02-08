@@ -7,7 +7,7 @@ interface IItemTextureDescription {
 
 class ItemForest implements ItemBehavior {
 
-    public static handFunctions: Map<number, (item: ItemStack) => void> = new Map();
+    public static handFunctions: Map<number, (item: ItemStack, playerUid: number) => void> = new Map();
 
     public maxStack: number = 64;
     public texture: IItemTextureDescription;

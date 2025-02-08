@@ -14,7 +14,7 @@ interface IEffectData {
     timer: number;
     progress: number;
     progress_max: number;
-    isLocked?: boolean;
+    lock?: boolean;
 };
 
 interface Learning {
@@ -71,7 +71,7 @@ class ObjectPlayer {
     public recordList: IPlayerPage[] = [];
 
     /**
-     * list of player effects. Key is name of effect, value is object with timer, progress, progress_max, isLocked;
+     * list of player effects. Key is name of effect, value is object with timer, progress, progress_max, lock;
      */
      
     public effectList: Record<string, IEffectData> = {};
@@ -204,10 +204,12 @@ class ObjectPlayer {
         const player = this.getOrCreate(player_uid);
         const hasLearning = player.learningList[learning_name];
 
-        if(typeof hasLearning === "number" && hasLearning != direction) {
+        if(!hasLearning) {
             player.learningList[learning_name] = direction;
 
-            return this.sendToClient(player_uid);
+            this.sendToClient(player_uid);
+            LearningNotification.sendFor(player_uid, learning_name);
+            return;
         };
     };
 
@@ -312,7 +314,7 @@ Network.addServerPacket("packet.infinite_forest.set_object_player", (client: Net
 
 Network.addClientPacket("packet.infinite_forest.get_object_player", (data: { player: ObjectPlayer }) => {
     ObjectPlayer.appendList(data.player);
-    Game.message("my data: -> " + JSON.stringify(ObjectPlayer.get()));
+    // Game.message("my data: -> " + JSON.stringify(ObjectPlayer.get()));
 });
 
 Network.addServerPacket("packet.infinite_forest.add_learning_player", (client: NetworkClient, data: { 
