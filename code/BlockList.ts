@@ -22,6 +22,8 @@ class BlockList {
     public static WINDMILL_BLADES = new WindmillBlades();
     public static WINDMILL_STATION = new WindmillStation();
 
+    public static LEARNING_TABLE = new LearningTable();
+
     public static BOTTLE = new Bottle();
     public static FIREFLIES_BOTTLE = new FirefliesBottle();
     

@@ -24,10 +24,11 @@ class AncientNote extends ItemForest {
                 },
                 {
                     type: "bitmap",
-                    bitmap: "lost_paper",
+                    bitmap: "ancient_note",
                     x: UI.getScreenHeight() / 1.3,
                     y: 30,
-                    scale: 2.1,
+                    width: 136 * 2.1,
+                    height: 179 * 2.1
                 },
             ],
             elements: {
@@ -42,10 +43,13 @@ class AncientNote extends ItemForest {
                     multiline: true,
                     text: null
                 },
-                closeButton: {
-                    type: "button",
-                    scale: 1000,
+                button: {
+                    type: "image",
                     bitmap: "unknown",
+                    width: 136 * 2.1,
+                    height: 100 * 2.1,
+                    x: UI.getScreenHeight() / 1.3,
+                    y: 30,
                     clicker: {}
                 }
             }
@@ -82,6 +86,10 @@ class AncientNote extends ItemForest {
     };
 
     public onItemUse(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, player: number): void {
+        if(block.id === BlockList.LEARNING_TABLE.id) {
+            return;
+        };
+
         const list = this.whichContains(player);
         Game.message(list);
         let text = item.extra && item.extra.getString("text");
@@ -99,6 +107,11 @@ class AncientNote extends ItemForest {
 
             let extra = new ItemExtraData();
             extra.putString("text", text);
+
+            const learning = AncientNote.list[text];
+            if(learning) {
+                extra.putString("learning", learning)
+            };
 
             Entity.setCarriedItem(player, this.id, 1, 0, extra);
         };
@@ -142,10 +155,13 @@ Network.addClientPacket("packet.infinite_forest.ancient_note.open_ui", (data: {
     if(AncientNote.UI.isOpened()) return;
 
     const content = AncientNote.UI.getContent();
+    const isCustomText = !Object.keys(AncientNote.list).includes(data.text);
 
-    content.elements.text.text = UIHelper.separateText(Translation.translate(`ancient_note.infinite_forest.${data.text}`));
+    content.elements.text.text = UIHelper.separateText(
+        isCustomText ? data.text : Translation.translate(`ancient_note.infinite_forest.${data.text}`) 
+    );
 
-    content.elements.closeButton.clicker.onClick = (position, container) => {
+    content.elements.button.clicker.onClick = (position, container) => {
         AncientNote.UI.close();
         Network.sendToServer("packet.infinite_forest.ancient_note.send_learning", data);
         return;
@@ -156,28 +172,20 @@ Network.addClientPacket("packet.infinite_forest.ancient_note.open_ui", (data: {
     AncientNote.UI.open();
 });
 
-Network.addServerPacket("packet.infinite_forest.ancient_note.send_learning", (client, data: {
-    text: string
-}) => {
+Network.addServerPacket("packet.infinite_forest.ancient_note.send_learning", (client, data: {}) => {
     if(!client) return;
-
-    const learning = AncientNote.list[data.text];
-
-    if(!learning) return;
     
     const player = client.getPlayerUid();
     const carriedItem = new PlayerEntity(player).getCarriedItem();
 
     if(carriedItem.id === ItemList.ANCIENT_NOTE.id) {
-        const text = carriedItem.extra && carriedItem.extra.getString("text");
+        if(!carriedItem.extra) return;
 
-        if(text === null) {
-            return;
-        };
+        const learning = carriedItem.extra.getString("learning");
 
-        if(text === data.text) {
-            return ObjectPlayer.addLearning(player,learning);
-        };
+        if(!learning) return;
+    
+        return ObjectPlayer.addLearning(player,learning);
     };
 });
 

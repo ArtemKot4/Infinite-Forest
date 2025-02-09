@@ -25,6 +25,7 @@ particles.ts
 header.ts
 core.ts
 
+api/Keyboard.ts
 
 api/item/ItemHandComponent.ts
 
@@ -60,6 +61,8 @@ block/tile_entity/wind_mill/WindmillBlades.ts
 
 block/tile_entity/Bottle.ts
 block/tile_entity/Cauldron.ts
+
+block/tile_entity/LearningTable.ts
 
 effect/WinterEffect.ts
 effect/CalmingEffect.ts

@@ -15,7 +15,7 @@ class LearningNotification {
         return window;
     })();
 
-    public static wait_list: string[] = [];
+    public static queue: string[] = [];
     public static lock: boolean = false;
 
     public static setContentWith(learning: string) {
@@ -77,8 +77,8 @@ class LearningNotification {
                     text: (() => {
                         let text = Translation.translate(`learning.infinite_forest.${valid_learning.name}`);
 
-                        if(text.length >= 16) {
-                            text = text.slice(0, 16) + "...";
+                        if(text.length >= 20) {
+                            text = text.slice(0, 20) + "...";
                         };
 
                         return Translation.translate("message.infinite_forest.new_learning") + text;
@@ -99,7 +99,7 @@ class LearningNotification {
 
     public static open(learning: string): void {
         if(this.lock) {
-            this.wait_list.push(learning);
+            this.queue.push(learning);
             return;
         };
 
@@ -147,9 +147,9 @@ class LearningNotification {
                     } else {
                         this.lock = false;
 
-                        if(this.wait_list.length > 0) {
+                        if(this.queue.length > 0) {
                             java.lang.Thread.sleep(1000);
-                            this.open(this.wait_list.shift());
+                            this.open(this.queue.shift());
                             return;
                         };
 
@@ -172,8 +172,8 @@ class LearningNotification {
 };
 
 Translation.addTranslation("message.infinite_forest.new_learning", {
-    en: "You learned: ",
-    ru: "Вы изучили: ",
+    en: "Learned: ",
+    ru: "Изучено: ",
 });
 
 Callback.addCallback("ItemUse", (coords, item, block, isEx, player) => {
