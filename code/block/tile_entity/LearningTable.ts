@@ -12,7 +12,7 @@ class LearningTableTile extends TileEntityBase {
 
     public data: typeof this.defaultValues;
 
-    public dropNote(extra?: Nullable<ItemExtraData>) {
+    public dropNote(extra?: Nullable<ItemExtraData>): void {
         if(this.data.extra != null) {
             this.blockSource.spawnDroppedItem(
                 this.x + 0.5, 
@@ -29,7 +29,7 @@ class LearningTableTile extends TileEntityBase {
         return;
     };
 
-    public onItemUse(coords: Callback.ItemUseCoordinates, item: ItemStack, player: number) {
+    public onItemUse(coords: Callback.ItemUseCoordinates, item: ItemStack, player: number): void {
         const entity = new PlayerEntity(player);
         const carriedItem = entity.getCarriedItem();
 
@@ -57,7 +57,7 @@ class LearningTableTile extends TileEntityBase {
 
     };
 
-    public drawMain(player: number) {
+    public drawMain(player: number): void {
         let text = Translation.translate("message.infinite_forest.typing");
         
         if(this.data.extra != null) {
@@ -65,18 +65,26 @@ class LearningTableTile extends TileEntityBase {
         };
 
         this.UI.content.elements.text.text = UIHelper.separateText(text);
+
+        if(this.UI.content.elements.info_field) {
+            this.UI.content.elements.info_field.text = "";
+        };
+
+        if(this.UI.content.elements.info_text) {
+            this.UI.content.elements.info_text.text = "";
+        };
+
         this.edit(player);
         this.update();
         return;
     };
 
-    public update() {
-        this.UI.setContent(this.UI.content);
+    public update(): void {
         this.UI.forceRefresh();
         return;
     };
 
-    public edit(player: number) {
+    public edit(player: number): void {
         this.UI.content.elements.button.clicker.onClick = () => {
             const keyboard = new Keyboard(Translation.translate("message.infinite_forest.typing_placeholder"));
 
@@ -89,8 +97,8 @@ class LearningTableTile extends TileEntityBase {
 
             keyboard.open();
 
-            const separated = this.UI.content.elements.text.text.split("\n") as string[];
-            const last_string = separated[separated.length - 1];
+            const split = this.UI.content.elements.text.text.split("\n") as string[];
+            const last_string = split[split.length - 1];
 
             if(last_string.includes(Translation.translate("message.infinite_forest.transfer_learning"))) {
                 const learning = last_string.split(" ").pop();
@@ -104,22 +112,32 @@ class LearningTableTile extends TileEntityBase {
         };
     };
 
-    public drawLearningInfo(player: number) {
-        const isPressed = this.UI.content.elements.info && this.UI.content.elements.info.bitmap === "ancient_note_info_pressed";
+    public drawLearningInfo(player: number): void {
+        let isPressed: boolean = true;
 
         this.UI.content.elements.info = {
-            "type": "button",
+            "type": "image",
             x: UI.getScreenHeight() / 1.3 + (7 * 2.1),
             y: 30 + (167 * 2.1),
             scale: 2.1,
             bitmap: "ancient_note_info",
-            bitmap2: "ancient_note_info_pressed",
+            bitmap2: "ancient_note_info_pressed"
+        };
+
+        this.UI.content.elements.info_field = {
+            type: "image",
+            x: UI.getScreenHeight() / 1.3,
+            y: 167 * 2.1,
+            width: 30 * 2.1,
+            height: 30 * 2.1,
+            bitmap: "unknown",
             clicker: {
                 onClick: () => {
                     if(!isPressed) {
                         this.UI.content.elements.info.bitmap = "ancient_note_info_pressed";
-                        let text = Translation.translate("message.infinite_forest.none_learnings");;
+                        let text = Translation.translate("message.infinite_forest.none_learnings");
                         let learningList = Object.keys(ObjectPlayer.getOrCreate(player).learningList);
+                        Game.message(learningList);
     
                         if(learningList.length > 0) {
                             text = learningList.reduce((pV, cV, cI) => {
@@ -129,10 +147,26 @@ class LearningTableTile extends TileEntityBase {
     
                         this.UI.content.elements.button.clicker.onClick = () => this.drawMain(player);
                         this.UI.content.elements.text.text = UIHelper.separateText(text);
+
+                        this.UI.content.elements.info_text = {
+                            type: "text",
+                            x: UI.getScreenHeight() / 1.17,
+                            y: 240,
+                            font: {
+                                size: 11,
+                                color: android.graphics.Color.parseColor("#9E9E9E"),
+                            },
+                            multiline: true,
+                            text: UIHelper.separateText(Translation.translate("message.infinite_forest.hint_with_learning_transfer") + `"${Translation.translate("message.infinite_forest.transfer_learning")}<?>"`)
+                        };
+
+                        isPressed = true;
                     } else {
                         this.UI.content.elements.info.bitmap = "ancient_note_info";
                         this.drawMain(player);
+                        isPressed = false;
                     };
+                    this.update();
                     return;
                 }
             }
@@ -192,3 +226,8 @@ Translation.addTranslation("message.infinite_forest.transfer_learning", {
     en: "I am tell about ",
     ru: "Рассказываю о "
 });
+
+Translation.addTranslation("message.infinite_forest.hint_with_learning_transfer", {
+    en: "To transfer learning, you need to type in end: ",
+    ru: "Чтобы перенести изучение, вам нужно написать в конце: "
+})
