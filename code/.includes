@@ -1,4 +1,10 @@
 # lib: esnext
+api/render/RenderHelper.ts
+
+api/animation/RenderSide.ts
+api/animation/BlockAnimation.ts
+
+api/animation/ScreenAnimation.ts
 
 langParser.ts
 translations.ts
@@ -11,10 +17,7 @@ api/Curse.ts
 api/effect/EffectHud.ts
 api/effect/Effect.ts
 
-api/render/RenderHelper.ts
 
-api/animation/RenderSide.ts
-api/animation/BlockAnimation.ts
 
 api/Factory.ts
 

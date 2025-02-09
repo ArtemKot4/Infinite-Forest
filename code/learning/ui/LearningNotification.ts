@@ -1,11 +1,11 @@
 class LearningNotification {
     private constructor() {};
 
-    public static SCALE: number = 2.5;
+    public static SCALE: number = 2.3; 
     public static WIDTH: number = 240 * this.SCALE;
     public static HEIGHT: number = 40 * this.SCALE;
 
-    public static WAIT_TIME_MAX = 190;
+    public static WAIT_TIME_MAX = 2;
 
     public static UI: UI.Window = (() => {
         const window = new UI.Window();
@@ -46,12 +46,12 @@ class LearningNotification {
                     bitmap: "learning_notification"
                 },
                 image: (() => {
-                    const x = 3 + (8 * this.SCALE);
-                    const y = -this.HEIGHT + (this.HEIGHT / 4);
+                    const x = 2 + (8 * this.SCALE);
+                    const y = -this.HEIGHT + (this.HEIGHT / 4.5);
                     const height = 27 * this.SCALE;
                     const width = 27 * this.SCALE;
 
-                    const isItemIcon = valid_learning.type.includes("item");
+                    const isItemIcon = valid_learning.icon_type && valid_learning.icon_type === "item";
 
                     const content = {
                         type: isItemIcon ? "slot" : "image",
@@ -73,8 +73,16 @@ class LearningNotification {
                 text: {
                     type: "text",
                     x: 48 * this.SCALE,
-                    y: -this.HEIGHT + (this.HEIGHT / 2.4), // 1.9
-                    text: Translation.translate("message.infinite_forest.new_learning") + Translation.translate(`learning.infinite_forest.${valid_learning.name}`),
+                    y: -this.HEIGHT + (this.HEIGHT / 2.5), // 1.9
+                    text: (() => {
+                        let text = Translation.translate(`learning.infinite_forest.${valid_learning.name}`);
+
+                        if(text.length >= 16) {
+                            text = text.slice(0, 16) + "...";
+                        };
+
+                        return Translation.translate("message.infinite_forest.new_learning") + text;
+                    })(),
                     font: {
                         size: 20,
                         color: android.graphics.Color.BLACK
@@ -110,8 +118,8 @@ class LearningNotification {
         const content = this.UI.getContent();
 
         content.elements.background.y = value;
-        content.elements.text.y = value + (this.HEIGHT / 2.4); //1.8
-        content.elements.image.y = value + (this.HEIGHT / 4);
+        content.elements.text.y = value + (this.HEIGHT / 2.5); 
+        content.elements.image.y = value + (this.HEIGHT / 4.5);
         
         this.UI.forceRefresh();
         return;
@@ -119,33 +127,28 @@ class LearningNotification {
 
     public static initAnimation(): void {
         let mark: boolean = false;
-        let timer: number = 0;
         let height: number = -this.HEIGHT;
 
         Threading.initThread("thread.infinite_forest.learning_notification", () => {
             while(true) {
-                java.lang.Thread.sleep(5);
+                java.lang.Thread.sleep(3);
                 if(!mark) {
-                    
                     if(height < 0) {
                         height += 1;
                         this.updateElementHeights(height);
                     } else {
-                        if(timer < this.WAIT_TIME_MAX) {
-                            timer += 1;
-                        } else {
-                            mark = true;
-                        };
+                        java.lang.Thread.sleep(this.WAIT_TIME_MAX * 1000);
+                        mark = true;
                     };
                 } else {
-
-                    if(height > -this.HEIGHT && timer >= this.WAIT_TIME_MAX) {
+                    if(height > -this.HEIGHT) {
                         height -= 1
                         this.updateElementHeights(height);
                     } else {
                         this.lock = false;
 
                         if(this.wait_list.length > 0) {
+                            java.lang.Thread.sleep(1000);
                             this.open(this.wait_list.shift());
                             return;
                         };
