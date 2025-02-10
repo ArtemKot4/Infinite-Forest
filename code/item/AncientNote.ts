@@ -95,7 +95,7 @@ class AncientNote extends ItemForest {
         let text = item.extra && item.extra.getString("text");
 
         if(!text) {
-            let unique_records = [];
+            const unique_records = [];
 
             for(const name in AncientNote.list) {
                 if(!list.includes(name)) {
@@ -103,14 +103,15 @@ class AncientNote extends ItemForest {
                 };
             };
 
-            text = MathHelper.randomFromArray(unique_records || ["ancient_note.infinite_forest.empty"]);
+            text = Object.keys(AncientNote.list).find((v) => !list.includes(v)) || Translation.translate("ancient_note.infinite_forest.empty");
 
-            let extra = new ItemExtraData();
+            const extra = new ItemExtraData();
             extra.putString("text", text);
 
             const learning = AncientNote.list[text];
+
             if(learning) {
-                extra.putString("learning", learning)
+                extra.putString("learning", learning);
             };
 
             Entity.setCarriedItem(player, this.id, 1, 0, extra);
@@ -124,16 +125,39 @@ class AncientNote extends ItemForest {
     };
 
     public onNameOverride(item: ItemInstance, translation: string, name: string): string {
-        let text = (item.extra && item.extra.getString("text")) || "???";
+        let text = "???";
+        if(item.extra)  {
+            const self_text = item.extra.getString("text");
+            const learning = item.extra.getString("learning");
+
+            if(self_text) {
+                text = self_text.slice(0, 10) + "...";
+            };
+
+            if(learning) {
+                text += "\n" + Translation.translate("message.infinite_forest.learning") + (learning || Translation.translate("message.infinite_forest.none"));
+            };
+        };
         return Translation.translate(name) + "\n" + Native.Color.GRAY + Translation.translate("ancient_note.infinite_forest.contains") + text;
     };
 
-    public setupAllToCreative() {
+    public setupAllToCreative(): void {
         for(const text in AncientNote.list) {
+            const learning = AncientNote.list[text];
             const extra = new ItemExtraData();
+
             extra.putString("text", text); 
+
+            if(learning) {
+                extra.putString("learning", learning);
+            };
+
             Item.addToCreative(this.id, 1, 0, extra);
         };
+    };
+
+    public inCreative(): boolean {
+        return true;
     };
 
     public constructor() {
@@ -141,13 +165,12 @@ class AncientNote extends ItemForest {
             name: "ancient_note",
             meta: 0 
         }, 1);
-        this.setupAllToCreative();
-    };
-
-    public inCreative(): boolean {
-        return true;
     };
 };
+
+Callback.addCallback("ModsLoaded", () => {
+    ItemList.ANCIENT_NOTE.setupAllToCreative();
+});
 
 Network.addClientPacket("packet.infinite_forest.ancient_note.open_ui", (data: {
     text: string
@@ -161,7 +184,7 @@ Network.addClientPacket("packet.infinite_forest.ancient_note.open_ui", (data: {
         isCustomText ? data.text : Translation.translate(`ancient_note.infinite_forest.${data.text}`) 
     );
 
-    content.elements.button.clicker.onClick = (position, container) => {
+    content.elements.button.clicker.onClick = () => {
         AncientNote.UI.close();
         Network.sendToServer("packet.infinite_forest.ancient_note.send_learning", data);
         return;
@@ -202,6 +225,17 @@ Translation.addTranslation("ancient_note.infinite_forest.contains", {
 AncientNote.add("unity_with_nature");
 AncientNote.add("flames");
 AncientNote.add("strange_walls");
+AncientNote.add("test", "first_lucks"); //todo: debug
+
+Translation.addTranslation("message.infinite_forest.learning", {
+    en: "Learning: ",
+    ru: "Изучение: "
+});
+
+Translation.addTranslation("message.infinite_forest.none", {
+    en: "None",
+    ru: "Нет"
+});
 
 Translation.addTranslation("ancient_note.infinite_forest.strange_walls", {
     ru: "Пока пусто"

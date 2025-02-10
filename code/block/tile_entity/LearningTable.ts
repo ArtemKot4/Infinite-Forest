@@ -7,13 +7,18 @@ class LearningTableTile extends TileEntityBase {
 
     public defaultValues = {
         is_valid: false,
-        extra: null as Nullable<ItemExtraData>
+        text: null,
+        learning: null
     };
 
     public data: typeof this.defaultValues;
+    public info_pressed: boolean = false;
 
     public dropNote(extra?: Nullable<ItemExtraData>): void {
-        if(this.data.extra != null) {
+        if(this.data.text != null) {
+            const new_extra = new ItemExtraData();
+            new_extra.putString("text", this.data.text);
+            new_extra.putString("learning", this.data.learning);
             this.blockSource.spawnDroppedItem(
                 this.x + 0.5, 
                 this.y + 1.2,
@@ -21,10 +26,19 @@ class LearningTableTile extends TileEntityBase {
                 ItemList.ANCIENT_NOTE.id,
                 1,
                 0,
-                this.data.extra
+                new_extra
             );
         };
-        this.data.extra = extra || null;
+        let text = null;
+        let learning = null;
+
+        if(extra) {
+            text = extra.getString("text");
+            learning = extra.getString("learning");
+        };
+        
+        this.data.text = text;
+        this.data.learning = learning;
         this.data.is_valid = !!extra;
         return;
     };
@@ -51,7 +65,6 @@ class LearningTableTile extends TileEntityBase {
 
         if(this.data.is_valid) {
             this.drawMain(player);
-            this.drawLearningInfo(player);
             this.UI.open();
         };
 
@@ -60,21 +73,26 @@ class LearningTableTile extends TileEntityBase {
     public drawMain(player: number): void {
         let text = Translation.translate("message.infinite_forest.typing");
         
-        if(this.data.extra != null) {
-            text = this.data.extra.getString("text");
+        if(this.data.text != null) {
+            text = this.data.text;
         };
 
         this.UI.content.elements.text.text = UIHelper.separateText(text);
 
-        if(this.UI.content.elements.info_field) {
+        if("info_field" in this.UI.content.elements) {
             this.UI.content.elements.info_field.text = "";
         };
 
-        if(this.UI.content.elements.info_text) {
+        if("info_text" in this.UI.content.elements) {
             this.UI.content.elements.info_text.text = "";
         };
 
-        this.edit(player);
+        if("info_icon" in this.UI.content.elements) {
+            this.UI.content.elements.info_icon.bitmap = "unknown";
+        };
+
+        this.drawLearningInfo(player);
+        this.drawEditButton(player);
         this.update();
         return;
     };
@@ -84,38 +102,34 @@ class LearningTableTile extends TileEntityBase {
         return;
     };
 
-    public edit(player: number): void {
+    public drawEditButton(player: number): void {
         this.UI.content.elements.button.clicker.onClick = () => {
             const keyboard = new Keyboard(Translation.translate("message.infinite_forest.typing_placeholder"));
 
             keyboard.getText((text: string) => {
                 this.UI.content.elements.text.text = UIHelper.separateText(text || "...");
-                this.data.extra ??= new ItemExtraData();
-                this.data.extra.putString("text", text);
+                this.data.text = text;
                 this.update();
             });
 
             keyboard.open();
 
             const split = this.UI.content.elements.text.text.split("\n") as string[];
-            const last_string = split[split.length - 1];
+            const need_strings = split[split.length - 2] + split[split.length - 1];
 
-            if(last_string.includes(Translation.translate("message.infinite_forest.transfer_learning"))) {
-                const learning = last_string.split(" ").pop();
-                const playerHasLearning = ObjectPlayer.getOrCreate(player).learningList[learning];
+            if(need_strings.includes(Translation.translate("message.infinite_forest.transfer_learning"))) {
+                const learning = need_strings.split(" ").pop();
+                const playerLearnings = ObjectPlayer.getOrCreate(player).learningList;
                 
-                if(playerHasLearning) {
-                    this.data.extra ??= new ItemExtraData();
-                    this.data.extra.putString("learning", learning);
+                if(learning in playerLearnings) {
+                    this.data.learning = learning;
                 };
             };
         };
     };
 
     public drawLearningInfo(player: number): void {
-        let isPressed: boolean = true;
-
-        this.UI.content.elements.info = {
+        this.UI.content.elements.info_image = {
             "type": "image",
             x: UI.getScreenHeight() / 1.3 + (7 * 2.1),
             y: 30 + (167 * 2.1),
@@ -133,16 +147,24 @@ class LearningTableTile extends TileEntityBase {
             bitmap: "unknown",
             clicker: {
                 onClick: () => {
-                    if(!isPressed) {
-                        this.UI.content.elements.info.bitmap = "ancient_note_info_pressed";
+                    if(!this.info_pressed) {
+                        this.UI.content.elements.info_image.bitmap = "ancient_note_info_pressed";
                         let text = Translation.translate("message.infinite_forest.none_learnings");
-                        let learningList = Object.keys(ObjectPlayer.getOrCreate(player).learningList);
-                        Game.message(learningList);
-    
-                        if(learningList.length > 0) {
-                            text = learningList.reduce((pV, cV, cI) => {
-                                return cI === learningList.length - 1 ? pV : pV + cV + ", ";
-                            }, Translation.translate("message.infinite_forest.player_learning_list"));
+                        let learningList = Object.keys(ObjectPlayer.get(player).learningList);
+  
+                        if(learningList && learningList.length > 0) {
+                            text = Translation.translate("message.infinite_forest.player_learning_list");
+
+                            for(const i in learningList) {
+                                const current = learningList[i];
+
+                                if(Number(i) === learningList.length - 1) {
+                                    text += `"${current}"`;
+                                    continue;
+                                };
+                                text += `"${current}", `;
+                            };
+
                         };
     
                         this.UI.content.elements.button.clicker.onClick = () => this.drawMain(player);
@@ -151,20 +173,28 @@ class LearningTableTile extends TileEntityBase {
                         this.UI.content.elements.info_text = {
                             type: "text",
                             x: UI.getScreenHeight() / 1.17,
-                            y: 240,
+                            y: 30 + (138 * 2.1),
                             font: {
-                                size: 11,
+                                size: 10.5,
                                 color: android.graphics.Color.parseColor("#9E9E9E"),
                             },
                             multiline: true,
-                            text: UIHelper.separateText(Translation.translate("message.infinite_forest.hint_with_learning_transfer") + `"${Translation.translate("message.infinite_forest.transfer_learning")}<?>"`)
+                            text: UIHelper.separateText(Translation.translate("message.infinite_forest.hint_with_learning_transfer") + "\n" + `"${Translation.translate("message.infinite_forest.transfer_learning")}<?>"`, 30)
                         };
 
-                        isPressed = true;
+                        this.UI.content.elements.info_icon = {
+                            type: "image",
+                            x: (UI.getScreenHeight() / 1.3) + (61 * 2.1),
+                            y: 30 + (125 * 2.1),
+                            scale: 2.1,
+                            bitmap: "info_icon"
+                        };
+
+                        this.info_pressed = true;
                     } else {
-                        this.UI.content.elements.info.bitmap = "ancient_note_info";
+                        this.UI.content.elements.info_image.bitmap = "ancient_note_info";
                         this.drawMain(player);
-                        isPressed = false;
+                        this.info_pressed = false;
                     };
                     this.update();
                     return;
@@ -203,8 +233,8 @@ Translation.addTranslation("block.infinite_forest.learning_table", {
 });
 
 Translation.addTranslation("message.infinite_forest.player_learning_list", {
-    en: "Your learnings: ",
-    ru: "Ваши изучения: "
+    en: "Available learnings: ",
+    ru: "Доступные изучения: "
 });
 
 Translation.addTranslation("message.infinite_forest.none_learnings", {
@@ -228,6 +258,6 @@ Translation.addTranslation("message.infinite_forest.transfer_learning", {
 });
 
 Translation.addTranslation("message.infinite_forest.hint_with_learning_transfer", {
-    en: "To transfer learning, you need to type in end: ",
-    ru: "Чтобы перенести изучение, вам нужно написать в конце: "
-})
+    en: "To share of learning, tell about his: ",
+    ru: "Чтобы поделиться изучением, расскажите о нём: "
+});
