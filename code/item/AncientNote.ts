@@ -95,14 +95,6 @@ class AncientNote extends ItemForest {
         let text = item.extra && item.extra.getString("text");
 
         if(!text) {
-            const unique_records = [];
-
-            for(const name in AncientNote.list) {
-                if(!list.includes(name)) {
-                    unique_records.push(name);
-                };
-            };
-
             text = Object.keys(AncientNote.list).find((v) => !list.includes(v)) || Translation.translate("ancient_note.infinite_forest.empty");
 
             const extra = new ItemExtraData();

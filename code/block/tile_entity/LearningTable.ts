@@ -107,24 +107,28 @@ class LearningTableTile extends TileEntityBase {
             const keyboard = new Keyboard(Translation.translate("message.infinite_forest.typing_placeholder"));
 
             keyboard.getText((text: string) => {
-                this.UI.content.elements.text.text = UIHelper.separateText(text || "...");
+                const separatedText = UIHelper.separateText(text || "...");
+
+                this.UI.content.elements.text.text = separatedText;
                 this.data.text = text;
+
+                const split = separatedText.split("\n") as string[];
+                const need_strings = split[split.length - 2] + split[split.length - 1];
+    
+                if(need_strings.toLowerCase().includes(Translation.translate("message.infinite_forest.transfer_learning"))) {
+                    const learning = need_strings.split(" ").pop();
+                    const playerLearnings = ObjectPlayer.getOrCreate(player).learningList;
+                    
+                    if(learning in playerLearnings) {
+                        this.data.learning = learning;
+                    };
+                };
                 this.update();
             });
 
             keyboard.open();
 
-            const split = this.UI.content.elements.text.text.split("\n") as string[];
-            const need_strings = split[split.length - 2] + split[split.length - 1];
 
-            if(need_strings.includes(Translation.translate("message.infinite_forest.transfer_learning"))) {
-                const learning = need_strings.split(" ").pop();
-                const playerLearnings = ObjectPlayer.getOrCreate(player).learningList;
-                
-                if(learning in playerLearnings) {
-                    this.data.learning = learning;
-                };
-            };
         };
     };
 
@@ -253,8 +257,8 @@ Translation.addTranslation("message.infinite_forest.typing_placeholder", {
 });
 
 Translation.addTranslation("message.infinite_forest.transfer_learning", {
-    en: "I am tell about ",
-    ru: "Рассказываю о "
+    en: "i am tell about ",
+    ru: "рассказываю о "
 });
 
 Translation.addTranslation("message.infinite_forest.hint_with_learning_transfer", {
