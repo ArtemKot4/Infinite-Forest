@@ -3,7 +3,7 @@ class ItemList {
     public static readonly BLUE_CRYSTAL = new BlueCrystal();
     public static WHEAT_FLOUR = new class extends ItemForest implements ItemHandComponent {
         public onHand(item: ItemStack, player_uid: number): void {
-            return ObjectPlayer.addLearning(player_uid, "first_lucks");
+            ObjectPlayer.addLearning(player_uid, "first_lucks");
         }
     }("wheat_flour", {
         name: "wheat_flour",

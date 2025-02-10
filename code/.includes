@@ -25,7 +25,9 @@ particles.ts
 header.ts
 core.ts
 
-client/Notification.ts
+
+client/ui/Notification.ts
+client/ui/notification_styles.ts
 
 api/Keyboard.ts
 
@@ -112,6 +114,8 @@ core/events/LocalTick.ts
 core/events/PlayerChangedDimension.ts
 
 recipes.ts
+
+api/Command.ts
 
 final.ts
 

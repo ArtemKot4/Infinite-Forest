@@ -13,9 +13,9 @@ interface INotificationStyle {
     }, 
     icon: {
         /**
-         * scale of the icon when type is item
+         * size of the icon when type is item
          */
-        item_scale: number,
+        item_size: number,
         default_x: number,
         default_y: number,
         width: number,
@@ -107,7 +107,7 @@ class Notification {
                         content.type = "slot";
                         content.source = new ItemStack(parseID(icon), 1, 0);
                         content.visual = true;
-                        content.scale = style.scale;
+                        content.size = style.icon.item_size;
                         content.bitmap = "unknown";
                     } else {
                         content.bitmap = icon;
