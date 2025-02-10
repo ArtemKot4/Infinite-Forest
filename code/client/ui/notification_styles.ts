@@ -1,22 +1,32 @@
-Notification.addStyle("learning", {
-    scale: 2.3,
-    width: 240,
-    height: 40,
-    wait_time: 2,
-    queue_time: 1,
-    background: {
-        bitmap: "notification"
-    },
-    text: {
-        default_x: 48,
-        default_y: 37,
-        max_length: 30
-    },
-    icon: {
-        default_x: 9,
-        default_y: 18,
-        width: 27,
-        heigth: 27,
-        item_size: 70
+namespace NotificationStyles {
+    export const LEARNING: INotificationStyle = {
+        scale: 2.3,
+        width: 240,
+        height: 40,
+        wait_time: 2,
+        queue_time: 1,
+        background: {
+            bitmap: "notification"
+        },
+        text: {
+            default_x: 48,
+            default_y: 37,
+            max_length: 30
+        },
+        icon: {
+            bitmap: {
+                default_x: 7,
+                default_y: 18,
+                width: 27,
+                height: 27
+            },
+            item: {
+                default_x: 5,
+                default_y: 10,
+                size: 90
+            }
+        }
     }
-});
+};
+
+Notification.addStyle("learning", NotificationStyles.LEARNING);

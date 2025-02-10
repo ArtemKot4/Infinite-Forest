@@ -1,4 +1,6 @@
 # lib: esnext
+api/Command.ts
+
 api/render/RenderHelper.ts
 
 api/animation/RenderSide.ts
@@ -37,6 +39,7 @@ api/item/ItemForest.ts
 
 item/TransferCrystal.ts
 item/AncientNote.ts
+item/WheatFlour.ts
 
 api/block/IBlockModel.ts
 api/block/BlockModel.ts
@@ -83,8 +86,8 @@ BiomeList.ts
 
 core/dimension/InfiniteForest.ts
 
-BlockList.ts
-ItemList.ts
+block/BlockList.ts
+item/ItemList.ts
 
 core/dimension/generation/PlantGenerator.ts
 
@@ -103,19 +106,23 @@ learning/ui/LearningNotification.ts
 learning/LearningBase.ts
 learning/ItemLearning.ts
 learning/CraftBuildLearning.ts
+learning/EventLearning.ts
 
 learning/Reflection.ts
 
 
 learning/Book.ts
 
+learning/LearningList.ts
+learning/LearningCommand.ts
+
 core/events/ServerPlayerTick.ts
 core/events/LocalTick.ts
 core/events/PlayerChangedDimension.ts
+core/events/ServerPlayerLoaded.ts
 
 recipes.ts
 
-api/Command.ts
 
 final.ts
 

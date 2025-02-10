@@ -12,14 +12,38 @@ interface INotificationStyle {
         max_length: number
     }, 
     icon: {
-        /**
-         * size of the icon when type is item
-         */
-        item_size: number,
-        default_x: number,
-        default_y: number,
-        width: number,
-        heigth: number
+        item: {
+            /**
+             * size of the icon when type is item
+             */
+            size: number,
+            /**
+             * x of the icon when type is item
+             */
+            default_x: number,
+            /**
+             * y of the icon when type is item
+             */
+            default_y: number
+        },
+        bitmap: {
+            /**
+             * x of the icon when type is bitmap
+             */
+            default_x: number,
+            /**
+             * y of the icon when type is bitmap
+             */
+            default_y: number,
+            /**
+             * width of the icon when type is bitmap
+             */
+            width: number,
+            /**
+             * height of the icon when type is bitmap
+             */
+            height: number
+        }
     },
     /**
      * scale of all elements
@@ -94,25 +118,25 @@ class Notification {
                     bitmap: style.background.bitmap
                 },
                 icon: (() => {
-                    const x = style.icon.default_x * style.scale;
-                    const y = style.icon.default_y * style.scale;
-
-                    const content = {
-                        type: "image",
-                        x: x,
-                        y: -height + y,
-                    } as UI.UISlotElement | UI.UIImageElement;
+                    const content = {} as UI.UISlotElement | UI.UIImageElement;
 
                     if(icon_type && icon_type === "item") {
                         content.type = "slot";
+                        content.x = style.icon.item.default_x * style.scale;
+                        content.y = style.icon.item.default_y * style.scale;
+
                         content.source = new ItemStack(parseID(icon), 1, 0);
                         content.visual = true;
-                        content.size = style.icon.item_size;
+                        content.size = style.icon.item.size;
                         content.bitmap = "unknown";
                     } else {
+                        content.type = "image";
+                        content.x = style.icon.bitmap.default_x * style.scale;
+                        content.y = style.icon.bitmap.default_y * style.scale;
+                        
                         content.bitmap = icon;
-                        content.width = style.icon.width * style.scale;
-                        content.height = style.icon.heigth * style.scale;
+                        content.width = style.icon.bitmap.width * style.scale;
+                        content.height = style.icon.bitmap.height * style.scale;
                     };
                     
                     return content;
@@ -167,12 +191,15 @@ class Notification {
         return;
     };
 
-    public static updateElementHeights(style: INotificationStyle, value: number): void {
+    public static updateElementHeights(style: INotificationStyle, icon_type: "item" | "default" ,value: number): void {
         const elements = this.UI.getElements();
 
         elements.get("background").setPosition(0, value);
         elements.get("text").setPosition(style.text.default_x * style.scale, value + style.text.default_y); 
-        elements.get("icon").setPosition(style.icon.default_x * style.scale, value + style.icon.default_y);
+
+        const key = icon_type === "item" ? "item" : "bitmap";
+
+        elements.get("icon").setPosition(style.icon[key].default_x * style.scale, value + style.icon[key].default_y);
         return;
     };
 
@@ -187,7 +214,7 @@ class Notification {
                 if(!mark) {
                     if(height < 0) {
                         height += 1;
-                        this.updateElementHeights(style, height);
+                        this.updateElementHeights(style, icon_type, height);
                     } else {
                         java.lang.Thread.sleep(style.wait_time * 1000);
                         mark = true;
@@ -195,7 +222,7 @@ class Notification {
                 } else {
                     if(height > -static_height) {
                         height -= 1
-                        this.updateElementHeights(style, height);
+                        this.updateElementHeights(style, icon_type, height);
                     } else {
                         this.lock = false;
 

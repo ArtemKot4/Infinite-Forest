@@ -14,6 +14,8 @@ abstract class LearningBase {
         this.section = data.section || 'default';
         this.icon = data.icon;
         this.icon_type = data.icon_type;
+
+        Learning.list[name] = this;
     };
 
     abstract type: string;
@@ -51,15 +53,3 @@ abstract class LearningBase {
         return;
     };
 };
-
-class EventLearning extends LearningBase {
-    public type: string = "event";
-};
-
-Learning.registry(new EventLearning("test", {
-    page: "test"
-}));
-
-Learning.registry(new EventLearning("first_point", {
-    page: "infinite_forest_is_real"
-}));
