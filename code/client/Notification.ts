@@ -6,19 +6,40 @@ interface INotificationStyle {
         default_x: number,
         default_y: number,
         font?: com.zhekasmirnov.innercore.api.mod.ui.types.FontDescription,
+        /**
+         * width of text. If text length bigger then max_length, it will be cut
+         */
         max_length: number
     }, 
     icon: {
+        /**
+         * scale of the icon when type is item
+         */
         item_scale: number,
         default_x: number,
         default_y: number,
         width: number,
         heigth: number
     },
+    /**
+     * scale of all elements
+     */
     scale: number,
+    /**
+     * time before moving back, in seconds
+     */
     wait_time: number,
+    /**
+     * time before next notification, in seconds
+     */
     queue_time: number,
+    /**
+     * width of window. Influences on background width
+     */
     width: number,
+    /**
+     * height of window. Influences on background height
+     */
     height: number
 };
 
@@ -147,13 +168,11 @@ class Notification {
     };
 
     public static updateElementHeights(style: INotificationStyle, value: number): void {
-        const content = this.UI.getContent();
+        const elements = this.UI.getElements();
 
-        content.elements.background.y = value;
-        content.elements.text.y = value + style.text.default_y; 
-        content.elements.icon.y = value + style.icon.default_y;
-        
-        this.UI.forceRefresh();
+        elements.get("background").setPosition(0, value);
+        elements.get("text").setPosition(style.text.default_x * style.scale, value + style.text.default_y); 
+        elements.get("icon").setPosition(style.icon.default_x * style.scale, value + style.icon.default_y);
         return;
     };
 
@@ -208,7 +227,7 @@ class Notification {
 };
 
 Network.addClientPacket("packet.infinite_forest.send_notification", (data: INotificationInputParams) => {
-    Notification.open(data.style_name, data.text, data.icon, data.icon_type);
+    return Notification.open(data.style_name, data.text, data.icon, data.icon_type);
 });
 
 Callback.addCallback("LocalLevelLeft", () => {

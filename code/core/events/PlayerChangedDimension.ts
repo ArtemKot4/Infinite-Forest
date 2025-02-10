@@ -34,7 +34,9 @@ Callback.addCallback("PlayerChangedDimension", function (playerUid: number, from
         Commands.exec("/gamerule doDaylightCycle false");
         Commands.exec("/gamerule doWeatherCycle false");
 
-        InventorySaver.replaceFor(playerUid);
+        if(from !== InfiniteForest.id) {
+            InventorySaver.replaceFor(playerUid);
+        };
         
         ObjectPlayer.addLearning(playerUid, "first_point");
     } else {
