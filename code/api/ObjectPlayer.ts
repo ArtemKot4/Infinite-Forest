@@ -213,7 +213,7 @@ class ObjectPlayer {
 
             this.sendToClient(player_uid);
 
-            return Notification.sendFor(player_uid, "learning", learning_name, learning.icon, learning.icon_type);
+            return Notification.sendFor(player_uid, "learning", `learning.infinite_forest.${learning_name}`, learning.icon, learning.icon_type);
         };
     };
 
