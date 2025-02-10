@@ -6,8 +6,8 @@ class ItemList {
             ObjectPlayer.addLearning(player_uid, "first_lucks");
         }
     }("wheat_flour", {
-            name: "wheat_flour",
-            meta: 0
+        name: "wheat_flour",
+        meta: 0
     })
     //new ItemForest();
     public static ANCIENT_NOTE = new AncientNote();

@@ -25,6 +25,8 @@ particles.ts
 header.ts
 core.ts
 
+client/Notification.ts
+
 api/Keyboard.ts
 
 api/item/ItemHandComponent.ts
@@ -99,6 +101,8 @@ learning/ui/LearningNotification.ts
 learning/LearningBase.ts
 learning/ItemLearning.ts
 learning/CraftBuildLearning.ts
+
+learning/Reflection.ts
 
 
 learning/Book.ts

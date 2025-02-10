@@ -31,7 +31,7 @@ interface Reflection {
  */
 
 class ObjectPlayer {
-    protected static list: Record<number, ObjectPlayer> = {};
+    public static list: Record<number, ObjectPlayer> = {};
 
     protected constructor(id: number) {
         this.id = id;
@@ -109,6 +109,8 @@ class ObjectPlayer {
      */
 
     public static appendList(player: ObjectPlayer) {
+        ObjectPlayer.list ??= {};
+
         const key = ObjectPlayer.list[player.id];
 
         if(!key) {
@@ -160,9 +162,9 @@ class ObjectPlayer {
      * @param id numeric id of player;
      */
 
-    public static createToServer(id: number): void {
-        Network.sendToServer("packet.infinite_forest.create_object_player", { id });
-    };
+    // public static createToServer(id: number): void {
+    //     Network.sendToServer("packet.infinite_forest.create_object_player", { id });
+    // };
 
     /**
      * Server function to set player object in client side;
@@ -184,9 +186,9 @@ class ObjectPlayer {
      * @param player numeric id of player;
      */
 
-    public static sendToServer(player: ObjectPlayer): void {
-        Network.sendToServer("packet.infinite_forest.set_object_player", { player });
-    };
+    // public static sendToServer(player: ObjectPlayer): void {
+    //     Network.sendToServer("packet.infinite_forest.set_object_player", { player });
+    // };
 
     /**
      * Server function to append learning list of player in both sides;
@@ -196,7 +198,9 @@ class ObjectPlayer {
      */
 
     public static addLearning(player_uid: number, learning_name: string, direction: number = -1): void {
-        if(!Learning.get(learning_name)) {
+        const learning = Learning.get(learning_name);
+
+        if(!learning) {
             Debug.message(`Server: ${learning_name} is not a learning. All exists learnings: ${Object.keys(Learning.list)}`);
             return;
         };
@@ -208,7 +212,8 @@ class ObjectPlayer {
             player.learningList[learning_name] = direction;
 
             this.sendToClient(player_uid);
-            LearningNotification.sendFor(player_uid, learning_name);
+
+            Notification.sendFor(player_uid, "learning", learning_name, learning.icon, learning.icon_type);
             return;
         };
     };
@@ -302,38 +307,47 @@ class ObjectPlayer {
     // public static addMyPageToServer(id: number, title: string, subtitle: string, text: string): void {
     //     Network.sendToServer("packet.infinite_forest.add_my_page_player", { id, title, subtitle, text });
     // };
+    public static clearList(): void {
+        ObjectPlayer.list = {};
+    };
+
+    public static getList(): typeof this.list {
+        return ObjectPlayer.list;
+    };
 };
 
-Network.addServerPacket("packet.infinite_forest.create_object_player", (client: NetworkClient, data: { id: number }) => {
-    ObjectPlayer.create(data.id);
-});
+// Network.addServerPacket("packet.infinite_forest.create_object_player", (client: NetworkClient, data: { id: number }) => {
+//     ObjectPlayer.create(data.id);
+// });
 
-Network.addServerPacket("packet.infinite_forest.set_object_player", (client: NetworkClient, data: { player: ObjectPlayer }) => {
-    ObjectPlayer.set(data.player);
-});
+// Network.addServerPacket("packet.infinite_forest.set_object_player", (client: NetworkClient, data: { player: ObjectPlayer }) => {
+//     ObjectPlayer.set(data.player);
+// });
 
 Network.addClientPacket("packet.infinite_forest.get_object_player", (data: { player: ObjectPlayer }) => {
     ObjectPlayer.appendList(data.player);
     // Game.message("my data: -> " + JSON.stringify(ObjectPlayer.get()));
 });
 
-Network.addServerPacket("packet.infinite_forest.add_learning_player", (client: NetworkClient, data: { 
-    id: number, 
-    learning: string, 
-    direction: number 
-}) => {
-    return ObjectPlayer.addLearning(data.id, data.learning, data.direction);
-});
+// Network.addServerPacket("packet.infinite_forest.add_learning_player", (client: NetworkClient, data: { 
+//     id: number, 
+//     learning: string, 
+//     direction: number 
+// }) => {
+//     return ObjectPlayer.addLearning(data.id, data.learning, data.direction);
+// });
 
-Network.addServerPacket("packet.infinite_forest.add_reflection_player", (client: NetworkClient, data: { id: number, reflection: Reflection, progress: number, page_direction: number }) => {
-    return ObjectPlayer.addReflection(data.id, data.reflection, data.progress, data.page_direction);
-});
+// Network.addServerPacket("packet.infinite_forest.add_reflection_player", (client: NetworkClient, data: { id: number, reflection: Reflection, progress: number, page_direction: number }) => {
+//     return ObjectPlayer.addReflection(data.id, data.reflection, data.progress, data.page_direction);
+// });
 
-Network.addServerPacket("packet.infinite_forest.add_my_page_player", (client: NetworkClient, data: { id: number, title: string, subtitle: string, text: string }) => {
-    return ObjectPlayer.addRecord(data.id, data.title, data.subtitle, data.text);
-});
+// Network.addServerPacket("packet.infinite_forest.add_my_page_player", (client: NetworkClient, data: { id: number, title: string, subtitle: string, text: string }) => {
+//     return ObjectPlayer.addRecord(data.id, data.title, data.subtitle, data.text);
+// });
 
 Callback.addCallback("ServerPlayerLoaded", (player) => {
     ObjectPlayer.create(player);
     ObjectPlayer.sendToClient(player);
 });
+
+

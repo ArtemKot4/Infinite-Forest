@@ -1,11 +1,12 @@
 class InventorySaver {
-    public static data: Record<string, ItemInstance[]> = {};
+    public static list: Record<number, ItemInstance[]> = {};
 
-    public static replace(player: number) {
+    public static replaceFor(player: number) {
+        this.list ??= {};
+        
         const entity = new PlayerEntity(player);
-        const name = Entity.getNameTag(player);
         const from = [];
-        const to = this.data[name] ??= [];
+        const to = this.list[player] ??= [];
 
         for(let i = 0; i < 36; i++) {
             from.push(entity.getInventorySlot(i));
@@ -16,20 +17,15 @@ class InventorySaver {
             entity.addItemToInventory(instance);
         };
 
-        this.data[name] = from;
+        this.list[player] = from;
     };
 
-    static {
-        Saver.addSavesScope("scope.infinite_forest.inventory_saver", 
-            function load(scope: {data: Record<string, ItemInstance[]>}) {
-                InventorySaver.data = scope ? scope.data : {}
-            },
-            function read() {
-                return {data: InventorySaver.data};
-            }
-        );
-    }
-}
+    public static clearList(): void {
+        this.list = {};
+    };
+};
+
+
 
 Callback.addCallback("PlayerChangedDimension", function (playerUid: number, from: number, to: number) {
     if (Entity.getDimension(playerUid) == InfiniteForest.id) {
@@ -38,7 +34,7 @@ Callback.addCallback("PlayerChangedDimension", function (playerUid: number, from
         Commands.exec("/gamerule doDaylightCycle false");
         Commands.exec("/gamerule doWeatherCycle false");
 
-        InventorySaver.replace(playerUid);
+        InventorySaver.replaceFor(playerUid);
         
         ObjectPlayer.addLearning(playerUid, "first_point");
     } else {
@@ -46,7 +42,7 @@ Callback.addCallback("PlayerChangedDimension", function (playerUid: number, from
         Commands.exec("/gamerule doWeatherCycle true");
         
         if(from == InfiniteForest.id) {
-            InventorySaver.replace(playerUid);
+            InventorySaver.replaceFor(playerUid);
         };
     };
 });

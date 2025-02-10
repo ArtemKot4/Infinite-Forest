@@ -16,9 +16,9 @@ class LearningTableTile extends TileEntityBase {
 
     public dropNote(extra?: Nullable<ItemExtraData>): void {
         if(this.data.text != null) {
-            const new_extra = new ItemExtraData();
-            new_extra.putString("text", this.data.text);
-            new_extra.putString("learning", this.data.learning);
+            const newExtra = new ItemExtraData();
+            newExtra.putString("text", this.data.text);
+            newExtra.putString("learning", this.data.learning);
             this.blockSource.spawnDroppedItem(
                 this.x + 0.5, 
                 this.y + 1.2,
@@ -26,7 +26,7 @@ class LearningTableTile extends TileEntityBase {
                 ItemList.ANCIENT_NOTE.id,
                 1,
                 0,
-                new_extra
+                newExtra
             );
         };
         let text = null;

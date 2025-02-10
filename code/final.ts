@@ -18,4 +18,25 @@ ModAPI.addAPICallback("InfiniteDepth", function(InfiniteDepth) {
     });
 });
 
+Callback.addCallback("LevelLeft", () => {
+    ObjectPlayer.clearList();
+    InventorySaver.clearList();
+});
 
+Saver.addSavesScope("scope.infinite_forest.inventory_saver", 
+    function save(scope: { list: typeof InventorySaver.list }) {
+        InventorySaver.list = scope && scope.list ? scope.list : {};
+    },
+    function read() {
+        return { list: InventorySaver.list };
+    }
+);
+
+Saver.addSavesScope("scope.infinite_forest.object_player_list", 
+    function read(scope: { list: typeof ObjectPlayer.list }) {
+        ObjectPlayer.list = scope && scope.list ? scope.list : {};
+    },
+    function save() {
+        return { list: ObjectPlayer.list };
+    }
+);
