@@ -15,14 +15,14 @@ namespace NotificationStyles {
         },
         icon: {
             bitmap: {
-                default_x: 7,
+                default_x: 8,
                 default_y: 18,
                 width: 27,
                 height: 27
             },
             item: {
-                default_x: -10,
-                default_y: -10,
+                default_x: 2.3,
+                default_y: 2.3,
                 size: 90
             }
         }

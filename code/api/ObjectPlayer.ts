@@ -158,15 +158,6 @@ class ObjectPlayer {
     }
 
     /**
-     * Client function to create player object in server side;
-     * @param id numeric id of player;
-     */
-
-    // public static createToServer(id: number): void {
-    //     Network.sendToServer("packet.infinite_forest.create_object_player", { id });
-    // };
-
-    /**
      * Server function to set player object in client side;
      * @param id numeric id of player;
      */
@@ -180,15 +171,6 @@ class ObjectPlayer {
             });
         };
     };
-
-    /**
-     * Client function to set player object in server side;
-     * @param player numeric id of player;
-     */
-
-    // public static sendToServer(player: ObjectPlayer): void {
-    //     Network.sendToServer("packet.infinite_forest.set_object_player", { player });
-    // };
 
     /**
      * Server function to append learning list of player in both sides;
@@ -270,42 +252,6 @@ class ObjectPlayer {
         this.sendToClient(id);
     };
 
-    //next danger functions, mustn't to realize
-
-    /**
-     * Client function to append learning list of player in both sides;
-     * @param id numeric id of player;
-     * @param learning in database;
-     * @param direction of page;
-     */
-
-    // public static addLearningToServer(id: number, learning: string, direction: number): void {
-    //     Network.sendToServer("packet.infinite_forest.add_learning_player", { id, learning, direction });
-    // };
-
-    /**
-     * Client function to append reflection list of player in both sides;
-     * @param id numeric id of player;
-     * @param reflection in database;
-     * @param progress number of progress;
-     * @param page_direction direction of page;
-     */
-
-    // public static addReflectionToServer(id: number, reflection: Reflection, progress: number, page_direction: number): void {
-    //     Network.sendToServer("packet.infinite_forest.add_reflection_player", { id, reflection, progress, page_direction });
-    // };
-
-    /**
-     * Client function to append pagesMyself list of player in both sides;
-     * @param id numeric id of player;
-     * @param title title of page;
-     * @param subtitle subtitle of page;
-     * @param text text of page;
-     */
-
-    // public static addMyPageToServer(id: number, title: string, subtitle: string, text: string): void {
-    //     Network.sendToServer("packet.infinite_forest.add_my_page_player", { id, title, subtitle, text });
-    // };
     public static clearList(): void {
         ObjectPlayer.list = {};
     };
@@ -315,34 +261,10 @@ class ObjectPlayer {
     };
 };
 
-// Network.addServerPacket("packet.infinite_forest.create_object_player", (client: NetworkClient, data: { id: number }) => {
-//     ObjectPlayer.create(data.id);
-// });
-
-// Network.addServerPacket("packet.infinite_forest.set_object_player", (client: NetworkClient, data: { player: ObjectPlayer }) => {
-//     ObjectPlayer.set(data.player);
-// });
-
 Network.addClientPacket("packet.infinite_forest.get_object_player", (data: { player: ObjectPlayer }) => {
     ObjectPlayer.appendList(data.player);
     // Game.message("my data: -> " + JSON.stringify(ObjectPlayer.get()));
 });
-
-// Network.addServerPacket("packet.infinite_forest.add_learning_player", (client: NetworkClient, data: { 
-//     id: number, 
-//     learning: string, 
-//     direction: number 
-// }) => {
-//     return ObjectPlayer.addLearning(data.id, data.learning, data.direction);
-// });
-
-// Network.addServerPacket("packet.infinite_forest.add_reflection_player", (client: NetworkClient, data: { id: number, reflection: Reflection, progress: number, page_direction: number }) => {
-//     return ObjectPlayer.addReflection(data.id, data.reflection, data.progress, data.page_direction);
-// });
-
-// Network.addServerPacket("packet.infinite_forest.add_my_page_player", (client: NetworkClient, data: { id: number, title: string, subtitle: string, text: string }) => {
-//     return ObjectPlayer.addRecord(data.id, data.title, data.subtitle, data.text);
-// });
 
 Callback.addCallback("ServerPlayerLoaded", (player) => {
     ObjectPlayer.create(player);
