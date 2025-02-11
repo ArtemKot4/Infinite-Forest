@@ -102,8 +102,7 @@ class EffectHud {
     };
 
     public setScale(value: number, max: number): void {
-        this.UI.content.elements["scale"].value = value / max;
-        this.UI.forceRefresh();
+        this.UI.getElements().get("scale").setBinding("value", value / max);
         return;
     };
 

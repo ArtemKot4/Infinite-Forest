@@ -1,32 +1,32 @@
-class BlockList {
-    public static FIRONIA = new Fironia();
-    public static ICE_FLOWER = new IceFlower();
-    public static ELECTRIC_MUSHROOM = new ElectricMushroom();
-    public static BLUE_MUSHROOM_BLOCK = new BlueMushroomBlock();
+namespace BlockList {
+    export const FIRONIA = new Fironia();
+    export const ICE_FLOWER = new IceFlower();
+    export const ELECTRIC_MUSHROOM = new ElectricMushroom();
+    export const BLUE_MUSHROOM_BLOCK = new BlueMushroomBlock();
 
-    public static PINK_HEWN = new Hewn("pink_hewn");
-    public static PINK_LOG = new Log("pink_log", this.PINK_HEWN.stringID);
-    public static PINK_BARK = new Bark("pink_bark", this.PINK_LOG.stringID);
-    public static PINK_PLANKS = new Planks("pink_planks", this.PINK_LOG.stringID, this.PINK_BARK.stringID, this.PINK_HEWN.stringID);
+    export const PINK_HEWN = new Hewn("pink_hewn");
+    export const PINK_LOG = new Log("pink_log", PINK_HEWN.stringID);
+    export const PINK_BARK = new Bark("pink_bark", PINK_LOG.stringID);
+    export const PINK_PLANKS = new Planks("pink_planks", PINK_LOG.stringID, PINK_BARK.stringID, PINK_HEWN.stringID);
 
-    public static EUCALYPTUS_HEWN = new Hewn("eucalyptus_hewn");
-    public static EUCALYPTUS_LOG = new Log("eucalyptus_log", this.EUCALYPTUS_HEWN.stringID);
-    public static EUCALYPTUS_BARK = new Bark("eucalyptus_bark", this.EUCALYPTUS_LOG.stringID);
-    public static EUCALYPTUS_PLANKS = new Planks("eucalyptus_planks", this.EUCALYPTUS_LOG.stringID, this.EUCALYPTUS_BARK.stringID, this.EUCALYPTUS_HEWN.stringID);
+    export const EUCALYPTUS_HEWN = new Hewn("eucalyptus_hewn");
+    export const EUCALYPTUS_LOG = new Log("eucalyptus_log", EUCALYPTUS_HEWN.stringID);
+    export const EUCALYPTUS_BARK = new Bark("eucalyptus_bark", EUCALYPTUS_LOG.stringID);
+    export const EUCALYPTUS_PLANKS = new Planks("eucalyptus_planks", EUCALYPTUS_LOG.stringID, EUCALYPTUS_BARK.stringID, EUCALYPTUS_HEWN.stringID);
 
-    public static WINTER_HEWN = new Hewn("winter_hewn");
-    public static WINTER_LOG = new Log("winter_log", this.WINTER_HEWN.stringID);
-    public static WINTER_BARK = new Bark("winter_bark", this.WINTER_LOG.stringID);
-    public static WINTER_PLANKS = new Planks("winter_planks", this.WINTER_LOG.stringID, this.WINTER_BARK.stringID, this.WINTER_HEWN.stringID);
+    export const WINTER_HEWN = new Hewn("winter_hewn");
+    export const WINTER_LOG = new Log("winter_log", WINTER_HEWN.stringID);
+    export const WINTER_BARK = new Bark("winter_bark", WINTER_LOG.stringID);
+    export const WINTER_PLANKS = new Planks("winter_planks", WINTER_LOG.stringID, WINTER_BARK.stringID, WINTER_HEWN.stringID);
 
-    public static WINDMILL_BLADES = new WindmillBlades();
-    public static WINDMILL_STATION = new WindmillStation();
+    export const WINDMILL_BLADES = new WindmillBlades();
+    export const WINDMILL_STATION = new WindmillStation();
 
-    public static LEARNING_TABLE = new LearningTable();
+    export const LEARNING_TABLE = new LearningTable();
 
-    public static BOTTLE = new Bottle();
-    public static FIREFLIES_BOTTLE = new FirefliesBottle();
+    export const BOTTLE = new Bottle();
+    export const FIREFLIES_BOTTLE = new FirefliesBottle();
     
-    public static CAULDRON = new Cauldron();
-    public static SALT = new Salt();
-}
+    export const CAULDRON = new Cauldron();
+    export const SALT = new Salt();
+};

@@ -1,6 +1,6 @@
-class ItemList {
-    public static readonly ORANGE_CRYSTAL = new OrangeCrystal();
-    public static readonly BLUE_CRYSTAL = new BlueCrystal();
-    public static WHEAT_FLOUR = new WheatFlour();
-    public static ANCIENT_NOTE = new AncientNote();
+namespace ItemList {
+    export const ORANGE_CRYSTAL: Readonly<OrangeCrystal> = new OrangeCrystal();
+    export const BLUE_CRYSTAL: Readonly<OrangeCrystal> = new BlueCrystal();
+    export const WHEAT_FLOUR = new WheatFlour();
+    export const ANCIENT_NOTE = new AncientNote();
 };

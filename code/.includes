@@ -3,8 +3,9 @@ api/Command.ts
 
 api/render/RenderHelper.ts
 
-api/animation/RenderSide.ts
-api/animation/BlockAnimation.ts
+client/animation/RenderSide.ts
+client/animation/BlockAnimation.ts
+client/particles.ts
 
 api/animation/ScreenAnimation.ts
 
@@ -27,6 +28,7 @@ particles.ts
 header.ts
 core.ts
 
+client/SoundHelper.ts
 
 client/ui/Notification.ts
 client/ui/notification_styles.ts
@@ -74,7 +76,7 @@ block/tile_entity/LearningTable.ts
 effect/WinterEffect.ts
 effect/CalmingEffect.ts
 
-EffectList.ts
+effect/EffectList.ts
 
 core/dimension/biome/BiomeBehaviour.ts
 core/dimension/biome/AbstractBiome.ts
