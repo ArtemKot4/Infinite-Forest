@@ -205,3 +205,8 @@ Translation.addTranslation("learning.infinite_forest.first_point", {
     en: "First point",
     ru: "Отправная точка"
 });
+
+Translation.addTranslation("learning.infinite_forest.cauldron_lifehack", {
+    en: "Unbound water",
+    ru: "Вода без границ"
+});

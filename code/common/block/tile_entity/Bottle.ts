@@ -22,7 +22,7 @@ class Bottle extends BlockForest {
             region.destroyBlock(x, y, z, false);
         };
 
-        this.addFireflies(x, y, z, region, MathHelper.randomFromArray(glowwormColors));
+        this.addFireflies(x, y, z, region, ParticleHelper.getRandomGlowworm());
     };
 
     public addFireflies(x: number, y: number, z: number, region: BlockSource, color: number) {
@@ -69,7 +69,7 @@ class Bottle extends BlockForest {
 
 class FirefliesBottleTile extends TileEntityBase {
     public defaultValues = {
-        color: glowwormColors[2]
+        color: null
     };
 
     public data: typeof this.defaultValues;
@@ -80,7 +80,7 @@ class FirefliesBottleTile extends TileEntityBase {
 
     public override clientTick(): void {
         if(World.getThreadTime() % 10 === 0) {
-            const color = this.networkData.getInt("color", glowwormColors[2]);
+            const color = this.networkData.getInt("color", EForestParticle.GLOWWORM_2);
 
             Particles.addParticle(
                 color,
@@ -113,7 +113,7 @@ class FirefliesBottle extends BlockForest {
     };
 
     public override onPlace(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, player: number, region: BlockSource): void | Vector {
-        let color = MathHelper.randomFromArray(glowwormColors);
+        let color = ParticleHelper.getRandomGlowworm();
 
         if(item.extra) {
             color = item.extra.getInt("color", color);

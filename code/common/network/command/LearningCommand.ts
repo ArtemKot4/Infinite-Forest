@@ -16,13 +16,18 @@ class LearningCommand extends ServerCommand<ILearningCommandProps> {
         const player = ObjectPlayer.getOrCreate(playerUid);
 
         if(data.action === "clear") {
+            let text = Translation.translate("message.infinite_forest.clear_learnings");
+
             if('name' in data) {
-                delete player.learningList[data.name]
+                text = Translation.translate("message.infinite_forest.clear_learning")
+                .replace("%s", Translation.translate(`learning.infinite_forest.${data.name}`));
+                
+                delete player.learningList[data.name];
             } else {
-                player.learningList = {};
+                player.learningList = {};"message.infinite_forest.clear_learning"
             };
             ObjectPlayer.sendToClient(playerUid);
-            Notification.sendFor(playerUid, "learning", Translation.translate("message.infinite_forest.clear_learnings"), "amulet_lock");
+            Notification.sendFor(playerUid, "learning", text, "amulet_lock");
         };
 
         if(data.action === "add") {
@@ -44,4 +49,9 @@ new LearningCommand();
 Translation.addTranslation("message.infinite_forest.clear_learnings", {
     en: "Your learnings cleared",
     ru: "Ваши изучения удалены",
+});
+
+Translation.addTranslation("message.infinite_forest.clear_learning", {
+    en: "Learning %s cleared",
+    ru: "Изучение %s удалено",
 });

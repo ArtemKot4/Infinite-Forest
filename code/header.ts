@@ -36,7 +36,7 @@ declare namespace com.zhekasmirnov.innercore.api.NativeAPI {
     export function setFogDistance(r: number, g: number, b: number): void;
 
     export function setCloudColor(r: number, g: number, b: number): void;
-}
+};
 
 const NativeAPI = com.zhekasmirnov.innercore.api.NativeAPI;
 
@@ -49,7 +49,7 @@ interface RGB {
     g: number;
     b: number;
     alpha?: number;
-}
+};
 
 namespace Utils {
     export function setEmptyBlockCollision(id: number) {
@@ -61,16 +61,16 @@ namespace Utils {
         entry.addBox(0, 0, 0, 0, 0, 0);
         BlockRenderer.setCustomCollisionShape(id, -1, shape);
         render.addEntry(model);
-    }
+    };
 
     export function getBiomeState(x: number, z: number, region: BlockSource): EBiomeState {
         const biome = AbstractBiome.getFor(region.getBiome(x, z));
         return biome && biome.getBiomeState ? biome.getBiomeState() : EBiomeState.BALANCE;
-    }
+    };
 
     export function getBlockTags(id: number): string[] {
         return TagRegistry.getTagsFor("blocks", id);
-    }
+    };
 
     export function getItemTags(id: number): string[] {
         return TagRegistry.getTagsFor("items", id);
@@ -84,7 +84,7 @@ namespace Utils {
         Commands.exec("/title " + Entity.getNameTag(player) + " actionbar " + message);
     };
 
-    export function isCreativePlayer(player: number) {
+    export function isCreativePlayer(player: number): boolean {
         const gamemode = new PlayerActor(player).getGameMode();
         
         return gamemode === EGameMode.CREATIVE || gamemode === EGameMode.SPECTATOR;
@@ -118,13 +118,7 @@ namespace UIHelper {
     
         return result.join("\n");
     };
-}
-
-Network.addClientPacket("packet.infinite_forest.send_particle", (data: IParticleSender) => {
-    Particles.addParticle(data.type, data.x, data.y, data.z, data.vx, data.vy, data.vz);
-})
-  
-
+}; 
 
 namespace ForestGenerator {
     export const structurePool = new StructurePool("infinite_forest_structure_pool");

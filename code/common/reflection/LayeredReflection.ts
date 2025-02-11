@@ -1,0 +1,3 @@
+class LayeredReflection extends Reflection {
+    
+}

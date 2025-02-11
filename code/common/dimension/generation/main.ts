@@ -63,7 +63,6 @@ Callback.addCallback("GenerateCustomDimensionChunk", (chunkX, chunkZ, random, di
 });
 
 namespace ForestGenerator {
-
     export function generateCustomBiome(biome: number, chunkX: number, chunkZ: number, dimensionSeed: number, density: number = 0.7) {
         for (let x = chunkX * 16; x < (chunkX + 1) * 16; x++) {
             for (let z = chunkZ; z < (chunkZ + 1) * 16; z++) {

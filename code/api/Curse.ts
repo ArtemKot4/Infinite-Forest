@@ -6,7 +6,9 @@ class Curse {
         "dungeon"
     ];
 
-    public static sendClient(client: NetworkClient) {
+    public static sendFor(player_uid: number) {
+        const client = Network.getClientForPlayer(player_uid);
+
         if(client) {
             client.send("packet.infinite_forest.curse_client_list", { list: Curse.list });
         };
@@ -28,7 +30,7 @@ class Curse {
 };
 
 Callback.addCallback("ServerPlayerLoaded", (player) => {
-    Curse.sendClient(Network.getClientForPlayer(player));
+    Curse.sendFor(player);
 });
 
 Network.addClientPacket("packet.infinite_forest.curse_client_list", (data: { list: string[] }) => {

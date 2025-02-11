@@ -6,6 +6,12 @@ namespace LearningList {
         icon_type: 'item'
     });
 
+    export const CAULDRON_LIFEHACK = new EventLearning("cauldron_lifehack", {
+        page: "unbound_water",
+        icon: "water_bucket",
+        icon_type: 'item'
+    });
+
     //ITEM LEARNINGS
     export const FIRST_LUCKS = new ItemLearning("first_lucks", {
         page: "mill_is_work", icon: "wheat_flour"

@@ -1,16 +1,17 @@
 # lib: esnext
+translations.ts
+
 api/Command.ts
 
 api/render/RenderHelper.ts
 
-client/animation/RenderSide.ts
-client/animation/BlockAnimation.ts
-client/particles.ts
+common/client/animation/RenderSide.ts
+common/client/animation/BlockAnimation.ts
+common/client/particles.ts
 
 api/animation/ScreenAnimation.ts
 
-langParser.ts
-translations.ts
+common/lang_parser.ts
 
 api/Flags.ts
 api/ObjectPlayer.ts
@@ -24,14 +25,13 @@ api/effect/Effect.ts
 
 api/Factory.ts
 
-particles.ts
 header.ts
 core.ts
 
-client/SoundHelper.ts
+common/client/SoundHelper.ts
 
-client/ui/Notification.ts
-client/ui/notification_styles.ts
+common/client/ui/Notification.ts
+common/client/ui/notification_styles.ts
 
 api/Keyboard.ts
 
@@ -39,9 +39,9 @@ api/item/ItemHandComponent.ts
 
 api/item/ItemForest.ts
 
-item/TransferCrystal.ts
-item/AncientNote.ts
-item/WheatFlour.ts
+common/item/TransferCrystal.ts
+common/item/AncientNote.ts
+common/item/WheatFlour.ts
 
 api/block/IBlockModel.ts
 api/block/BlockModel.ts
@@ -57,74 +57,78 @@ api/block/wood/Bark.ts
 api/block/wood/Hewn.ts
 api/block/wood/Planks.ts
 
-block/mine/Salt.ts
+api/learning/Learning.ts
+api/learning/LearningBase.ts
+api/reflection/Reflection.ts
 
-block/plant/Fironia.ts
-block/plant/IceFlower.ts
-block/plant/ElectricMushroom.ts
+common/block/mine/Salt.ts
 
-block/tile_entity/EucalyptusWorkbench.ts
+common/block/plant/Fironia.ts
+common/block/plant/IceFlower.ts
+common/block/plant/ElectricMushroom.ts
 
-block/tile_entity/wind_mill/WindmillStation.ts
-block/tile_entity/wind_mill/WindmillBlades.ts
+common/block/tile_entity/EucalyptusWorkbench.ts
 
-block/tile_entity/Bottle.ts
-block/tile_entity/Cauldron.ts
+common/block/tile_entity/wind_mill/WindmillStation.ts
+common/block/tile_entity/wind_mill/WindmillBlades.ts
 
-block/tile_entity/LearningTable.ts
+common/block/tile_entity/Bottle.ts
+common/block/tile_entity/Cauldron.ts
 
-effect/WinterEffect.ts
-effect/CalmingEffect.ts
+common/block/tile_entity/LearningTable.ts
 
-effect/EffectList.ts
+common/effect/WinterEffect.ts
+common/effect/CalmingEffect.ts
 
-core/dimension/biome/BiomeBehaviour.ts
-core/dimension/biome/AbstractBiome.ts
-core/dimension/biome/FirefliesForest.ts
-core/dimension/biome/WinterForest.ts
-core/dimension/biome/HeartForest.ts
+common/effect/EffectList.ts
 
-BiomeList.ts
+common/dimension/biome/BiomeBehaviour.ts
+common/dimension/biome/AbstractBiome.ts
+common/dimension/biome/FirefliesForest.ts
+common/dimension/biome/WinterForest.ts
+common/dimension/biome/HeartForest.ts
 
-core/dimension/InfiniteForest.ts
+common/dimension/biome/BiomeList.ts
 
-block/BlockList.ts
-item/ItemList.ts
+common/dimension/InfiniteForest.ts
 
-core/dimension/generation/PlantGenerator.ts
+common/block/BlockList.ts
+common/item/ItemList.ts
 
-core/dimension/generation/different/column.ts
-core/dimension/generation/different/ground_caves.ts
-core/dimension/generation/different/kelps.ts
-core/dimension/generation/different/seagrass.ts
-core/dimension/generation/different/lake_bottom.ts
-core/dimension/generation/different/mystic_path.ts
-core/dimension/generation/different/beach.ts
+common/dimension/generation/PlantGenerator.ts
 
-core/dimension/generation/main.ts
+common/dimension/generation/different/column.ts
+common/dimension/generation/different/ground_caves.ts
+common/dimension/generation/different/kelps.ts
+common/dimension/generation/different/seagrass.ts
+common/dimension/generation/different/lake_bottom.ts
+common/dimension/generation/different/mystic_path.ts
+common/dimension/generation/different/beach.ts
 
-learning/Learning.ts
-learning/ui/LearningNotification.ts
-learning/LearningBase.ts
-learning/ItemLearning.ts
-learning/CraftBuildLearning.ts
-learning/EventLearning.ts
-
-learning/Reflection.ts
+common/dimension/generation/main.ts
 
 
-learning/Book.ts
+common/learning/ItemLearning.ts
+common/learning/CraftBuildLearning.ts
+common/learning/EventLearning.ts
+common/learning/Book.ts
+common/learning/LearningList.ts
 
-learning/LearningList.ts
-learning/LearningCommand.ts
-
-core/events/ServerPlayerTick.ts
-core/events/LocalTick.ts
-core/events/PlayerChangedDimension.ts
-core/events/ServerPlayerLoaded.ts
-
-recipes.ts
+common/reflection/LayeredReflection.ts
+common/reflection/ReflectionList.ts
 
 
-final.ts
+
+
+common/network/command/LearningCommand.ts
+
+common/events/ServerPlayerTick.ts
+common/events/LocalTick.ts
+common/events/PlayerChangedDimension.ts
+common/events/ServerPlayerLoaded.ts
+
+common/recipes.ts
+
+
+common/final.ts
 
