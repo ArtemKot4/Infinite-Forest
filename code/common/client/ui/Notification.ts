@@ -91,7 +91,16 @@ class Notification {
     })();
 
     public static queue: INotificationInputParams[] = [];
+
+    public static clearQueue() {
+        this.queue = [];
+    };
+
     public static lock: boolean = false;
+
+    public static setLock(lock: boolean) {
+        this.lock = lock;
+    };
 
     public static setDefault(style: INotificationStyle, text: string, icon: string, icon_type?: string) {
         const width = style.width * style.scale;
@@ -180,7 +189,7 @@ class Notification {
             throw new NoSuchFieldException("Error with getting style: style is not exists");
         };
 
-        this.lock = true;
+        this.setLock(true);
         this.setDefault(style, text, icon, icon_type);
 
         if(!this.UI.isOpened()) {
@@ -213,18 +222,16 @@ class Notification {
                 java.lang.Thread.sleep(3);
                 if(!mark) {
                     if(height < 0) {
-                        height += 1;
-                        this.updateElementHeights(style, icon_type, height);
+                        this.updateElementHeights(style, icon_type, height += 1);
                     } else {
                         java.lang.Thread.sleep(style.wait_time * 1000);
                         mark = true;
                     };
                 } else {
                     if(height > -static_height) {
-                        height -= 1
-                        this.updateElementHeights(style, icon_type, height);
+                        this.updateElementHeights(style, icon_type, height -= 1);
                     } else {
-                        this.lock = false;
+                        this.setLock(false);
 
                         if(this.queue.length > 0) {
                             java.lang.Thread.sleep(style.queue_time * 1000);
@@ -258,5 +265,5 @@ Network.addClientPacket("packet.infinite_forest.send_notification", (data: INoti
 });
 
 Callback.addCallback("LocalLevelLeft", () => {
-    Notification.queue = [];
+    Notification.clearQueue();
 });

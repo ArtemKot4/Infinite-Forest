@@ -3,21 +3,18 @@ TagRegistry.addCommonObject("blocks", VanillaBlockID.fire, ["fire"]);
 class CauldronTile extends TileEntityBase {
 
     public static WATER_RENDERMESH: RenderMesh = (() => {
-
         const mesh = new RenderMesh();
-        const pos = 8 / 16
 
-        mesh.addVertex(- pos, 0, -pos, 0, 0); 
-        mesh.addVertex(pos, 0, -pos, 1, 0); 
-        mesh.addVertex(-pos, 0, pos, 0, 1); 
+		mesh.setNormal(0, 1, 0);
+		mesh.setColor(1, 1, 1);
         
-        mesh.addVertex(pos, 0, -pos, 1, 0); 
-        mesh.addVertex(-pos, 0, pos, 0, 1); 
-        mesh.addVertex(pos, 0, pos, 1, 1); 
-
-        mesh.scale(1, 0, 1);
-        //mesh.setColor(0/256, 137/256, 46/256, 0.8);
-        return mesh;
+		mesh.addVertex(-0.5, 0, -0.5, 0, 0);
+		mesh.addVertex(0.5, 0, -0.5, 1, 0);
+		mesh.addVertex(0.5, 0, 0.5, 1, 1);
+		mesh.addVertex(-0.5, 0, -0.5, 0, 0);
+		mesh.addVertex(0.5, 0, 0.5, 1, 1);
+		mesh.addVertex(-0.5, 0, 0.5, 0, 1);
+		return mesh;
     })();
 
     public static BOILING_TIME_MAX = 2;

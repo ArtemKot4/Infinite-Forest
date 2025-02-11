@@ -1,5 +1,5 @@
 # lib: esnext
-translations.ts
+translations.js
 
 api/Command.ts
 
@@ -76,6 +76,7 @@ common/block/tile_entity/Bottle.ts
 common/block/tile_entity/Cauldron.ts
 
 common/block/tile_entity/LearningTable.ts
+common/block/tile_entity/EucalyptusTorch.ts
 
 common/effect/WinterEffect.ts
 common/effect/CalmingEffect.ts
@@ -91,6 +92,12 @@ common/dimension/biome/HeartForest.ts
 common/dimension/biome/BiomeList.ts
 
 common/dimension/InfiniteForest.ts
+
+common/block/infection/GrassInfected.ts
+common/block/infection/TallgrassInfected.ts
+common/block/infection/VineInfected.ts
+common/block/infection/DeadFlower.ts
+common/block/infection/DeadOak.ts
 
 common/block/BlockList.ts
 common/item/ItemList.ts

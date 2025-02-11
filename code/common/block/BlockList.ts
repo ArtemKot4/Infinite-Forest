@@ -29,4 +29,6 @@ namespace BlockList {
     
     export const CAULDRON = new Cauldron();
     export const SALT = new Salt();
+
+    export const EUCALYPTUS_TORCH = new EucalyptusTorchUnlit();
 };

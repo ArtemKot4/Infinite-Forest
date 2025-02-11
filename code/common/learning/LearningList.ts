@@ -12,6 +12,11 @@ namespace LearningList {
         icon_type: 'item'
     });
 
+    export const NO_MORE_EVIL = new EventLearning("no_more_evil", {
+        page: "i_am_new_god",
+        icon: "important_notification"
+    });
+
     //ITEM LEARNINGS
     export const FIRST_LUCKS = new ItemLearning("first_lucks", {
         page: "mill_is_work", icon: "wheat_flour"

@@ -3,7 +3,8 @@ class Curse {
         "cold",
         "fire",
         "cursed_lightning",
-        "dungeon"
+        "dungeon",
+        "infection"
     ];
 
     public static sendFor(player_uid: number) {
@@ -27,6 +28,10 @@ class Curse {
     public static has(curse: string) {
         return Curse.list.includes(curse);
     };
+
+    public static register(name: string) {
+        this.list.push(name);
+    }
 };
 
 Callback.addCallback("ServerPlayerLoaded", (player) => {

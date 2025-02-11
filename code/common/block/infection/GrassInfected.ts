@@ -1,0 +1,3 @@
+class GrassInfected extends BlockForest {
+
+};

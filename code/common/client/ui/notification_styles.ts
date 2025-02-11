@@ -21,7 +21,7 @@ namespace NotificationStyles {
                 height: 27
             },
             item: {
-                default_x: 2.3,
+                default_x: 2.25,
                 default_y: 2.3,
                 size: 90
             }

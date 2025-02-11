@@ -210,3 +210,8 @@ Translation.addTranslation("learning.infinite_forest.cauldron_lifehack", {
     en: "Unbound water",
     ru: "Вода без границ"
 });
+
+Translation.addTranslation("learning.infinite_forest.no_more_evil", {
+    en: "There is no more evil",
+    ru: "Зла больше нет"
+});

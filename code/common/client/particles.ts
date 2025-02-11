@@ -65,7 +65,7 @@ namespace EForestParticle {
         },
     });
 
-    export const VANILLA_RAIN = Particles.registerParticleType({
+    export const GREEN_RAIN = Particles.registerParticleType({
         texture: "weather",
         render: 2,
         size: [3, 4],

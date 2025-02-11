@@ -102,6 +102,10 @@ class LearningTableTile extends TileEntityBase {
         return;
     };
 
+    public clearLearning(): void {
+        this.data.learning = null;
+    };
+
     public drawEditButton(player: number): void {
         this.UI.content.elements.button.clicker.onClick = () => {
             const keyboard = new Keyboard(Translation.translate("message.infinite_forest.typing_placeholder"));
@@ -121,14 +125,14 @@ class LearningTableTile extends TileEntityBase {
                     
                     if(learning in playerLearnings) {
                         this.data.learning = learning;
-                    };
-                };
+                    } //else this.clearLearning();
+                } //else {
+                    //this.clearLearning();
+                //};
                 this.update();
             });
 
             keyboard.open();
-
-
         };
     };
 
