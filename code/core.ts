@@ -1,7 +1,7 @@
-function range(min: number, max: number): number[] {
+function range(min: number, max: number, number: number = 1): number[] {
     const list = [];
 
-    for (let i = min; i < max; i++) {
+    for (let i = min; i < max; i += number) {
         list.push(i);
     }
 
@@ -57,6 +57,10 @@ namespace MathHelper {
     export function randomFromArray<T>(array: T[]): T {
         return array[Math.floor(Math.random() * array.length)];
     };
+
+    export function radian(gradus: number): number {
+        return (gradus * Math.PI) / 180;
+    }
 }
 
 const structureDIR = __dir__ + "resources/assets/structures/";

@@ -52,8 +52,7 @@ class EucalyptusTorchTile extends TileEntityBase {
                 height = 4;
                 const waterLevel = cauldronTile.data.water_level;
 
-                if(waterLevel < 1) {
-                    
+                if(waterLevel < 1.0) {
                    this.addLearnings();
                    this.updateCauldronWaterLevel(cauldronTile);
                 };

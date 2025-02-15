@@ -27,7 +27,7 @@ interface IBookButtonElement extends UI.UIClickEvent {
 class PageUI {
     public UI: UI.Window = new UI.Window();
 
-    public defaultContent = {
+    public defaultContent: UI.WindowContent = {
         drawing: [{
             type: "background",
             color: android.graphics.Color.argb(0, 0, 0, 0)
@@ -137,18 +137,19 @@ class PageUI {
     public close(): void {
         this.UI.close();
         if(this.onClose) this.onClose((this));
+        return;
     };
 
     protected onOpen!: (page: this) => void;
     protected onClose!: (page: this) => void;
     protected customRender!: (page: this) => void;
 
-    public setOpenAction(callback: typeof this.onOpen) {
+    public setOpenAction(callback: typeof this.onOpen): this {
         this.onOpen = callback;
         return this;
     };
 
-    public setCloseAction(callback: typeof this.onClose) {
+    public setCloseAction(callback: typeof this.onClose): this {
         this.onClose = callback;
         return this;
     };
@@ -165,7 +166,7 @@ class PageUI {
     public clear(): this {
         this.defaultContent.elements = {};
         return this; 
-    }
+    };
 };
 
 abstract class Book {
@@ -191,8 +192,8 @@ abstract class Book {
         const width = this.background_bitmap.getWidth();
         const height = this.background_bitmap.getHeight();
 
-        const defaultX = UI.getScreenHeight() * 1.1 - ((width * scale) / 2);
-        const defaultY = UI.getScreenHeight() / 2 - ((height * scale) / 2);
+        const defaultX = UI.getScreenHeight() + 20 - ((width * scale) / 2);
+        const defaultY = UI.getScreenHeight() - ((height * scale) / 2);
 
         this.leftPageUI = this.getLeftPageUI()
         .setWidth((width * scale) / 2)

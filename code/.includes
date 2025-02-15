@@ -77,6 +77,7 @@ common/block/tile_entity/Cauldron.ts
 
 common/block/tile_entity/LearningTable.ts
 common/block/tile_entity/EucalyptusTorch.ts
+common/block/tile_entity/Candle.ts
 
 common/effect/WinterEffect.ts
 common/effect/CalmingEffect.ts

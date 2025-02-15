@@ -124,7 +124,7 @@ class EffectHud {
 
         Threading.initThread("thread.infinite_forest.effect_scale", () => {
             while(true) {
-                    java.lang.Thread.sleep(25);
+                    java.lang.Thread.sleep(50);
 
                     if(!this.isOpened()) {
                         continue;
@@ -138,13 +138,13 @@ class EffectHud {
                         
                     if(data.timer > 0) {
                         if(alpha < 1) {
-                            this.UI.layout.setAlpha(alpha + 0.025);
+                            this.UI.layout.setAlpha(alpha + 0.05);
                         };
                     };
     
                     if(data.timer <= 0 && data.progress <= 0) {
                         if(alpha > 0) {
-                            this.UI.layout.setAlpha(alpha - 0.025);
+                            this.UI.layout.setAlpha(alpha - 0.05);
                         } else {
                             this.close();
                             return;

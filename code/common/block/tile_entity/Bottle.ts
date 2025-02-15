@@ -75,6 +75,7 @@ class FirefliesBottleTile extends TileEntityBase {
     public data: typeof this.defaultValues;
 
     public override onLoad(): void {
+        this.data.color ??= ParticleHelper.getRandomGlowworm();
         this.networkData.putInt("color", this.data.color);
     };
 

@@ -43,7 +43,7 @@ Saver.addSavesScope("scope.infinite_forest.object_player_list",
 
 
 class TestBookItem extends ItemForest {
-    public book: TestBook = new TestBook("book.background", 1.8);
+    public book: TestBook = new TestBook("book.background", 1.95);
     public onItemUse(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, player: number): void {
         this.book.open();
         return;

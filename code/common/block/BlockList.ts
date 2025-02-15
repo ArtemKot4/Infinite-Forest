@@ -31,4 +31,5 @@ namespace BlockList {
     export const SALT = new Salt();
 
     export const EUCALYPTUS_TORCH = new EucalyptusTorchUnlit();
+    //export const CANDLE = new Candle();
 };

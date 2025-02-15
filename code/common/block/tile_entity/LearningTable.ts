@@ -5,6 +5,24 @@ class LearningTableTile extends TileEntityBase {
         return {...this.content}
     };
 
+    public static createAnimation(x: number, y: number, z: number): Animation.Item {
+        const animation = new Animation.Item(
+            x + MathHelper.randomFromArray(range(0.1, 0.9, 0.1)),
+            y + 1.025, 
+            z + MathHelper.randomFromArray(range(0.3, 0.6, 0.1))
+        );
+
+        animation.describeItem({
+            id: ItemList.ANCIENT_NOTE.id,
+            count: 1,
+            data: 0,
+            size: 0.6,
+            rotation: [Math.PI / 2, MathHelper.radian(randomInt(0, 180)), 0]
+        });
+
+        return animation;
+    };
+
     public UI: UI.Window = (() => {
         const window = new UI.Window(LearningTableTile.getDefaultContent());
         window.setCloseOnBackPressed(true);
@@ -19,6 +37,33 @@ class LearningTableTile extends TileEntityBase {
 
     public data: typeof this.defaultValues;
     public info_pressed: boolean = false;
+    public animation!: Animation.Item;
+
+
+    @NetworkEvent(Side.Client)
+    public createAnimationPacket(data: { is_valid: boolean }): void {
+        if(data.is_valid && !this.animation) {
+            this.animation = LearningTableTile.createAnimation(this.x, this.y, this.z);
+            this.animation.load();
+        } else if(this.animation) {
+            this.animation.destroy();
+            delete this.animation;
+        };
+    };
+
+    public clientLoad(): void {
+        const is_valid = this.networkData.getBoolean("is_valid");
+        if(is_valid && !this.animation) {
+            this.animation = LearningTableTile.createAnimation(this.x, this.y, this.z);
+            this.animation.load();
+        };
+    };
+
+    public clientUnload(): void {
+        if(this.animation) {
+            this.animation.destroy();
+        };
+    };
 
     public dropNote(extra?: Nullable<ItemExtraData>): void {
         if(this.data.text != null) {
@@ -35,6 +80,7 @@ class LearningTableTile extends TileEntityBase {
                 newExtra
             );
         };
+
         let text = null;
         let learning = null;
 
@@ -43,6 +89,11 @@ class LearningTableTile extends TileEntityBase {
             learning = extra.getString("learning");
         };
         
+        this.networkData.putBoolean("is_valid", !!extra);
+        this.networkData.sendChanges();
+
+        this.sendPacket("createAnimationPacket", { is_valid: !!extra });
+
         this.data.text = text;
         this.data.learning = learning;
         this.data.is_valid = !!extra;
@@ -131,10 +182,10 @@ class LearningTableTile extends TileEntityBase {
                     
                     if(learning in playerLearnings) {
                         this.data.learning = learning;
-                    } //else this.clearLearning();
-                } //else {
-                    //this.clearLearning();
-                //};
+                    } else this.clearLearning();
+                } else {
+                    this.clearLearning();
+                };
                 this.update();
             });
 
@@ -215,6 +266,25 @@ class LearningTableTile extends TileEntityBase {
                 }
             }
         };
+    };
+
+    public override destroyBlock(coords: Callback.ItemUseCoordinates, player: number): void {
+        if(!this.data.is_valid) {
+            return;
+        };
+
+        const extra = new ItemExtraData();
+
+        if(this.data.text) {
+            extra.putString("text", this.data.text);
+        };
+
+        if(this.data.learning) {
+            extra.putString("learning", this.data.learning);
+        };
+    
+        this.dropNote();
+        this.selfDestroy();
     };
 
 };
