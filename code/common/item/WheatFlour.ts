@@ -7,7 +7,7 @@ class WheatFlour extends ItemForest implements ItemHandComponent {
     };
 
     public onHand(item: ItemStack, player_uid: number): void {
-        ObjectPlayer.addLearning(player_uid, LearningList.FIRST_LUCKS.name);
+        Learning.giveFor(player_uid, LearningList.FIRST_LUCKS.name);
     };
 };
 

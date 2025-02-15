@@ -1,11 +1,11 @@
 class EucalyptusTorchTile extends TileEntityBase {
     public override clientTick(): void {
-        const enabled = this.networkData.getBoolean("enabled");
+        const enabled = this.networkData.getBoolean("enabled", true);
         if(!enabled) return;
 
         const height = this.networkData.getFloat("height", 2);
         const rainSpeed = this.networkData.getFloat("speed", 0.2);
-        const rainDensity = this.networkData.getInt("rain_density", 0);
+        const rainDensity = this.networkData.getInt("rain_density", 1);
 
         const rainHeight = height + 0.1;
         const cloudsHeight = height + 0.5;
@@ -95,7 +95,7 @@ class EucalyptusTorchTile extends TileEntityBase {
             false
         );
 
-        players.forEach((player) => ObjectPlayer.addLearning(player, "cauldron_lifehack"));
+        players.forEach((player) => Learning.giveFor(player, "cauldron_lifehack"));
         return;
     };
 };

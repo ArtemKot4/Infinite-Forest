@@ -9,9 +9,6 @@ class LearningCommand extends ServerCommand<ILearningCommandProps> {
     };
 
     public override onServer(client: NetworkClient, data: ILearningCommandProps): void {
-        if(!data) return;
-        if(!data.action) return;
-
         const playerUid = client.getPlayerUid();
         const player = ObjectPlayer.getOrCreate(playerUid);
 
@@ -19,15 +16,20 @@ class LearningCommand extends ServerCommand<ILearningCommandProps> {
             let text = Translation.translate("message.infinite_forest.clear_learnings");
 
             if('name' in data) {
+                const learningText = Translation.translate(`learning.infinite_forest.${data.name}`);
+
                 text = Translation.translate("message.infinite_forest.clear_learning")
-                .replace("%s", Translation.translate(`learning.infinite_forest.${data.name}`));
+                .replace("%s", learningText.length > 10 ? learningText.slice(0, 10) + "..." : learningText);
                 
-                delete player.learningList[data.name];
+                Learning.deleteFor(playerUid, data.name);
             } else {
-                player.learningList = {};"message.infinite_forest.clear_learning"
+                text = Translation.translate("message.infinite_forest.clear_learnings");
+
+                player.learningList = {};
+                ObjectPlayer.sendToClient(playerUid);
             };
-            ObjectPlayer.sendToClient(playerUid);
             Notification.sendFor(playerUid, "learning", text, "amulet_lock");
+            return;
         };
 
         if(data.action === "add") {
@@ -35,11 +37,11 @@ class LearningCommand extends ServerCommand<ILearningCommandProps> {
 
             if(data.name === "all") {
                 for(const learning_name of Object.keys(Learning.list)) {
-                    ObjectPlayer.addLearning(playerUid, learning_name);
+                    Learning.giveFor(playerUid, learning_name);
                 };
                 return;
             };
-            ObjectPlayer.addLearning(playerUid, data.name);
+            Learning.giveFor(playerUid, data.name);
         };
     };
 };

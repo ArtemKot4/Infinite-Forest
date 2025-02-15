@@ -5,9 +5,9 @@ api/Command.ts
 
 api/render/RenderHelper.ts
 
-common/client/animation/RenderSide.ts
-common/client/animation/BlockAnimation.ts
-common/client/particles.ts
+client/animation/RenderSide.ts
+client/animation/BlockAnimation.ts
+client/particles.ts
 
 api/animation/ScreenAnimation.ts
 
@@ -20,20 +20,18 @@ api/Curse.ts
 
 api/effect/EffectHud.ts
 api/effect/Effect.ts
-
-
-
 api/Factory.ts
 
 header.ts
 core.ts
 
-common/client/SoundHelper.ts
+client/SoundHelper.ts
 
-common/client/ui/Notification.ts
-common/client/ui/notification_styles.ts
+client/ui/Keyboard.ts
+client/ui/Notification.ts
+client/ui/notification_styles.ts
 
-api/Keyboard.ts
+client/ui/book/Book.ts
 
 api/item/ItemHandComponent.ts
 
@@ -59,7 +57,9 @@ api/block/wood/Planks.ts
 
 api/learning/Learning.ts
 api/learning/LearningBase.ts
+
 api/reflection/Reflection.ts
+api/reflection/ReflectionBase.ts
 
 common/block/mine/Salt.ts
 

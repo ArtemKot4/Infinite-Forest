@@ -5,7 +5,7 @@ Callback.addCallback("ItemUse", (coords, item, block, isE, player) => {
 });
 
 Callback.addCallback("LevelDisplayed", () => {
-    BookPage.loadFromJSON(__dir__ + "resources/assets/pages/");
+    //BookPage.loadFromJSON(__dir__ + "resources/assets/pages/");
 });
 
 
@@ -40,3 +40,17 @@ Saver.addSavesScope("scope.infinite_forest.object_player_list",
         return { list: ObjectPlayer.list };
     }
 );
+
+
+class TestBookItem extends ItemForest {
+    public book: TestBook = new TestBook("book.background", 1.8);
+    public onItemUse(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, player: number): void {
+        this.book.open();
+        return;
+    };
+};
+
+new TestBookItem("test_book_item", {
+    name: "forest_diary",
+    meta: 0
+}, 1);

@@ -38,7 +38,7 @@ Callback.addCallback("PlayerChangedDimension", function (playerUid: number, from
             InventorySaver.replaceFor(playerUid);
         };
         
-        ObjectPlayer.addLearning(playerUid, "first_point");
+        Learning.giveFor(playerUid, "first_point");
     } else {
         Commands.exec("/gamerule doDaylightCycle true");
         Commands.exec("/gamerule doWeatherCycle true");

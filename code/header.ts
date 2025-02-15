@@ -39,6 +39,7 @@ declare namespace com.zhekasmirnov.innercore.api.NativeAPI {
 };
 
 const NativeAPI = com.zhekasmirnov.innercore.api.NativeAPI;
+const TextureSource = UI.TextureSource;
 
 const NetworkEvent = BlockEngine.Decorators.NetworkEvent;
 const ContainerEvent = BlockEngine.Decorators.ContainerEvent;
@@ -99,12 +100,12 @@ type JSONLang = {
 const initRecipes: Map<[id: number, count: number], ItemInstance[]> = new Map();
 
 namespace UIHelper {
-    export function separateText(text: string, each_chars: number = 25) {
+    export function separateText(text: string, line_size: number = 25): string {
         let result = [];
         let line = "";
     
         for (let word of text.split(" ")) {
-            if (line.length + word.length <= each_chars) {
+            if (line.length + word.length <= line_size) {
                 line += word + " ";
             } else {
                 result.push(line.trim());

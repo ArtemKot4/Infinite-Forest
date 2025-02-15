@@ -49,7 +49,7 @@ abstract class LearningBase {
             this.completeEvent(player, ...args);
         };
 
-        ObjectPlayer.addLearning(player, learning.name);
+        Learning.giveFor(player, learning.name);
         return;
     };
 };

@@ -200,7 +200,7 @@ Network.addServerPacket("packet.infinite_forest.ancient_note.send_learning", (cl
 
         if(!learning) return;
     
-        return ObjectPlayer.addLearning(player,learning);
+        Learning.giveFor(player, learning);
     };
 });
 

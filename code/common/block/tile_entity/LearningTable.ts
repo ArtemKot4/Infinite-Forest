@@ -1,6 +1,12 @@
 class LearningTableTile extends TileEntityBase {
+    protected static content = {...AncientNote.UI.getContent()};
+
+    public static getDefaultContent(): UI.WindowContent {
+        return {...this.content}
+    };
+
     public UI: UI.Window = (() => {
-        const window = new UI.Window(AncientNote.UI.getContent());
+        const window = new UI.Window(LearningTableTile.getDefaultContent());
         window.setCloseOnBackPressed(true);
         return window;
     })();

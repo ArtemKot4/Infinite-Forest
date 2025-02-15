@@ -18,6 +18,6 @@ class CalmingEffect extends Effect {
 };
 
 Translation.addTranslation("message.infinite_forest.calming_effect", {
-    en: "You feel calm and peaceful. You feel that everything is still ahead of you. Relax.",
-    ru: "Вы чувствуете неожиданный прилив спокойствия. Вам кажется, что все проблемы остались позади. Отдыхайте."
+    en: "You feel calm and peaceful. You feel that everything is still ahead of you.",
+    ru: "Вы чувствуете неожиданный прилив спокойствия. Вам кажется, что все проблемы остались позади."
 })

@@ -15,11 +15,43 @@ abstract class Effect {
 
     abstract onTick(player: number): void;
 
-    public getFor(player_uid: number): IEffectData {
-        return ObjectPlayer.getOrCreate(player_uid).getEffect(this.getHud().icon);
+     /**
+     * Server function to get effect object;
+     */
+     public static get(player_uid: number, name: string): IEffectData {
+        const player = ObjectPlayer.get(player_uid);
+
+        if(player) {
+            return player.effectList[name] ??= {
+                progress: 0,
+                progress_max: 100,
+                timer: 0
+            };
+        }
     };
 
-    public sendDataFor(player: number, progress_max: number, data: IEffectData): void {
+    /**
+     * Server function to update effect object;
+     * @param name of effect;
+     * @param data different data of effect; All is optional, e.g. it is assigning new data with previous data
+     */
+
+    public static set(player_uid: number, name: string, data: Partial<IEffectData>) {
+        const player = ObjectPlayer.get(player_uid);
+
+        if(player) {
+            const previousData = player.effectList[name] || {
+                progress: 0,
+                progress_max: 100,
+                timer: 0
+            } satisfies IEffectData;
+    
+            player.effectList[name] = Object.assign(previousData, data);
+        };
+        return;
+    };
+
+    protected sendDataFor(player: number, progress_max: number, data: IEffectData): void {
         const client = Network.getClientForPlayer(player);
         if(client) {
             client.send("packet.infinite_forest.effect_data_sync_for_client", {
@@ -32,7 +64,7 @@ abstract class Effect {
         };
     };
 
-    public openHudFor(player: number) {
+    protected openHudFor(player: number) {
         const client = Network.getClientForPlayer(player);
         if(client) {
             client.send("packet.infinite_forest.effect_scale_open", {
@@ -42,20 +74,18 @@ abstract class Effect {
         return;
     };
 
-    public onInit?(player_uid: number, progress_max: number): void;
+    protected onInit?(player_uid: number, progress_max: number): void;
 
-    public onEnd?(player_uid: number, progress_max: number): void;
+    protected onEnd?(player_uid: number, progress_max: number): void;
 
     public init(player_uid: number, unique_progress_max?: number): void {
         const name = this.getHud().icon;
 
-        const player = ObjectPlayer.getOrCreate(player_uid);
-
-        player.setEffect(name, {
+        Effect.set(player_uid, name, {
             timer: Effect.TIMER_MAX
         });
 
-        const effect = this.getFor(player_uid);
+        const effect = Effect.get(player_uid, name);
 
         if(effect.lock === true) {
             return;
@@ -66,7 +96,7 @@ abstract class Effect {
         this.sendDataFor(player_uid, progress_max, effect);
         this.openHudFor(player_uid);
 
-        player.setEffect(name, {
+        Effect.set(player_uid, name, {
             lock: true,
             progress: 0
         });
@@ -133,13 +163,10 @@ Network.addClientPacket("packet.infinite_forest.effect_scale_open", (data: { nam
 Callback.addCallback("EntityDeath", (entity) => {
     if(Entity.getType(entity) === Native.EntityType.PLAYER) {
         for(const i in Effect.list) {
-
-            ObjectPlayer.getOrCreate(entity)
-            .setEffect(i, {
+            Effect.set(entity, i, {
                 timer: 0,
                 progress: 0
             });
-
         };
     };
 });

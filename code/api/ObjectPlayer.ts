@@ -77,33 +77,6 @@ class ObjectPlayer {
     public effectList: Record<string, IEffectData> = {};
 
     /**
-     * Server function to get effect object;
-     */
-    public getEffect(name: string): IEffectData {
-        return this.effectList[name] ??= {
-            progress: 0,
-            progress_max: 100,
-            timer: 0
-        };
-    };
-
-    /**
-     * Server function to update effect object;
-     * @param name of effect;
-     * @param data different data of effect; All is optional, e.g. it is assigning new data with previous data
-     */
-
-    public setEffect(name: string, data: Partial<IEffectData>) {
-        const previousData = this.effectList[name] || {
-            progress: 0,
-            progress_max: 100,
-            timer: 0
-        } satisfies IEffectData;
-
-        this.effectList[name] = Object.assign(previousData, data);
-    };
-
-    /**
      * Server function to append list of players;
      * @param player numeric id of player;
      */
@@ -172,66 +145,7 @@ class ObjectPlayer {
         };
     };
 
-    /**
-     * Server function to append learning list of player in both sides;
-     * @param id numeric id of player;
-     * @param learning learning in database;
-     * @param direction direction of page;
-     */
-
-    public static addLearning(player_uid: number, learning_name: string, direction: number = -1): void {
-        const learning = Learning.get(learning_name);
-
-        if(!learning) {
-            Debug.message(`Server: ${learning_name} is not a learning. All exists learnings: ${Object.keys(Learning.list)}`);
-            return;
-        };
-
-        const player = this.getOrCreate(player_uid);
-        const hasLearning = player.learningList[learning_name];
-
-        if(!hasLearning) {
-            player.learningList[learning_name] = direction;
-
-            this.sendToClient(player_uid);
-
-            return Notification.sendFor(player_uid, "learning", `learning.infinite_forest.${learning_name}`, learning.icon, learning.icon_type);
-        };
-    };
-
-    /**
-     * Server function to append reflection list of player in both sides;
-     * @param id numeric id of player;
-     * @param reflection reflection in database;
-     * @param progress number of progress
-     * @param page_direction direction of page
-     */
-
-    public static addReflection(id: number, reflection: Reflection, progress: number, page_direction: number): void {
-        const player = this.getOrCreate(id);
-        const hasReflection = player.reflectionList[reflection.name];
-
-        if(hasReflection) {
-            if(hasReflection.enough_attempts <= 0) {
-                return;
-            } else {
-                hasReflection.enough_attempts--;
-                hasReflection.progress = Math.min(hasReflection.progress + progress, 100);
-        
-                this.sendToClient(id);
-                return;
-            }
-        };
-
-        player.reflectionList[reflection.name] = {
-            progress,
-            enough_attempts: reflection.max_attempts,
-            page_direction: page_direction || 0
-        };
-
-        return this.sendToClient(id);
-    };
-
+   
     /**
      * Server function to append pagesMyself list of player in both sides;
      * @param id numeric id of player;
