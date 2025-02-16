@@ -5,11 +5,11 @@ class LearningTableTile extends TileEntityBase {
         return {...this.content};
     };
 
-    public static createAnimation(x: number, y: number, z: number): Animation.Item {
+    public static createAnimation(coords: Vector, x?: number, z?: number, rotation?: number): Animation.Item {
         const animation = new Animation.Item(
-            x + MathHelper.randomFromArray(range(0.3, 0.6, 0.05)),
-            y + 1.025, 
-            z + MathHelper.randomFromArray(range(0.3, 0.6, 0.05))
+            coords.x + (x || MathHelper.randomFromArray(range(0.3, 0.6, 0.05))),
+            coords.y + 1.025, 
+            coords.z + (z || MathHelper.randomFromArray(range(0.3, 0.6, 0.05)))
         );
 
         animation.describeItem({
@@ -17,7 +17,7 @@ class LearningTableTile extends TileEntityBase {
             count: 1,
             data: 0,
             size: 0.6,
-            rotation: [Math.PI / 2, MathHelper.radian(randomInt(0, 180)), 0]
+            rotation: [Math.PI / 2, rotation || MathHelper.radian(randomInt(0, 180)), 0]
         });
 
         return animation;
@@ -39,11 +39,10 @@ class LearningTableTile extends TileEntityBase {
     public info_pressed: boolean = false;
     public animation!: Animation.Item;
 
-
     @NetworkEvent(Side.Client)
-    public createAnimationPacket(data: { is_valid: boolean }): void {
+    public create_animation(data: { is_valid: boolean, animation_x?: number, animation_z?: number, rotation?: number }): void {
         if(data.is_valid && !this.animation) {
-            this.animation = LearningTableTile.createAnimation(this.x, this.y, this.z);
+            this.animation = LearningTableTile.createAnimation(this, data.animation_x, data.animation_z, data.rotation);
             this.animation.load();
         } else if(this.animation) {
             this.animation.destroy();
@@ -51,10 +50,20 @@ class LearningTableTile extends TileEntityBase {
         };
     };
 
+    public onLoad(): void {
+        this.networkData.putBoolean("is_valid", this.data.is_valid);
+        this.networkData.sendChanges();
+    };
+
     public clientLoad(): void {
         const is_valid = this.networkData.getBoolean("is_valid");
+
+        const animation_x = this.networkData.getFloat("animation_x", MathHelper.randomFromArray(range(0.3, 0.6, 0.05)));
+        const animation_z = this.networkData.getFloat("animation_z", MathHelper.randomFromArray(range(0.3, 0.6, 0.05)));
+        const rotation = this.networkData.getFloat("rotation", MathHelper.radian(randomInt(0, 180)));
+
         if(is_valid && !this.animation) {
-            this.animation = LearningTableTile.createAnimation(this.x, this.y, this.z);
+            this.animation = LearningTableTile.createAnimation(this, animation_x, animation_z, rotation);
             this.animation.load();
         };
     };
@@ -84,15 +93,23 @@ class LearningTableTile extends TileEntityBase {
         let text = null;
         let learning = null;
 
+        const animation_x = MathHelper.randomFromArray(range(0.3, 0.6, 0.05));
+        const animation_z = MathHelper.randomFromArray(range(0.3, 0.6, 0.05));
+        const rotation = MathHelper.radian(randomInt(0, 180));
+
         if(extra) {
             text = extra.getString("text");
             learning = extra.getString("learning");
+
+            this.networkData.putFloat("animation_x", animation_x);
+            this.networkData.putFloat("animation_z", animation_z);
+            this.networkData.putFloat("rotation", rotation);
         };
         
         this.networkData.putBoolean("is_valid", !!extra);
         this.networkData.sendChanges();
 
-        this.sendPacket("createAnimationPacket", { is_valid: !!extra });
+        this.sendPacket("create_animation", { is_valid: !!extra, animation_x, animation_z, rotation });
 
         this.data.text = text;
         this.data.learning = learning;
@@ -224,10 +241,10 @@ class LearningTableTile extends TileEntityBase {
                                 const current = learningList[i];
 
                                 if(Number(i) === learningList.length - 1) {
-                                    text += `"${current}"`;
+                                    text += `«${current}»`;
                                     continue;
                                 };
-                                text += `"${current}", `;
+                                text += `«${current}», `;
                             };
 
                         };
@@ -298,7 +315,7 @@ class LearningTable extends BlockForest implements IBlockModel {
         }]);
     };
 
-    public override getModel(): BlockModel | BlockModel[] {
+    public override getModel(): BlockModel {
         return new BlockModel("learning_table");
     };
 

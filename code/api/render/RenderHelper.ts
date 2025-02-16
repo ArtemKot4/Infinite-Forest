@@ -6,7 +6,7 @@ namespace RenderHelper {
             invertV: false,
             noRebuild: false,
         },
-        rotate: number[]
+        rotate?: number[]
     ): RenderMesh {
         const mesh = new RenderMesh(
           __dir__ + "/resources/assets/models/" + model + ".obj",

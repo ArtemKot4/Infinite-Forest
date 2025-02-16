@@ -7,7 +7,7 @@ class Bottle extends BlockForest {
         }]);
     };
 
-    public override getModel(): BlockModel | BlockModel[] {
+    public override getModel(): BlockModel {
         return new BlockModel("bottle", "forest_bottle");
     };
 
@@ -142,7 +142,7 @@ class FirefliesBottle extends BlockForest {
         return;
     };
 
-    public getDrop(coords: Callback.ItemUseCoordinates, block: Tile, diggingLevel: number, enchant: ToolAPI.EnchantData, item: ItemStack, region: BlockSource): ItemInstanceArray[] {
+    public override getDrop(coords: Callback.ItemUseCoordinates, block: Tile, diggingLevel: number, enchant: ToolAPI.EnchantData, item: ItemStack, region: BlockSource): ItemInstanceArray[] {
         const tile = TileEntity.getTileEntity(coords.x, coords.y, coords.z, region) as TileEntity & FirefliesBottleTile;
 
         let extra = null;

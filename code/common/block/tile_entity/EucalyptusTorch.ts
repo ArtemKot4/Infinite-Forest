@@ -44,24 +44,27 @@ class EucalyptusTorchTile extends TileEntityBase {
                 return;
             };
             
+
+            const lightlevel = this.blockSource.getLightLevel(this.x, this.y, this.z);
+            const rain_density = Math.floor(lightlevel < 8 ? lightlevel / 2 : lightlevel / 4);
+            const speed = lightlevel < 4 ? 0.2 : lightlevel / 35;
+
             const cauldronTile = this.findCauldronWithTile();
 
             let height = 2;
+
 
             if(cauldronTile != null) {
                 height = 4;
                 const waterLevel = cauldronTile.data.water_level;
 
-                if(waterLevel < 1.0) {
+                if(waterLevel < 1.0 && rain_density >= 1) {
                    this.addLearnings();
                    this.updateCauldronWaterLevel(cauldronTile);
                 };
             };
 
-            const lightlevel = this.blockSource.getLightLevel(this.x, this.y, this.z);
-            const speed = lightlevel < 4 ? 0.2 : lightlevel / 35;
-
-            this.networkData.putInt("rain_density", Math.floor(lightlevel < 8 ? lightlevel / 2 : lightlevel / 4));
+            this.networkData.putInt("rain_density", rain_density);
             this.networkData.putFloat("speed", speed);
             this.networkData.putFloat("height", height);
             this.networkData.sendChanges();

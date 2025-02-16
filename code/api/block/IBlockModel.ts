@@ -1,3 +1,3 @@
 interface IBlockModel {
-    getModel?(): BlockModel | BlockModel[];
+    getModel?(): RenderMesh | RenderMesh[] | BlockModel | BlockModel[];
 };

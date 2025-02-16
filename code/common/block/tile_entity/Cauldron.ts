@@ -17,14 +17,16 @@ class CauldronTile extends TileEntityBase {
     })();
 
     public static WATER_LEVEL_MAX = 1.3;
+    public static BOILING_MAX = 10;
 
     public defaultValues = {
-        water_level: 0.0
+        water_level: 0.0,
+        boiling: 0.0
     };
 
     public data: typeof this.defaultValues;
 
-    public water_animation: Animation.Base;
+    public water_animation!: Animation.Base;
 
     public static createWaterAnimation(level: number = CauldronTile.WATER_LEVEL_MAX, coords: Vector) {
         const animation = new Animation.Base(coords.x + 0.5, coords.y + level, coords.z + 0.5);
@@ -39,15 +41,27 @@ class CauldronTile extends TileEntityBase {
 
     @NetworkEvent(Side.Client)
     public update_water_level(data: { level: number } = { level: CauldronTile.WATER_LEVEL_MAX }) {
-        this.water_animation = this.water_animation || CauldronTile.createWaterAnimation(data.level, this);
+        this.water_animation ??= CauldronTile.createWaterAnimation(data.level, this);
         this.water_animation.setPos(this.x + 0.5, this.y + data.level, this.z + 0.5);
 
         this.water_animation.load();
+        return; 
+    };
+
+    @NetworkEvent(Side.Client)
+    public bubble_particles(data: { level: number } = { level: CauldronTile.WATER_LEVEL_MAX }) {
+        for(let i = -0.45; i > 0.45; i -= 0.1) {
+            if(Math.random() < 0.3) {
+                Particles.addParticle(EForestParticle.CAULDRON_BUBBLE, this.x + i, this.y + data.level, this.z, 0, 0, 0);
+                Particles.addParticle(EForestParticle.CAULDRON_BUBBLE, this.x, this.y + data.level - i, this.z, 0, 0, 0)
+            };
+        };
+        return;
     };
 
     public setWaterLevel(level: number) {
         this.data.water_level = Math.min(level, CauldronTile.WATER_LEVEL_MAX);
-        this.sendPacket("update_water_level", { level: level });
+        this.sendPacket("update_water_level", { level: this.data.water_level });
         return;
     };
 
@@ -57,6 +71,26 @@ class CauldronTile extends TileEntityBase {
             Entity.setCarriedItem(player, VanillaItemID.bucket, 1, 0);
         };
         return true;
+    };
+
+    public hasFire() {
+        return Utils.getBlockTags(this.blockSource.getBlockID(this.x, this.y, this.z)).includes("fire");
+    };
+
+    public onTick(): void {
+        if(World.getThreadTime() % 20 === 0) {
+            if(this.hasFire()) {
+                this.data.boiling = Math.min(this.data.boiling + 1, CauldronTile.BOILING_MAX);
+            } else {
+                this.data.boiling = 0;
+            };
+
+            if(this.data.boiling >= CauldronTile.BOILING_MAX && this.data.water_level > 0.3) {
+                this.setWaterLevel(this.data.water_level -= 0.05);
+                this.sendPacket("bubble_particles", { level: this.data.water_level });
+            };
+        };
+        return;  
     };
 };
 
@@ -71,7 +105,7 @@ class Cauldron extends BlockForest {
         }]);
     };
 
-    public override getModel(): BlockModel | BlockModel[] {
+    public override getModel(): BlockModel {
         return new BlockModel("iron_cauldron", "iron_cauldron");
     };
 

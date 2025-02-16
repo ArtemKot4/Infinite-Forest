@@ -52,8 +52,10 @@ class BlockForest implements BlockBehavior, IBlockModel {
                 this.setModel(modelList[0], -1);
             } else {
                 for (let i: number = 0; i < modelList.length; i++) {
-                    const data: number = modelList[i].getBlockData();
-                    this.setModel(modelList[i], data > -1 ? data : i);
+                    const model = modelList[i];
+
+                    const data: number = model instanceof BlockModel ? model.getBlockData() : i;
+                    this.setModel(model, data);
                 };
             };
         };
@@ -126,11 +128,18 @@ class BlockForest implements BlockBehavior, IBlockModel {
         Block.setDestroyLevel(this.stringID, this.getDestroyLevel());
     };
 
-    public setModel(model: BlockModel, data: number): this {
+    public setModel(model: BlockModel | RenderMesh, data: number): this {
         const render: ICRender.Model = new ICRender.Model();
+        let mesh;
+        let _data = data;
 
-        render.addEntry(new BlockRenderer.Model(model.getRenderMesh()));
-        BlockRenderer.setStaticICRender(this.id, data ?? model.getBlockData(), render);
+        if(model instanceof BlockModel) {
+            mesh = model.getRenderMesh();
+            _data = model.getBlockData();
+        } else mesh = model;
+
+        render.addEntry(new BlockRenderer.Model(mesh));
+        BlockRenderer.setStaticICRender(this.id, data ?? mesh, render);
 
         return this;
     };
@@ -139,7 +148,7 @@ class BlockForest implements BlockBehavior, IBlockModel {
         return BlockID[this.stringID];
     };
     
-    public getModel?(): BlockModel | BlockModel[];
+    public getModel?(): RenderMesh | RenderMesh[] | BlockModel | BlockModel[];
 
     public getTags?(): string[] {
         return null;
