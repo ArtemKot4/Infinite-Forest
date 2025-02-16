@@ -121,7 +121,7 @@ class PageUI {
     public open(): this {
         if(this.onOpen) this.onOpen((this));
 
-        this.UI.open();
+        if(!this.UI.isOpened()) this.UI.open();
 
         if(this.customRender) {
             this.customRender(this);
@@ -192,8 +192,8 @@ abstract class Book {
         const width = this.background_bitmap.getWidth();
         const height = this.background_bitmap.getHeight();
 
-        const defaultX = UI.getScreenHeight() + 20 - ((width * scale) / 2);
-        const defaultY = UI.getScreenHeight() - ((height * scale) / 2);
+        const defaultX = (UI.getScreenHeight() + 20) - ((width * scale) / 2);
+        const defaultY = UI.getScreenHeight() + ((height * scale) / 2);
 
         this.leftPageUI = this.getLeftPageUI()
         .setWidth((width * scale) / 2)

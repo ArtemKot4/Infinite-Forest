@@ -77,6 +77,7 @@ class FirefliesBottleTile extends TileEntityBase {
     public override onLoad(): void {
         this.data.color ??= ParticleHelper.getRandomGlowworm();
         this.networkData.putInt("color", this.data.color);
+        this.networkData.sendChanges();
     };
 
     public override clientTick(): void {
@@ -94,6 +95,14 @@ class FirefliesBottleTile extends TileEntityBase {
             );
         };
     };
+
+    // public override onTick(): void {
+    //     if(World.getThreadTime() % 60 === 0) {
+    //         if(this.data.color === null) {
+    //             this.data.color = ParticleHelper.getRandomGlowworm();
+    //         };
+    //     }  
+    // };
 };
 
 class FirefliesBottle extends BlockForest {

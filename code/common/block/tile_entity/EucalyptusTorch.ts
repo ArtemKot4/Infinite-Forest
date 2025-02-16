@@ -77,8 +77,7 @@ class EucalyptusTorchTile extends TileEntityBase {
     };
 
     public updateCauldronWaterLevel(tile_entity: CauldronTile): void {
-        tile_entity.data.water_level += 0.25;
-        tile_entity.updateWaterVisual();
+        tile_entity.setWaterLevel(tile_entity.data.water_level += 0.25);
         return;
     };
 

@@ -55,6 +55,8 @@ api/block/wood/Bark.ts
 api/block/wood/Hewn.ts
 api/block/wood/Planks.ts
 
+api/block/Painting.ts
+
 api/learning/Learning.ts
 api/learning/LearningBase.ts
 

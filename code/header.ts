@@ -3,6 +3,7 @@ IMPORT("ConnectedTexture");
 IMPORT("ItemAnimHelper");
 IMPORT("SoundLib");
 IMPORT("EnergyNet");
+IMPORT("RenderUtil");
 
 declare namespace com.zhekasmirnov.innercore.api.NativeAPI {
     export function getDifficulty(): EGameDifficulty;

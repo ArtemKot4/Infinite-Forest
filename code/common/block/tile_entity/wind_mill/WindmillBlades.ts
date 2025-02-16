@@ -11,7 +11,7 @@ class WindmillBladesTile extends TileEntityBase {
     public animation!: BlockAnimation;
 
     @NetworkEvent(Side.Client)
-    public breakParticlePacket() {
+    public break_particle(): void {
         for(let i = 0; i < 3; i++) {
             Particles.addParticle(EParticleType.CLOUD, this.x + 0.5, this.y + 0.5, this.z + 0.5, 0, 0.02, 0);
         };
@@ -40,7 +40,7 @@ class WindmillBladesTile extends TileEntityBase {
         const height = this.findHeight();
 
         if(!stationTile || height < 10) {
-            this.sendPacket("breakParticlePacket", {});
+            this.sendPacket("break_particle", {});
             this.initDestroy();
             return;
         };

@@ -32,4 +32,6 @@ namespace BlockList {
 
     export const EUCALYPTUS_TORCH = new EucalyptusTorchUnlit();
     //export const CANDLE = new Candle();
+
+    //export const PAINTING_WINDMILL_IN_OLD_TIMES = new Painting1x1("windmill_in_old_times");
 };

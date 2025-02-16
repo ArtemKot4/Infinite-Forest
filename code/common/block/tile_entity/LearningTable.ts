@@ -2,14 +2,14 @@ class LearningTableTile extends TileEntityBase {
     protected static content = {...AncientNote.UI.getContent()};
 
     public static getDefaultContent(): UI.WindowContent {
-        return {...this.content}
+        return {...this.content};
     };
 
     public static createAnimation(x: number, y: number, z: number): Animation.Item {
         const animation = new Animation.Item(
-            x + MathHelper.randomFromArray(range(0.1, 0.9, 0.1)),
+            x + MathHelper.randomFromArray(range(0.3, 0.6, 0.05)),
             y + 1.025, 
-            z + MathHelper.randomFromArray(range(0.3, 0.6, 0.1))
+            z + MathHelper.randomFromArray(range(0.3, 0.6, 0.05))
         );
 
         animation.describeItem({
