@@ -7,7 +7,7 @@ class Salt extends BlockForest {
         }]);
     };
 
-    public getDestroyLevel(): MiningLevel {
-        return MiningLevel.STONE;
+    public override getDestroyLevel(): EDestroyLevel {
+        return EDestroyLevel.STONE;
     };
 };

@@ -6,7 +6,7 @@ class ElectricMushroomTile extends TileEntityBase {
     };
 }
 
-class ElectricMushroom extends BlockPlant {
+class ElectricMushroom extends BlockPlant implements IClickCallback, IDestroyContinueCallback {
     public constructor() {
         super("electric_mushroom", [{
             inCreative: true,
@@ -24,11 +24,11 @@ class ElectricMushroom extends BlockPlant {
         this.dangerMessage(player);
     };
 
-    public override onClick(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, player: number): void {
+    public onClick(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, player: number): void {
         ElectricMushroom.damage(player);
     };
 
-    public override onDestroyContinue(coords: Callback.ItemUseCoordinates, block: Tile, progress: number): void {
+    public onDestroyContinue(coords: Callback.ItemUseCoordinates, block: Tile, progress: number): void {
         const player = Player.getLocal();
 
         GameController.attack(player);
@@ -61,7 +61,7 @@ class BlueMushroomBlock extends BlockForest {
         return "nature";
     };
 
-    public override getDrop(coords: Callback.ItemUseCoordinates, block: Tile, diggingLevel: number, enchant: ToolAPI.EnchantData, item: ItemStack, region: BlockSource): ItemInstanceArray[] {
+    public override getDrop(coords: Callback.ItemUseCoordinates, id: number, data: number, diggingLevel: number, enchant: ToolAPI.EnchantData, item: ItemInstance, region: BlockSource): ItemInstanceArray[] {
         if (ToolAPI.isAxe(item.id) && Math.random() < 0.25) {
             return [[BlockList.ELECTRIC_MUSHROOM.id, 1, 0]];
         };

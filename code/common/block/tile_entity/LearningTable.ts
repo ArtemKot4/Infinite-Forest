@@ -7,9 +7,9 @@ class LearningTableTile extends TileEntityBase {
 
     public static createAnimation(coords: Vector, x?: number, z?: number, rotation?: number): Animation.Item {
         const animation = new Animation.Item(
-            coords.x + (x || MathHelper.randomFromArray(range(0.3, 0.6, 0.05))),
+            coords.x + (x || MathHelper.randomFromArray(Utils.range(0.3, 0.6, 0.05))),
             coords.y + 1.025, 
-            coords.z + (z || MathHelper.randomFromArray(range(0.3, 0.6, 0.05)))
+            coords.z + (z || MathHelper.randomFromArray(Utils.range(0.3, 0.6, 0.05)))
         );
 
         animation.describeItem({
@@ -17,7 +17,7 @@ class LearningTableTile extends TileEntityBase {
             count: 1,
             data: 0,
             size: 0.6,
-            rotation: [Math.PI / 2, rotation || MathHelper.radian(randomInt(0, 180)), 0]
+            rotation: [Math.PI / 2, rotation || MathHelper.radian(MathHelper.randomInt(0, 180)), 0]
         });
 
         return animation;
@@ -58,9 +58,9 @@ class LearningTableTile extends TileEntityBase {
     public clientLoad(): void {
         const is_valid = this.networkData.getBoolean("is_valid");
 
-        const animation_x = this.networkData.getFloat("animation_x", MathHelper.randomFromArray(range(0.3, 0.6, 0.05)));
-        const animation_z = this.networkData.getFloat("animation_z", MathHelper.randomFromArray(range(0.3, 0.6, 0.05)));
-        const rotation = this.networkData.getFloat("rotation", MathHelper.radian(randomInt(0, 180)));
+        const animation_x = this.networkData.getFloat("animation_x", MathHelper.randomFromArray(Utils.range(0.3, 0.6, 0.05)));
+        const animation_z = this.networkData.getFloat("animation_z", MathHelper.randomFromArray(Utils.range(0.3, 0.6, 0.05)));
+        const rotation = this.networkData.getFloat("rotation", MathHelper.radian(MathHelper.randomInt(0, 180)));
 
         if(is_valid && !this.animation) {
             this.animation = LearningTableTile.createAnimation(this, animation_x, animation_z, rotation);
@@ -93,9 +93,9 @@ class LearningTableTile extends TileEntityBase {
         let text = null;
         let learning = null;
 
-        const animation_x = MathHelper.randomFromArray(range(0.3, 0.6, 0.05));
-        const animation_z = MathHelper.randomFromArray(range(0.3, 0.6, 0.05));
-        const rotation = MathHelper.radian(randomInt(0, 180));
+        const animation_x = MathHelper.randomFromArray(Utils.range(0.3, 0.6, 0.05));
+        const animation_z = MathHelper.randomFromArray(Utils.range(0.3, 0.6, 0.05));
+        const rotation = MathHelper.radian(MathHelper.randomInt(0, 180));
 
         if(extra) {
             text = extra.getString("text");
@@ -315,7 +315,7 @@ class LearningTable extends BlockForest implements IBlockModel {
         }]);
     };
 
-    public override getModel(): BlockModel {
+    public getModel(): BlockModel {
         return new BlockModel("learning_table");
     };
 

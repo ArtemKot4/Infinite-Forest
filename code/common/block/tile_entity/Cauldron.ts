@@ -45,6 +45,7 @@ class CauldronTile extends TileEntityBase {
         this.water_animation.setPos(this.x + 0.5, this.y + data.level, this.z + 0.5);
 
         this.water_animation.load();
+        Game.message("Doletel yopta")
         return; 
     };
 
@@ -105,7 +106,7 @@ class Cauldron extends BlockForest {
         }]);
     };
 
-    public override getModel(): BlockModel {
+    public getModel(): BlockModel {
         return new BlockModel("iron_cauldron", "iron_cauldron");
     };
 

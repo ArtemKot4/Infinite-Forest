@@ -95,7 +95,7 @@ class PageUI {
         } else {
             content.type = "slot";
             content.size = description.size;
-            content.item = parseID(description.image);
+            content.item = Utils.parseID(description.image);
         };
             
         this.defaultContent.elements[element_name] = content;

@@ -1,4 +1,4 @@
-class Bottle extends BlockForest {
+class Bottle extends BlockForest implements IRandomTickCallback {
     public constructor() {
         super("bottle", [{
             name: "block.infinite_forest.bottle",
@@ -7,7 +7,7 @@ class Bottle extends BlockForest {
         }]);
     };
 
-    public override getModel(): BlockModel {
+    public getModel(): BlockModel {
         return new BlockModel("bottle", "forest_bottle");
     };
 
@@ -15,7 +15,7 @@ class Bottle extends BlockForest {
         return "glass";
     };
 
-    public override onRandomTick(x: number, y: number, z: number, block: Tile, region: BlockSource): void {
+    public onRandomTick(x: number, y: number, z: number, id: number, data: number, region: BlockSource): void {
         const isColdState = Utils.getBiomeState(x, z, region) === EBiomeState.COLD;
 
         if ((y >= 200 || isColdState) && Curse.has("cold")) {
@@ -95,17 +95,9 @@ class FirefliesBottleTile extends TileEntityBase {
             );
         };
     };
-
-    // public override onTick(): void {
-    //     if(World.getThreadTime() % 60 === 0) {
-    //         if(this.data.color === null) {
-    //             this.data.color = ParticleHelper.getRandomGlowworm();
-    //         };
-    //     }  
-    // };
 };
 
-class FirefliesBottle extends BlockForest {
+class FirefliesBottle extends BlockForest implements IPlaceCallback {
     public constructor() {
         super("fireflies_bottle", [{
             name: "block.infinite_forest.fireflies_bottle",
@@ -114,7 +106,7 @@ class FirefliesBottle extends BlockForest {
         }]);
     };
 
-    public override getModel(): BlockModel | BlockModel[] {
+    public getModel(): BlockModel | BlockModel[] {
         return new BlockModel("bottle", "forest_bottle");
     };
 
@@ -122,7 +114,7 @@ class FirefliesBottle extends BlockForest {
         return 10;
     };
 
-    public override onPlace(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, player: number, region: BlockSource): void | Vector {
+    public onPlace(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, player: number, region: BlockSource): void | Vector {
         let color = ParticleHelper.getRandomGlowworm();
 
         if(item.extra) {
@@ -142,7 +134,7 @@ class FirefliesBottle extends BlockForest {
         return;
     };
 
-    public override getDrop(coords: Callback.ItemUseCoordinates, block: Tile, diggingLevel: number, enchant: ToolAPI.EnchantData, item: ItemStack, region: BlockSource): ItemInstanceArray[] {
+    public override getDrop(coords: Callback.ItemUseCoordinates, id: number, data: number, diggingLevel: number, enchant: ToolAPI.EnchantData, item: ItemInstance, region: BlockSource): ItemInstanceArray[] {
         const tile = TileEntity.getTileEntity(coords.x, coords.y, coords.z, region) as TileEntity & FirefliesBottleTile;
 
         let extra = null;
@@ -152,7 +144,7 @@ class FirefliesBottle extends BlockForest {
             extra.putInt("color", tile.data.color);
         };
 
-        return [[block.id, 1, block.data, extra]];
+        return [[id, 1, data, extra]];
     };
 
     public override getTileEntity(): TileEntityBase {

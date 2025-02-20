@@ -13,9 +13,9 @@ class EucalyptusTorchTile extends TileEntityBase {
         for(let i = 0; i < rainDensity; i++) {
             Particles.addParticle(
                 EForestParticle.GREEN_RAIN, 
-                this.x - 0.5 + randomInt(0.3, 0.6),
+                this.x - 0.5 + MathHelper.randomInt(0.3, 0.6),
                 this.y + rainHeight,
-                this.z - 0.5 + randomInt(0.3, 0.5),
+                this.z - 0.5 + MathHelper.randomInt(0.3, 0.5),
                 0.01,
                 -rainSpeed,
                 0.01
@@ -25,9 +25,9 @@ class EucalyptusTorchTile extends TileEntityBase {
         for(let i = 0; i <= 6; i++) {
             Particles.addParticle(
                 EForestParticle.CLOUD,
-                this.x - 0.5 + randomInt(0.3, 0.6),
+                this.x - 0.5 + MathHelper.randomInt(0.3, 0.6),
                 this.y + cloudsHeight,
-                this.z - 0.5 + randomInt(0.3, 0.6),
+                this.z - 0.5 + MathHelper.randomInt(0.3, 0.6),
                 0,
                 0,
                 0
@@ -118,7 +118,7 @@ class EucalyptusTorchUnlit extends BlockForest implements IBlockModel {
         return "wood";
     };
 
-    public override getModel(): BlockModel | BlockModel[] {
+    public getModel(): BlockModel | BlockModel[] {
         return new BlockModel("eucalyptus_torch");
     };
 

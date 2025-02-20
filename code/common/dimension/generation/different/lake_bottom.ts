@@ -16,7 +16,7 @@ namespace ForestGenerator {
 
                     if (randomBlock1 === VanillaBlockID.dirt && Math.random() < 0.1) {
                         let heightMax = 53 - coords.y;
-                        generateKelps(coords.x, coords.y, coords.z, randomInt(1, heightMax));
+                        generateKelps(coords.x, coords.y, coords.z, MathHelper.randomInt(1, heightMax));
                     };
 
                 } else {

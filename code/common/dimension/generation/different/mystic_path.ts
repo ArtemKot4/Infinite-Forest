@@ -36,7 +36,7 @@ namespace ForestGenerator {
                     };
 
                     if (block === VanillaBlockID.podzol && Math.random() < 0.1) {
-                        World.setBlock(coords.x, coords.y + 1, coords.z, VanillaBlockID.sweet_berry_bush, randomInt(1, 4));
+                        World.setBlock(coords.x, coords.y + 1, coords.z, VanillaBlockID.sweet_berry_bush, MathHelper.randomInt(1, 4));
                     };
                 };
                 World.setBlock(coords.x, coords.y, coords.z, block, 0);

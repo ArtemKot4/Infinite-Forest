@@ -17,8 +17,8 @@ output
 .vscode
 
 tsconfig.json
-tsconfig.json
-tsconfig.json
-typescript/tsconfig.json
-tsconfig.json
-tsconfig.json
+code/tsconfig.json
+
+other_resources/old_code
+other_resources/deleted_code
+other_resources/unwork

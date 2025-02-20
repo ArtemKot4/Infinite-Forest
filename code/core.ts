@@ -1,29 +1,3 @@
-function range(min: number, max: number, number: number = 1): number[] {
-    const list = [];
-
-    for (let i = min; i < max; i += number) {
-        list.push(i);
-    }
-
-    return list;
-};
-
-function parseBlockID(id: string): number {
-    return BlockID[id] || VanillaBlockID[id];
-};
-
-function parseItemID(id: string): number {
-    return ItemID[id] || VanillaItemID[id];
-};
-
-function parseID(id: string): number {
-    return parseBlockID(id) ?? parseItemID(id);
-};
-
-function randomInt(min: number, max: number): number {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-};
-
 const enum EBiomeState {
     BALANCE,
     COLD,
@@ -48,19 +22,5 @@ const RuntimeException = java.lang.RuntimeException;
 const NullPointerException = java.lang.NullPointerException;
 const IllegalArgumentException = java.lang.IllegalArgumentException;
 const NoSuchFieldException = java.lang.NoSuchFieldException;
-
-namespace MathHelper {
-    export function randomFrom<T>(...elements: T[]): T {
-        return elements[Math.floor(Math.random() * elements.length)];
-    };
-
-    export function randomFromArray<T>(array: T[]): T {
-        return array[Math.floor(Math.random() * array.length)];
-    };
-
-    export function radian(gradus: number): number {
-        return (gradus * Math.PI) / 180;
-    }
-}
 
 const structureDIR = __dir__ + "resources/assets/structures/";

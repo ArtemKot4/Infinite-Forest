@@ -49,9 +49,9 @@ class WinterForest extends AbstractBiome implements BiomeBehaviour {
     public runSnowInRadius(x: number, y: number, z: number, radius = 16, count = 16) {
         if (World.getThreadTime() % 8 === 0) {
             for (let n = -count; n <= count; n++) {
-                Particles.addParticle(EForestParticle.SNOWFALL, x + n, y, z + randomInt(-radius, radius), 0.05, -0.1, 0);
+                Particles.addParticle(EForestParticle.SNOWFALL, x + n, y, z + MathHelper.randomInt(-radius, radius), 0.05, -0.1, 0);
 
-                Particles.addParticle(EForestParticle.SNOWFALL, x + randomInt(-radius, radius), y, z + n, 0.05, -0.1, 0);
+                Particles.addParticle(EForestParticle.SNOWFALL, x + MathHelper.randomInt(-radius, radius), y, z + n, 0.05, -0.1, 0);
             };
         };
     };

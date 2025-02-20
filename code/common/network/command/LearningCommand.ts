@@ -1,47 +1,64 @@
-interface ILearningCommandProps {
-    action?: string;
+interface ILearningCommandProps extends ICommandParams {
+    action: string;
     name?: string;
 };
 
 class LearningCommand extends ServerCommand<ILearningCommandProps> {
     public constructor() {
-        super("if:learning", ["action", "name"], 1);
+        super("if:learning", {
+            "action": "string", 
+            "name": "string",
+            "entities": "number"
+        }, 1);
     };
 
     public override onServer(client: NetworkClient, data: ILearningCommandProps): void {
-        const playerUid = client.getPlayerUid();
-        const player = ObjectPlayer.getOrCreate(playerUid);
+        const playersUid = 'entities' in data ? data.entities.players : [client.getPlayerUid()];
 
-        if(data.action === "clear") {
-            let text = Translation.translate("message.infinite_forest.clear_learnings");
+        for(const uid of playersUid) {
+            const player = ObjectPlayer.getOrCreate(uid);
 
-            if('name' in data) {
-                const learningText = Translation.translate(`learning.infinite_forest.${data.name}`);
+            if(data.action === "clear") {
+                let text = Translation.translate("message.infinite_forest.clear_learnings");
+    
+                if('name' in data) {
+                    const learningName = Translation.translate(`learning.infinite_forest.${data.name}`);
+    
+                    text = Translation.translate("message.infinite_forest.clear_learning")
+                    .replace("%s", learningName.length > 10 ? learningName.slice(0, 10) + "..." : learningName);
+                    
+                    if(data.name in Learning.list) { 
+                        Learning.deleteFor(uid, data.name);
+                    } else {
+                        const client = Network.getClientForPlayer(uid);
 
-                text = Translation.translate("message.infinite_forest.clear_learning")
-                .replace("%s", learningText.length > 10 ? learningText.slice(0, 10) + "..." : learningText);
-                
-                Learning.deleteFor(playerUid, data.name);
-            } else {
-                text = Translation.translate("message.infinite_forest.clear_learnings");
-
-                player.learningList = {};
-                ObjectPlayer.sendToClient(playerUid);
-            };
-            Notification.sendFor(playerUid, "learning", text, "amulet_lock");
-            return;
-        };
-
-        if(data.action === "add") {
-            if(!data.name) return;
-
-            if(data.name === "all") {
-                for(const learning_name of Object.keys(Learning.list)) {
-                    Learning.giveFor(playerUid, learning_name);
+                        if(client) {
+                            client.sendMessage(Native.Color.RED + Translation.translate("message.infinite_forest.unknown_learning"));
+                        };
+                    };
+                } else {
+                    text = Translation.translate("message.infinite_forest.clear_learnings");
+    
+                    player.learningList = {}
+                    ObjectPlayer.sendToClient(uid)
                 };
+    
+                Notification.sendFor(uid, "learning", text, "amulet_lock")
                 return;
             };
-            Learning.giveFor(playerUid, data.name);
+    
+            if(data.action === "add") {
+                if(!data.name) return;
+    
+                if(data.name === "all") {
+                    for(const learning_name of Object.keys(Learning.list)) {
+                        Learning.giveFor(uid, learning_name)
+                    };
+                    return;
+                };
+    
+                Learning.giveFor(uid, data.name)
+            };
         };
     };
 };
@@ -56,4 +73,10 @@ Translation.addTranslation("message.infinite_forest.clear_learnings", {
 Translation.addTranslation("message.infinite_forest.clear_learning", {
     en: "Learning %s cleared",
     ru: "Изучение %s удалено",
+});
+
+
+Translation.addTranslation("message.infinite_forest.unknown_learning", {
+    en: "Error! Unknown learning...",
+    ru: "Ошибка! Неизвестное изучение...",
 });

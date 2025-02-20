@@ -18,7 +18,7 @@ namespace ForestGenerator {
             };
 
             if (Math.random() < 0.0078) {
-                placeColumn({ id: VanillaBlockID.cactus, data: 0 }, coords, randomInt(1, 5));
+                placeColumn({ id: VanillaBlockID.cactus, data: 0 }, coords, MathHelper.randomInt(1, 5));
             };
 
             if (Math.random() < 0.01 && World.getBlockID(coords.x, 55, coords.z) === VanillaTileID.air) {

@@ -134,7 +134,7 @@ class Notification {
                         content.x = style.icon.item.default_x * style.scale;
                         content.y = style.icon.item.default_y * style.scale;
 
-                        content.source = new ItemStack(parseID(icon), 1, 0);
+                        content.source = new ItemStack(Utils.parseID(icon), 1, 0);
                         content.visual = true;
                         content.size = style.icon.item.size;
                         content.bitmap = "unknown";

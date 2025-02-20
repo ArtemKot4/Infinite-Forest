@@ -4,6 +4,8 @@ IMPORT("ItemAnimHelper");
 IMPORT("SoundLib");
 IMPORT("EnergyNet");
 IMPORT("RenderUtil");
+IMPORT("ICHelper");
+IMPORT("CommandHelper");
 
 declare namespace com.zhekasmirnov.innercore.api.NativeAPI {
     export function getDifficulty(): EGameDifficulty;
@@ -54,42 +56,9 @@ interface RGB {
 };
 
 namespace Utils {
-    export function setEmptyBlockCollision(id: number) {
-        const render = new ICRender.Model();
-        const model = BlockRenderer.createModel();
-        const shape = new ICRender.CollisionShape();
-        const entry = shape.addEntry();
-
-        entry.addBox(0, 0, 0, 0, 0, 0);
-        BlockRenderer.setCustomCollisionShape(id, -1, shape);
-        render.addEntry(model);
-    };
-
     export function getBiomeState(x: number, z: number, region: BlockSource): EBiomeState {
         const biome = AbstractBiome.getFor(region.getBiome(x, z));
         return biome && biome.getBiomeState ? biome.getBiomeState() : EBiomeState.BALANCE;
-    };
-
-    export function getBlockTags(id: number): string[] {
-        return TagRegistry.getTagsFor("blocks", id);
-    };
-
-    export function getItemTags(id: number): string[] {
-        return TagRegistry.getTagsFor("items", id);
-    };
-
-    export function getDimensionTags(id: number): string[] {
-        return TagRegistry.getTagsFor("dimensions", id);
-    };
-
-    export function actionbarMessage(player: number, message: string): void {
-        Commands.exec("/title " + Entity.getNameTag(player) + " actionbar " + message);
-    };
-
-    export function isCreativePlayer(player: number): boolean {
-        const gamemode = new PlayerActor(player).getGameMode();
-        
-        return gamemode === EGameMode.CREATIVE || gamemode === EGameMode.SPECTATOR;
     };
 };
 
@@ -99,28 +68,6 @@ type JSONLang = {
 };
 
 const initRecipes: Map<[id: number, count: number], ItemInstance[]> = new Map();
-
-namespace UIHelper {
-    export function separateText(text: string, line_size: number = 25): string {
-        let result = [];
-        let line = "";
-    
-        for (let word of text.split(" ")) {
-            if (line.length + word.length <= line_size) {
-                line += word + " ";
-            } else {
-                result.push(line.trim());
-                line = word + " ";
-            }
-        }
-    
-        if (line) {
-            result.push(line.trim());
-        }
-    
-        return result.join("\n");
-    };
-}; 
 
 namespace ForestGenerator {
     export const structurePool = new StructurePool("infinite_forest_structure_pool");
