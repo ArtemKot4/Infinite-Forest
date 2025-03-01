@@ -54,7 +54,7 @@ class InfiniteForest extends Dimension {
         ];
     };
 
-    public generateCaves() {
+    public generateCaves(): [boolean, boolean] {
         return [false, false];
     };
 

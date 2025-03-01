@@ -406,7 +406,7 @@ declare class RotatableLog extends BasicBlock implements IPlaceCallback {
     getSoundType(): Block.Sound;
     getDrop(coords: Callback.ItemUseCoordinates, id: number, data: number, diggingLevel: number, enchant: ToolAPI.EnchantData, item: ItemStack, region: BlockSource): ItemInstanceArray[];
 }
-declare class Log extends BasicBlock implements IClickCallback {
+declare class Log extends RotatableLog implements IClickCallback {
     hewn_id: string;
     constructor(id: string, hewn_id: string);
     onClick(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, player: number): void;
@@ -648,7 +648,8 @@ declare abstract class Dimension {
     modWorldgenDimension?(): string | number;
     getType?(): string;
     buildVanillaSurfaces(): boolean;
-    generateVanillaStructures?(): boolean;
+    generateCaves(): [caves: boolean, underwater_caves: boolean];
+    generateVanillaStructures(): boolean;
     hasSkyLight(): boolean;
     /** Method places colors in rgb format */
     getSkyColor?(): number[];

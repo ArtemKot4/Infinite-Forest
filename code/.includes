@@ -69,17 +69,33 @@ common/block/plant/Fironia.ts
 common/block/plant/IceFlower.ts
 common/block/plant/ElectricMushroom.ts
 
-common/block/tile_entity/EucalyptusWorkbench.ts
+common/block/tile_entity/windmill_station/WindmillStationTile.ts
+common/block/tile_entity/windmill_station/WindmillStation.ts
 
-common/block/tile_entity/wind_mill/WindmillStation.ts
-common/block/tile_entity/wind_mill/WindmillBlades.ts
+common/block/tile_entity/windmill_blades/LocalWindmillBladesTile.ts
+common/block/tile_entity/windmill_blades/WindmillBladesTile.ts
+common/block/tile_entity/windmill_blades/WindmillBlades.ts
 
-common/block/tile_entity/Bottle.ts
-common/block/tile_entity/Cauldron.ts
+common/block/tile_entity/bottle/LocalFirefliesBottleTile.ts
+common/block/tile_entity/bottle/FirefliesBottleTile.ts
+common/block/tile_entity/bottle/Bottle.ts
+common/block/tile_entity/bottle/FirefliesBottle.ts
 
-common/block/tile_entity/LearningTable.ts
-common/block/tile_entity/EucalyptusTorch.ts
-common/block/tile_entity/Candle.ts
+common/block/tile_entity/cauldron/LocalCauldronTile.ts
+common/block/tile_entity/cauldron/CauldronTile.ts
+common/block/tile_entity/cauldron/Cauldron.ts
+
+common/block/tile_entity/learning_table/LocalLearningTableTile.ts
+common/block/tile_entity/learning_table/LearningTableTile.ts
+common/block/tile_entity/learning_table/LearningTable.ts
+
+common/block/tile_entity/eucalyptus_torch/LocalEucalyptusTorchTile.ts
+common/block/tile_entity/eucalyptus_torch/EucalyptusTorchTile.ts
+common/block/tile_entity/eucalyptus_torch/EucalyptusTorch.ts
+
+common/block/tile_entity/candle/LocalCandleTile.ts
+common/block/tile_entity/candle/CandleTile.ts
+common/block/tile_entity/candle/Candle.ts
 
 common/effect/WinterEffect.ts
 common/effect/CalmingEffect.ts

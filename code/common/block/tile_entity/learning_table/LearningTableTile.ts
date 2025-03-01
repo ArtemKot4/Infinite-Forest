@@ -1,53 +1,3 @@
-class LocalLearningTableTile extends LocalTileEntity {
-    public createAnimation(coords: Vector, x?: number, z?: number, rotation?: number): Animation.Item {
-        const animation = new Animation.Item(
-            coords.x + (x || MathHelper.randomFromArray(Utils.range(0.3, 0.6, 0.05))),
-            coords.y + 1.025, 
-            coords.z + (z || MathHelper.randomFromArray(Utils.range(0.3, 0.6, 0.05)))
-        );
-
-        animation.describeItem({
-            id: ItemList.ANCIENT_NOTE.id,
-            count: 1,
-            data: 0,
-            size: 0.6,
-            rotation: [Math.PI / 2, rotation || MathHelper.radian(MathHelper.randomInt(0, 180)), 0]
-        });
-
-        return animation;
-    };
-
-    public onLoad(): void {
-        const is_valid = this.networkData.getBoolean("is_valid");
-
-        const animation_x = this.networkData.getFloat("animation_x", MathHelper.randomFromArray(Utils.range(0.3, 0.6, 0.05)));
-        const animation_z = this.networkData.getFloat("animation_z", MathHelper.randomFromArray(Utils.range(0.3, 0.6, 0.05)));
-        const rotation = this.networkData.getFloat("rotation", MathHelper.radian(MathHelper.randomInt(0, 180)));
-
-        if(is_valid && !this.animation) {
-            this.animation = this.createAnimation(this, animation_x, animation_z, rotation);
-            this.animation.load();
-        };
-    };
-
-    public onUnload(): void {
-        if(this.animation) {
-            this.animation.destroy();
-        };
-    };
-
-    @NetworkEvent
-    public create_animation(data: { is_valid: boolean, animation_x?: number, animation_z?: number, rotation?: number }): void {
-        if(data.is_valid && !this.animation) {
-            this.animation = this.createAnimation(this, data.animation_x, data.animation_z, data.rotation);
-            this.animation.load();
-        } else if(this.animation) {
-            this.animation.destroy();
-            delete this.animation;
-        };
-    };
-};
-
 class LearningTableTile extends CommonTileEntity {
     protected static content = {...AncientNote.UI.getContent()};
 
@@ -286,7 +236,7 @@ class LearningTableTile extends CommonTileEntity {
         };
     };
 
-    public override destroyBlock(coords: Callback.ItemUseCoordinates, player: number): void {
+    public override onDestroyBlock(coords: Callback.ItemUseCoordinates, player: number): void {
         if(!this.data.is_valid) {
             return;
         };
@@ -305,61 +255,7 @@ class LearningTableTile extends CommonTileEntity {
         this.selfDestroy();
     };
 
-};
-
-class LearningTable extends BasicBlock implements IBlockModel {
-    public constructor() {
-        super("learning_table", [{
-            name: "block.infinite_forest.learning_table",
-            texture: [["eucalyptus_log_side", 0]],
-            inCreative: true
-        }]);
-    };
-
-    public getModel(): BlockModel {
-        return new BlockModel(modelsdir, "block/learning_table", "learning_table");
-    };
-
-    public override getSoundType(): Block.Sound {
-        return "wood";
-    };
-
-    public override getTileEntity(): CommonTileEntity {
-        return new LearningTableTile();
+    public override getLocalTileEntity(): LocalTileEntity {
+        return new LocalLearningTableTile();
     };
 };
-
-Translation.addTranslation("block.infinite_forest.learning_table", {
-    en: "Learning table",
-    ru: "Исследовательский стол"
-});
-
-Translation.addTranslation("message.infinite_forest.player_learning_list", {
-    en: "Available learnings: ",
-    ru: "Доступные изучения: "
-});
-
-Translation.addTranslation("message.infinite_forest.none_learnings", {
-    en: "Learnings is not",
-    ru: "Нет изучений"
-});
-
-Translation.addTranslation("message.infinite_forest.typing", {
-    en: "I guess, here clearly. Time is come to fix it...",
-    ru: "Кажется, здесь чисто. Думаю, пришло время это исправить..."
-});
-
-Translation.addTranslation("message.infinite_forest.typing_placeholder", {
-    en: "Press text",
-    ru: "Введите текст"
-});
-
-Translation.addTranslation("message.infinite_forest.transfer_learning", {
-    en: "i am tell about ",
-    ru: "рассказываю о "
-});
-
-Translation.addTranslation("message.infinite_forest.hint_with_learning_transfer", {
-    en: "To share of learning, tell about his: ",
-    ru: "Чтобы поделиться изучением, расскажите о нём: "
-});
