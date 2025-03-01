@@ -1,4 +1,4 @@
-class Salt extends BlockForest {
+class Salt extends BasicBlock {
     constructor() {
         super("salt", [{
                 name: "block.infinite_forest.salt",

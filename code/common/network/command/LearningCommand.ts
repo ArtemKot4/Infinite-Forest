@@ -13,7 +13,7 @@ class LearningCommand extends ServerCommand<ILearningCommandProps> {
     };
 
     public override onServer(client: NetworkClient, data: ILearningCommandProps): void {
-        const playersUid = 'entities' in data ? data.entities.players : [client.getPlayerUid()];
+        const playersUid = 'initiator' in data ? data.initiator.players : [client.getPlayerUid()];
 
         for(const uid of playersUid) {
             const player = ObjectPlayer.getOrCreate(uid);

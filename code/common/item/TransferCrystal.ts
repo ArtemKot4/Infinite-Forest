@@ -1,9 +1,11 @@
-abstract class TransferCrystal extends ItemForest {
+abstract class TransferCrystal extends BasicItem implements ItemUseCallback {
     public allowDimensions: number[] = [];
     public provideDimension: number;
 
     public constructor(stringID: string, dimensionFrom: number, dimensionTo: number) {
-        super(stringID, { name: stringID, meta: 0 }, 1);
+        super(stringID, { name: stringID, meta: 0 }, {
+            stack: 1
+        });
 
         this.allowDimensions.push(dimensionFrom);
         this.provideDimension = dimensionTo;
@@ -32,12 +34,20 @@ abstract class TransferCrystal extends ItemForest {
 
 class BlueCrystal extends TransferCrystal {
     public constructor() {
-        super("blue_crystal", EDimension.OVERWORLD, InfiniteForest.id);
+        super("blue_crystal", EDimension.OVERWORLD, EDimension.INFINITE_FOREST.id);
+    };
+
+    public getName(): string {
+        return "item.infinite_forest.blue_crystal";
     };
 };
 
 class OrangeCrystal extends TransferCrystal {
     public constructor() {
-        super("orange_crystal", InfiniteForest.id, EDimension.OVERWORLD);
+        super("orange_crystal", EDimension.INFINITE_FOREST.id, EDimension.OVERWORLD);
+    };
+
+    public getName(): string {
+        return "item.infinite_forest.orange_crystal";
     };
 };

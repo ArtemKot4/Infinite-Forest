@@ -1,11 +1,5 @@
-class LearningTableTile extends TileEntityBase {
-    protected static content = {...AncientNote.UI.getContent()};
-
-    public static getDefaultContent(): UI.WindowContent {
-        return {...this.content};
-    };
-
-    public static createAnimation(coords: Vector, x?: number, z?: number, rotation?: number): Animation.Item {
+class LocalLearningTableTile extends LocalTileEntity {
+    public createAnimation(coords: Vector, x?: number, z?: number, rotation?: number): Animation.Item {
         const animation = new Animation.Item(
             coords.x + (x || MathHelper.randomFromArray(Utils.range(0.3, 0.6, 0.05))),
             coords.y + 1.025, 
@@ -21,6 +15,44 @@ class LearningTableTile extends TileEntityBase {
         });
 
         return animation;
+    };
+
+    public onLoad(): void {
+        const is_valid = this.networkData.getBoolean("is_valid");
+
+        const animation_x = this.networkData.getFloat("animation_x", MathHelper.randomFromArray(Utils.range(0.3, 0.6, 0.05)));
+        const animation_z = this.networkData.getFloat("animation_z", MathHelper.randomFromArray(Utils.range(0.3, 0.6, 0.05)));
+        const rotation = this.networkData.getFloat("rotation", MathHelper.radian(MathHelper.randomInt(0, 180)));
+
+        if(is_valid && !this.animation) {
+            this.animation = this.createAnimation(this, animation_x, animation_z, rotation);
+            this.animation.load();
+        };
+    };
+
+    public onUnload(): void {
+        if(this.animation) {
+            this.animation.destroy();
+        };
+    };
+
+    @NetworkEvent
+    public create_animation(data: { is_valid: boolean, animation_x?: number, animation_z?: number, rotation?: number }): void {
+        if(data.is_valid && !this.animation) {
+            this.animation = this.createAnimation(this, data.animation_x, data.animation_z, data.rotation);
+            this.animation.load();
+        } else if(this.animation) {
+            this.animation.destroy();
+            delete this.animation;
+        };
+    };
+};
+
+class LearningTableTile extends CommonTileEntity {
+    protected static content = {...AncientNote.UI.getContent()};
+
+    public static getDefaultContent(): UI.WindowContent {
+        return {...this.content};
     };
 
     public UI: UI.Window = (() => {
@@ -39,39 +71,9 @@ class LearningTableTile extends TileEntityBase {
     public info_pressed: boolean = false;
     public animation!: Animation.Item;
 
-    @NetworkEvent(Side.Client)
-    public create_animation(data: { is_valid: boolean, animation_x?: number, animation_z?: number, rotation?: number }): void {
-        if(data.is_valid && !this.animation) {
-            this.animation = LearningTableTile.createAnimation(this, data.animation_x, data.animation_z, data.rotation);
-            this.animation.load();
-        } else if(this.animation) {
-            this.animation.destroy();
-            delete this.animation;
-        };
-    };
-
-    public onLoad(): void {
+    public override onLoad(): void {
         this.networkData.putBoolean("is_valid", this.data.is_valid);
         this.networkData.sendChanges();
-    };
-
-    public clientLoad(): void {
-        const is_valid = this.networkData.getBoolean("is_valid");
-
-        const animation_x = this.networkData.getFloat("animation_x", MathHelper.randomFromArray(Utils.range(0.3, 0.6, 0.05)));
-        const animation_z = this.networkData.getFloat("animation_z", MathHelper.randomFromArray(Utils.range(0.3, 0.6, 0.05)));
-        const rotation = this.networkData.getFloat("rotation", MathHelper.radian(MathHelper.randomInt(0, 180)));
-
-        if(is_valid && !this.animation) {
-            this.animation = LearningTableTile.createAnimation(this, animation_x, animation_z, rotation);
-            this.animation.load();
-        };
-    };
-
-    public clientUnload(): void {
-        if(this.animation) {
-            this.animation.destroy();
-        };
     };
 
     public dropNote(extra?: Nullable<ItemExtraData>): void {
@@ -117,9 +119,9 @@ class LearningTableTile extends TileEntityBase {
         return;
     };
 
-    public onItemUse(coords: Callback.ItemUseCoordinates, item: ItemStack, player: number): void {
-        const entity = new PlayerEntity(player);
-        const carriedItem = entity.getCarriedItem();
+    public onClick(coords: Callback.ItemUseCoordinates, item: ItemStack, player: number): void {
+        const entity = new PlayerUser(player);
+        const carriedItem = Entity.getCarriedItem(player);
 
         if(carriedItem.id === ItemList.ANCIENT_NOTE.id) {
             if(carriedItem.extra) {
@@ -141,7 +143,6 @@ class LearningTableTile extends TileEntityBase {
             this.drawMain(player);
             this.UI.open();
         };
-
     };
 
     public drawMain(player: number): void {
@@ -167,11 +168,11 @@ class LearningTableTile extends TileEntityBase {
 
         this.drawLearningInfo(player);
         this.drawEditButton(player);
-        this.update();
+        this.refresh();
         return;
     };
 
-    public update(): void {
+    public refresh(): void {
         this.UI.forceRefresh();
         return;
     };
@@ -203,7 +204,7 @@ class LearningTableTile extends TileEntityBase {
                 } else {
                     this.clearLearning();
                 };
-                this.update();
+                this.refresh();
             });
 
             keyboard.open();
@@ -278,7 +279,7 @@ class LearningTableTile extends TileEntityBase {
                         this.drawMain(player);
                         this.info_pressed = false;
                     };
-                    this.update();
+                    this.refresh();
                     return;
                 }
             }
@@ -306,7 +307,7 @@ class LearningTableTile extends TileEntityBase {
 
 };
 
-class LearningTable extends BlockForest implements IBlockModel {
+class LearningTable extends BasicBlock implements IBlockModel {
     public constructor() {
         super("learning_table", [{
             name: "block.infinite_forest.learning_table",
@@ -316,14 +317,14 @@ class LearningTable extends BlockForest implements IBlockModel {
     };
 
     public getModel(): BlockModel {
-        return new BlockModel("learning_table");
+        return new BlockModel(modelsdir, "block/learning_table", "learning_table");
     };
 
     public override getSoundType(): Block.Sound {
         return "wood";
     };
 
-    public override getTileEntity(): TileEntityBase {
+    public override getTileEntity(): CommonTileEntity {
         return new LearningTableTile();
     };
 };

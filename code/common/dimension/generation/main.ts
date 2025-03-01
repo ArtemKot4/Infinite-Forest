@@ -1,5 +1,5 @@
 Callback.addCallback("GenerateCustomDimensionChunk", (chunkX, chunkZ, random, dimensionId) => {
-    if(dimensionId !== InfiniteForest.id) return;
+    if(dimensionId !== EDimension.INFINITE_FOREST.id) return;
 
     for (let x = chunkX * 16; x < (chunkX + 1) * 16; x++) {
 
@@ -81,7 +81,7 @@ namespace ForestGenerator {
 };
 
 Callback.addCallback("GenerateBiomeMap",(chunkX, chunkZ, random, dimensionId, chunkSeed, worldSeed, dimensionSeed) => {
-    if (dimensionId !== InfiniteForest.id) {
+    if (dimensionId !== EDimension.INFINITE_FOREST.id) {
         return;
     };
 

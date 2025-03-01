@@ -4,7 +4,7 @@ class InventorySaver {
     public static replaceFor(player: number) {
         this.list ??= {};
         
-        const entity = new PlayerEntity(player);
+        const entity = new PlayerUser(player);
         const from = [];
         const to = this.list[player] ??= [];
 
@@ -28,13 +28,13 @@ class InventorySaver {
 
 
 Callback.addCallback("PlayerChangedDimension", function (playerUid: number, from: number, to: number) {
-    if (Entity.getDimension(playerUid) == InfiniteForest.id) {
+    if (Entity.getDimension(playerUid) == EDimension.INFINITE_FOREST.id) {
         World.setWorldTime(42000);
 
         Commands.exec("/gamerule doDaylightCycle false");
         Commands.exec("/gamerule doWeatherCycle false");
 
-        if(from !== InfiniteForest.id) {
+        if(from !== EDimension.INFINITE_FOREST.id) {
             InventorySaver.replaceFor(playerUid);
         };
         
@@ -43,7 +43,7 @@ Callback.addCallback("PlayerChangedDimension", function (playerUid: number, from
         Commands.exec("/gamerule doDaylightCycle true");
         Commands.exec("/gamerule doWeatherCycle true");
         
-        if(from == InfiniteForest.id) {
+        if(from == EDimension.INFINITE_FOREST.id) {
             InventorySaver.replaceFor(playerUid);
         };
     };

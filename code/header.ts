@@ -1,52 +1,12 @@
-IMPORT("BlockEngine");
+// IMPORT("BlockEngine");
 IMPORT("ConnectedTexture");
 IMPORT("ItemAnimHelper");
 IMPORT("SoundLib");
 IMPORT("EnergyNet");
 IMPORT("RenderUtil");
-IMPORT("ICHelper");
-IMPORT("CommandHelper");
-
-declare namespace com.zhekasmirnov.innercore.api.NativeAPI {
-    export function getDifficulty(): EGameDifficulty;
-
-    export function setDifficulty(difficulty: EGameDifficulty);
-
-    export function resetCloudColor(): void;
-
-    export function resetFogColor(): void;
-
-    export function resetFogDistance(): void;
-
-    export function resetSkyColor(): void;
-
-    export function resetSunsetColor(): void;
-
-    export function resetUnderwaterFogColor(): void;
-
-    export function resetUnderwaterFogDistance(): void;
-
-    export function setFogColor(r: number, g: number, b: number): void;
-
-    export function setSkyColor(r: number, g: number, b: number): void;
-
-    export function setSunsetColor(r: number, g: number, b: number): void;
-
-    export function setUnderwaterFogColor(r: number, g: number, b: number): void;
-
-    export function setUnderwaterFogDistance(r: number, g: number, b: number): void;
-
-    export function setFogDistance(r: number, g: number, b: number): void;
-
-    export function setCloudColor(r: number, g: number, b: number): void;
-};
 
 const NativeAPI = com.zhekasmirnov.innercore.api.NativeAPI;
 const TextureSource = UI.TextureSource;
-
-const NetworkEvent = BlockEngine.Decorators.NetworkEvent;
-const ContainerEvent = BlockEngine.Decorators.ContainerEvent;
-const ClientSide = BlockEngine.Decorators.ClientSide;
 
 interface RGB {
     r: number;
@@ -79,14 +39,9 @@ namespace ConfigManager {
     export const FIREFLIES_COUNT_AROUND = __config__.getInteger("fireflies_count_around") || 7;
 };
 
-namespace ToolAPI {
-    export function isAxe(id: number): boolean {
-        return ToolAPI.getToolData(id)?.blockMaterials?.["wood"]
-    };
-};
-
-type NativeRendererTransform = com.zhekasmirnov.innercore.api.NativeRenderer.Transform;
-
 Callback.addCallback("ItemUse", (c, i, block, isE, player) => {
     Entity.getSneaking(player) && Game.message(IDRegistry.getNameByID(block.id) + " | " + block.data)
 }); //todo: debug
+
+const modelsdir = __dir__ + "/resources/assets/models/";
+const NativeBlock = com.zhekasmirnov.innercore.api.NativeBlock;

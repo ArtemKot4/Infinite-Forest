@@ -1,18 +1,5 @@
 Callback.addCallback("ServerPlayerTick", (playerUid: number) => {
-    if(World.getThreadTime() % 8 === 0) {
-        const entity = new PlayerEntity(playerUid);
-
-        const selectedItemStack = entity.getInventorySlot(entity.getSelectedSlot());
-        const carriedItemStack = entity.getCarriedItem();
-
-        const handFunction = ItemForest.handFunctions.get(selectedItemStack.id);
-
-        if (selectedItemStack.id == carriedItemStack.id && handFunction !== undefined) {
-            return handFunction(selectedItemStack, playerUid);
-        };
-    };
-
-    if(Player.getDimension() !== InfiniteForest.id) {
+    if(Player.getDimension() !== EDimension.INFINITE_FOREST.id) {
         return;
     };
 
@@ -20,7 +7,7 @@ Callback.addCallback("ServerPlayerTick", (playerUid: number) => {
 
     const time = World.getThreadTime();
 
-    const region = BlockSource.getDefaultForDimension(InfiniteForest.id);
+    const region = BlockSource.getDefaultForDimension(EDimension.INFINITE_FOREST.id);
     const biome = region.getBiome(pos.x, pos.z);
 
     const params = AbstractBiome.data[biome] as AbstractBiome & BiomeBehaviour;

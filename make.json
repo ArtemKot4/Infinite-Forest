@@ -34,7 +34,7 @@
 			"language": "javascript"
 		},
 		{
-			"source": "lib/*",
+			"source": "library/*",
 			"type": "library",
 			"language": "typescript"
 		}

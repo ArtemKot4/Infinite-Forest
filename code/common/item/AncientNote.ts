@@ -1,4 +1,4 @@
-class AncientNote extends ItemForest {
+class AncientNote extends BasicItem implements INoTargetUseCallback, ItemUseCallback, INameOverrideCallback {
     /**
      * @key is a the text of the note
      * @value is the learning name
@@ -113,7 +113,7 @@ class AncientNote extends ItemForest {
     };
 
     public onNoTargetUse(item: ItemStack, player: number): void {
-        return this.onItemUse(null, item, null, player);
+        return this.onItemUse(null, item, new ItemStack(), player);
     };
 
     public onNameOverride(item: ItemInstance, translation: string, name: string): string {
@@ -148,21 +148,23 @@ class AncientNote extends ItemForest {
         };
     };
 
-    public inCreative(): boolean {
+    public override inCreative(): boolean {
         return true;
+    };
+
+    public override getName(): string {
+        return "item.infinite_forest.ancient_note";
     };
 
     public constructor() {
         super("ancient_note", {
             name: "ancient_note",
             meta: 0 
-        }, 1);
+        }, {
+            stack: 1
+        });
     };
 };
-
-Callback.addCallback("ModsLoaded", () => {
-    ItemList.ANCIENT_NOTE.setupAllToCreative();
-});
 
 Network.addClientPacket("packet.infinite_forest.ancient_note.open_ui", (data: {
     text: string
@@ -191,7 +193,7 @@ Network.addServerPacket("packet.infinite_forest.ancient_note.send_learning", (cl
     if(!client) return;
     
     const player = client.getPlayerUid();
-    const carriedItem = new PlayerEntity(player).getCarriedItem();
+    const carriedItem = Entity.getCarriedItem(player);
 
     if(carriedItem.id === ItemList.ANCIENT_NOTE.id) {
         if(!carriedItem.extra) return;

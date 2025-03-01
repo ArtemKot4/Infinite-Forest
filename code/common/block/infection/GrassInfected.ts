@@ -1,3 +1,3 @@
-class GrassInfected extends BlockForest {
+class GrassInfected extends BasicBlock {
 
 };

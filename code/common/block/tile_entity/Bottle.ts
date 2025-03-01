@@ -1,4 +1,4 @@
-class Bottle extends BlockForest implements IRandomTickCallback {
+class Bottle extends BasicBlock implements IRandomTickCallback {
     public constructor() {
         super("bottle", [{
             name: "block.infinite_forest.bottle",
@@ -8,7 +8,7 @@ class Bottle extends BlockForest implements IRandomTickCallback {
     };
 
     public getModel(): BlockModel {
-        return new BlockModel("bottle", "forest_bottle");
+        return new BlockModel(modelsdir, "block/bottle", "forest_bottle");
     };
 
     public override getSoundType(): Block.Sound {
@@ -67,20 +67,8 @@ class Bottle extends BlockForest implements IRandomTickCallback {
     };
 };
 
-class FirefliesBottleTile extends TileEntityBase {
-    public defaultValues = {
-        color: null
-    };
-
-    public data: typeof this.defaultValues;
-
-    public override onLoad(): void {
-        this.data.color ??= ParticleHelper.getRandomGlowworm();
-        this.networkData.putInt("color", this.data.color);
-        this.networkData.sendChanges();
-    };
-
-    public override clientTick(): void {
+class LocalFirefliesBottleTile extends LocalTileEntity {
+    public override onTick(): void {
         if(World.getThreadTime() % 10 === 0) {
             const color = this.networkData.getInt("color", EForestParticle.GLOWWORM_2);
 
@@ -97,7 +85,25 @@ class FirefliesBottleTile extends TileEntityBase {
     };
 };
 
-class FirefliesBottle extends BlockForest implements IPlaceCallback {
+class FirefliesBottleTile extends CommonTileEntity {
+    public defaultValues = {
+        color: null
+    };
+
+    public data: typeof this.defaultValues;
+
+    public override onLoad(): void {
+        this.data.color ??= ParticleHelper.getRandomGlowworm();
+        this.networkData.putInt("color", this.data.color);
+        this.networkData.sendChanges();
+    };
+
+    public override getLocalTileEntity(): LocalTileEntity {
+        return new LocalFirefliesBottleTile();
+    };
+};
+
+class FirefliesBottle extends BasicBlock implements IPlaceCallback, IBlockModel {
     public constructor() {
         super("fireflies_bottle", [{
             name: "block.infinite_forest.fireflies_bottle",
@@ -107,7 +113,7 @@ class FirefliesBottle extends BlockForest implements IPlaceCallback {
     };
 
     public getModel(): BlockModel | BlockModel[] {
-        return new BlockModel("bottle", "forest_bottle");
+        return new BlockModel(modelsdir, "block/bottle", "forest_bottle");
     };
 
     public override getLightLevel(): number {
@@ -147,7 +153,7 @@ class FirefliesBottle extends BlockForest implements IPlaceCallback {
         return [[id, 1, data, extra]];
     };
 
-    public override getTileEntity(): TileEntityBase {
+    public override getTileEntity(): CommonTileEntity {
         return new FirefliesBottleTile();
     };
 

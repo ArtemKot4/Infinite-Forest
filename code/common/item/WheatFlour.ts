@@ -1,4 +1,4 @@
-class WheatFlour extends ItemForest implements ItemHandComponent {
+class WheatFlour extends BasicItem implements ItemHandComponent {
     public constructor() {
         super("wheat_flour", {
             name: "wheat_flour",
@@ -8,6 +8,10 @@ class WheatFlour extends ItemForest implements ItemHandComponent {
 
     public onHand(item: ItemStack, player_uid: number): void {
         Learning.giveFor(player_uid, LearningList.FIRST_LUCKS.name);
+    };
+
+    public getName(): string {
+        return "item.infinite_forest.wheat_flour";
     };
 };
 

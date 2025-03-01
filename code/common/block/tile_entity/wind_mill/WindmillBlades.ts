@@ -1,16 +1,8 @@
-class WindmillBladesTile extends TileEntityBase {
-    public static render_side: RenderSide<string> = new RenderSide("block/mill_blades");
-
-    public defaultValues = {
-        enabled: false, //false
-        speed: 0.05
-    };
-
-    public data: typeof this.defaultValues;
-
+class LocalWindmillBladesTile extends LocalTileEntity {
+    public static render_side: RenderSide<string> = new RenderSide(modelsdir, "block/mill_blades");
     public animation!: BlockAnimation;
 
-    @NetworkEvent(Side.Client)
+    @NetworkEvent
     public break_particle(): void {
         for(let i = 0; i < 3; i++) {
             Particles.addParticle(EParticleType.CLOUD, this.x + 0.5, this.y + 0.5, this.z + 0.5, 0, 0.02, 0);
@@ -18,16 +10,56 @@ class WindmillBladesTile extends TileEntityBase {
         return;
     };
     
-    public override clientLoad(): void {
+    public override onLoad(): void {
         this.animation = new BlockAnimation(
             new Vector3(this.x + 0.5, this.y + 0.5, this.z + 0.5),
             this
         );
 
-        this.animation.describe(WindmillBladesTile.render_side, "mill/mill_blades", 4);
+        this.animation.describe(LocalWindmillBladesTile.render_side, "mill/mill_blades", 4);
         this.animation.load();
         return;
     };
+
+    public override onUnload(): void {
+        this.animation && this.animation.destroy();
+    };
+
+    public override onTick(): void {
+        if(World.getThreadTime() % 60 === 0) {
+            const height = this.networkData.getInt("height", 0);
+
+            if(height < 10) {
+                return;
+            };
+        };
+        
+        const speed = this.networkData.getFloat("speed", 0.2);
+
+        const blockSource = BlockSource.getCurrentClientRegion();
+        const data = blockSource.getBlockData(this.x, this.y, this.z);
+
+        const move_coords = {
+            x: speed,
+            z: 0
+        };
+
+        if(data === 0 || data === 1) {
+            move_coords.z = move_coords.x;
+            move_coords.x = 0;
+        };
+
+        this.animation.rotate(move_coords.x, 0, move_coords.z);
+    };
+};
+
+class WindmillBladesTile extends CommonTileEntity {
+    public defaultValues = {
+        enabled: false, //false
+        speed: 0.05
+    };
+
+    public data: typeof this.defaultValues;
 
     public initDestroy() {
         this.blockSource.destroyBlock(this.x, this.y, this.z, true);
@@ -55,38 +87,6 @@ class WindmillBladesTile extends TileEntityBase {
         this.networkData.sendChanges();
     };
 
-    public override clientUnload(): void {
-        this.animation && this.animation.destroy();
-    };
-
-    public override clientTick(): void {
-
-        if(World.getThreadTime() % 60 === 0) {
-            const height = this.networkData.getInt("height", 0);
-
-            if(height < 10) {
-                return;
-            };
-        };
-        
-        const speed = this.networkData.getFloat("speed", 0.2);
-
-        const blockSource = BlockSource.getCurrentClientRegion();
-        const data = blockSource.getBlockData(this.x, this.y, this.z);
-
-        const move_coords = {
-            x: speed,
-            z: 0
-        };
-
-        if(data === 0 || data === 1) {
-            move_coords.z = move_coords.x;
-            move_coords.x = 0;
-        };
-
-        this.animation.rotate(move_coords.x, 0, move_coords.z);
-    };
-
     public override onTick(): void {
         if(World.getThreadTime() % 60 === 0) {
             const height = this.findHeight();
@@ -109,7 +109,7 @@ class WindmillBladesTile extends TileEntityBase {
         };
     };
 
-    public override destroy(): boolean {
+    public override onDestroyTile(): boolean {
         this.switchStationMode(false);
         return false;
     };
@@ -136,7 +136,7 @@ class WindmillBladesTile extends TileEntityBase {
         for(const i in vectors) {
             const id = this.blockSource.getBlockID(vectors[i][0], this.y, vectors[i][1]);
 
-            if(id === BlockList.WINDMILL_STATION.getID()) {
+            if(id === BlockList.WINDMILL_STATION.id) {
                 return TileEntity.getTileEntity(vectors[i][0], this.y, vectors[i][1], this.blockSource) as WindmillStationTile & TileEntity;
             };
         };
@@ -155,7 +155,7 @@ class WindmillBladesTile extends TileEntityBase {
     };
 };
 
-class WindmillBlades extends BlockForest {
+class WindmillBlades extends BasicBlock {
     public constructor() {
         super("windmill_blades", [{
             name: "block.infinite_forest.windmill_blades",
@@ -173,7 +173,7 @@ class WindmillBlades extends BlockForest {
         Utils.setEmptyBlockCollision(this.id);
     };
 
-    public getTileEntity(): TileEntityBase {
+    public getTileEntity(): CommonTileEntity {
         return new WindmillBladesTile();
     };
 

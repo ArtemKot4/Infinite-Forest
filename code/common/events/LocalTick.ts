@@ -1,5 +1,5 @@
 Callback.addCallback("LocalTick", () => {
-    if (Player.getDimension() !== InfiniteForest.id) {
+    if (Player.getDimension() !== EDimension.INFINITE_FOREST.id) {
         return;
     };
 

@@ -1,5 +1,5 @@
-class EucalyptusTorchTile extends TileEntityBase {
-    public override clientTick(): void {
+class LocalEucalyptusTorchTile extends LocalTileEntity {
+    public override onTick(): void {
         const enabled = this.networkData.getBoolean("enabled", true);
         if(!enabled) return;
 
@@ -34,7 +34,9 @@ class EucalyptusTorchTile extends TileEntityBase {
             );
         };
     };
+};
 
+class EucalyptusTorchTile extends CommonTileEntity {
     public override onTick(): void {
         const time = World.getThreadTime();
 
@@ -43,7 +45,6 @@ class EucalyptusTorchTile extends TileEntityBase {
                 this.networkData.putBoolean("enabled", false);
                 return;
             };
-            
 
             const lightlevel = this.blockSource.getLightLevel(this.x, this.y, this.z);
             const rain_density = Math.floor(lightlevel < 8 ? lightlevel / 2 : lightlevel / 4);
@@ -52,7 +53,6 @@ class EucalyptusTorchTile extends TileEntityBase {
             const cauldronTile = this.findCauldronWithTile();
 
             let height = 2;
-
 
             if(cauldronTile != null) {
                 height = 4;
@@ -99,9 +99,13 @@ class EucalyptusTorchTile extends TileEntityBase {
         players.forEach((player) => Learning.giveFor(player, "cauldron_lifehack"));
         return;
     };
+
+    public getLocalTileEntity(): LocalTileEntity {
+        return new LocalEucalyptusTorchTile();
+    };
 };
 
-class EucalyptusTorchUnlit extends BlockForest implements IBlockModel {
+class EucalyptusTorchUnlit extends BasicBlock implements IBlockModel {
     public constructor() {
         super("eucalyptus_torch_unlit", [{
             name: "block.infinite_forest.eucalyptus_torch",
@@ -119,11 +123,10 @@ class EucalyptusTorchUnlit extends BlockForest implements IBlockModel {
     };
 
     public getModel(): BlockModel | BlockModel[] {
-        return new BlockModel("eucalyptus_torch");
+        return new BlockModel(modelsdir, "block/eucalyptus_torch", "eucalyptus_torch");
     };
 
-    public override getTileEntity(): TileEntityBase {
+    public override getTileEntity(): CommonTileEntity {
         return new EucalyptusTorchTile();
     };
-    
 };

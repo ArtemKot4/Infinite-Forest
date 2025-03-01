@@ -1,4 +1,31 @@
-class WindmillStationTile extends TileEntityBase {
+class LocalWindmillStationTile extends LocalTileEntity {
+    public override onTick(): void {
+        if(World.getThreadTime() % 5 === 0) {
+            const id = this.networkData.getInt("input_id", 0);
+            const enabled = this.networkData.getBoolean("enabled", false);
+
+            if(!enabled) {
+                return;
+            };
+
+            ParticleHelper.spawnElectric(this.x + 0.5, this.y + 1.05, this.z + 0.5);
+
+            if(id != 0) {
+                for(let i = 0; i < 3; i++) {
+                    Particles.addBreakingItemParticle(
+                        Network.serverToLocalId(id), 
+                        0, 
+                        this.x + 0.5, 
+                        this.y - 0.1, 
+                        this.z + 0.5
+                    );
+                };
+            };   
+        };
+    };
+};
+
+class WindmillStationTile extends CommonTileEntity {
     public defaultValues = {
         enabled: false,
         progress: 0,
@@ -109,36 +136,11 @@ class WindmillStationTile extends TileEntityBase {
         };
     };
 
-    public override clientTick(): void {
-        if(World.getThreadTime() % 5 === 0) {
-            const id = this.networkData.getInt("input_id", 0);
-            const enabled = this.networkData.getBoolean("enabled", false);
-
-            if(!enabled) {
-                return;
-            };
-
-            ParticleHelper.spawnElectric(this.x + 0.5, this.y + 1.05, this.z + 0.5);
-
-            if(id != 0) {
-                for(let i = 0; i < 3; i++) {
-                    Particles.addBreakingItemParticle(
-                        Network.serverToLocalId(id), 
-                        0, 
-                        this.x + 0.5, 
-                        this.y - 0.1, 
-                        this.z + 0.5
-                    );
-                };
-            };   
-        };
-    };
-
     public isRightItem(): boolean {
         return Object.values(BlockList.WINDMILL_STATION.factory.field).includes(this.data.input_id);
     };
 
-    public override destroyBlock(coords: Callback.ItemUseCoordinates, player: number): void {
+    public override onDestroyBlock(coords: Callback.ItemUseCoordinates, player: number): void {
         const vectors = [
             [this.x, this.z + 1],
             [this.x, this.z - 1],
@@ -150,7 +152,7 @@ class WindmillStationTile extends TileEntityBase {
             const id = this.blockSource.getBlockID(vectors[i][0], this.y, vectors[i][1]);
 
             if(id === BlockList.WINDMILL_BLADES.getID()) {
-                BlockForest.destroyWithTile(vectors[i][0], this.y, vectors[i][1], this.blockSource);
+                BasicBlock.destroyWithTile(vectors[i][0], this.y, vectors[i][1], this.blockSource);
             };
         };
 
@@ -165,12 +167,12 @@ class WindmillStationTile extends TileEntityBase {
         this.data.input_id = 0;
         this.data.input_count = 0;
 
-        this.region.dropItem(new Vector3(this.x + 0.5, this.y + 0.5, this.z + 0.5), stack);
+        this.blockSource.spawnDroppedItem(this.x + 0.5, this.y + 0.5, this.z + 0.5, stack.id, stack.count, stack.data);
         return;
     }
 };
 
-class WindmillStation extends BlockForest {
+class WindmillStation extends BasicBlock {
     public factory = new Factory<number>();
 
     public constructor() {
@@ -181,7 +183,7 @@ class WindmillStation extends BlockForest {
         }]);
     };
 
-    public override getTileEntity(): TileEntityBase {
+    public override getTileEntity(): CommonTileEntity {
         return new WindmillStationTile();
     };
 };

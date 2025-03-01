@@ -11,7 +11,7 @@ Callback.addCallback("LevelDisplayed", () => {
 
 ModAPI.addAPICallback("InfiniteDepth", function(InfiniteDepth) {
     InfiniteDepth.fromJson({
-        [InfiniteForest.id]: {
+        [EDimension.INFINITE_FOREST.id]: {
              "min": 0,
              "max": 512
         }
@@ -42,7 +42,7 @@ Saver.addSavesScope("scope.infinite_forest.object_player_list",
 );
 
 
-class TestBookItem extends ItemForest {
+class TestBookItem extends BasicItem {
     public book: TestBook = new TestBook("book.background", 1.95);
     public onItemUse(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, player: number): void {
         this.book.open();
@@ -53,4 +53,10 @@ class TestBookItem extends ItemForest {
 new TestBookItem("test_book_item", {
     name: "forest_diary",
     meta: 0
-}, 1);
+}, {
+    stack: 1
+});
+
+Callback.addCallback("ModsLoaded", () => {
+    ItemList.ANCIENT_NOTE.setupAllToCreative();
+});

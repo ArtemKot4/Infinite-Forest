@@ -1,10 +1,16 @@
-class ElectricMushroomTile extends TileEntityBase {
-    public override clientTick() {
+class LocalElectricMushroomTile extends LocalTileEntity {
+    public override onTick() {
         if(World.getThreadTime() % 5 === 0) {
             ParticleHelper.spawnElectric(this.x + 0.5, this.y + 0.4, this.z + 0.5);
         };
     };
-}
+};
+
+class ElectricMushroomTile extends CommonTileEntity {
+    public override getLocalTileEntity(): LocalTileEntity {
+        return new LocalElectricMushroomTile();
+    };
+};
 
 class ElectricMushroom extends BlockPlant implements IClickCallback, IDestroyContinueCallback {
     public constructor() {
@@ -35,12 +41,12 @@ class ElectricMushroom extends BlockPlant implements IClickCallback, IDestroyCon
         ElectricMushroom.dangerMessage(player);
     };
 
-    public override getTileEntity(): TileEntityBase {
+    public override getTileEntity(): CommonTileEntity {
         return new ElectricMushroomTile();
     };
 };
 
-class BlueMushroomBlock extends BlockForest {
+class BlueMushroomBlock extends BasicBlock {
     public constructor() {
         super("blue_mushroom_block", [{
             name: "block.infinite_forest.blue_mushroom_block",

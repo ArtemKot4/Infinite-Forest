@@ -1,47 +1,5 @@
-class CandleTile extends TileEntityBase {
-    public defaultValues = {
-        flames: 0
-    };
-
-    public data: typeof this.defaultValues;
-    public onItemUse(coords: Callback.ItemUseCoordinates, item: ItemStack, player: number) {
-        const blockData = this.blockSource.getBlockData(coords.x, coords.y, coords.z);
-
-        if(this.data.flames < Candle.meshes.length && item.id === VanillaItemID.flint_and_steel) {
-            const isIncreased = this.increaseFlames();
-
-            if(isIncreased) {
-                Entity.setCarriedItem(player, item.id, item.count, item.data + 1, item.extra);
-            };
-            return;
-        };
-
-        if(blockData < (Candle.meshes.length - 1) && Utils.getBlockTags(item.id).includes("candle")) {
-            const entity = new PlayerEntity(player);
-
-            entity.decreaseCarriedItem(1);
-            BlockSource.getDefaultForActor(player).setBlock(coords.x, coords.y, coords.z, this.blockID, this.blockSource.getBlockData(this.x, this.y, this.z) + 1);
-        };
-    };
-
-    public increaseFlames(): boolean {
-        const blockData = this.blockSource.getBlockData(this.x, this.y, this.z);
-        const increasedFlame = Math.min(this.data.flames + 1, Candle.meshes.length);
-
-        if(increasedFlame !== blockData || this.data.flames === increasedFlame) return false;
-
-        this.data.flames = increasedFlame
-
-        this.networkData.putInt("flames", increasedFlame);
-        this.networkData.sendChanges();
-
-        this.blockSource.setBlock(this.x, this.y, this.z, BlockID["candle_lit_" + increasedFlame],
-         blockData);
-        TileEntity.addTileEntity(this.x, this.y, this.z, this.blockSource);
-        return true;
-    };
-
-    public clientTick(): void {
+class LocalCandleTile extends LocalTileEntity {
+    public onTick(): void {
         const flames = this.networkData.getInt("flames", 0);
 
         if(flames >= 1) {
@@ -123,12 +81,60 @@ class CandleTile extends TileEntityBase {
         };
  
     };
+}
+
+class CandleTile extends CommonTileEntity {
+    public defaultValues = {
+        flames: 0
+    };
+
+    public data: typeof this.defaultValues;
+    public onClick(coords: Callback.ItemUseCoordinates, item: ItemStack, player: number) {
+        const blockData = this.blockSource.getBlockData(coords.x, coords.y, coords.z);
+
+        if(this.data.flames < Candle.meshes.length && item.id === VanillaItemID.flint_and_steel) {
+            const isIncreased = this.increaseFlames();
+
+            if(isIncreased) {
+                Entity.setCarriedItem(player, item.id, item.count, item.data + 1, item.extra);
+            };
+            return;
+        };
+
+        if(blockData < (Candle.meshes.length - 1) && Utils.getBlockTags(item.id).includes("candle")) {
+            const entity = new PlayerUser(player);
+
+            entity.decreaseCarriedItem(1);
+            BlockSource.getDefaultForActor(player).setBlock(coords.x, coords.y, coords.z, this.blockID, this.blockSource.getBlockData(this.x, this.y, this.z) + 1);
+        };
+    };
+
+    public increaseFlames(): boolean {
+        const blockData = this.blockSource.getBlockData(this.x, this.y, this.z);
+        const increasedFlame = Math.min(this.data.flames + 1, Candle.meshes.length);
+
+        if(increasedFlame !== blockData || this.data.flames === increasedFlame) return false;
+
+        this.data.flames = increasedFlame
+
+        this.networkData.putInt("flames", increasedFlame);
+        this.networkData.sendChanges();
+
+        this.blockSource.setBlock(this.x, this.y, this.z, BlockID["candle_lit_" + increasedFlame],
+         blockData);
+        TileEntity.addTileEntity(this.x, this.y, this.z, this.blockSource);
+        return true;
+    };
+
+    public override getLocalTileEntity(): LocalTileEntity {
+        return new LocalCandleTile();
+    }
 };
 
-class Candle extends BlockForest {
+class Candle extends BasicBlock {
     public static meshes = (() => {
-        const big = RenderHelper.generateMesh("block/candle_max");
-        const small = RenderHelper.generateMesh("block/candle_max");
+        const big = RenderHelper.generateMesh(modelsdir, "block/candle_max");
+        const small = RenderHelper.generateMesh(modelsdir, "block/candle_min");
     
         big.setBlockTexture("candle", 0);
         small.setBlockTexture("candle", 0);
@@ -157,7 +163,7 @@ class Candle extends BlockForest {
             inCreative: false
         }]);
 
-        BlockRegistry.setLightLevel(this.id, light_level);
+        NativeBlock.setLightLevel(this.id, light_level);
     };
 
     public getTags(): string[] {
@@ -168,7 +174,7 @@ class Candle extends BlockForest {
         return Candle.meshes;
     };
 
-    public getTileEntity(): TileEntityBase {
+    public getTileEntity(): CommonTileEntity {
         return Candle.tile;
     };
 };

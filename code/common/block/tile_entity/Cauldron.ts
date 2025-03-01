@@ -1,6 +1,6 @@
 TagRegistry.addCommonObject("blocks", VanillaBlockID.fire, ["fire"]);
 
-class CauldronTile extends TileEntityBase {
+class LocalCauldronTile extends LocalTileEntity {
     public static WATER_RENDERMESH: RenderMesh = (() => {
         const mesh = new RenderMesh();
 
@@ -28,74 +28,19 @@ class CauldronTile extends TileEntityBase {
 
     public water_animation!: Animation.Base;
 
-    public static createWaterAnimation(level: number = CauldronTile.WATER_LEVEL_MAX, coords: Vector) {
-        const animation = new Animation.Base(coords.x + 0.5, coords.y + level, coords.z + 0.5);
+};
 
-        animation.describe({
-            mesh: CauldronTile.WATER_RENDERMESH,
-            skin: "terrain-atlas/water/water_0.png"
-        });
-
-        return animation;
-    };
-
-    @NetworkEvent(Side.Client)
-    public update_water_level(data: { level: number } = { level: CauldronTile.WATER_LEVEL_MAX }) {
-        this.water_animation ??= CauldronTile.createWaterAnimation(data.level, this);
-        this.water_animation.setPos(this.x + 0.5, this.y + data.level, this.z + 0.5);
-
-        this.water_animation.load();
-        Game.message("Doletel yopta")
-        return; 
-    };
-
-    @NetworkEvent(Side.Client)
-    public bubble_particles(data: { level: number } = { level: CauldronTile.WATER_LEVEL_MAX }) {
-        for(let i = -0.45; i > 0.45; i -= 0.1) {
-            if(Math.random() < 0.3) {
-                Particles.addParticle(EForestParticle.CAULDRON_BUBBLE, this.x + i, this.y + data.level, this.z, 0, 0, 0);
-                Particles.addParticle(EForestParticle.CAULDRON_BUBBLE, this.x, this.y + data.level - i, this.z, 0, 0, 0)
-            };
-        };
-        return;
-    };
-
+class CauldronTile extends CommonTileEntity {
     public setWaterLevel(level: number) {
-        this.data.water_level = Math.min(level, CauldronTile.WATER_LEVEL_MAX);
-        this.sendPacket("update_water_level", { level: this.data.water_level });
-        return;
+
     };
-
-    public onItemUse(coords: Callback.ItemUseCoordinates, item: ItemStack, player: number) {
-        if(item.id === VanillaItemID.water_bucket && this.data.water_level < CauldronTile.WATER_LEVEL_MAX) {
-            this.setWaterLevel(CauldronTile.WATER_LEVEL_MAX);
-            Entity.setCarriedItem(player, VanillaItemID.bucket, 1, 0);
-        };
-        return true;
-    };
-
-    public hasFire() {
-        return Utils.getBlockTags(this.blockSource.getBlockID(this.x, this.y, this.z)).includes("fire");
-    };
-
-    public onTick(): void {
-        if(World.getThreadTime() % 20 === 0) {
-            if(this.hasFire()) {
-                this.data.boiling = Math.min(this.data.boiling + 1, CauldronTile.BOILING_MAX);
-            } else {
-                this.data.boiling = 0;
-            };
-
-            if(this.data.boiling >= CauldronTile.BOILING_MAX && this.data.water_level > 0.3) {
-                this.setWaterLevel(this.data.water_level -= 0.05);
-                this.sendPacket("bubble_particles", { level: this.data.water_level });
-            };
-        };
-        return;  
+    
+    public override getLocalTileEntity(): LocalTileEntity {
+        return new LocalCauldronTile();
     };
 };
 
-class Cauldron extends BlockForest {
+class Cauldron extends BasicBlock {
     public factory = new Factory<number[]>();
 
     public constructor() {
@@ -107,10 +52,10 @@ class Cauldron extends BlockForest {
     };
 
     public getModel(): BlockModel {
-        return new BlockModel("iron_cauldron", "iron_cauldron");
+        return new BlockModel(modelsdir, "block/iron_cauldron", "iron_cauldron");
     };
 
-    public override getTileEntity(): TileEntityBase {
+    public override getTileEntity(): CommonTileEntity {
         return new CauldronTile();
     };
 };
