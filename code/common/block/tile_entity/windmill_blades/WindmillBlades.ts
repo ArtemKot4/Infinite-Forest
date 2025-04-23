@@ -13,7 +13,7 @@ class WindmillBlades extends BasicBlock {
             inCreative: true
         }]);
 
-        Utils.setEmptyBlockCollision(this.id);
+        Block.setEmptyCollisionShape(this.id);
     };
 
     public getTileEntity(): CommonTileEntity {

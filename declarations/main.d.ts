@@ -1,17 +1,11 @@
-declare namespace Utils {
-    const NativeBlock: typeof com.zhekasmirnov.innercore.api.NativeBlock;
-    function setEmptyBlockCollision(id: number): void;
-    function getBlockTags(id: number): string[];
-    function getItemTags(id: number): string[];
-    function getDimensionTags(id: number): string[];
-    function actionbarMessage(player: number, message: string): void;
-    function isCreativePlayer(player: number): boolean;
-    function range(min: number, max: number, number?: number): number[];
-    function parseBlockID(id: string): number;
-    function parseItemID(id: string): number;
-    function parseID(id: string): number;
+interface ILocalizeable {
+    getName(): string;
+    getLocalizedName(): string;
 }
-type NativeRendererTransform = com.zhekasmirnov.innercore.api.NativeRenderer.Transform;
+declare enum Side {
+    CLIENT = 0,
+    SERVER = 1
+}
 declare namespace com.zhekasmirnov.innercore.api.NativeBlock {
     function setSolid(id: number, solid: boolean): void;
     function setRenderAllFaces(id: number, render: boolean): void;
@@ -45,25 +39,90 @@ declare namespace com.zhekasmirnov.innercore.api.NativeAPI {
     function setFogDistance(r: number, g: number, b: number): void;
     function setCloudColor(r: number, g: number, b: number): void;
 }
-declare enum EDestroyLevel {
-    HAND = 0,
-    STONE = 1,
-    IRON = 2,
-    DIAMOND = 3,
-    OBSIDIAN = 4
-}
-declare namespace ToolAPI {
-    function isAxe(item: number): boolean;
-    function isPickaxe(item: number): boolean;
-}
-declare namespace Game {
-    function actionbarMessage(message: string): void;
+declare namespace RuntimeData {
+    /**
+     * Screen name on client.
+     */
+    namespace local {
+        let screenName: EScreenName;
+    }
 }
 declare namespace MathHelper {
     function randomFrom<T>(...elements: T[]): T;
     function randomFromArray<T>(array: T[]): T;
     function radian(gradus: number): number;
     function randomInt(min: number, max: number): number;
+    function range(min: number, max: number, number?: number): number[];
+}
+declare namespace TileEntity {
+    function buildEvents(prototype: TileEntity.TileEntityPrototype): void;
+    function openFor(client: NetworkClient, tile: TileEntity.TileEntityPrototype & {
+        container: ItemContainer;
+    }): void;
+}
+declare namespace ToolAPI {
+    function isAxe(item: number): boolean;
+    function isPickaxe(item: number): boolean;
+    function isShovel(item: number): boolean;
+    function isHoe(item: number): boolean;
+}
+declare namespace Block {
+    const destroyFunctions: Record<number, Callback.DestroyBlockFunction>;
+    const destroyStartFunctions: Record<number, Callback.DestroyBlockFunction>;
+    const destroyContinueFunctions: Record<number, Callback.DestroyBlockContinueFunction>;
+    function setEmptyCollisionShape(id: number): void;
+    function setSolid(id: number, solid: boolean): void;
+    function setRenderAllFaces(id: number, render: boolean): void;
+    function setRenderType(id: number, type: number): void;
+    function setRenderLayer(id: number, layer: number): void;
+    function setLightLevel(id: number, level: number): void;
+    function setLightOpacity(id: number, opacity: number): void;
+    function setExplosionResistance(id: number, resistance: number): void;
+    function setFriction(id: number, friction: number): void;
+    function setTranslucency(id: number, translucency: number): void;
+    function setSoundType(id: number, type: Sound): void;
+    function setMapColor(id: number, color: number): void;
+    function setBlockColorSource(id: number, source: ColorSource): void;
+    function setMaterialBase(id: number, base_id: number): void;
+    function registerDestroyFunction(id: number, func: Callback.DestroyBlockFunction): void;
+    function registerDestroyFunctionForID(id: number, func: Callback.DestroyBlockFunction): void;
+    function registerDestroyStartFunction(id: number, func: Callback.DestroyBlockFunction): void;
+    function registerDestroyStartFunctionForID(id: number, func: Callback.DestroyBlockFunction): void;
+    function registerDestroyContinueFunction(id: number, func: Callback.DestroyBlockContinueFunction): void;
+    function registerDestroyContinueFunctionForID(id: number, func: Callback.DestroyBlockContinueFunction): void;
+}
+declare namespace Item {
+    const holdFunctions: Record<number, Callback.ItemHoldFunction>;
+    function registerHoldFunctionForID(id: number, func: Callback.ItemHoldFunction): void;
+    function registerHoldFunction(id: string | number, func: Callback.ItemHoldFunction): void;
+}
+declare namespace World {
+    function getDifficulty(): number;
+    function setDifficulty(difficulty: number): void;
+    function resetCloudColor(): void;
+    function resetFogColor(): void;
+    function resetFogDistance(): void;
+    function resetSkyColor(): void;
+    function resetSunsetColor(): void;
+    function resetUnderwaterFogColor(): void;
+    function resetUnderwaterFogDistance(): void;
+    function setFogColor(r: number, g: number, b: number): void;
+    function setSkyColor(r: number, g: number, b: number): void;
+    function setSunsetColor(r: number, g: number, b: number): void;
+    function setUnderwaterFogColor(r: number, g: number, b: number): void;
+    function setUnderwaterFogDistance(r: number, g: number, b: number): void;
+    function setFogDistance(r: number, g: number, b: number): void;
+    function setCloudColor(r: number, g: number, b: number): void;
+}
+declare namespace TagRegistry {
+    function getBlockTags(id: number): string[];
+    function getItemTags(id: number): string[];
+    function getDimensionTags(id: number): string[];
+}
+declare namespace IDRegistry {
+    function parseBlockID(id: string): number;
+    function parseItemID(id: string): number;
+    function parseID(id: string): number;
 }
 declare namespace RenderHelper {
     function generateMesh(dir: string, model: string, params?: RenderMesh.ImportParams, rotate?: number[]): RenderMesh;
@@ -84,8 +143,8 @@ declare class BlockAnimation {
     constructor(coords: Vector, tile_entity?: TileEntity.TileEntityPrototype);
     load(): void;
     describe(mesh: RenderMesh | RenderSide<string>, texture: string, scale?: number, material?: string): void;
-    rotate(x: number, y: number, z: number): NativeRendererTransform;
-    scale(x: number, y: number, z: number): NativeRendererTransform;
+    rotate(x: number, y: number, z: number): com.zhekasmirnov.innercore.api.NativeRenderer.Transform;
+    scale(x: number, y: number, z: number): com.zhekasmirnov.innercore.api.NativeRenderer.Transform;
     setPos(x: number, y: number, z: number): void;
     refresh(): void;
     destroy(): void;
@@ -100,14 +159,273 @@ declare class Keyboard {
 }
 declare namespace UIHelper {
     function separateText(text: string, line_size?: number): string;
+    function getItemIcon(itemID: string | number, x: number, y: number, size?: number, bitmap?: string): UI.UISlotElement;
 }
-declare namespace WorldSaves {
-    const defaultData: {
-        players: {};
+declare enum EScreenName {
+    IN_GAME_PLAY_SCREEN = "in_game_play_screen",
+    WORLD_LOADING_PROGRESS_SCREEN = "world_loading_progress_screen",
+    ENDER_CHEST_SCREEN = "ender_chest_screen",
+    FURNACE_SCREEN = "furnace_screen",
+    SMALL_CHEST_SCREEN = "small_chest_screen",
+    CREATIVE_INVENTORY_SCREEN = "creative_inventory_screen",
+    SURVIVAL_INVENTORY_SCREEN = "survival_inventory_screen",
+    INVENTORY_SCREEN = "inventory_screen",
+    INVENTORY_SCREEN_POCKET = "inventory_screen_pocket"
+}
+interface INotificationTimerParams {
+    /**
+     * time before moving back, in milliseconds
+     */
+    waitTime?: number;
+    /**
+     * time before next notification, in milliseconds
+     */
+    queueTime?: number;
+    /**
+     * time how much thread is sleep between elements moving, in milliseconds.
+     */
+    sleepTime?: number;
+}
+interface INotificationParams extends INotificationTimerParams {
+    /**
+     * scale of all elements
+     */
+    scale: number;
+    /**
+     * width of window. Influences on background width
+     */
+    width: number;
+    /**
+     * height of window. Influences on background height
+     */
+    height: number;
+    x?: number;
+    y?: number;
+    color?: number;
+}
+type INotificationRuntimeParams = Partial<INotificationParams> & {
+    [element: string]: NotificationElement;
+};
+interface INotificationElementInitEvent {
+    onInit?(element: NotificationElement, style: INotificationStyle, runtimeStyle: INotificationRuntimeParams): void;
+}
+type NotificationElement = (UI.UICustomElement | UI.UIButtonElement | UI.UICloseButtonElement | UI.UIFrameElement | UI.UIImageElement & {
+    item?: string | number;
+} | UI.UIScaleElement | UI.UIScrollElement | UI.UISlotElement | UI.UISwitchElement | UI.UITabElement | UI.UITextElement & {
+    maxLineLength?: number;
+} | UI.UIFPSTextElement | UI.UIInvSlotElement) & INotificationElementInitEvent;
+type INotificationStyle = INotificationParams | (INotificationParams & {
+    [element: string]: NotificationElement;
+});
+interface INotificationWindowData extends INotificationTimerParams {
+    content: UI.WindowContent;
+}
+interface INotificationInputData {
+    styleName: string;
+    runtimeStyle: INotificationRuntimeParams;
+}
+/**
+ * Class to create custom notification animations, be like as minecraft achievement animation.
+ * @example
+ * ```ts
+    class TransparentNotification extends Notification {
+        public mark: boolean = false;
+
+        protected onInit(style: INotificationStyle, runtimeStyle: INotificationRuntimeParams, description: INotificationWindowData): void {
+            this.mark = false;
+            this.UI.layout.setAlpha(0);
+        };
+
+        public setAlpha(value: number): void {
+            this.UI.layout.setAlpha(value);
+        };
+
+        protected run(style: INotificationStyle, runtimeStyle: INotificationRuntimeParams, data: INotificationWindowData): boolean {
+            const alpha = this.UI.layout.getAlpha();
+            if(alpha < 1 && !this.mark) {
+                this.setAlpha(alpha + 0.01);
+            } else {
+                if(!this.mark) {
+                    this.mark = true;
+                    java.lang.Thread.sleep(data.waitTime);
+                };
+            };
+            if(this.mark) {
+                this.setAlpha(alpha - 0.01);
+                if(alpha <= 0) {
+                    java.lang.Thread.sleep(style.queueTime);
+                    this.close();
+
+                    return true;
+                };
+            };
+        };
     };
-    let data: {
-        players: Record<number, typeof defaultData.players & Scriptable>;
-    } & Scriptable;
+
+    Notification.register("transparent", new TransparentNotification());
+
+    namespace ENotificationStyle {
+        export const TRANSPARENT: INotificationStyle = {
+            waitTime: 2000,
+            queueTime: 1000,
+            scale: 2.3,
+            width: 220,
+            height: 30,
+            frame: {
+                type: "custom",
+                x: 0,
+                y: 0,
+                width: 220 * 2.3,
+                height: 30 * 2.3,
+                custom: {
+                    onSetup(element) {
+                        const paint = this.paint = new android.graphics.Paint();
+                        paint.setStyle(android.graphics.Paint.Style.STROKE);
+                        paint.setARGB(100, 0, 0, 0);
+        
+                        element.setSize(220 * 2.3, 30 * 2.3);
+                    },
+                    onDraw(element, canvas, scale) {
+                        canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), this.paint);
+                    }
+                }
+            },
+            text: {
+                type: "text",
+                x: 48,
+                y: 15,
+                font: {
+                    color: android.graphics.Color.WHITE,
+                },
+                maxLineLength: 30
+            },
+            icon: {
+                type: "image",
+                x: 8,
+                y: 10,
+            }
+        };
+    };
+
+    Notification.get("transparent").addStyle("transparent", ENotificationStyle.TRANSPARENT);
+
+    Callback.addCallback("ItemUse", function(c, item, b, isE, player) {
+        const obj = {
+            text: {
+                type: "text",
+                text: Item.getName(item.id, item.data)
+            },
+            icon: {
+                type: "image",
+                item: item.id
+            }
+        } as INotificationRuntimeParams;
+
+        Notification.get("transparent").sendFor(player, "transparent", obj);
+    });
+ * ```
+ */
+declare abstract class Notification {
+    static list: Record<string, Notification>;
+    type: string;
+    styles: Record<string, INotificationStyle>;
+    queue: INotificationInputData[];
+    lock: boolean;
+    stop: boolean;
+    thread: java.lang.Thread;
+    UI: UI.Window;
+    constructor(type?: string);
+    buildPacket(): void;
+    /**
+     * Method to get specified Notification by type. {@link AchievementNotification} for example can be got with Notification.{@link get}("achievement")
+     * @param type type of the notification
+     */
+    static get<T extends Notification>(type: string): T;
+    addStyle(name: string, style: INotificationStyle): this;
+    setStop(stop: boolean): this;
+    /**
+     * Method clears queue
+     */
+    clearQueue(): void;
+    /**
+     * Changes lock state
+     * @param lock lock state
+     */
+    setLock(lock: boolean): this;
+    getColor(): number;
+    getLocationX(): number;
+    getLocationY(): number;
+    getWidth(): number;
+    getHeight(): number;
+    getScale(): number;
+    getSleepTime(): number;
+    getQueueTime(): number;
+    getWaitTime(): number;
+    protected getDescription(style: INotificationStyle, runtimeStyle: INotificationRuntimeParams): INotificationWindowData;
+    preventInit(styleName: string, runtimeStyle: INotificationRuntimeParams): boolean;
+    onPreventInit(styleName: string, runtimeStyle: INotificationRuntimeParams): void;
+    getStyle(styleName: string): INotificationStyle;
+    /**
+     * Method to open notification with specified style name and runtime data.
+     * @param styleName name of your style in {@link Notification.styles}
+     * @param runtimeStyle your runtime data. It can be text or image
+     */
+    init(styleName: string, runtimeStyle: INotificationRuntimeParams): void;
+    /**
+     * Method to init thread, contains logic of change notifications.
+     */
+    initThread(style: INotificationStyle, runtimeStyle: INotificationRuntimeParams, description: INotificationWindowData): java.lang.Thread;
+    /**
+     * Method {@link init}s  and deletes last notification from queue
+     * @returns true if notification was inited
+     */
+    initLast(): boolean;
+    /**
+     * Method, calls after opening ui. It can be used to set default values.
+     * @param style Notification style from init.
+     * @param description Description of window.
+     */
+    protected onInit(style: INotificationStyle, runtimeStyle: INotificationRuntimeParams, description: INotificationWindowData): void;
+    /**
+     * Method, where your thread do work. Return true to reload thread with last element from queue.
+     * @param style Notification style from init
+     * @param runtimeStyle Notification runtime params from init
+     * @param description result of {@link getDescription description}
+     */
+    protected abstract run(style: INotificationStyle, runtimeStyle: INotificationRuntimeParams, description: INotificationWindowData): boolean;
+    /**
+     * Method to send player from server notification with specified style name and runtime data.
+     * @param styleName name of your style in {@link Notification.styles}
+     * @param runtimeStyle your runtime data.
+     */
+    sendFor(player_uid: number, styleName: string, runtimeStyle: INotificationRuntimeParams): void;
+    /**
+     * Method, calls with using close function.
+     * @param style Notification style from init.
+     * @param runtimeStyle your runtime data.
+     * @param description result of {@link getDescription description}
+     */
+    onClose(style: INotificationStyle, runtimeStyle: INotificationRuntimeParams, description: INotificationWindowData): void;
+    close(style?: INotificationStyle, runtimeStyle?: INotificationRuntimeParams, description?: INotificationWindowData): void;
+    static register(type: string, notification: Notification): Notification;
+}
+declare namespace ENotificationStyle {
+    const TRANSPARENT: INotificationStyle;
+}
+declare class AchievementNotification extends Notification {
+    maxHeight: number;
+    mark: boolean;
+    height: number;
+    defaults: {};
+    protected updateElementsHeight(value: number): void;
+    protected onInit(style: INotificationStyle, runtimeStyle: INotificationRuntimeParams, description: INotificationWindowData): void;
+    protected run(style: INotificationStyle, runtimeStyle: INotificationRuntimeParams, data: INotificationWindowData): boolean;
+}
+declare class TransparentNotification extends Notification {
+    mark: boolean;
+    protected onInit(style: INotificationStyle, runtimeStyle: INotificationRuntimeParams, description: INotificationWindowData): void;
+    setAlpha(value: number): void;
+    protected run(style: INotificationStyle, runtimeStyle: INotificationRuntimeParams, data: INotificationWindowData): boolean;
 }
 declare class Vector3 {
     x: number;
@@ -122,6 +440,14 @@ declare class Vector3 {
     constructor(x: number, y: number, z: number);
     copy(): Vector3;
     equals(vector: Vector3): boolean;
+    add(vector: Vector3): Vector3;
+    subtract(vector: Vector3): Vector3;
+    multiply(scalar: number): Vector3;
+    divide(scalar: number): Vector3;
+    dot(vector: Vector3): number;
+    cross(vector: Vector3): Vector3;
+    length(): number;
+    normalize(): Vector3;
 }
 interface ICommandParams {
     /**
@@ -214,13 +540,6 @@ declare abstract class ServerCommand<T extends ICommandParams> extends Command {
      */
     protected sendToAllClients(data: T): void;
 }
-interface ITestCommand extends ICommandParams {
-    "aboba": string;
-}
-declare class TestServerCommand extends ServerCommand<ITestCommand> {
-    constructor();
-    onServer(client: NetworkClient, data: ITestCommand): void;
-}
 declare class ItemStack implements ItemInstance {
     id: number;
     count: number;
@@ -231,7 +550,7 @@ declare class ItemStack implements ItemInstance {
     constructor(id: number, count: number, data?: number, extra?: ItemExtraData);
     decrease(count?: number): void;
     increase(count?: number): void;
-    equals(stack: ItemStack): boolean;
+    equals(stack: ItemInstance | ItemStack): boolean;
     getItemInstance(): ItemInstance;
     isEmpty(): boolean;
     clear(): void;
@@ -241,27 +560,27 @@ declare class ItemStack implements ItemInstance {
     getStringID(): string;
     copy(): ItemStack;
 }
-interface ItemHandComponent {
-    onHand?(item: ItemInstance, player_uid: number): void;
+interface IItemHoldCallback {
+    onItemHold?(item: ItemInstance, playerUid: number, slotIndex: number): void;
 }
 type itemTextureAnimated = [texture: string, frames: number | number[], interval: number];
 interface IItemTextureDescription {
     name: string | itemTextureAnimated;
     meta: number;
 }
-interface IconOverrideCallback {
+interface IIconOverrideCallback {
     onIconOverride?(item: ItemInstance, isModUi: boolean): void | Item.TextureData;
 }
 interface INoTargetUseCallback {
     onNoTargetUse(item: ItemStack, player: number): void;
 }
-interface ItemUsingReleasedCallback {
+interface IItemUsingReleasedCallback {
     onUsingReleased(item: ItemStack, ticks: number, player: number): void;
 }
-interface ItemUsingCompleteCallback {
+interface IItemUsingCompleteCallback {
     onUsingComplete(item: ItemStack, player: number): void;
 }
-interface ItemUseCallback {
+interface IItemUseCallback {
     onItemUse(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, player: number): void;
 }
 interface INameOverrideCallback {
@@ -281,7 +600,6 @@ interface IGlintItem {
 }
 type ItemParams = Item.ItemParams | Item.FoodParams | Item.ArmorParams;
 declare class BasicItem<T extends Item.ItemParams = Item.ItemParams> {
-    static handFunctions: Map<number, (item: ItemInstance, playerUid: number) => void>;
     maxStack: number;
     texture: IItemTextureDescription;
     id: number;
@@ -297,13 +615,20 @@ declare class BasicItem<T extends Item.ItemParams = Item.ItemParams> {
     getTags?(): string[];
     isThrowable?(): boolean;
     getFood?(): number;
-    static setFunctions(instance: (IconOverrideCallback | INoTargetUseCallback | ItemUsingReleasedCallback | ItemUsingCompleteCallback | ItemUseCallback | INameOverrideCallback | ItemHandComponent | BasicItem) & {
+    static setFunctions(instance: (IIconOverrideCallback | INoTargetUseCallback | IItemUsingReleasedCallback | IItemUsingCompleteCallback | IItemUseCallback | INameOverrideCallback | IItemHoldCallback | BasicItem) & {
         id: number;
     }): void;
     create(params: ItemParams): void;
 }
+declare enum EDestroyLevel {
+    HAND = 0,
+    STONE = 1,
+    IRON = 2,
+    DIAMOND = 3,
+    OBSIDIAN = 4
+}
 interface IBlockModel {
-    getModel?(): RenderMesh | RenderMesh[] | BlockModel | BlockModel[];
+    getModel?(): RenderMesh | RenderMesh[] | BlockModel | BlockModel[] | BlockRenderer.Model | ICRender.Model;
 }
 declare class BlockModel {
     protected readonly mesh: RenderMesh;
@@ -349,18 +674,17 @@ interface IClickCallback {
     onClick(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, player: number): void;
 }
 declare class BasicBlock {
-    static destroyContinueFunctions: Record<number, Callback.DestroyBlockContinueFunction>;
-    static destroyStartFunctions: Record<number, Callback.DestroyBlockFunction>;
-    static destroyFunctions: Record<number, Callback.DestroyBlockFunction>;
     readonly variationList: Block.BlockVariation[];
     readonly id: number;
     readonly stringID: string;
     constructor(stringID: string, variationList?: Block.BlockVariation[]);
     canRotate(): boolean;
     build(): void;
-    setModel(model: BlockModel | RenderMesh, data: number): this;
+    setModel(model: BlockModel | RenderMesh | BlockRenderer.Model | ICRender.Model, data: number): this;
+    setStates(states: ReturnType<typeof this.getStates>): void;
     getID(): number;
-    getTags?(): string[];
+    getStates(): (string | number)[];
+    getTags(): string[];
     getDrop?(coords: Callback.ItemUseCoordinates, id: number, data: number, diggingLevel: number, enchant: ToolAPI.EnchantData, item: ItemStack, region: BlockSource): ItemInstanceArray[];
     getDestroyTime?(): number;
     getSoundType?(): Block.Sound;
@@ -391,7 +715,7 @@ declare abstract class BlockPlant extends BasicBlock implements INeighbourChange
     getSoundType(): Block.Sound;
     getRenderType(): number;
 }
-declare abstract class BlockBush extends BasicBlock implements IClickCallback, IRandomTickCallback {
+declare abstract class BlockBush extends BlockPlant implements IClickCallback, IRandomTickCallback {
     berryID: number;
     getMaxStage(): number;
     constructor(stringID: string, variationList: Block.BlockVariation[], berryID: number);
@@ -435,7 +759,7 @@ declare function NetworkEvent(target: CommonTileEntity | LocalTileEntity, proper
  * @param propertyName Name of method
  */
 declare function ContainerEvent(target: CommonTileEntity | LocalTileEntity, propertyName: string): void;
-declare abstract class LocalTileEntity implements TileEntity.LocalTileEntityPrototype {
+declare abstract class LocalTileEntity implements LocalTileEntity {
     events: {
         [packetName: string]: (packetData: any, packetExtra: any) => void;
     };
@@ -446,11 +770,17 @@ declare abstract class LocalTileEntity implements TileEntity.LocalTileEntityProt
         network: string[];
         container: string[];
     };
-    /**@deprecated */
+    /**@deprecated
+     * Use {@link onLoad} instead
+     */
     load(): void;
-    /**@deprecated */
+    /**@deprecated
+     * Use {@link onUnload} instead
+     */
     unload(): void;
-    /**@deprecated */
+    /**@deprecated
+     * Use {@link onTick} instead
+     */
     tick(): void;
     onLoad(): void;
     onUnload(): void;
@@ -504,14 +834,21 @@ declare abstract class CommonTileEntity implements TileEntity {
     readonly networkEntity: NetworkEntity;
     readonly networkEntityType: NetworkEntityType;
     readonly networkEntityTypeName: string;
+    /**
+     * Scriptable object that contains data of tile entity.
+     * You can use it instead {@link defaultValues}
+     */
     data: Scriptable;
+    /**
+     * Scriptable object that contains default data of tile entity.
+     */
     defaultValues: Scriptable;
-    container: ItemContainer | UI.Container;
+    container: ItemContainer;
     liquidStorage: LiquidRegistry.Storage;
     isLoaded: boolean;
     remove: boolean;
     noupdate: boolean;
-    useNetworkItemContainer?: boolean;
+    readonly useNetworkItemContainer: boolean;
     events: {
         [packetName: string]: (packetData: any, packetExtra: any) => void;
     };
@@ -523,43 +860,66 @@ declare abstract class CommonTileEntity implements TileEntity {
         network: string[];
         container: string[];
     };
+    constructor();
     created(): void;
-    /**@deprecated */
+    /**@deprecated
+     * Use {@link onInit} instead
+     */
     init(): void;
-    /**@deprecated */
+    /**@deprecated
+     * Use {@link onLoad} instead
+     */
     load(): void;
-    /**@deprecated */
+    /**@deprecated
+     * Use {@link onUnload} instead
+     */
     unload(): void;
     /**@deprecated */
     update: () => void;
     onCheckerTick(isInitialized: boolean, isLoaded: boolean, wasLoaded: boolean): void;
     click(id: number, count: number, data: number, coords: Callback.ItemUseCoordinates, player: number, extra: ItemExtraData): boolean | void;
-    /**@deprecated */
+    /**@deprecated
+     * Use {@link onDestroyBlock} instead
+     */
     destroyBlock(coords: Callback.ItemUseCoordinates, player: number): void;
     redstone(params: Callback.RedstoneSignalParams): void;
-    /**@deprecated */
+    /**@deprecated
+     * Use {@link onProjectileHit} instead
+     */
     projectileHit(coords: Callback.ItemUseCoordinates, target: Callback.ProjectileHitTarget): void;
-    /**@deprecated */
+    /**@deprecated
+     * Use {@link onDestroyTile} instead
+     */
     destroy(): boolean | void;
-    /**@deprecated */
+    /**@deprecated
+     * Use {@link onTick} instead
+     */
     tick(): void;
     onInit(): void;
     onLoad(): void;
     onUnload(): void;
+    /**
+     * Method, calls when player clicks on block with this tile entity. If method returns false, ui will be opened.
+     * @param coords
+     * @param item
+     * @param player
+     * @returns boolean
+     */
     onClick(coords: Callback.ItemUseCoordinates, item: ItemStack, player: number): boolean | void;
     onDestroyBlock(coords: Callback.ItemUseCoordinates, player: number): void;
     onProjectileHit(coords: Callback.ItemUseCoordinates, target: Callback.ProjectileHitTarget): void;
     onDestroyTile(): boolean | void;
     onTick(): void;
     getGuiScreen(): Nullable<UI.IWindow>;
-    getScreenByName(screenName?: string): Nullable<UI.IWindow>;
+    getScreenByName(screenName?: string, container?: ItemContainer): Nullable<UI.IWindow>;
+    getScreenName(player: number, coords: Vector): string;
+    preventUI(id: number, count: number, data: number, coords: Callback.ItemUseCoordinates, player: number, extra: Nullable<ItemExtraData>): boolean;
     onItemClick(id: number, count: number, data: number, coords: Callback.ItemUseCoordinates, player: number, extra: Nullable<ItemExtraData>): boolean;
     requireMoreLiquid(liquid: string, amount: number): void;
-    sendPacket: (name: string, data: object) => {};
-    sendResponse: (packetName: string, someData: object) => {};
+    sendPacket: <T = {}>(name: string, data: T) => {};
+    sendResponse: <T = {}>(packetName: string, someData: T) => {};
     selfDestroy(): void;
     getLocalTileEntity(): LocalTileEntity;
-    constructor();
 }
 declare class PlayerUser {
     playerUid: number;
@@ -611,13 +971,15 @@ declare class PlayerUser {
     setFlying(enabled: boolean): void;
     getEffect(effect: EPotionEffect): Entity.EffectInstance;
     setEffect(effectId: EPotionEffect, effectData: number, effectTime: number, ambience?: boolean, particles?: boolean): void;
-    getSneaking(): boolean;
+    isSneaking(): boolean;
     setSneaking(value: boolean): void;
     getName(): string;
     getCarriedItem(): ItemStack;
-    decreaseCarriedItem(count: number): void;
+    decreaseCarriedItem(count?: number): void;
     clearSlot(slot?: number): void;
     clearInventory(): void;
+    getSelectedItem(): ItemStack;
+    static isCreative(player: number): boolean;
 }
 interface CustomGeneratorDescription {
     base?: string | number;
@@ -664,6 +1026,165 @@ declare abstract class Dimension {
     generateDimensionChunk?(chunkX: number, chunkZ: number, random: java.util.Random): void;
     insidePlayerDimensionTransfer?(playerUid: number, from: number): void;
     outsidePlayerDimensionTransfer?(playerUid: number, to: number): void;
+}
+/**
+ * Enum with names of all callbacks
+ */
+declare enum ECallback {
+    CRAFT_RECIPE_PRE_PROVIDED = "CraftRecipePreProvided",
+    CRAFT_RECIPE_PROVIDED_FUNCTION = "CraftRecipeProvidedFunction",
+    VANILLA_WORKBENCH_CRAFT = "VanillaWorkbenchCraft",
+    VANILLA_WORKBENCH_POST_CRAFT = "VanillaWorkbenchPostCraft",
+    VANILLA_WORKBENCH_RECIPE_SELECTED = "VanillaWorkbenchRecipeSelected",
+    CONTAINER_CLOSED = "ContainerClosed",
+    CONTAINER_OPENED = "ContainerOpened",
+    CUSTOM_WINDOW_OPENED = "CustomWindowOpened",
+    CUSTOM_WINDOW_CLOSED = "CustomWindowClosed",
+    CORE_CONFIGURED = "CoreConfigured",
+    PRE_LOADED = "PreLoaded",
+    API_LOADED = "APILoaded",
+    MODS_LOADED = "ModsLoaded",
+    POST_LOADED = "PostLoaded",
+    PRE_BLOCKS_DEFINED = "PreBlocksDefined",
+    BLOCKS_DEFINED = "BlocksDefined",
+    ADD_RUNTIME_PACKS = "AddRuntimePacks",
+    LEVEL_SELECTED = "LevelSelected",
+    DIMENSION_LOADED = "DimensionLoaded",
+    DESTROY_BLOCK_END = "DestroyBlock",
+    DESTROY_BLOCK_START = "DestroyBlockStart",
+    DESTROY_BLOCK_CONTINUE = "DestroyBlockContinue",
+    BUILD_BLOCK = "BuildBlock",
+    BLOCK_CHANGED = "BlockChanged",
+    BREAK_BLOCK = "BreakBlock",
+    ITEM_USE = "ItemUse",
+    ITEM_USE_LOCAL_SERVER = "ItemUseLocalServer",
+    EXPLOSION = "Explosion",
+    FOOD_EATEN = "FoodEaten",
+    EXP_ADD = "ExpAdd",
+    EXP_LEVEL_ADD = "ExpLevelAdd",
+    NATIVE_COMMAND = "NativeCommand",
+    PLAYER_ATTACK = "PlayerAttack",
+    ENTITY_ADDED = "EntityAdded",
+    ENTITY_REMOVED = "EntityRemoved",
+    ENTITY_ADDED_LOCAL = "EntityAddedLocal",
+    ENTITY_REMOVED_LOCAL = "EntityRemovedLocal",
+    ENTITY_DEATH = "EntityDeath",
+    ENTITY_HURT = "EntityHurt",
+    ENTITY_INTERACT = "EntityInteract",
+    EXP_ORBS_SPAWNED = "ExpOrbsSpawned",
+    PROJECTILE_HIT = "ProjectileHit",
+    REDSTONE_SIGNAL = "RedstoneSignal",
+    POP_BLOCK_RESOURCES = "PopBlockResources",
+    ITEM_ICON_OVERRIDE = "ItemIconOverride",
+    ITEM_NAME_OVERRIDE = "ItemNameOverride",
+    ITEM_USE_NO_TARGET = "ItemUseNoTarget",
+    ITEM_USING_RELEASED = "ItemUsingReleased",
+    ITEM_USING_COMPLETE = "ItemUsingComplete",
+    ITEM_DISPENSED = "ItemDispensed",
+    NATIVE_GUI_CHANGED = "NativeGuiChanged",
+    ENCHANT_POST_ATTACK = "EnchantPostAttack",
+    ENCHANT_GET_PROTECTION_BONUS = "EnchantGetProtectionBonus",
+    ENCHANT_GET_DAMAGE_BONUS = "EnchantGetDamageBonus",
+    ENCHANT_POST_HURT = "EnchantPostHurt",
+    GENERATE_CHUNK = "GenerateChunk",
+    GENERATE_CHUNK_UNDERGROUND = "GenerateChunkUnderground",
+    GENERATE_NETHER_CHUNK = "GenerateNetherChunk",
+    GENERATE_END_CHUNK = "GenerateEndChunk",
+    GENERATE_CHUNK_UNIVERSAL = "GenerateChunkUniversal",
+    GENERATE_BIOME_MAP = "GenerateBiomeMap",
+    PRE_PROCESS_CHUNK = "PreProcessChunk",
+    POST_PROCESS_CHUNK = "PostProcessChunk",
+    READ_SAVES = "ReadSaves",
+    WRITE_SAVES = "WriteSaves",
+    CUSTOM_BLOCK_TESSELLATION = "CustomBlockTessellation",
+    LOCAL_PLAYER_TICK = "LocalPlayerTick",
+    SERVER_PLAYER_TICK = "ServerPlayerTick",
+    CUSTOM_DIMENSION_TRANSFER = "CustomDimensionTransfer",
+    BLOCK_EVENT_ENTITY_INSIDE = "BlockEventEntityInside",
+    BLOCK_EVENT_ENTITY_STEP_ON = "BlockEventEntityStepOn",
+    BLOCK_EVENT_NEIGHBOUR_CHANGE = "BlockEventNeighbourChange",
+    CONNECTING_TO_HOST = "ConnectingToHost",
+    DIMENSION_UNLOADED = "DimensionUnloaded",
+    LEVEL_PRE_LEFT = "LevelPreLeft",
+    GAME_LEFT = "GameLeft",
+    LEVEL_LEFT = "LevelLeft",
+    LOCAL_LEVEL_LEFT = "LocalLevelLeft",
+    LOCAL_LEVEL_PRE_LEFT = "LocalLevelPreLeft",
+    SERVER_LEVEL_LEFT = "ServerLevelLeft",
+    SERVER_LEVEL_PRE_LEFT = "ServerLevelPreLeft",
+    ITEM_USE_LOCAL = "ItemUseLocal",
+    SYSTEM_KEY_EVENT_DISPATCHED = "SystemKeyEventDispatched",
+    NAVIGATION_BACK_PRESSED = "NavigationBackPressed",
+    LEVEL_CREATED = "LevelCreated",
+    LEVEL_DISPLAYED = "LevelDisplayed",
+    LEVEL_PRE_LOADED = "LevelPreLoaded",
+    LEVEL_LOADED = "LevelLoaded",
+    LOCAL_LEVEL_LOADED = "LocalLevelLoaded",
+    REMOTE_LEVEL_LOADED = "RemoteLevelLoaded",
+    REMOTE_LEVEL_PRE_LOADED = "RemoteLevelPreLoaded",
+    SERVER_LEVEL_LOADED = "ServerLevelLoaded",
+    SERVER_LEVEL_PRE_LOADED = "ServerLevelPreLoaded",
+    TICK = "tick",
+    LOCAL_TICK = "LocalTick",
+    APP_SUSPENDED = "AppSuspended",
+    ENTITY_PICK_UP_DROP = "EntityPickUpDrop",
+    LOCAL_PLAYER_LOADED = "LocalPlayerLoaded",
+    SERVER_PLAYER_LOADED = "ServerPlayerLoaded",
+    SERVER_PLAYER_LEFT = "ServerPlayerLeft",
+    LOCAL_PLAYER_CHANGED_DIMENSION = "LocalPlayerChangedDimension",
+    PLAYER_CHANGED_DIMENSION = "PlayerChangedDimension",
+    LOCAL_PLAYER_EAT = "LocalPlayerEat",
+    SERVER_PLAYER_EAT = "ServerPlayerEat",
+    GENERATE_CUSTOM_DIMENSION_CHUNK = "GenerateCustomDimensionChunk",
+    TILE_ENTITY_ADDED = "TileEntityAdded",
+    TILE_ENTITY_REMOVED = "TileEntityRemoved",
+    /**
+     * Custom callback. Works in one time of 8 ticks, if player held the item.
+     */
+    ITEM_HOLD = "ItemHold"
+}
+/**
+ * The factory of decorators to add callback from function.
+ * @example
+ * ```ts
+    class Example {
+        [@SubscribeEvent(ECallback.LOCAL_TICK)]
+        public onTick() {
+            Game.message("example")
+        }
+    };
+ * ```
+ * @param event {@link ECallback} enum value
+ * @returns decorator
+ */
+declare function SubscribeEvent(event: ECallback): MethodDecorator;
+/**
+ * Decorator to add callback from function by function name and same function. Format will be "onNameOfCallback". "on" optional.
+ * @example
+ * ```ts
+ * class ExampleDestroyBlock {
+        [@SubscribeEvent]
+        public onDestroyBlock() {
+            Game.message("break block")
+        }
+    }
+ * ```
+ * @param target
+ * @param key
+ * @param descriptor
+ */
+declare function SubscribeEvent(target: unknown, key: string, descriptor: PropertyDescriptor): PropertyDescriptor;
+declare namespace Callback {
+    /**
+     * Function used in "ItemHold" callback. Callback works one time of 8 ticks.
+     * @since 0.1a
+     * @param item ItemInstance of held item
+     * @param playerUid unique identifier of holder player
+     */
+    interface ItemHoldFunction {
+        (item: ItemInstance, playerUid: number, slotIndex: number): void;
+    }
+    function addCallback(name: "ItemHold", func: ItemHoldFunction, priority?: number): void;
 }
 interface IPlayerDataCommand extends ICommandParams {
     key: string;

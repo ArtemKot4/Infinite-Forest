@@ -114,7 +114,7 @@ class EffectHud {
     };
 
     public init(): void {
-        if(!ConfigManager.EFFECT_SCALE_IN_CREATIVE && Utils.isCreativePlayer(Player.getLocal()) || this.lock) {
+        if(!ConfigManager.EFFECT_SCALE_IN_CREATIVE && PlayerUser.isCreative(Player.getLocal()) || this.lock) {
             return;
         };
 

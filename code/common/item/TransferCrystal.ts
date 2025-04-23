@@ -1,4 +1,4 @@
-abstract class TransferCrystal extends BasicItem implements ItemUseCallback {
+abstract class TransferCrystal extends BasicItem implements IItemUseCallback {
     public allowDimensions: number[] = [];
     public provideDimension: number;
 

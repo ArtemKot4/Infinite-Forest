@@ -27,8 +27,6 @@ core.ts
 
 client/SoundHelper.ts
 
-client/ui/Keyboard.ts
-client/ui/Notification.ts
 client/ui/notification_styles.ts
 
 client/ui/book/Book.ts

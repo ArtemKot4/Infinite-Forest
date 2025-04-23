@@ -1,9 +1,8 @@
 class CandleTile extends CommonTileEntity {
-    public defaultValues = {
+    public override data = {
         flames: 0
     };
-
-    public data: typeof this.defaultValues;
+    
     public onClick(coords: Callback.ItemUseCoordinates, item: ItemStack, player: number) {
         const blockData = this.blockSource.getBlockData(coords.x, coords.y, coords.z);
 
@@ -16,7 +15,7 @@ class CandleTile extends CommonTileEntity {
             return;
         };
 
-        if(blockData < (Candle.meshes.length - 1) && Utils.getBlockTags(item.id).includes("candle")) {
+        if(blockData < (Candle.meshes.length - 1) && TagRegistry.getBlockTags(item.id).includes("candle")) {
             const entity = new PlayerUser(player);
 
             entity.decreaseCarriedItem(1);

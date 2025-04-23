@@ -12,16 +12,20 @@ class LocalCandleTile extends LocalTileEntity {
 
         if(flames <= 0) return;
 
-        for(let i = 0; i < flames; i++) {
-            Particles.addParticle(EParticleType.FLAME,
-                this.x + LocalCandleTile.vectors[i][0] + Math.random() / 20,
-                this.y + LocalCandleTile.vectors[i][1] + Math.random() / 20,
-                this.z + LocalCandleTile.vectors[i][2] + Math.random() / 20,
-                0,
-                0,
-                0,
-                1
-            );
-        };
+        if(World.getThreadTime() % 10 === 0) {
+            for(let i = 0; i < flames; i++) {
+                if(Math.random() < 0.25) {
+                    Particles.addParticle(EParticleType.FLAME,
+                        this.x + LocalCandleTile.vectors[i][0] + Math.random() / 20,
+                        this.y + LocalCandleTile.vectors[i][1] + Math.random() / 20,
+                        this.z + LocalCandleTile.vectors[i][2] + Math.random() / 20,
+                        0,
+                        0,
+                        0,
+                        1
+                    );
+                }
+            };
+        }   
     };
 }

@@ -15,8 +15,8 @@ class LearningCommand extends ServerCommand<ILearningCommandProps> {
     public override onServer(client: NetworkClient, data: ILearningCommandProps): void {
         const playersUid = 'initiator' in data ? data.initiator.players : [client.getPlayerUid()];
 
-        for(const uid of playersUid) {
-            const player = ObjectPlayer.getOrCreate(uid);
+        for(const playerUid of playersUid) {
+            const player = ObjectPlayer.getOrCreate(playerUid);
 
             if(data.action === "clear") {
                 let text = Translation.translate("message.infinite_forest.clear_learnings");
@@ -28,9 +28,9 @@ class LearningCommand extends ServerCommand<ILearningCommandProps> {
                     .replace("%s", learningName.length > 10 ? learningName.slice(0, 10) + "..." : learningName);
                     
                     if(data.name in Learning.list) { 
-                        Learning.deleteFor(uid, data.name);
+                        Learning.deleteFor(playerUid, data.name);
                     } else {
-                        const client = Network.getClientForPlayer(uid);
+                        const client = Network.getClientForPlayer(playerUid);
 
                         if(client) {
                             client.sendMessage(Native.Color.RED + Translation.translate("message.infinite_forest.unknown_learning"));
@@ -40,10 +40,19 @@ class LearningCommand extends ServerCommand<ILearningCommandProps> {
                     text = Translation.translate("message.infinite_forest.clear_learnings");
     
                     player.learningList = {}
-                    ObjectPlayer.sendToClient(uid)
+                    ObjectPlayer.sendToClient(playerUid)
                 };
     
-                Notification.sendFor(uid, "learning", text, "amulet_lock")
+                Notification.get("achievement").sendFor(playerUid, "IFLearning", {
+                    text: {
+                        type: "text",
+                        text: text
+                    },
+                    icon: {
+                        type: "image",
+                        bitmap: "amulet_lock"
+                    } 
+                });
                 return;
             };
     
@@ -52,12 +61,12 @@ class LearningCommand extends ServerCommand<ILearningCommandProps> {
     
                 if(data.name === "all") {
                     for(const learning_name of Object.keys(Learning.list)) {
-                        Learning.giveFor(uid, learning_name)
+                        Learning.giveFor(playerUid, learning_name)
                     };
                     return;
                 };
     
-                Learning.giveFor(uid, data.name)
+                Learning.giveFor(playerUid, data.name)
             };
         };
     };

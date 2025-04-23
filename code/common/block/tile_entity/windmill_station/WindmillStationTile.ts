@@ -1,7 +1,7 @@
 class LocalWindmillStationTile extends LocalTileEntity {
     public override onTick(): void {
         if(World.getThreadTime() % 5 === 0) {
-            const id = this.networkData.getInt("input_id", 0);
+            const id = this.networkData.getInt("inputId", 0);
             const enabled = this.networkData.getBoolean("enabled", false);
 
             if(!enabled) {
@@ -26,16 +26,14 @@ class LocalWindmillStationTile extends LocalTileEntity {
 };
 
 class WindmillStationTile extends CommonTileEntity {
-    public defaultValues = {
+    public override data = {
         enabled: false,
         progress: 0,
         progress_max: 10,
-        input_id: 0,
+        inputId: 0,
         input_count: 0,
         height: 0
     };
-
-    public data: typeof this.defaultValues;
 
     public setUpperItems(): void {
         const itemEntities = this.blockSource.listEntitiesInAABB(
@@ -57,7 +55,7 @@ class WindmillStationTile extends CommonTileEntity {
                     continue;
                 };
 
-                if(this.isValidItem() && this.data.input_id !== item.id) {
+                if(this.isValidItem() && this.data.inputId !== item.id) {
                     continue;
                 };
 
@@ -70,7 +68,7 @@ class WindmillStationTile extends CommonTileEntity {
 
     public addItem(instance: ItemInstance): void {
         if(instance && instance.id) {
-            this.data.input_id = instance.id;
+            this.data.inputId = instance.id;
             this.data.input_count += instance.count;
         };
     };
@@ -84,7 +82,7 @@ class WindmillStationTile extends CommonTileEntity {
     };
 
     public isValidItem(): boolean {
-        return this.data.input_id !== 0;
+        return this.data.inputId !== 0;
     };
 
     public decrease(): void {
@@ -93,7 +91,7 @@ class WindmillStationTile extends CommonTileEntity {
             this.data.input_count -= 1;
 
             if(this.data.input_count === 0) {
-                this.data.input_id = 0;
+                this.data.inputId = 0;
             };
         };
     };
@@ -107,7 +105,7 @@ class WindmillStationTile extends CommonTileEntity {
             if(!this.isValidItem()) return;
 
             if(!this.isRightItem()) {
-                return this.drop(this.data.input_id);
+                return this.drop(this.data.inputId);
             };
 
             const currentWeather = World.getWeather();
@@ -116,13 +114,13 @@ class WindmillStationTile extends CommonTileEntity {
                 Math.floor(currentWeather.rain / 3) + Math.floor(currentWeather.thunder / 3)
             ) + Math.min(7, this.data.height / 10);
 
-            this.networkData.putInt("input_id", this.data.input_id);
+            this.networkData.putInt("inputId", this.data.inputId);
             this.networkData.putBoolean("enabled", this.data.enabled);
 
             this.networkData.sendChanges();
 
             BlockList.WINDMILL_STATION.factory.forEach((result, input) => {
-                if(this.data.input_id === input) {
+                if(this.data.inputId === input) {
                     this.data.progress += progress_count;
                 };
 
@@ -137,7 +135,19 @@ class WindmillStationTile extends CommonTileEntity {
     };
 
     public isRightItem(): boolean {
-        return Object.values(BlockList.WINDMILL_STATION.factory.field).includes(this.data.input_id);
+        return Object.values(BlockList.WINDMILL_STATION.factory.field).includes(this.data.inputId);
+    };
+
+    public dropAll(): void {
+        if(!this.isValidItem()) return;
+
+        const stack = new ItemStack(this.data.inputId, this.data.input_count);
+
+        this.data.inputId = 0;
+        this.data.input_count = 0;
+
+        this.blockSource.spawnDroppedItem(this.x + 0.5, this.y + 0.5, this.z + 0.5, stack.id, stack.count, stack.data);
+        return;
     };
 
     public override onDestroyBlock(coords: Callback.ItemUseCoordinates, player: number): void {
@@ -158,16 +168,4 @@ class WindmillStationTile extends CommonTileEntity {
 
         this.dropAll();
     };
-
-    public dropAll(): void {
-        if(!this.isValidItem()) return;
-
-        const stack = new ItemStack(this.data.input_id, this.data.input_count);
-
-        this.data.input_id = 0;
-        this.data.input_count = 0;
-
-        this.blockSource.spawnDroppedItem(this.x + 0.5, this.y + 0.5, this.z + 0.5, stack.id, stack.count, stack.data);
-        return;
-    }
 };

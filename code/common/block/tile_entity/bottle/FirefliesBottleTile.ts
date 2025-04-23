@@ -1,9 +1,7 @@
 class FirefliesBottleTile extends CommonTileEntity {
-    public defaultValues = {
+    public override data = {
         color: null
     };
-
-    public data: typeof this.defaultValues;
 
     public override onLoad(): void {
         this.data.color ??= ParticleHelper.getRandomGlowworm();

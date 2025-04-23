@@ -1,4 +1,4 @@
-class AncientNote extends BasicItem implements INoTargetUseCallback, ItemUseCallback, INameOverrideCallback {
+class AncientNote extends BasicItem implements INoTargetUseCallback, IItemUseCallback, INameOverrideCallback {
     /**
      * @key is a the text of the note
      * @value is the learning name

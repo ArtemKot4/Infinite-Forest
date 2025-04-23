@@ -27,7 +27,17 @@ abstract class Learning {
             player.learningList[name] = direction;
 
             ObjectPlayer.sendToClient(player_uid);
-            Notification.sendFor(player_uid, "learning", `learning.infinite_forest.${name}`, learning.icon, learning.icon_type);
+            Notification.get("achievement").sendFor(player_uid, "IFLearning", {
+                text: {
+                    type: "text",
+                    text: Translation.translate(`learning.infinite_forest.${name}`)
+                },
+                icon: {
+                    type: "image",
+                    bitmap: learning.icon_type === "default" ? learning.icon : null,
+                    item: learning.icon_type === "item" ? learning.icon : null
+                }
+            });
         };
     };
 

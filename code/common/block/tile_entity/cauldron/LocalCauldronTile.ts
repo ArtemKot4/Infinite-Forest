@@ -14,16 +14,28 @@ class LocalCauldronTile extends LocalTileEntity {
 		return mesh;
     })();
 
-    public static WATER_LEVEL_MAX = 1.3;
-    public static BOILING_MAX = 10;
+    public water_animation!: Animation.Base;
+    
+    public setupAnimation(level: number): void {
+        if(level <= 0) {
+            this.water_animation && this.water_animation.destroy();
+            return;
+        };
 
-    public defaultValues = {
-        water_level: 0.0,
-        boiling: 0.0
+        if(!this.water_animation) {
+            this.water_animation = new Animation.Base(this.x + 0.5, this.y + level, this.z + 0.5);
+            this.water_animation.describe({
+                mesh: LocalCauldronTile.WATER_RENDERMESH,
+                skin: "terrain-atlas/water/water_0.png"
+            });
+        };
+        this.water_animation.setPos(this.x + 0.5, this.y + level, this.z + 0.5);
+        this.water_animation.load();
+        return;
     };
 
-    public data: typeof this.defaultValues;
-
-    public water_animation!: Animation.Base;
-
+    @NetworkEvent
+    public set_water_render(data: { level: number }): void {
+        return this.setupAnimation(data.level || 0);
+    };
 };

@@ -26,7 +26,7 @@ class PlantGenerator {
 
             let split = i.split(":");
 
-            const id = Utils.parseBlockID(split[0]);
+            const id = IDRegistry.parseBlockID(split[0]);
             const data = plant.data || (split[1] ? Number(split[1]) : 0);
 
             for (let count = 0; count < (plant.count || 5); count++) {

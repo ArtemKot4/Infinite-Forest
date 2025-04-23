@@ -95,7 +95,7 @@ class PageUI {
         } else {
             content.type = "slot";
             content.size = description.size;
-            content.item = Utils.parseID(description.image);
+            content.item = IDRegistry.parseID(description.image);
         };
             
         this.defaultContent.elements[element_name] = content;
@@ -192,8 +192,8 @@ abstract class Book {
         const width = this.background_bitmap.getWidth();
         const height = this.background_bitmap.getHeight();
 
-        const defaultX = (UI.getScreenHeight() + 20) - ((width * scale) / 2);
-        const defaultY = UI.getScreenHeight() + ((height * scale) / 2);
+        const defaultX = 500 - (width * scale) / 2;
+        const defaultY = UI.getScreenHeight() / 2 - ((height * scale) / 2);
 
         this.leftPageUI = this.getLeftPageUI()
         .setWidth((width * scale) / 2)

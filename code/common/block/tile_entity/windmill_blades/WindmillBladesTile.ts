@@ -1,10 +1,8 @@
 class WindmillBladesTile extends CommonTileEntity {
-    public defaultValues = {
+    public override data = {
         enabled: false, //false
         speed: 0.05
     };
-
-    public data: typeof this.defaultValues;
 
     public initDestroy() {
         this.blockSource.destroyBlock(this.x, this.y, this.z, true);

@@ -11,18 +11,16 @@ class LearningTableTile extends CommonTileEntity {
         return window;
     })();
 
-    public defaultValues = {
-        is_valid: false,
+    public override data = {
+        valid: false,
         text: null,
         learning: null
     };
 
-    public data: typeof this.defaultValues;
     public info_pressed: boolean = false;
-    public animation!: Animation.Item;
 
     public override onLoad(): void {
-        this.networkData.putBoolean("is_valid", this.data.is_valid);
+        this.networkData.putBoolean("valid", this.data.valid);
         this.networkData.sendChanges();
     };
 
@@ -45,31 +43,31 @@ class LearningTableTile extends CommonTileEntity {
         let text = null;
         let learning = null;
 
-        const animation_x = MathHelper.randomFromArray(Utils.range(0.3, 0.6, 0.05));
-        const animation_z = MathHelper.randomFromArray(Utils.range(0.3, 0.6, 0.05));
+        const animationX = MathHelper.randomFromArray(MathHelper.range(0.3, 0.6, 0.05));
+        const animationZ = MathHelper.randomFromArray(MathHelper.range(0.3, 0.6, 0.05));
         const rotation = MathHelper.radian(MathHelper.randomInt(0, 180));
 
         if(extra) {
             text = extra.getString("text");
             learning = extra.getString("learning");
 
-            this.networkData.putFloat("animation_x", animation_x);
-            this.networkData.putFloat("animation_z", animation_z);
+            this.networkData.putFloat("animationX", animationX);
+            this.networkData.putFloat("animationZ", animationZ);
             this.networkData.putFloat("rotation", rotation);
         };
         
-        this.networkData.putBoolean("is_valid", !!extra);
+        this.networkData.putBoolean("valid", !!extra);
         this.networkData.sendChanges();
 
-        this.sendPacket("create_animation", { is_valid: !!extra, animation_x, animation_z, rotation });
+        this.sendPacket("create_animation", { valid: !!extra, animationX, animationZ, rotation });
 
         this.data.text = text;
         this.data.learning = learning;
-        this.data.is_valid = !!extra;
+        this.data.valid = !!extra;
         return;
     };
 
-    public onClick(coords: Callback.ItemUseCoordinates, item: ItemStack, player: number): void {
+    public override onClick(coords: Callback.ItemUseCoordinates, item: ItemStack, player: number): void {
         const entity = new PlayerUser(player);
         const carriedItem = Entity.getCarriedItem(player);
 
@@ -89,7 +87,7 @@ class LearningTableTile extends CommonTileEntity {
             return;
         };
 
-        if(this.data.is_valid) {
+        if(this.data.valid) {
             this.drawMain(player);
             this.UI.open();
         };
@@ -237,7 +235,7 @@ class LearningTableTile extends CommonTileEntity {
     };
 
     public override onDestroyBlock(coords: Callback.ItemUseCoordinates, player: number): void {
-        if(!this.data.is_valid) {
+        if(!this.data.valid) {
             return;
         };
 
