@@ -130,6 +130,7 @@ common/dimension/generation/different/mystic_path.ts
 common/dimension/generation/different/beach.ts
 
 common/dimension/generation/main.ts
+common/dimension/SkyRift.ts
 
 
 common/learning/ItemLearning.ts
