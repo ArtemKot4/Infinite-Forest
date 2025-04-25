@@ -1,5 +1,5 @@
 class WinterEffect extends Effect {
-    public override progress_max: number = 80;
+    public override progressMax: number = 80;
 
     public override onTick(player: number): void {
         Entity.damageEntity(player, 1);

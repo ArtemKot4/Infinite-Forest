@@ -1,19 +1,19 @@
 class InfiniteForest extends Dimension {
     public constructor() {
         super(75, "infinite_forest", BiomeList.FIREFLIES_FOREST.biome);
-    };
+    }
 
     public getSkyColor(): number[] {
         return ConfigManager.LEGACY_SKY_COLOR ? [.05,.2, .3] : [21 / 255, 96 / 255, 189 / 255];
-    };
+    }
 
     public getFogColor(): number[] {
         return ConfigManager.LEGACY_SKY_COLOR ? [0, .6, .3] : [0, 128 / 255, 0];
-    };
+    }
 
     public hasSkyLight(): boolean {
         return false;
-    };
+    }
 
     public getLayers(): Dimensions.TerrainLayerParams[] {
         return [
@@ -52,17 +52,17 @@ class InfiniteForest extends Dimension {
                 },
             }
         ];
-    };
+    }
 
     public generateCaves(): [boolean, boolean] {
         return [false, false];
-    };
+    }
 
     public getTags(): string[] {
         return ["nature", "magic", "forest"];
-    };
-};
+    }
+}
 
 namespace EDimension {
     export const INFINITE_FOREST = new InfiniteForest();
-};
+}

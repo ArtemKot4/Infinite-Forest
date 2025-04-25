@@ -1,55 +1,69 @@
 namespace SkyRift {
     export const entities: Partial<SkyRift.UpdatableEntity>[] = [];
 
-    function loadAnimation(player: number, packet: UpdatableEntity): UpdatableEntity {
+    export function createMesh(vertexesCount: number): RenderMesh {
+        const mesh = new RenderMesh();
+        // for(let i = -vertexesCount/2; i < vertexesCount/2; i++) {
+        //     let offset = MathHelper.randomFromArray(MathHelper.range(0.1, 0.7, 0.1))
+        //     let y = MathHelper.randomFromArray(MathHelper.range(0.1, 1, 0.1))
+        // }
+        mesh.addVertex(-1, 0, -1, 0, 0);
+        mesh.addVertex(1, 0, -1, 1, 0);
+        mesh.addVertex(1, 0, 1, 1, 1);
+        mesh.addVertex(-1, 0, -1, 0, 0);
+        mesh.addVertex(1, 0, 1, 1, 1);
+        mesh.addVertex(-1, 0, 1, 0, 1);
+        return mesh;
+    }
+
+    export function loadAnimation(player: number, packet: UpdatableEntity): UpdatableEntity {
         if(packet == null) {
             return packet;
         };
 
-        const entity = entities[packet.index] ??= {};
-        entity.animation = entity.animation || new Animation.Base(packet.x + 0.5, packet.y, packet.z + 0.5);
+        const entity = (entities[packet.index] = entities[packet.index] || {});
+        const animation = entity.animation = (entity.animation || new Animation.Base(packet.x + 0.5, packet.y, packet.z + 0.5));
     
-        entity.animation.describe({
-            mesh: UpdatableEntity.mesh,
+        animation.describe({
+            mesh: createMesh(packet.vertexes || 8),
             scale: packet.scale || 2
         });
 
-        entity.animation.setIgnoreLightMode();
-        entity.animation.setPos(packet.x + 0.5, packet.y, packet.z + 0.5);
-        entity.animation.load();
-        entity.animation.transform().lock().rotate(0.0005, 0, 0).unlock();
+        animation.setIgnoreLightMode();
+        animation.setPos(packet.x + 0.5, packet.y, packet.z + 0.5);
+        animation.load();
+        animation.transform()
+        .rotate(0.005, 0, 0)
+        //.scale(0.05, 0.05, 0.05);
         return packet;
     }
 
-    const networkEntityType = new NetworkEntityType("skyrift");
-    networkEntityType.addClientPacketListener("update", (target, player, data) => {
+    export const networkType = new NetworkEntityType("if.skyrift")
+    .addClientPacketListener("update", (target, player, packet) => {
+        return loadAnimation(player, packet);
+    })
+    .addClientPacketListener("destroy", (target: UpdatableEntity, player, packet: UpdatableEntity) => {
+        const animation = entities[packet.index];
+        if(animation) {
+            animation.destroy();
+        }
+        return packet;
+    })
+    .setClientEntityAddedListener((player, data: UpdatableEntity) => {
         return loadAnimation(player, data);
-    });
-
-    networkEntityType.setClientEntityAddedListener((player, data: UpdatableEntity) => {
-        return loadAnimation(player, data);
-    });
-
-    networkEntityType.setClientListSetupListener((list, target: UpdatableEntity, entity) => {
+    })
+    .setClientListSetupListener((list, target: UpdatableEntity, entity) => {
         list.setupDistancePolicy(target.x, target.y, target.z, target.dimension, 64);
-    });
-
-    networkEntityType.setClientEntityRemovedListener((target: UpdatableEntity, player) => {
-        target && target.animation && target.animation.destroy();
+    })
+    .setClientEntityRemovedListener((target: UpdatableEntity, player) => {
+        const animation = entities[target.index];
+        if(animation) {
+            animation.destroy();
+        }
+        return target;
     });
 
     export class UpdatableEntity implements Updatable {
-        public static mesh: RenderMesh = (() => {
-            const mesh = new RenderMesh();
-            mesh.setColor(0, 0, 0);
-            mesh.importFromFile(modelsdir + "rift.obj", "obj", {
-                invertV: false,
-                noRebuild: false,
-                translate: [0.5, 0, 0.5]
-            });
-            return mesh;
-        })();
-
         public update: () => void;
         public remove?: boolean; 
         public blockSource: BlockSource;
@@ -59,23 +73,33 @@ namespace SkyRift {
         public snowDensity: number;
         public networkEntity: NetworkEntity;
         public scale: number;
+        public scaleMax: number = 5;
+        public vertexes: number;
         public animation: Animation.Base;
 
         public constructor(public dimension: number, public x: number, public y: number, public z: number) {
             this.index = SkyRift.entities.length;
-            this.scale = MathHelper.randomFrom(0.2, 0.3, 0.4, 0.5, 0.6, 0.7, MathHelper.randomInt(1, 2));
+            this.scale = 0.1;
+            this.vertexes = MathHelper.randomInt(8, 64);
             this.snowSpeed = MathHelper.randomFrom( 0.2, 0.3, 0.4, 0.5);
             this.snowSpeedMax = this.snowSpeed * 2;
             this.snowDensity = MathHelper.randomInt(1, 3);
-            this.networkEntity = new NetworkEntity(networkEntityType, this);
+            this.networkEntity = new NetworkEntity(networkType, this);
             this.blockSource = BlockSource.getDefaultForDimension(this.dimension);
             this.update = () => this.tick();
-            this.updateToAllClients();
             SkyRift.entities.push(this);
         }
 
+        public getDimensionID(): number {
+            return EDimension.INFINITE_FOREST.id;
+        }
+
         public getScaleMax(): number {
-            return 10;
+            return this.scaleMax;
+        }
+
+        public getDrop(): ItemStack {
+            return new ItemStack(ItemList.BLUE_CRYSTAL.id, 1, 0);
         }
 
         public spawnSnow(): void {
@@ -90,7 +114,7 @@ namespace SkyRift {
 
         public tickValues(): void {
             if(this.scale < this.getScaleMax()) {
-                this.scale += 0.01;
+                this.scale += 0.05;
             }
             this.y += 0.01;
         }
@@ -107,15 +131,19 @@ namespace SkyRift {
 
         public getPlayers(): number[] {
             return this.blockSource.listEntitiesInAABB(
-                this.x - this.scale,
-                this.y - 5 - this.scale,
-                this.z - this.scale,
-                this.x + this.scale,
-                this.y + this.scale,
-                this.z + this.scale,
+                this.x - (5 + this.scale),
+                this.y - (5 + this.scale),
+                this.z - (5 + this.scale),
+                this.x + 5 + this.scale,
+                this.y + 5 + this.scale,
+                this.z + 5 + this.scale,
                 EEntityType.PLAYER,
                 false
             );
+        }
+
+        public hasTarget(pos: Vector): boolean {
+            return Math.floor(pos.x) == Math.ceil(this.x) && Math.floor(pos.z) == Math.ceil(this.z) && pos.y >= this.y;
         }
 
         public usePlayers(threadTime: number): void {
@@ -123,11 +151,15 @@ namespace SkyRift {
             for(const i in playersUid) {
                 const playerUid = playersUid[i];
                 
-                if(Entity.getDimension(playerUid) !== this.dimension) return;
+                if(Entity.getDimension(playerUid) != this.dimension) {
+                    return;
+                };
+
                 if(threadTime % 20 === 0) {
                     EffectList.WINTER.init(playerUid, 200);
-                    if(Entity.getPosition(playerUid).y >= this.y) {
-                        Dimensions.transfer(playerUid, EDimension.INFINITE_FOREST.id);
+                    const pos = Entity.getPosition(playerUid);
+                    if(this.hasTarget(pos)) {
+                        Dimensions.transfer(playerUid, this.getDimensionID());
                     }
                 }
             }
@@ -137,33 +169,43 @@ namespace SkyRift {
         public tick(): void {
             const threadTime = World.getThreadTime();
             
-            this.spawnSnow();
+            // this.spawnSnow(); концепт изменился
             this.usePlayers(threadTime);
 
             if(threadTime % 20 === 0) {
-                this.tickSnow();
-                this.updateToAllClients();
+                //this.tickSnow();
+                this.updateToAllClients("update");
                 this.tickValues();
             }
 
-            if(!this.blockSource.canSeeSky(this.x, this.y, this.z) || this.blockSource.getLightningLevel() > 0 || this.scale >= this.getScaleMax()) {
+            if(this.blockSource.getLightningLevel() > 0 || this.scale >= this.getScaleMax()) {
                 this.destroy();
             }
         }
 
         public destroy(): void {
-            this.blockSource.explode(this.x, this.y, this.z, this.scale, false);
+            const drop = this.getDrop();
+
+            this.blockSource.explode(this.x, this.y, this.z, Math.ceil(this.scale), false);
+            this.blockSource.spawnDroppedItem(this.x + 0.5, this.y + 0.5, this.z + 0.5, drop.id, drop.count, drop.data, drop.extra || null);
+            this.updateToAllClients("remove");
             this.networkEntity.remove();
             this.remove = true;
         }
 
-        public updateToAllClients(): void {
+        public updateToAllClients(packetName: string): void {
             const iterator = this.networkEntity.getClients().iterator();
             while(iterator.hasNext()) {
                 const client = iterator.next();
-                this.networkEntity.send(client, "update", this);
+                this.networkEntity.send(client, packetName, this);
             }
         }
+    }
+
+    export function create(x: number, y: number, z: number, dimension: number, entity?: UpdatableEntity): UpdatableEntity {
+        let object = entity || new UpdatableEntity(dimension, x, y, z);
+        Updatable.addUpdatable(object);
+        return object;
     }
 
     Network.addClientPacket("packet.infinite_forest.rift_snow", (data: UpdatableEntity) => {

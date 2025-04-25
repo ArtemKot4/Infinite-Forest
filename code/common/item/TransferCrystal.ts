@@ -32,19 +32,36 @@ abstract class TransferCrystal extends BasicItem implements IItemUseCallback {
     }
 }
 
-class BlueCrystal extends BasicItem implements IItemUseCallback {
+class BlueCrystal extends TransferCrystal {
     public constructor() {
-        super("blue_crystal", { name: "blue_crystal", meta: 0 }, {
-            stack: 1
-        });
-    };
-
-    public onItemUse(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, player: number): void {
-        Updatable.addUpdatable(new SkyRift.UpdatableEntity(Entity.getDimension(player), coords.x, coords.y + 15, coords.z));
+        super("blue_crystal", EDimension.OVERWORLD, EDimension.INFINITE_FOREST.id);
     }
 
     public getName(): string {
         return "item.infinite_forest.blue_crystal";
+    }
+
+    @SubscribeEvent
+    public onEntityAdded(entityUid: number): void {
+        if(Entity.getType(entityUid) == EEntityType.ITEM) {
+            const blockSource = BlockSource.getDefaultForActor(entityUid);
+            const item = Entity.getDroppedItem(entityUid);
+            const pos = Entity.getPosition(entityUid);
+            if(item.id == ItemList.BLUE_CRYSTAL.id) {
+                alert("кристалл");
+                Updatable.addUpdatable({
+                    update() {
+                        if(!Entity.isExist(entityUid)) {
+                            this.remove = true;
+                        }
+                        if(blockSource.getBlockID(pos.x, pos.y-1, pos.z) == VanillaBlockID.fire) {
+                            Entity.remove(entityUid);
+                            SkyRift.create(pos.x, pos.y + 0.5, pos.z, blockSource.getDimension());
+                        }   
+                    }
+                })
+            }
+        }
     }
 }
 

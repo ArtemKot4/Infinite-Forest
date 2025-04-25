@@ -13,7 +13,7 @@ interface IPlayerPage {
 interface IEffectData {
     timer: number;
     progress: number;
-    progress_max: number;
+    progressMax: number;
     lock?: boolean;
 };
 

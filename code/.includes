@@ -146,6 +146,7 @@ common/reflection/ReflectionList.ts
 
 
 common/network/command/LearningCommand.ts
+common/network/command/RiftCommand.ts
 
 common/events/ServerPlayerTick.ts
 common/events/LocalTick.ts

@@ -3,20 +3,12 @@ class EffectHud {
 
     public static count: number = 1;
 
-    public static increaseCount() {
-        this.count++;
-    };
-
-    public static decreaseCount() {
-        this.count = Math.max(1, this.count-1);
-    };
-
     public constructor(
         public icon: string,
         public scale_bitmap: string,
         public scale_bitmap_background: string = "effect.default_scale_background") {
         EffectHud.list[icon] = this;
-    };
+    }
 
     public UI: UI.Window = (() => {
         const window = new UI.Window();
@@ -88,35 +80,35 @@ class EffectHud {
         this.UI.open();
         EffectHud.increaseCount();
         return;
-    };
+    }
 
     public close(): void {
         this.lock = false;
         this.UI.close();
         EffectHud.decreaseCount();
-    };
+    }
 
     public isOpened(): boolean {
         return this.UI.isOpened();
-    };
+    }
 
     public setScale(value: number, max: number): void {
         this.UI.getElements().get("scale").setBinding("value", value / max);
         return;
-    };
+    }
 
     public clear(): void {
         this.setScale(0, 0);
 
         if(this.isOpened()) {
             this.UI.layout.setAlpha(0);
-        };
-    };
+        }
+    }
 
     public init(): void {
         if(!ConfigManager.EFFECT_SCALE_IN_CREATIVE && PlayerUser.isCreative(Player.getLocal()) || this.lock) {
             return;
-        };
+        }
 
         this.lock = true;
         this.open();
@@ -128,19 +120,19 @@ class EffectHud {
 
                     if(!this.isOpened()) {
                         continue;
-                    };
+                    }
 
                     const data = Effect.clientData[this.icon];
     
-                    this.setScale(data.progress, data.progress_max);
+                    this.setScale(data.progress, data.progressMax);
     
                     const alpha = this.UI.layout.getAlpha();
                         
                     if(data.timer > 0) {
                         if(alpha < 1) {
                             this.UI.layout.setAlpha(alpha + 0.05);
-                        };
-                    };
+                        }
+                    }
     
                     if(data.timer <= 0 && data.progress <= 0) {
                         if(alpha > 0) {
@@ -148,13 +140,21 @@ class EffectHud {
                         } else {
                             this.close();
                             return;
-                        };
-                    };
-                };
+                        }
+                    }
+                }
             }
         );
-    };
-};
+    }
+
+    public static increaseCount() {
+        this.count++;
+    }
+
+    public static decreaseCount() {
+        this.count = Math.max(1, this.count-1);
+    }
+}
 
 // Callback.addCallback("NativeGuiChanged", (screenName) => {
 //     for(const name in Effect.clientData) {
