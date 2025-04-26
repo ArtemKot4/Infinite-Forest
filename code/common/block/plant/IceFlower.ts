@@ -42,7 +42,7 @@ Network.addServerPacket("packet.infinite_forest.ice_flower.winter_effect_if_vali
     const blockSource = BlockSource.getDefaultForActor(client.getPlayerUid());
     const blockID = blockSource.getBlockID(data.coords.x, data.coords.y, data.coords.z);
     
-    if(blockID === BlockList.ICE_FLOWER.id) {
-        EffectList.WINTER.init(client.getPlayerUid(), 50);
+    if(client != null && blockID === BlockList.ICE_FLOWER.id) {
+        Effect.get("winter").init(client.getPlayerUid(), 50);
     };
 });

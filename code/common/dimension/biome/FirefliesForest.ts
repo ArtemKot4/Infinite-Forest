@@ -43,7 +43,7 @@ class FirefliesForest extends AbstractBiome implements BiomeBehaviour {
                 count: 3 
             }
         };
-    };
+    }
 
     public override getStructures(): { name: string; chance: number; count: number; }[] {
         return [
@@ -98,25 +98,25 @@ class FirefliesForest extends AbstractBiome implements BiomeBehaviour {
                 count: 1
             }
         ];
-    };
+    }
 
     public insideLocalTick(position: Vector, time: number): void {
         if(position.y >= 300) {
             return;
-        };
+        }
 
         if(time % 15 === 0 && position.y <= 100) {
             ParticleHelper.spawnFire(position);
-        };
+        }
 
         if(position.y < 110) {
             for(let i = 0; i < ConfigManager.FIREFLIES_COUNT_AROUND; i++) {
                 ParticleHelper.spawnGlowworm(position, ParticleHelper.getRandomGlowworm());
-            };
-        };
-    };
+            }
+        }
+    }
 
     public getLocalUpdate(): number {
         return 5;
-    };
-};
+    }
+}

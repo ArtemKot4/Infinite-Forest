@@ -33,9 +33,9 @@ abstract class AbstractBiome {
 
             for(const structure of structures) {
                 ForestGenerator.structurePool.load(structureDIR + structure.name + ".struct", structure.name);
-            };
+            }
             
-        };
+        }
 
         AbstractBiome.data[this.id] = this;
     }
@@ -68,6 +68,5 @@ abstract class AbstractBiome {
 
     public static getFor(biome: number): AbstractBiome {
         return AbstractBiome.data[biome];
-    };
-
+    }
 }

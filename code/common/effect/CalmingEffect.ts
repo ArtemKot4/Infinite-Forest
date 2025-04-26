@@ -1,6 +1,11 @@
 class CalmingEffect extends Effect {
     public override progressMax: number = 80;
-    public onInit(player: number, progressMax: number): void {
+    
+    protected override getType(): string {
+        return "calming";
+    }
+
+    protected override onInit(player: number, progressMax: number): void {
         const client = Network.getClientForPlayer(player);
 
         if(client) {
@@ -38,16 +43,19 @@ class CalmingEffect extends Effect {
         }
     }
 
-    public override onTick(player: number): void {
+    protected override onTick(player: number): void {
         Entity.addEffect(player, EPotionEffect.REGENERATION, 3, 5, true, true);
     }
 
     public override getHud(): EffectHud {
-        return new EffectHud("effect.calming_icon", "effect.calming_scale");
+        return new EffectHud(this.getType(), "effect.calming_icon", "effect.calming_scale");
     }
 }
+
+Effect.register(new CalmingEffect());
 
 Translation.addTranslation("message.infinite_forest.calming_effect", {
     en: "You feel calm and peaceful. You feel that everything is still ahead of you.",
     ru: "Вы чувствуете неожиданный прилив спокойствия. Вам кажется, что все проблемы остались позади."
 });
+

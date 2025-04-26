@@ -1,15 +1,10 @@
 class EffectHud {
-    public static list: Record<string, EffectHud> = {};
-
     public static count: number = 1;
+    public static BORDER_SCALE: number = 3.3;
+    public static HORIZONTAL_POSITION: number = UI.getScreenHeight() / 2 + 195;
+    public static VERTICAL_POSITION: number = 15;
 
-    public constructor(
-        public icon: string,
-        public scale_bitmap: string,
-        public scale_bitmap_background: string = "effect.default_scale_background") {
-        EffectHud.list[icon] = this;
-    }
-
+    public lock: boolean = false;
     public UI: UI.Window = (() => {
         const window = new UI.Window();
         window.setAsGameOverlay(true);
@@ -18,21 +13,35 @@ class EffectHud {
         return window;
     })();
 
-    public lock: boolean = false;
+    public constructor(
+        public type: string,
+        public icon?: string,
+        public bitmapScale?: string,
+        public backgroundScale?: string,
+        public border?: string
+    ) {}
 
-    public static BORDER_SCALE: number = 3.3;
+    public getIcon(): string {
+        return this.icon;
+    }
 
-    public static HORIZONTAL_POSITION: number = UI.getScreenHeight() / 2 + 195;
+    public getBitmapScale(): string {
+        return this.bitmapScale;
+    }
 
-    public static VERTICAL_POSITION: number = 15;
+    public getBackgroundScale(): string {
+        return this.backgroundScale;
+    }
 
-    public open(): void {
-        if(this.isOpened()) return;
+    public getBorder(): string {
+        return "effect.border";
+    }
 
-        const content = {
+    public getContent(): UI.WindowContent {
+        return {
             location: {
                 x: EffectHud.HORIZONTAL_POSITION,
-                y: EffectHud.VERTICAL_POSITION + 20 * EffectHud.count
+                y: EffectHud.VERTICAL_POSITION + 25 * EffectHud.count
             },
             drawing: [
                 {
@@ -41,12 +50,12 @@ class EffectHud {
                 },
                 {
                     type: "bitmap",
-                    bitmap: "effect.border",
+                    bitmap: this.getBorder(),
                     scale: EffectHud.BORDER_SCALE,
                 },
                 {
                     type: "bitmap",
-                    bitmap: this.icon,
+                    bitmap: this.getIcon(),
                     x: 10,
                     y: 5,
                     width: 9 * 3.7,
@@ -58,7 +67,7 @@ class EffectHud {
                     y: 8,
                     width: 76 * 3,
                     height: 9 * 3,
-                    bitmap: this.scale_bitmap_background
+                    bitmap: this.getBackgroundScale() || "effect.default_scale_background"
                 }
             ],
             elements: {
@@ -69,14 +78,16 @@ class EffectHud {
                     width: 76 * 3,
                     height: 9 * 3,
                     direction: 0,
-                    bitmap: this.scale_bitmap,
+                    bitmap: this.getBitmapScale(),
                 }
             }
-        } satisfies UI.WindowContent;
+        };
+    }
 
-        this.UI.setContent(content);
+    public open(): void {
+        if(this.isOpened()) return;
+        this.UI.setContent(this.getContent());
         this.UI.forceRefresh();
-
         this.UI.open();
         EffectHud.increaseCount();
         return;
@@ -122,7 +133,7 @@ class EffectHud {
                         continue;
                     }
 
-                    const data = Effect.clientData[this.icon];
+                    const data = Effect.clientData[this.type];
     
                     this.setScale(data.progress, data.progressMax);
     

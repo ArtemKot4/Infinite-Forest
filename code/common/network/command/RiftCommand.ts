@@ -1,13 +1,13 @@
-interface IRiftParams extends ICommandParams {
+interface IRiftCommandParams extends ICommandParams {
     action: string;
     scale?: number;
     y: number;
     z: number;
 }
 
-class RiftCommand extends ServerCommand<IRiftParams> {
+class RiftCommand extends ServerCommand<IRiftCommandParams> {
     public constructor() {
-        super("if:rift", {
+        super("if:skyrift", {
             action: "string",
             scale: "number",
             x: "number",
@@ -15,19 +15,19 @@ class RiftCommand extends ServerCommand<IRiftParams> {
         }, 1);
     }
 
-    public override onServer(client: NetworkClient, data: IRiftParams): void {
+    public override onServer(client: NetworkClient, data: IRiftCommandParams): void {
         if(client == null) return;
         const playerUid = client.getPlayerUid();
         switch(data.action) {
             case "spawn": {
                 const pos = Entity.getPosition(playerUid);
                 const scale = data.scale || 0.1;
-                const rift = SkyRift.create(pos.x, pos.y + 0.5, pos.z, Entity.getDimension(playerUid));
+                const rift = new SkyRift.UpdatableEntity(pos.x, pos.y + 0.5, pos.z, Entity.getDimension(playerUid));
                 rift.scale = scale;
                 if(!data.scale) {
                     rift.scaleMax = Math.ceil(scale) * 2;
                 };
-                rift.updateToAllClients("update");
+                SkyRift.create(rift);
                 return client.sendMessage(Native.Color.GREEN + Translation.translate("message.infinite_forest.rift_created"));
             }
             case "destroy": {

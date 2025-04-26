@@ -1,18 +1,29 @@
 namespace SkyRift {
     export const entities: Partial<SkyRift.UpdatableEntity>[] = [];
+    export const commonMesh = new RenderMesh(modelsdir + "rift.obj", "obj", {
+        noRebuild: false,
+        invertV: false,
+        translate: [0.5, 0, 0.5]
+    });
+    commonMesh.setNormal(0, 1, 0);
+    commonMesh.setColor(0, 0, 0);
 
     export function createMesh(vertexesCount: number): RenderMesh {
-        const mesh = new RenderMesh();
-        // for(let i = -vertexesCount/2; i < vertexesCount/2; i++) {
-        //     let offset = MathHelper.randomFromArray(MathHelper.range(0.1, 0.7, 0.1))
-        //     let y = MathHelper.randomFromArray(MathHelper.range(0.1, 1, 0.1))
-        // }
-        mesh.addVertex(-1, 0, -1, 0, 0);
-        mesh.addVertex(1, 0, -1, 1, 0);
-        mesh.addVertex(1, 0, 1, 1, 1);
-        mesh.addVertex(-1, 0, -1, 0, 0);
-        mesh.addVertex(1, 0, 1, 1, 1);
-        mesh.addVertex(-1, 0, 1, 0, 1);
+        const mesh = new RenderMesh();//commonMesh.clone();
+        mesh.setColor(0, 0, 0);
+        let shift = 0;
+        let line = 0;
+        for(let i = -vertexesCount/2; i < vertexesCount/2; i++) {
+            let distance = MathHelper.randomInt(1, 3);
+            mesh.addVertex(i, 0,0, 0, 0); //первая точка с учётом индекса
+            mesh.addVertex(shift, 0, 0); //вторая точка, но теперь с учётом смещения
+            mesh.addVertex(shift, 0, distance); //завершаем треугольник отдалённой точкой
+
+            mesh.addVertex(i, 0, distance);
+            
+            shift += MathHelper.randomInt(1, 3);
+            line += MathHelper.randomInt(1, 3);
+        }
         return mesh;
     }
 
@@ -43,7 +54,7 @@ namespace SkyRift {
         return loadAnimation(player, packet);
     })
     .addClientPacketListener("destroy", (target: UpdatableEntity, player, packet: UpdatableEntity) => {
-        const animation = entities[packet.index];
+        const animation = entities[packet.index]?.animation;
         if(animation) {
             animation.destroy();
         }
@@ -56,7 +67,7 @@ namespace SkyRift {
         list.setupDistancePolicy(target.x, target.y, target.z, target.dimension, 64);
     })
     .setClientEntityRemovedListener((target: UpdatableEntity, player) => {
-        const animation = entities[target.index];
+        const animation = entities[target.index]?.animation;
         if(animation) {
             animation.destroy();
         }
@@ -77,7 +88,7 @@ namespace SkyRift {
         public vertexes: number;
         public animation: Animation.Base;
 
-        public constructor(public dimension: number, public x: number, public y: number, public z: number) {
+        public constructor(public x: number, public y: number, public z: number, public dimension: number) {
             this.index = SkyRift.entities.length;
             this.scale = 0.1;
             this.vertexes = MathHelper.randomInt(8, 64);
@@ -85,7 +96,7 @@ namespace SkyRift {
             this.snowSpeedMax = this.snowSpeed * 2;
             this.snowDensity = MathHelper.randomInt(1, 3);
             this.networkEntity = new NetworkEntity(networkType, this);
-            this.blockSource = BlockSource.getDefaultForDimension(this.dimension);
+            this.blockSource = BlockSource.getDefaultForDimension(dimension);
             this.update = () => this.tick();
             SkyRift.entities.push(this);
         }
@@ -102,15 +113,15 @@ namespace SkyRift {
             return new ItemStack(ItemList.BLUE_CRYSTAL.id, 1, 0);
         }
 
-        public spawnSnow(): void {
-            const clients = Network.getConnectedClients();
-            for(const i in clients) {
-                const client = clients[i]; 
-                if(client && Entity.getDimension(client.getPlayerUid()) === this.dimension) {
-                    client.send("packet.infinite_forest.rift_snow", this);
-                }
-            }
-        }
+        // public spawnSnow(): void {
+        //     const clients = Network.getConnectedClients();
+        //     for(const i in clients) {
+        //         const client = clients[i]; 
+        //         if(client && Entity.getDimension(client.getPlayerUid()) === this.dimension) {
+        //             client.send("packet.infinite_forest.rift_snow", this);
+        //         }
+        //     }
+        // }
 
         public tickValues(): void {
             if(this.scale < this.getScaleMax()) {
@@ -119,15 +130,15 @@ namespace SkyRift {
             this.y += 0.01;
         }
 
-        public tickSnow(): void {
-            if(this.snowSpeed > 0.1 && this.snowSpeed < this.snowSpeedMax) {
-                if(Math.random() < 0.5) {
-                    this.snowSpeed += 0.005;
-                } else {
-                    this.snowSpeed -= 0.005;
-                }
-            }
-        }
+        // public tickSnow(): void {
+        //     if(this.snowSpeed > 0.1 && this.snowSpeed < this.snowSpeedMax) {
+        //         if(Math.random() < 0.5) {
+        //             this.snowSpeed += 0.005;
+        //         } else {
+        //             this.snowSpeed -= 0.005;
+        //         }
+        //     }
+        // }
 
         public getPlayers(): number[] {
             return this.blockSource.listEntitiesInAABB(
@@ -156,7 +167,7 @@ namespace SkyRift {
                 };
 
                 if(threadTime % 20 === 0) {
-                    EffectList.WINTER.init(playerUid, 200);
+                    Effect.get("winter").init(playerUid, 200);
                     const pos = Entity.getPosition(playerUid);
                     if(this.hasTarget(pos)) {
                         Dimensions.transfer(playerUid, this.getDimensionID());
@@ -178,14 +189,14 @@ namespace SkyRift {
                 this.tickValues();
             }
 
-            if(this.blockSource.getLightningLevel() > 0 || this.scale >= this.getScaleMax()) {
+            if(this.blockSource.getLightningLevel() > 0 || this.scale >= this.getScaleMax() || this.blockSource.getBlockID(this.x, this.y, this.z) != 0) {
                 this.destroy();
             }
         }
 
         public destroy(): void {
             const drop = this.getDrop();
-
+            alert('destroyed')
             this.blockSource.explode(this.x, this.y, this.z, Math.ceil(this.scale), false);
             this.blockSource.spawnDroppedItem(this.x + 0.5, this.y + 0.5, this.z + 0.5, drop.id, drop.count, drop.data, drop.extra || null);
             this.updateToAllClients("remove");
@@ -202,23 +213,25 @@ namespace SkyRift {
         }
     }
 
-    export function create(x: number, y: number, z: number, dimension: number, entity?: UpdatableEntity): UpdatableEntity {
-        let object = entity || new UpdatableEntity(dimension, x, y, z);
+    export function create(entity: UpdatableEntity): UpdatableEntity;
+    export function create(x: number, y: number, z: number, dimension: number): UpdatableEntity;
+    export function create(x: number | UpdatableEntity, y?: number, z?: number, dimension?: number): UpdatableEntity {
+        let object = x instanceof UpdatableEntity ? x : new UpdatableEntity(x, y, z, dimension);
         Updatable.addUpdatable(object);
         return object;
     }
 
-    Network.addClientPacket("packet.infinite_forest.rift_snow", (data: UpdatableEntity) => {
-        for(let i = 0; i < data.snowDensity; i++) {
-            Particles.addParticle(
-                EForestParticle.SNOWFALL, 
-                (data.x - data.scale + MathHelper.randomInt(-data.scale * 0.5, data.scale * 1.5)) + 0.5,
-                data.y - 0.25,
-                (data.z - data.scale + MathHelper.randomInt(-data.scale * 0.5, data.scale * 1.5)) + 0.5,
-                0.01,
-                -data.snowSpeed,
-                0.01
-            );
-        }
-    });
+    // Network.addClientPacket("packet.infinite_forest.rift_snow", (data: UpdatableEntity) => {
+    //     for(let i = 0; i < data.snowDensity; i++) {
+    //         Particles.addParticle(
+    //             EForestParticle.SNOWFALL, 
+    //             (data.x - data.scale + MathHelper.randomInt(-data.scale * 0.5, data.scale * 1.5)) + 0.5,
+    //             data.y - 0.25,
+    //             (data.z - data.scale + MathHelper.randomInt(-data.scale * 0.5, data.scale * 1.5)) + 0.5,
+    //             0.01,
+    //             -data.snowSpeed,
+    //             0.01
+    //         );
+    //     }
+    // });
 }

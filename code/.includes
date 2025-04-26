@@ -97,6 +97,7 @@ common/block/tile_entity/candle/Candle.ts
 
 common/effect/WinterEffect.ts
 common/effect/CalmingEffect.ts
+common/effect/FearEffect.ts
 
 common/effect/EffectList.ts
 
@@ -147,6 +148,7 @@ common/reflection/ReflectionList.ts
 
 common/network/command/LearningCommand.ts
 common/network/command/RiftCommand.ts
+common/network/command/EffectCommand.ts
 
 common/events/ServerPlayerTick.ts
 common/events/LocalTick.ts
