@@ -41,6 +41,8 @@ class EffectCommand extends ServerCommand<IEffectCommandParams> {
     }
 }
 
+new EffectCommand();
+
 Translation.addTranslation("message.infinite_forest.not_exists_effect", {
     en: "Effect %s not exists",
     ru: "Эффект %s не существует"

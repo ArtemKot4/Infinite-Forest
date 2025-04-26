@@ -59,8 +59,8 @@ Network.addServerPacket("packet.infinite_forest.cancel_destroy_block_fear", (cli
     const playerUid = client.getPlayerUid();
     if(Curse.has("cursed_lightning") && Entity.getPosition(playerUid).y <= FearEffect.HEIGHT) {
         const effect = Effect.getFor(playerUid, "fear");
-        if(effect.progress === effect.progressMax) {
-            Game.prevent();
+        if(effect.progress >= effect.progressMax) {
+            return Game.prevent();
         }
     }
 })

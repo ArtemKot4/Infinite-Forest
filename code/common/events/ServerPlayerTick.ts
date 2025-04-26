@@ -19,10 +19,8 @@ Callback.addCallback("ServerPlayerTick", (playerUid: number) => {
             };
             BiomeList.WINTER_FOREST.runSnowInRadius(pos.x, pos.y + 12.5, pos.z, 64, 24);
         }
-        if(Curse.has("cursed_lightning")) {
-            if(pos.y < FearEffect.HEIGHT) {
-                Effect.get("fear").init(playerUid, 250 - (10 * (pos.y / 10)));
-            }
+        if(Curse.has("cursed_lightning") && pos.y <= FearEffect.HEIGHT) {
+            Effect.get("fear").init(playerUid, 250 - (10 * (pos.y / 10)));
         }
     };
     
