@@ -19,10 +19,6 @@ class EffectCommand extends ServerCommand<IEffectCommandParams> {
         if(client == null) return;
         const playerUid = client.getPlayerUid();
         const effect = Effect.get(data.effectType);
-        
-        if(effect == null) {
-            return client.sendMessage(Native.Color.RED + Translation.translate("message.infinite_forest.not_exists_effect").replace("%s", data.effectType));
-        };
 
         if(!new PlayerActor(playerUid).isOperator()) {
             return client.sendMessage(Native.Color.RED + Translation.translate("message.fireflies.not_allowed"));
@@ -30,6 +26,10 @@ class EffectCommand extends ServerCommand<IEffectCommandParams> {
 
         switch(data.action) {
             case "set": {
+                if(effect == null) {
+                    return client.sendMessage(Native.Color.RED + Translation.translate("message.infinite_forest.not_exists_effect").replace("%s", data.effectType));
+                }
+
                 effect.init(playerUid, data.progressMax || effect.progressMax, data.timerMax || effect.timerMax);
                 return client.sendMessage(Native.Color.GREEN + Translation.translate("message.infinite_forest.effect_successfully_set").replace("%s", data.effectType));
             }

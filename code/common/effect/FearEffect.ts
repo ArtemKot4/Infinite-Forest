@@ -4,7 +4,7 @@ class FearHud extends EffectHud {
     }
 
     public override setScale(value: number, max: number): void {
-        this.UI.getElements().get("scale").setBinding("value", (value - MathHelper.randomInt(1, 3)) / max);
+        this.UI.getElements().get("scale").setBinding("value", (value - MathHelper.randomInt(1, 6)) / max);
         return;
     }
 }

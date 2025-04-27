@@ -170,26 +170,26 @@ Callback.addCallback("EntityDeath", (entity) => {
     }
 });
 
-Callback.addCallback("NativeGuiChanged", (screenName: string) => {
-    const player = Player.getLocal();
-    if(player == -1) {
-        return;
-    }
+// Callback.addCallback("NativeGuiChanged", (screenName: string) => {
+//     const player = Player.getLocal();
+//     if(player == -1) {
+//         return;
+//     }
 
-    for(const effectType in Effect.list) {
-        const effect = Effect.getFor(player, effectType);
-        if(effect.lock == true) {
-            const hud = Effect.list[effectType].getHud();
+//     for(const effectType in Effect.list) {
+//         const effect = Effect.getFor(player, effectType);
+//         if(effect.lock == true) {
+//             const hud = Effect.list[effectType].getHud();
    
-            if(screenName == EScreenName.IN_GAME_PLAY_SCREEN) {
-                if(hud.lock == true && !hud.isOpened()) {
-                    return hud.open();
-                }
-            } else {
-                if(hud.isOpened()) {
-                    return hud.close();
-                }
-            }
-        }
-    }
-});
+//             if(screenName == EScreenName.IN_GAME_PLAY_SCREEN) {
+//                 if(hud.lock == true && !hud.isOpened()) {
+//                     return hud.open();
+//                 }
+//             } else {
+//                 if(hud.isOpened()) {
+//                     return hud.close();
+//                 }
+//             }
+//         }
+//     }
+// });

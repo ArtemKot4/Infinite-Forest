@@ -71,7 +71,7 @@ class WinterForest extends AbstractBiome implements BiomeBehaviour {
 
     public insideServerTick(player: number, region: BlockSource, x: number, y: number, z: number, time: number): void {
         if(Curse.has("cold")) {
-            Effect.get("winter").init(player, 80, 100);
+            Effect.get("winter").init(player, 80);
         }
     }
 

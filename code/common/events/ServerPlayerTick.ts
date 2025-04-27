@@ -1,7 +1,8 @@
 Callback.addCallback("ServerPlayerTick", (playerUid: number) => {
     if(Entity.getDimension(playerUid) !== EDimension.INFINITE_FOREST.id) {
         return;
-    };
+    }
+
     const pos = Entity.getPosition(playerUid);
     const time = World.getThreadTime();
     const region = BlockSource.getDefaultForDimension(EDimension.INFINITE_FOREST.id);
@@ -10,7 +11,7 @@ Callback.addCallback("ServerPlayerTick", (playerUid: number) => {
 
     if(!params) {
         return;
-    };
+    }
 
     if(time % 20 === 0) {
         if(Curse.has("cold") && params.getBiomeState() !== EBiomeState.COLD && pos.y >= 200) {
@@ -20,11 +21,11 @@ Callback.addCallback("ServerPlayerTick", (playerUid: number) => {
             BiomeList.WINTER_FOREST.runSnowInRadius(pos.x, pos.y + 12.5, pos.z, 64, 24);
         }
         if(Curse.has("cursed_lightning") && pos.y <= FearEffect.HEIGHT) {
-            Effect.get("fear").init(playerUid, 80, 250 - (10 * (pos.y / 10)));
+            Effect.get("fear").init(playerUid, 250 - (10 * (pos.y / 10)), 7);
         }
-    };
+    }
     
     if(params.getServerUpdate && time % params.getServerUpdate() == 0 && params.insideServerTick) {
         return params.insideServerTick(playerUid, region, pos.x, pos.y, pos.z, time);
-    };
+    }
 });
