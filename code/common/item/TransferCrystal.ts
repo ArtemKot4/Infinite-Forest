@@ -54,9 +54,9 @@ class BlueCrystal extends TransferCrystal {
                             this.remove = true;
                         }
                         if(blockSource.getBlockID(pos.x, pos.y - 1, pos.z) == VanillaBlockID.fire) {
-                            SkyRift.create(pos.x, pos.y, pos.z, blockSource.getDimension());
+                            SkyRift.create(pos.x, pos.y - 1, pos.z, blockSource.getDimension());
                             Entity.remove(entityUid);
-                            blockSource.explode(pos.x, pos.y, pos.z, 1, false);
+                            blockSource.explode(pos.x, pos.y - 1, pos.z, 1, false);
                         }   
                     }
                 })

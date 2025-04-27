@@ -116,12 +116,11 @@ class EffectHud {
         }
     }
 
-    public init(): void {
+    public init(playerUid: number): void {
         if(!ConfigManager.EFFECT_SCALE_IN_CREATIVE && PlayerUser.isCreative(Player.getLocal()) || this.lock) {
             return;
         }
 
-        this.lock = true;
         this.open();
         this.clear();
 
@@ -133,7 +132,7 @@ class EffectHud {
                         continue;
                     }
 
-                    const data = Effect.clientData[this.type];
+                    const data = Effect.getFor(playerUid, this.type)
     
                     this.setScale(data.progress, data.progressMax);
     

@@ -10,7 +10,7 @@ namespace SkyRift {
 
     export function createMesh(vertexesCount: number): RenderMesh {
         const mesh = new RenderMesh();//commonMesh.clone();
-        mesh.setColor(0, 0, 0);
+        //mesh.setColor(0, 0, 0);
         let shift = 0;
         let line = 0;
         for(let i = -vertexesCount/2; i < vertexesCount/2; i++) {

@@ -18,6 +18,11 @@ class RiftCommand extends ServerCommand<IRiftCommandParams> {
     public override onServer(client: NetworkClient, data: IRiftCommandParams): void {
         if(client == null) return;
         const playerUid = client.getPlayerUid();
+        
+        if(!new PlayerActor(playerUid).isOperator()) {
+            return client.sendMessage(Native.Color.RED + Translation.translate("message.fireflies.not_allowed"));
+        };
+
         switch(data.action) {
             case "spawn": {
                 const pos = Entity.getPosition(playerUid);

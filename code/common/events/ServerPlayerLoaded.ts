@@ -1,6 +1,12 @@
-// Callback.addCallback("ServerPlayerLoaded", (player) => {
-//     ObjectPlayer.addLearning(player, LearningList.STRANGE_DREAM.name);
-// });
+Callback.addCallback("ServerPlayerLoaded", (playerUid) => {
+    for(let effectType in Effect.list) {
+        const effect = Effect.getFor(playerUid, effectType);
+        if(effect.progress > 0) {
+            effect.lock = false;
+            Effect.get(effectType).init(playerUid, effect.progressMax, effect.timerMax);
+        }
+    }
+});
 
 // Network.addServerPacket("packet.infinite_forest.first_point", (client, data: {}) => {
 //     if(!client) return;

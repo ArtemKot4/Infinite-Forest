@@ -5,6 +5,10 @@ class CalmingEffect extends Effect {
         return "calming";
     }
 
+    public override getHud(): EffectHud {
+        return new EffectHud(this.getType(), "effect.calming_icon", "effect.calming_scale");
+    }
+
     protected override onInit(player: number, progressMax: number): void {
         const client = Network.getClientForPlayer(player);
 
@@ -43,12 +47,8 @@ class CalmingEffect extends Effect {
         }
     }
 
-    protected override onTick(player: number): void {
+    protected override onFull(player: number): void {
         Entity.addEffect(player, EPotionEffect.REGENERATION, 3, 5, true, true);
-    }
-
-    public override getHud(): EffectHud {
-        return new EffectHud(this.getType(), "effect.calming_icon", "effect.calming_scale");
     }
 }
 
