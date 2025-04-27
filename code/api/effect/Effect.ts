@@ -3,11 +3,6 @@ abstract class Effect {
     public static list: Record<string, Effect> = {};
     public readonly timerMax?: number;
     public abstract readonly progressMax: number;
-
-    protected abstract getType(): string;
-    abstract getHud(): EffectHud;
-
-    protected abstract onFull(playerUid: number): void;
     
     public static register(effect: Effect): Effect {
         return Effect.list[effect.getType()] = effect;
@@ -50,6 +45,13 @@ abstract class Effect {
         }
     }
 
+    protected abstract getType(): string;
+    public abstract getHud(): EffectHud;
+    protected abstract onFull(playerUid: number, data: IEffectData): void;
+    protected onIncrease?(playerUid: number, data: IEffectData): void;
+    protected onDecrease?(playerUid: number, data: IEffectData): void;
+    protected onInit?(playerUid: number, data: IEffectData): void;
+    protected onEnd?(playerUid: number, data: IEffectData): void;
 
     protected initFor(playerUid: number): void {
         const client = Network.getClientForPlayer(playerUid);
@@ -59,11 +61,6 @@ abstract class Effect {
             });
         }
     }
-
-    protected onIncrease?(playerUid: number, progressMax: number, timerMax: number): void;
-    protected onDecrease?(playerUid: number, progressMax: number, timerMax: number): void;
-    protected onInit?(playerUid: number, progressMax: number, timerMax: number): void;
-    protected onEnd?(playerUid: number, progressMax: number, timerMax: number): void;
 
     public init(playerUid: number, progressMax?: number, timerMax?: number): void {
         timerMax = timerMax || this.timerMax || 5;
@@ -89,7 +86,7 @@ abstract class Effect {
         this.initFor(playerUid);
 
         if("onInit" in this) {
-            this.onInit(playerUid, progressMax, timerMax);
+            this.onInit(playerUid, Effect.getFor(playerUid, type));
         }
 
         const self = this;
@@ -97,41 +94,41 @@ abstract class Effect {
         Updatable.addUpdatable({
             update() {
                 const time = World.getThreadTime();
-                const effect = Effect.getFor(playerUid, type);
+                const effectData = Effect.getFor(playerUid, type);
 
-                if(time % 20 === 0 && effect.timer > 0) {
-                    effect.timer -= 1;
+                if(time % 20 === 0 && effectData.timer > 0) {
+                    effectData.timer -= 1;
                 }
 
-                if(effect.timer > 0 && effect.progress <= progressMax) {
-                    effect.progress += 1;
+                if(effectData.timer > 0 && effectData.progress <= progressMax) {
+                    effectData.progress += 1;
 
                     if("onIncrease" in self) {
-                        self.onIncrease(playerUid, progressMax, timerMax);
+                        self.onIncrease(playerUid, effectData);
                     }
                 }
 
-                if(effect.timer <= Math.floor(timerMax / 2) && effect.progress > 0) {
+                if(effectData.timer <= Math.floor(timerMax / 2) && effectData.progress > 0) {
                     if("onDecrease" in self) {
-                        self.onDecrease(playerUid, progressMax, timerMax);
+                        self.onDecrease(playerUid, effectData);
                     }
-                    
-                    effect.progress -= 1;
+
+                    effectData.progress -= 1;
                 }
    
-                if(effect.progress >= progressMax) {
-                    self.onFull(playerUid);
+                if(effectData.progress >= progressMax) {
+                    self.onFull(playerUid, effectData);
                 }
 
-                if(time % 60 === 0 && effect.timer <= 0 && effect.progress <= 0) {
+                if(time % 60 === 0 && effectData.timer <= 0 && effectData.progress <= 0) {
                     if("onEnd" in this) {
-                        self.onEnd(playerUid, progressMax, timerMax);
+                        self.onEnd(playerUid, effectData);
                     }
 
-                    effect.lock = false;
+                    effectData.lock = false;
                     this.remove = true;
                 }
-                Effect.sendFor(playerUid, type, effect);
+                Effect.sendFor(playerUid, type, effectData);
             }
         });
     }
@@ -169,6 +166,30 @@ Callback.addCallback("EntityDeath", (entity) => {
                 progress: 0,
                 lock: false
             });
+        }
+    }
+});
+
+Callback.addCallback("NativeGuiChanged", (screenName: string) => {
+    const player = Player.getLocal();
+    if(player == -1) {
+        return;
+    }
+
+    for(const effectType in Effect.list) {
+        const effect = Effect.getFor(player, effectType);
+        if(effect.lock == true) {
+            const hud = Effect.list[effectType].getHud();
+   
+            if(screenName == EScreenName.IN_GAME_PLAY_SCREEN) {
+                if(hud.lock == true && !hud.isOpened()) {
+                    return hud.open();
+                }
+            } else {
+                if(hud.isOpened()) {
+                    return hud.close();
+                }
+            }
         }
     }
 });

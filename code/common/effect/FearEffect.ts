@@ -1,3 +1,14 @@
+class FearHud extends EffectHud {
+    public constructor() {
+        super("fear", "unknown", "effect.fear_scale");
+    }
+
+    public override setScale(value: number, max: number): void {
+        this.UI.getElements().get("scale").setBinding("value", (value - MathHelper.randomInt(1, 3)) / max);
+        return;
+    }
+}
+
 class FearEffect extends Effect {
     public static HEIGHT: number = 40;
 
@@ -7,31 +18,41 @@ class FearEffect extends Effect {
         return "fear";
     }
 
-    public getLightLevel(): number {
-        return 4;
-    }
-
     protected getRange(): number {
         return 50;
     }
 
     public override getHud(): EffectHud {
-        return new EffectHud(this.getType(), "unknown", "effect.fear_scale");
+        return new FearHud();
     }
 
-    public override onFull(playerUid: number): void {
-        if(World.getThreadTime() % 30 === 0) {
+    protected getLightLevel(): number {
+        return 4;
+    }
+
+    protected getRandomHotbarSlot(): number {
+        return MathHelper.randomInt(0, 8);
+    }
+
+    public override onFull(playerUid: number, data: IEffectData): void {
+        const threadTime = World.getThreadTime();
+        if(threadTime % 30 === 0) {
             const pos = Entity.getPosition(playerUid);
             const blockSource = BlockSource.getDefaultForActor(playerUid);
 
-            if(blockSource.getLightLevel(pos.x, pos.y, pos.z) <= this.getLightLevel()) {
+            if(blockSource.getDimension() === EDimension.INFINITE_FOREST.id) {
                 this.breakLightning(pos, blockSource);
             }
         }
-    }
-
-    protected override onEnd(playerUid: number, progressMax: number): void {
-        Entity.clearEffect(playerUid, 4);
+        if(threadTime % 8 === 0) {
+            const user = new PlayerUser(playerUid);
+            if(!user.getSelectedItem().isEmpty()) {
+                const slotIndex = this.getRandomHotbarSlot();
+                user.setSelectedSlot(slotIndex);
+                const slot = user.getInventorySlot(slotIndex);
+                Entity.setCarriedItem(playerUid, slot.id, slot.count, slot.data, slot.extra);
+            }
+        }
     }
 
     public breakLightning(pos: Vector, blockSource: BlockSource): void {
@@ -47,22 +68,6 @@ class FearEffect extends Effect {
             }
         }
     }
-
-    @SubscribeEvent
-    public onDestroyBlockContinue(coords: Callback.ItemUseCoordinates, block: Tile, progress: number) {
-        Network.sendToServer("packet.infinite_forest.cancel_destroy_block_fear", {});
-    }
 }
-
-Network.addServerPacket("packet.infinite_forest.cancel_destroy_block_fear", (client, data) => {
-    if(client == null) return;
-    const playerUid = client.getPlayerUid();
-    if(Curse.has("cursed_lightning") && Entity.getPosition(playerUid).y <= FearEffect.HEIGHT) {
-        const effect = Effect.getFor(playerUid, "fear");
-        if(effect.progress >= effect.progressMax) {
-            return Game.prevent();
-        }
-    }
-})
 
 Effect.register(new FearEffect());

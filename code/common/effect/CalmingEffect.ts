@@ -9,7 +9,7 @@ class CalmingEffect extends Effect {
         return new EffectHud(this.getType(), "effect.calming_icon", "effect.calming_scale");
     }
 
-    protected override onInit(player: number, progressMax: number): void {
+    protected override onInit(player: number, data: IEffectData): void {
         const client = Network.getClientForPlayer(player);
 
         if(client) {

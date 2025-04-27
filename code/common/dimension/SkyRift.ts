@@ -63,7 +63,7 @@ namespace SkyRift {
     .setClientEntityAddedListener((player, data: UpdatableEntity) => {
         return loadAnimation(player, data);
     })
-    .setClientListSetupListener((list, target: UpdatableEntity, entity) => {
+    .setClientListSetupListener((list, target: UpdatableEntity, player) => {
         list.setupDistancePolicy(target.x, target.y, target.z, target.dimension, 64);
     })
     .setClientEntityRemovedListener((target: UpdatableEntity, player) => {
@@ -168,6 +168,7 @@ namespace SkyRift {
 
                 if(threadTime % 20 === 0) {
                     Effect.get("winter").init(playerUid, 200);
+                    Effect.get("fear").init(playerUid, 200);
                     const pos = Entity.getPosition(playerUid);
                     if(this.hasTarget(pos)) {
                         Dimensions.transfer(playerUid, this.getDimensionID());

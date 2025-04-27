@@ -4,6 +4,7 @@ class EffectHud {
     public static HORIZONTAL_POSITION: number = UI.getScreenHeight() / 2 + 195;
     public static VERTICAL_POSITION: number = 15;
 
+    public thread!: java.lang.Thread;
     public lock: boolean = false;
     public UI: UI.Window = (() => {
         const window = new UI.Window();
@@ -20,6 +21,7 @@ class EffectHud {
         public backgroundScale?: string,
         public border?: string
     ) {}
+
 
     public getIcon(): string {
         return this.icon;
@@ -116,45 +118,74 @@ class EffectHud {
         }
     }
 
+    public preventInit(playerUid: number): boolean {
+        return !ConfigManager.EFFECT_SCALE_IN_CREATIVE && PlayerUser.isCreative(playerUid) || this.lock == true;
+    }
+
+    public onPreventInit(playerUid: number): void {};
+    public onInit?(playerUid: number): void;
+    public onThread?(playerUid: number, data: IEffectData): void;
+    public onAppear?(playerUid: number, data: IEffectData): void;
+    public onDisappear?(playerUid: number, data: IEffectData): void;
+    public onClose?(playerUid: number, data: IEffectData): void;
+
     public init(playerUid: number): void {
-        if(!ConfigManager.EFFECT_SCALE_IN_CREATIVE && PlayerUser.isCreative(Player.getLocal()) || this.lock) {
-            return;
+        if(this.preventInit(playerUid)) {
+            return this.onPreventInit(playerUid);
+        }
+
+        if("onInit" in this) {
+            this.onInit(playerUid);
         }
 
         this.open();
         this.clear();
+        
+        this.thread = Threading.initThread("thread.infinite_forest.effect_scale", this.threadFunction.bind(this));
+    }
 
-        Threading.initThread("thread.infinite_forest.effect_scale", () => {
-            while(true) {
-                    java.lang.Thread.sleep(50);
+    public threadFunction(playerUid: number): void {
+        while(true) {
+            java.lang.Thread.sleep(50);
 
-                    if(!this.isOpened()) {
-                        continue;
-                    }
+            if(!this.isOpened()) {
+                continue;
+            }
 
-                    const data = Effect.getFor(playerUid, this.type)
-    
-                    this.setScale(data.progress, data.progressMax);
-    
-                    const alpha = this.UI.layout.getAlpha();
-                        
-                    if(data.timer > 0) {
-                        if(alpha < 1) {
-                            this.UI.layout.setAlpha(alpha + 0.05);
-                        }
+            const data = Effect.getFor(playerUid, this.type)
+
+            this.setScale(data.progress, data.progressMax);
+
+            if("onThread" in this) {
+                this.onThread(playerUid, data);
+            }
+
+            const alpha = this.UI.layout.getAlpha();
+                
+            if(data.timer > 0) {
+                if(alpha < 1) {
+                    if("onAppear" in this) {
+                        this.onAppear(playerUid, data);
                     }
-    
-                    if(data.timer <= 0 && data.progress <= 0) {
-                        if(alpha > 0) {
-                            this.UI.layout.setAlpha(alpha - 0.05);
-                        } else {
-                            this.close();
-                            return;
-                        }
-                    }
+                    this.UI.layout.setAlpha(alpha + 0.05);
                 }
             }
-        );
+
+            if(data.timer <= 0 && data.progress <= 0) {
+                if(alpha > 0) {
+                    if("onDisappear" in this) {
+                        this.onDisappear(playerUid, data);
+                    }
+                    this.UI.layout.setAlpha(alpha - 0.05);
+                } else {
+                    if("onClose" in this) {
+                        this.onClose(playerUid, data);
+                    }
+                    this.close();
+                    return;
+                }
+            }
+        }
     }
 
     public static increaseCount() {
