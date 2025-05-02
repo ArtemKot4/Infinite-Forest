@@ -1,15 +1,15 @@
 class CalmingEffect extends Effect {
     public override progressMax: number = 80;
     
-    protected override getType(): string {
+    public override getType(): string {
         return "calming";
     }
 
     public override getHud(): EffectHud {
-        return new EffectHud(this.getType(), "effect.calming_icon", "effect.calming_scale");
+        return new ForestEffectHud(this.getType(), "effect.calming_icon", "effect.calming_scale");
     }
 
-    protected override onInit(player: number, data: IEffectData): void {
+    public override onInit(player: number, data: IEffectData): void {
         const client = Network.getClientForPlayer(player);
 
         if(client) {
@@ -47,7 +47,7 @@ class CalmingEffect extends Effect {
         }
     }
 
-    protected override onFull(player: number): void {
+    public override onFull(player: number): void {
         Entity.addEffect(player, EPotionEffect.REGENERATION, 3, 5, true, true);
     }
 }

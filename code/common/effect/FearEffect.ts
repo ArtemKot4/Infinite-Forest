@@ -1,9 +1,9 @@
-class FearHud extends EffectHud {
+class FearHud extends ForestEffectHud {
     public constructor() {
         super("fear", "unknown", "effect.fear_scale");
     }
 
-    public override setScale(value: number, max: number): void {
+    public override setScale(scale: string, value: number, max: number): void {
         this.UI.getElements().get("scale").setBinding("value", (value - MathHelper.randomInt(1, 6)) / max);
         return;
     }
@@ -14,7 +14,7 @@ class FearEffect extends Effect {
 
     public override progressMax: number = 250;
 
-    protected override getType(): string {
+    public override getType(): string {
         return "fear";
     }
 

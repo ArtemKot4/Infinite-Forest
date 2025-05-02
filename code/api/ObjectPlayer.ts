@@ -10,14 +10,6 @@ interface IPlayerPage {
     text: string
 };
 
-interface IEffectData {
-    timer: number;
-    timerMax?: number;
-    progress: number;
-    progressMax: number;
-    lock?: boolean;
-};
-
 interface Learning {
     name: string
 };
@@ -70,12 +62,6 @@ class ObjectPlayer {
      */
 
     public recordList: IPlayerPage[] = [];
-
-    /**
-     * list of player effects. Key is name of effect, value is object with timer, progress, progress_max, lock;
-     */
-     
-    public effectList: Record<string, IEffectData> = {};
 
     /**
      * Server function to append list of players;
