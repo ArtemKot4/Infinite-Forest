@@ -51,7 +51,7 @@ class RiftCommand extends ServerCommand<IRiftCommandParams> {
     }
 }
 
-new RiftCommand();
+Command.register(new RiftCommand());
 
 Translation.addTranslation("message.infinite_forest.rift_coords_not_enough", {
     ru: "Недостаточно координат!",

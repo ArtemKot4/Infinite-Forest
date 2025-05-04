@@ -1,9 +1,9 @@
-// IMPORT("BlockEngine");
 IMPORT("ConnectedTexture");
 IMPORT("ItemAnimHelper");
 IMPORT("SoundLib");
 IMPORT("EnergyNet");
 IMPORT("RenderUtil");
+IMPORT("Command");
 
 const NativeAPI = com.zhekasmirnov.innercore.api.NativeAPI;
 const TextureSource = UI.TextureSource;

@@ -1,3 +1,5 @@
+IMPORT("Notification");
+
 namespace ENotificationStyle {
     export const LEARNING: INotificationStyle = {
         waitTime: 2000,

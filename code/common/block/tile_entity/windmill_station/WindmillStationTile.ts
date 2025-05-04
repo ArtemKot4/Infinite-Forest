@@ -45,7 +45,7 @@ class WindmillStationTile extends CommonTileEntity {
         if(itemEntities.length > 0) {
             for(const item_entity of itemEntities) {
 
-                if(Entity.getType(item_entity) !== Native.EntityType.ITEM) {
+                if(Entity.getType(item_entity) !== EEntityType.ITEM) {
                     continue;
                 };
 

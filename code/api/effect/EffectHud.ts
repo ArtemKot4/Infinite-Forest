@@ -75,10 +75,3 @@ class ForestEffectHud extends EffectHud {
         }
     }
 }
-
-
-Callback.addCallback("ItemUse", (c, i, b, isE, p) => {
-    Effect.get("winter").init(p, 500, 5);
-    Effect.get("fear").init(p, 500, 10);
-    Effect.get("calming").init(p, 500, 15);
-})

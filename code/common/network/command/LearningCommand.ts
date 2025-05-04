@@ -72,7 +72,7 @@ class LearningCommand extends ServerCommand<ILearningCommandProps> {
     };
 };
 
-new LearningCommand();
+Command.register(new LearningCommand());
 
 Translation.addTranslation("message.infinite_forest.clear_learnings", {
     en: "Your learnings cleared",
