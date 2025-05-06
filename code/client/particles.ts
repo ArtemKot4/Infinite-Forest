@@ -138,7 +138,7 @@ namespace EForestParticle {
             size: { fadeOut: 0, fadeIn: 0, start: 0.6, end: 0 }
         }
     });
-};
+}
 
 interface IParticleSender {
     type: number,
@@ -148,21 +148,21 @@ interface IParticleSender {
     vx: number,
     vy: number,
     vz: number
-};
+}
 
 namespace ParticleHelper {
     export function getSign(n: number) {
         if(n > 0) return 1;
         if(n == 0) return 0;
         if(n < 0) return -1;
-    };
+    }
 
     export function random(min: number, max: number) {
         const random = Math.random();
         const dot = getSign(Math.random() * 2 - 1);
     
         return Math.floor(random * (max - min) * dot + min * dot);
-    };
+    }
 
     export function getMinDistance(min, max) {
         const x = random(0, max);
@@ -172,8 +172,8 @@ namespace ParticleHelper {
             return { x: x, z: z };
         } else {
             return getMinDistance(min, max);
-        };
-    };
+        }
+    }
 
     export function sendWithRadius(x1: number, y1: number, z1: number, x2: number, y2: number, z2: number, region: BlockSource, particle: IParticleSender) {
         const playerList = region.listEntitiesInAABB(x1, y1, z1, x2, y2, z2, EEntityType.PLAYER, false);
@@ -185,9 +185,9 @@ namespace ParticleHelper {
             
             if(client) {
                 client.send("packet.infinite_forest.send_particle", particle)
-            };
-        };
-    };
+            }
+        }
+    }
 
     export function send(type: typeof EForestParticle | EParticleType, x: number, y: number, z: number, vx: number, vy: number, vz: number, player: number) {
         const client = Network.getClientForPlayer(player);
@@ -202,8 +202,8 @@ namespace ParticleHelper {
                 vy: vy,
                 vz: vz
             });
-        };
-    };
+        }
+    }
 
     export function spawnFire(coords: Vector): void {
         const xz = ParticleHelper.getMinDistance(3, 10);
@@ -220,7 +220,7 @@ namespace ParticleHelper {
             0.03,
             0
         );
-    };
+    }
 
     export function spawnGlowworm(coords: Vector, color: number) {
         let xz = ParticleHelper.getMinDistance(30, 80);
@@ -242,7 +242,7 @@ namespace ParticleHelper {
             yV,
             zV
         );
-    };
+    }
 
     export function spawnElectric(x: number, y: number, z: number) {
         for(let i = 0; i <= 5; i++) {
@@ -255,8 +255,8 @@ namespace ParticleHelper {
                 Math.random() / 20,
                 Math.random() / 20
             );
-        };
-    };
+        }
+    }
 
     export function registerGlowworm(r: number, g: number, b: number) {
         const newGlowworm = Particles.registerParticleType({
@@ -272,12 +272,12 @@ namespace ParticleHelper {
         });
 
         EForestParticle.glowwormColors.push(newGlowworm);
-    };
+    }
 
     export function getRandomGlowworm(): number {
         return MathHelper.randomFromArray(EForestParticle.glowwormColors);
     }
-};
+}
 
 Network.addClientPacket("packet.infinite_forest.send_particle", (data: IParticleSender) => {
     return Particles.addParticle(data.type, data.x, data.y, data.z, data.vx, data.vy, data.vz);

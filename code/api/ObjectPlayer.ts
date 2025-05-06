@@ -2,22 +2,22 @@ interface IPlayerReflection {
     progress: number,
     enough_attempts: number,
     page_direction: number
-};
+}
 
 interface IPlayerPage {
     title: string,
     subtitle: string,
     text: string
-};
+}
 
 interface Learning {
     name: string
-};
+}
 
 interface Reflection {
     name: string;
     max_attempts: number;
-};
+}
 
 /**
  * Class to manipulate contain player data in imagination of modification;
@@ -29,7 +29,7 @@ class ObjectPlayer {
     protected constructor(id: number) {
         this.id = id;
         this.name = Entity.getNameTag(id);
-    };
+    }
 
     /**
      * numeric id of player;
@@ -77,8 +77,8 @@ class ObjectPlayer {
             ObjectPlayer.list[player.id] = player;
         } else {
             key.name = Entity.getNameTag(player.id);
-        };
-    };
+        }
+    }
 
     /**
      * Server function to set player object;
@@ -87,7 +87,7 @@ class ObjectPlayer {
 
     public static set(player: ObjectPlayer) {
         this.list[player.id] = player;
-    };
+    }
 
     /**
      * Server function to append list of players;
@@ -99,10 +99,10 @@ class ObjectPlayer {
 
         if(!isValid) {
             return;
-        };
+        }
 
         this.appendList(new ObjectPlayer(id));
-    };
+    }
 
     /**
      * Server function to get player by id;
@@ -111,7 +111,7 @@ class ObjectPlayer {
 
     public static get(id: number = Player.getLocal()): Nullable<ObjectPlayer> {
         return this.list[id] || null;
-    };
+    }
 
     public static getOrCreate(id: number): ObjectPlayer {
         return this.list[id] ??= new ObjectPlayer(id);
@@ -129,9 +129,8 @@ class ObjectPlayer {
             client.send("packet.infinite_forest.get_object_player", { 
                 player: this.getOrCreate(id)
             });
-        };
-    };
-
+        }
+    }
    
     /**
      * Server function to append pagesMyself list of player in both sides;
@@ -151,20 +150,19 @@ class ObjectPlayer {
         });
 
         this.sendToClient(id);
-    };
+    }
 
     public static clearList(): void {
         ObjectPlayer.list = {};
-    };
+    }
 
     public static getList(): typeof this.list {
         return ObjectPlayer.list;
-    };
-};
+    }
+}
 
 Network.addClientPacket("packet.infinite_forest.get_object_player", (data: { player: ObjectPlayer }) => {
     ObjectPlayer.appendList(data.player);
-    // Game.message("my data: -> " + JSON.stringify(ObjectPlayer.get()));
 });
 
 Callback.addCallback("ServerPlayerLoaded", (player) => {

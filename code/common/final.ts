@@ -33,29 +33,29 @@ Saver.addSavesScope("scope.infinite_forest.inventory_saver",
 );
 
 Saver.addSavesScope("scope.infinite_forest.object_player_list", 
-    function read(scope: { list: typeof ObjectPlayer.list }) {
-        ObjectPlayer.list = scope && scope.list ? scope.list : {};
+    function read(scope: typeof ObjectPlayer.list) {
+        ObjectPlayer.list = scope ? scope : {};
     },
     function save() {
-        return { list: ObjectPlayer.list };
+        return ObjectPlayer.list;
     }
 );
 
 
-class TestBookItem extends BasicItem {
-    public book: TestBook = new TestBook("book.background", 1.95);
-    public onItemUse(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, player: number): void {
-        this.book.open();
-        return;
-    };
-};
+// class TestBookItem extends BasicItem {
+//     public book: TestBook = new TestBook("book.background", 1.95);
+//     public onItemUse(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, player: number): void {
+//         this.book.open();
+//         return;
+//     };
+// };
 
-new TestBookItem("test_book_item", {
-    name: "forest_diary",
-    meta: 0
-}, {
-    stack: 1
-});
+// new TestBookItem("test_book_item", {
+//     name: "forest_diary",
+//     meta: 0
+// }, {
+//     stack: 1
+// });
 
 Callback.addCallback("ModsLoaded", () => {
     ItemList.ANCIENT_NOTE.setupAllToCreative();

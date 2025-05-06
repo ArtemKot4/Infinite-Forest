@@ -196,19 +196,21 @@ var ListCommand = /** @class */ (function (_super) {
         return _super.call(this, "commandlist", {}) || this;
     }
     ListCommand.prototype.onCall = function (data) {
-        Game.message(Translation.translate("message.command.list"));
-        var index = 0;
+        var message = Translation.translate("message.command.list");
+        var index = 1;
         for (var i in Command.list) {
+            message += "\n";
             var current = Command.list[i];
-            var description = (index + "." + " " + "/" + current.caller + " " + Object.keys(current.arguments).
+            var description = (index + "." + " " + "/" + current.caller + " " + Object.entries(current.arguments).
                 reduce(function (pv, cv) {
-                pv += "<" + cv + ">" + " ";
+                pv += "<" + cv[0] + ":" + cv[1] + ">" + " ";
                 return pv;
             }, "")
-                .concat(" — " + (current.getDescription() || "...")));
-            Game.message(description);
+                .concat("—" + " " + (current.getDescription() || "...")));
+            message += description;
             index++;
         }
+        Game.message(message);
     };
     return ListCommand;
 }(ClientCommand));

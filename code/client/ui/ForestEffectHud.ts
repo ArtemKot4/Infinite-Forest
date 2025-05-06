@@ -1,5 +1,3 @@
-IMPORT("EffectBar");
-
 class ForestEffectHud extends EffectHud {
     public constructor(
         public type: string,

@@ -1,8 +1,6 @@
 # lib: esnext
 translations.js
 
-api/Command.ts
-
 api/render/RenderHelper.ts
 
 client/animation/RenderSide.ts
@@ -17,9 +15,6 @@ api/Flags.ts
 api/ObjectPlayer.ts
 api/Curse.ts
 
-
-api/effect/EffectHud.ts
-api/effect/Effect.ts
 api/Factory.ts
 
 header.ts
@@ -27,7 +22,9 @@ core.ts
 
 client/SoundHelper.ts
 
-client/ui/notification_styles.ts
+client/ui/ForestEffectHud.ts
+
+client/ui/NotificationStyles.ts
 
 client/ui/book/Book.ts
 

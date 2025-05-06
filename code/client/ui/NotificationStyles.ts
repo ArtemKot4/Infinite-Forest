@@ -1,6 +1,4 @@
-IMPORT("Notification");
-
-namespace ENotificationStyle {
+namespace NotificationStyles {
     export const LEARNING: INotificationStyle = {
         waitTime: 2000,
         queueTime: 1000,
@@ -42,6 +40,6 @@ namespace ENotificationStyle {
             height: 27
         }
     }
-};
+}
 
-Notification.get("achievement").addStyle("IFLearning", ENotificationStyle.LEARNING);
+Notification.get("achievement").addStyle("IFLearning", NotificationStyles.LEARNING);
