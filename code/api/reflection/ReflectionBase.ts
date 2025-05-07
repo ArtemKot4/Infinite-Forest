@@ -2,12 +2,12 @@ class ReflectionBase {
     public name: string;
     public page: string;
     public section: string; 
-    public max_attempts: number;
+    public maxAttempts: number;
 
-    public constructor(name: string, page: string, section: string, max_attempts: number) {
+    public constructor(name: string, page: string, section: string, maxAttempts: number) {
         this.name = name;
         this.page = page;
         this.section = section || "default";
-        this.max_attempts = max_attempts || 5;
+        this.maxAttempts = maxAttempts || 5;
     };
 };

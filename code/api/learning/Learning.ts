@@ -12,30 +12,30 @@ abstract class Learning {
      * @param direction direction of page;
     */
 
-    public static giveFor(player_uid: number, name: string, direction: number = -1): void {
+    public static giveFor(playerUid: number, name: string, direction: number = -1): void {
         const learning = Learning.get(name);
 
         if(!learning) {
-            Network.getClientForPlayer(player_uid).sendMessage(`Server: ${name} is not a learning. All exists learnings: ${Object.keys(Learning.list)}`);
+            Network.getClientForPlayer(playerUid).sendMessage(`Server: ${name} is not a learning. All exists learnings: ${Object.keys(Learning.list)}`);
             return;
         };
 
-        const player = ObjectPlayer.getOrCreate(player_uid);
-        const playerLearning = player.learningList[name];
+        const player = ObjectPlayer.getOrCreate(playerUid);
+        const playerLearning = player.learnings[name];
 
         if(!playerLearning) {
-            player.learningList[name] = direction;
+            player.learnings[name] = direction;
 
-            ObjectPlayer.sendToClient(player_uid);
-            Notification.get("achievement").sendFor(player_uid, "IFLearning", {
+            ObjectPlayer.sendToClient(playerUid);
+            Notification.get("achievement").sendFor(playerUid, "IFLearning", {
                 text: {
                     type: "text",
                     text: Translation.translate(`learning.infinite_forest.${name}`)
                 },
                 icon: {
                     type: "image",
-                    bitmap: learning.icon_type === "default" ? learning.icon : null,
-                    item: learning.icon_type === "item" ? learning.icon : null
+                    bitmap: learning.iconType === "default" ? learning.icon : null,
+                    item: learning.iconType === "item" ? learning.icon : null
                 }
             });
         };
@@ -47,14 +47,14 @@ abstract class Learning {
      * @param learning learning in database;
     */
     
-    public static deleteFor(player_uid: number, name: string): void {
-        const player = ObjectPlayer.getOrCreate(player_uid);
-        const playerLearning = player.learningList[name];
+    public static deleteFor(playerUid: number, name: string): void {
+        const player = ObjectPlayer.getOrCreate(playerUid);
+        const playerLearning = player.learnings[name];
 
         if(playerLearning) {
-            delete player.learningList[name];
+            delete player.learnings[name];
 
-            ObjectPlayer.sendToClient(player_uid);
+            ObjectPlayer.sendToClient(playerUid);
         };
     };
 

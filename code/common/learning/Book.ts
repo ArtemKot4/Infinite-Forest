@@ -1,3 +1,20 @@
+class ForestDiary extends BasicItem implements IItemUseCallback, INoTargetUseCallback {
+    public book: Book = new Book();
+    public constructor() {
+        super("forest_diary", {
+            name: "forest_diary",
+            meta: 0
+        });
+    }
+
+    public getName(): string {
+        return "item.infinite_forest.forest_diary";
+    }
+}
+
+Network.addClientPacket("packet.infinite_forest.open_forest_diary", (data: ObjectPlayer) => {
+    ItemList.FOREST_DIARY.book.open(data.player)
+})
 // class BookPage {
 
 //     public static list: Record<string, Record<string, IPageDescription>> = {

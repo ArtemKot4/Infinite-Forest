@@ -49,19 +49,19 @@ class ObjectPlayer {
      * @value number number of direction of page linked with this learning, -1 is not selected;
      */
 
-    public learningList: Record<string, number> = {};
+    public learnings: Record<string, number> = {};
 
     /**
      * list of player reflections. Key is name of reflection, value is object with progress, enough_attempts, page_direction;
      */
 
-    public reflectionList: { [reflection: string]: IPlayerReflection } = {};
+    public reflections: { [reflection: string]: IPlayerReflection } = {};
 
     /**
      * list of player recorded pages. Key is name of page, value is object with title, subtitle, text;
      */
 
-    public recordList: IPlayerPage[] = [];
+    public records: IPlayerPage[] = [];
 
     /**
      * Server function to append list of players;
@@ -143,7 +143,7 @@ class ObjectPlayer {
     public static addRecord(id: number, title: string, subtitle: string, text: string): void {
         const player = this.getOrCreate(id);
 
-        player.recordList.push({
+        player.records.push({
             title,
             subtitle,
             text

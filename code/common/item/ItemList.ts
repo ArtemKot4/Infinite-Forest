@@ -3,4 +3,5 @@ namespace ItemList {
     export const BLUE_CRYSTAL= new BlueCrystal();
     export const WHEAT_FLOUR = new WheatFlour();
     export const ANCIENT_NOTE = new AncientNote();
+    export const FOREST_DIARY = new ForestDiary();
 };
