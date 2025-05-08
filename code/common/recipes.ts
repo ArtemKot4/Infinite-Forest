@@ -3,11 +3,11 @@ Callback.addCallback("LevelDisplayed", () => {
         new ItemStack(ItemList.WHEAT_FLOUR.id, 1)
     ]);
 
-    BlockList.WINDMILL_STATION.factory.addRecipe(ItemList.WHEAT_FLOUR.id, 296);
+    WindmillStation.factory.registerRecipe(new ItemStack(ItemList.WHEAT_FLOUR.id), [new ItemStack(296)]);
 
     for(const recipe of initRecipes.entries()) {
         Recipes.addShapeless(new ItemStack(recipe[0][0], recipe[0][1]), recipe[1]);
-    };
+    }
 
     Recipes.addShaped({ id: BlockList.BOTTLE.id, count: 1, data: 0 }, [
         "aba",

@@ -1,10 +1,18 @@
 class ForestDiary extends BasicItem implements IItemUseCallback, INoTargetUseCallback {
-    public book: Book = new Book();
+    public static book: Book = new Book();
     public constructor() {
         super("forest_diary", {
             name: "forest_diary",
             meta: 0
         });
+    }
+
+    public onItemUse(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, player: number): void {
+        Network.getClientForPlayer(player).send("packet.infinite_forest.open_forest_diary", ObjectPlayer.getOrCreate(player))
+    }
+
+    onNoTargetUse(item: ItemStack, player: number): void {
+        return this.onItemUse(null, null, null, player);
     }
 
     public getName(): string {
@@ -13,8 +21,8 @@ class ForestDiary extends BasicItem implements IItemUseCallback, INoTargetUseCal
 }
 
 Network.addClientPacket("packet.infinite_forest.open_forest_diary", (data: ObjectPlayer) => {
-    ItemList.FOREST_DIARY.book.open(data.player)
-})
+    ForestDiary.book.openWith(data);
+});
 // class BookPage {
 
 //     public static list: Record<string, Record<string, IPageDescription>> = {

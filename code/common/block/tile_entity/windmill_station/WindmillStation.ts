@@ -1,5 +1,5 @@
 class WindmillStation extends BasicBlock {
-    public factory = new Factory<number>();
+    public static factory = new Factory();
 
     public constructor() {
         super("windmill_station", [{
@@ -7,9 +7,9 @@ class WindmillStation extends BasicBlock {
             texture: [["windmill_station", 0]],
             inCreative: true
         }]);
-    };
+    }
 
     public override getTileEntity(): CommonTileEntity {
         return new WindmillStationTile();
-    };
-};
+    }
+}
