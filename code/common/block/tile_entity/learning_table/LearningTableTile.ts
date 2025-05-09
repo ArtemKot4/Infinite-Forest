@@ -184,7 +184,7 @@ class LearningTableTile extends CommonTileEntity {
                         let learningList = Object.keys(ObjectPlayer.get(player).learnings);
   
                         if(learningList && learningList.length > 0) {
-                            text = Translation.translate("message.infinite_forest.player_learning_list");
+                            text = Translation.translate("message.infinite_forest.player_learning_list" + " ");
 
                             for(const i in learningList) {
                                 const current = learningList[i];
@@ -210,7 +210,7 @@ class LearningTableTile extends CommonTileEntity {
                                 color: android.graphics.Color.parseColor("#9E9E9E"),
                             },
                             multiline: true,
-                            text: UIHelper.separateText(Translation.translate("message.infinite_forest.hint_with_learning_transfer") + "\n" + `"${Translation.translate("message.infinite_forest.transfer_learning")}<?>"`, 30)
+                            text: UIHelper.separateText(Translation.translate("message.infinite_forest.hint_with_learning_transfer") + " " + "\n" + `"${Translation.translate("message.infinite_forest.transfer_learning")} <?>"`, 30)
                         };
 
                         this.UI.content.elements.info_icon = {

@@ -1,2 +1,66 @@
-num: 10 //just num
-mod.aboba = Я абоба! нам ис ${num}
+//блоки
+block.infinite_forest.learning_table = Исследовательский стол
+block.infinite_forest.iron_cauldron = Железный котёл
+block.infinite_forest.windmill_station = Станция мельницы
+block.infinite_forest.windmill_blades = Лопасти мельницы
+block.infinite_forest.bottle = Пустая банка
+block.infinite_forest.fireflies_bottle = Банка со светлячками
+
+block.infinite_forest.salt = Соль
+
+block.infinite_forest.electric_mushroom = Электрический гриб
+block.infinite_forest.fironia = §6Огнецвет
+block.infinite_forest.ice_flower = §9Луноцвет
+block.infinite_forest.flame_vine = §6Горячий стебель
+block.infinite_forest.flame_vine_top = §6Горячий плод
+
+block.infinite_forest.eucalyptus_log = §2Эвкалиптовая древесина
+block.infinite_forest.pink_log = §dРозовая древесина
+block.infinite_forest.winter_log = Зимняя древесина
+block.infinite_forest.pink_planks = §dРозовые доски
+block.infinite_forest.eucalyptus_planks = §2Эвкалиптовые доски
+block.infinite_forest.winter_planks = Зимние доски
+block.infinite_forest.eucalyptus_bark = §2Кора эвкалипта
+block.infinite_forest.eucalyptus_hewn = §2Обтёсанный эвкалипт
+block.infinite_forest.pink_hewn = §2Обтёсанное розовое дерево
+block.infinite_forest.pink_bark = §dКора розового дерева
+
+//предметы
+item.infinite_forest.ancient_note = Древняя записка
+item.infinite_forest.diary = Дневник
+item.infinite_forest.blue_crystal = Ледяной кристалл
+item.infinite_forest.orange_crystal = Огненный кристалл
+item.infinite_forest.wheat_flour = Пшеничная мука
+
+//записи
+page.infinite_forest.awake_title = Странное чувство
+page.infinite_forest.awake_description = Сейчас день, и... В очередной раз я пытаюсь убежать от странного сна, что давно меня беспокоит. В нём я брёл по загадочному лесу. Высочайшие деревья, чьи кроны углублялись и теснились глубоко в небе, не дают мне покоя. Тихий шёпот листьев, прохладная земля, на которой были броско разбросаны листья и цветы, бросают меня в дрожь. Пора разобраться со своими проблемами. С этого дня начинаю вести дневник...
+
+//изучения
+learning.infinite_forest.first_lucks = Первые успехи
+learning.infinite_forest.strange_dream = Странный сон
+learning.infinite_forest.first_point = Отправная точка
+learning.infinite_forest.cauldron_lifehack = Вода без границ
+learning.infinite_forest.no_more_evil = Зла больше нет
+
+//сообщения
+message.infinite_forest.clear_learnings = Ваши изучения удалены
+message.infinite_forest.clear_learning = Изучение %s удалено
+message.infinite_forest.unknown_learning = Ошибка! Неизвестное изучение... 
+message.infinite_forest.rift_coords_not_enough = Недостаточно координат!
+message.infinite_forest.rift_created = Разлом создан
+message.infinite_forest.rift_destroyed = Разлом удалён
+message.infinite_forest.player_learning_list = Доступные изучения:
+message.infinite_forest.none_learnings = Изучений нет
+message.infinite_forest.typing = Кажется, здесь чисто. Думаю, пришло время это исправить...
+message.infinite_forest.typing_placeholder = Введите текст
+message.infinite_forest.transfer_learning = рассказываю о
+message.infinite_forest.hint_with_learning_transfer = Чтобы поделиться изучением, расскажите о нём:
+message.infinite_forest.learning = Изучение:
+message.infinite_forest.none = Нет
+
+ancient_note.infinite_forest.empty = Эта записка пуста
+ancient_note.infinite_forest.contains = Запись:
+ancient_note.infinite_forest.strange_walls = Пока пусто
+ancient_note.infinite_forest.flames = Я люблю огоньки. Они так красиво светятся, и, кажется, они не боятся темноты. Я люблю их, и, кажется, они любят меня.
+ancient_note.infinite_forest.unity_with_nature = Мне нравятся наши места. Здесь теплее, чем в остальном лесу. Люблю посидеть у берега озера, и люблю, когда светлячки пролетают над ним. Очень красиво. И хоть здесь всегда темно, но есть в этом месте что-то такое, необыкновенное, не как в нашей деревне. Здесь я чувствую себя спокойно, только редкий ветер колышит траву, наполняя её присутствием..

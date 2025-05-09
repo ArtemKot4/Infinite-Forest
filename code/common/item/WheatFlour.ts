@@ -14,8 +14,3 @@ class WheatFlour extends BasicItem implements IItemHoldCallback {
         return "item.infinite_forest.wheat_flour";
     }
 }
-
-Translation.addTranslation("item.infinite_forest.wheat_flour", {
-    en: "Wheat flour",
-    ru: "Пшеничная мука"
-});

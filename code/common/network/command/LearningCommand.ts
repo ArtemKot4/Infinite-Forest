@@ -67,19 +67,3 @@ class LearningCommand extends ServerCommand<ILearningCommandProps> {
 }
 
 Command.register(new LearningCommand());
-
-Translation.addTranslation("message.infinite_forest.clear_learnings", {
-    en: "Your learnings cleared",
-    ru: "Ваши изучения удалены",
-});
-
-Translation.addTranslation("message.infinite_forest.clear_learning", {
-    en: "Learning %s cleared",
-    ru: "Изучение %s удалено",
-});
-
-
-Translation.addTranslation("message.infinite_forest.unknown_learning", {
-    en: "Error! Unknown learning...",
-    ru: "Ошибка! Неизвестное изучение...",
-});

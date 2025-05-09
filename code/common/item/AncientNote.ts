@@ -130,7 +130,7 @@ class AncientNote extends BasicItem implements INoTargetUseCallback, IItemUseCal
                 text += "\n" + Translation.translate("message.infinite_forest.learning") + (learning || Translation.translate("message.infinite_forest.none"));
             };
         };
-        return Translation.translate(name) + "\n" + Native.Color.GRAY + Translation.translate("ancient_note.infinite_forest.contains") + text;
+        return Translation.translate(name) + "\n" + Native.Color.GRAY + Translation.translate("ancient_note.infinite_forest.contains") + " " + text;
     };
 
     public setupAllToCreative(): void {
@@ -206,47 +206,7 @@ Network.addServerPacket("packet.infinite_forest.ancient_note.send_learning", (cl
     };
 });
 
-Translation.addTranslation("ancient_note.infinite_forest.empty", {
-    en: "This note is empty",
-    ru: "Эта записка пуста"
-});
-
-Translation.addTranslation("ancient_note.infinite_forest.contains", {
-    en: "Record: ",
-    ru: "Запись: "
-})
-
 AncientNote.add("unity_with_nature");
 AncientNote.add("flames");
 AncientNote.add("strange_walls");
 AncientNote.add("test", "first_lucks"); //todo: debug
-
-Translation.addTranslation("message.infinite_forest.learning", {
-    en: "Learning: ",
-    ru: "Изучение: "
-});
-
-Translation.addTranslation("message.infinite_forest.none", {
-    en: "None",
-    ru: "Нет"
-});
-
-Translation.addTranslation("ancient_note.infinite_forest.strange_walls", {
-    ru: "Пока пусто"
-}); 
-
-Translation.addTranslation("ancient_note.infinite_forest.flames", {
-    en: "I love glowworms. They so beautiful, and, seems, they not afraid of dark. I love them, and, seems, they love me.",
-    ru: "Я люблю огоньки. Они так красиво светятся, и, кажется, они не боятся темноты. Я люблю их, и, кажется, они любят меня." 
-})
-
-Translation.addTranslation("ancient_note.infinite_forest.unity_with_nature", {
-    ru: "Мне нравятся наши места. Здесь теплее, чем в остальном лесу. Люблю посидеть у берега озера, и люблю, когда светлячки пролетают над ним. Очень красиво. И хоть здесь всегда темно, но есть в этом месте что-то такое, необыкновенное, не как в нашей деревне. Здесь я чувствую себя спокойно, только редкий ветер колышит траву, наполняя её присутствием..",
-    en: "I love our places. Here so more warm then in other forest. I like sitting in front of beach of lake, and i like, when fireflies will fly up him. Over beautiful. And although here always dark, but it place has something so, does not default, do not as in our village. Here i am felling peaceful myself, only rarely wind touches a grass, will contain his coming."
-});
-
-Translation.addTranslation("item.infinite_forest.ancient_note", {
-    en: "Ancient note",
-    ru: "Древняя записка"
-});
-

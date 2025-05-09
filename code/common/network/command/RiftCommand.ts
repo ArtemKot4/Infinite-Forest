@@ -52,18 +52,3 @@ class RiftCommand extends ServerCommand<IRiftCommandParams> {
 }
 
 Command.register(new RiftCommand());
-
-Translation.addTranslation("message.infinite_forest.rift_coords_not_enough", {
-    ru: "Недостаточно координат!",
-    en: "Not enough coordinates!"
-});
-
-Translation.addTranslation("message.infinite_forest.rift_created", {
-    ru: "Разлом создан!",
-    en: "Rift created!"
-});
-
-Translation.addTranslation("message.infinite_forest.rift_destroyed", {
-    ru: "Разлом удален!",
-    en: "Rift destroyed!"
-});

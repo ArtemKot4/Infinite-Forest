@@ -1,2 +1,66 @@
-num: 10 //just num
-mod.aboba = I am aboba! num is ${num}
+//blocks
+block.infinite_forest.learning_table = Learning Table
+block.infinite_forest.iron_cauldron = Iron Cauldron  
+block.infinite_forest.windmill_station = Windmill Station  
+block.infinite_forest.windmill_blades = Windmill Blades  
+block.infinite_forest.bottle = Empty Bottle  
+block.infinite_forest.fireflies_bottle = Fireflies in a Bottle  
+
+block.infinite_forest.salt = Salt  
+
+block.infinite_forest.electric_mushroom = Electric Mushroom  
+block.infinite_forest.fironia = Fironia
+block.infinite_forest.ice_flower = Moonflower
+block.infinite_forest.flame_vine = Flame Vine (Hot Stem)  
+block.infinite_forest.flame_vine_top = Flame Fruit (Hot Fruit)  
+
+block.infinite_forest.eucalyptus_log = Eucalyptus Log  
+block.infinite_forest.pink_log = Pink Log  
+block.infinite_forest.winter_log = Winter Log  
+block.infinite_forest.pink_planks = Pink Planks  
+block.infinite_forest.eucalyptus_planks = Eucalyptus Planks  
+block.infinite_forest.winter_planks = Winter Planks  
+block.infinite_forest.eucalyptus_bark = Eucalyptus Bark  
+block.infinite_forest.eucalyptus_hewn = Hewn Eucalyptus  
+block.infinite_forest.pink_hewn = Hewn Pink Wood  
+block.infinite_forest.pink_bark = Pink Bark  
+
+//items  
+item.infinite_forest.ancient_note = Ancient Note
+item.infinite_forest.diary = Diary  
+item.infinite_forest.blue_crystal = Ice Crystal  
+item.infinite_forest.orange_crystal = Fire Crystal  
+item.infinite_forest.wheat_flour = Wheat Flour  
+
+//records
+page.infinite_forest.awake_title = Strange Feeling  
+page.infinite_forest.awake_description = It’s daytime now, yet once more I’m trying to flee from the strange dream that keeps disturbing me. In this dream, I wander through a mysterious forest. Towering trees with their crowns stretching deep into the sky unsettle me. The soft rustle of leaves, the cool ground strewn with colorful leaves and flowers, they all send shivers down my spine. Time to face my issues. Starting today, I’ll keep a diary…  
+
+//learning  
+learning.infinite_forest.first_lucks = First Successes  
+learning.infinite_forest.strange_dream = Strange Dream  
+learning.infinite_forest.first_point = Starting Point  
+learning.infinite_forest.cauldron_lifehack = Water Without Limits  
+learning.infinite_forest.no_more_evil = No More Evil
+
+//messages
+message.infinite_forest.clear_learnings = Your learnings was cleared
+message.infinite_forest.clear_learning = Learning %s was cleared
+message.infinite_forest.unknown_learning = Error! Unknown learning... 
+message.infinite_forest.rift_coords_not_enough = Not enough!
+message.infinite_forest.rift_created = Rift created
+message.infinite_forest.rift_destroyed = Rift destroyed
+message.infinite_forest.player_learning_list = Available learnings:
+message.infinite_forest.none_learnings = Have not learnings
+message.infinite_forest.typing = I guess, here clearly. Time is come to fix it...
+message.infinite_forest.typing_placeholder = Press text
+message.infinite_forest.transfer_learning = I am tell about
+message.infinite_forest.hint_with_learning_transfer = To share of learning, tell about his:
+message.infinite_forest.learning = Learning:
+message.infinite_forest.none = None
+
+ancient_note.infinite_forest.empty = This note is empty
+ancient_note.infinite_forest.contains = Recored:
+ancient_note.infinite_forest.strange_walls = Empty yet
+ancient_note.infinite_forest.flames = I love glowworms. They so beautiful, and, seems, they not afraid of dark. I love them, and, seems, they love me.
+ancient_note.infinite_forest.unity_with_nature = I love our places. Here so more warm then in other forest. I like sitting in front of beach of lake, and i like, when fireflies will fly up him. Over beautiful. And although here always dark, but it place has something so, does not default, do not as in our village. Here i am felling peaceful myself, only rarely wind touches a grass, will contain his coming..

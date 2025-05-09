@@ -16,7 +16,7 @@ class ForestDiary extends BasicItem implements IItemUseCallback, INoTargetUseCal
     }
 
     public getName(): string {
-        return "item.infinite_forest.forest_diary";
+        return "item.infinite_forest.diary";
     }
 }
 
