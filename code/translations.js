@@ -1,3 +1,7 @@
+IMPORT("LangFile");
+LangFile.registerTranslationsFrom(__dir__ + "resources/assets/lang/en.lang", "en");
+LangFile.registerTranslationsFrom(__dir__ + "resources/assets/lang/ru.lang", "ru");
+
 Translation.addTranslation("Iron cauldron", {
     ru: "Железный котёл",
 });

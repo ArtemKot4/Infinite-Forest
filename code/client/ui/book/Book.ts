@@ -1,4 +1,5 @@
 interface IRecipePage {
+    name: string,
     title: string,
     subtitle?: string,
     description: string,
@@ -35,6 +36,7 @@ interface IRecordPage {
 
 interface IDefaultPage {
     type: "default",
+    name: string,
     title: string,
     subtitle: string,
     description: string,
@@ -102,7 +104,7 @@ class Book {
                     pages: []
                 };
             }
-            this.sections[learning.section].pages.push(Book.pages[learning.page]);
+            this.sections[learning.section].pages.push(Book.pages[learning.pageName]);
         }
     }
 
@@ -244,6 +246,64 @@ class Book {
     }
 
     public static registerPage(page: PageDescription): void {
-        this.pages[page.title] = page;
+        this.pages[page.name] = page;
+    }
+
+    public static registerPagesFromPath(path: string): void {
+        const files = FileTools.GetListOfFiles(path, "");
+        for(const i in files) {
+            const object: PageDescription = JSON.parse(FileTools.ReadText(files[i].getAbsolutePath()));
+            if("title" in object) {
+                object.type = object.type || "default";
+                this.pages[object.name] = object;
+            }
+        }
     }
 }
+
+Book.registerPagesFromPath(__dir__ + "resources/assets/pages")
+
+/*
+     "left": {
+      "title": {
+        "text": {
+          "en": "Time is come",
+          "ru": "Время пришло"
+        }
+      },
+      "subtitle": {
+        "text": {
+          "en": "Strange feel",
+          "ru": "Странное чувство"
+        }
+      },
+      "text": {
+        "text": {
+          "en": "A now day, and... Again i'm trying run away from strange dream, that from old days worrying my. There i'm walks in mystical forest. A highest trees, which crowns grows and spreads in wide skies, couldn't me feeling free myself. Quit wind of leaves, so cold dirt, in there leaves has been break down and flowers, come back to me my fears. Time is come to equal my problem, since at day I'm starting write my diary...",
+          "ru": "Сейчас день, и... В очередной раз я пытаюсь убежать от странного сна, что давно меня беспокоит. В нём я брёл по загадочному лесу. Высочайшие деревья, чьи кроны углублялись и теснились глубоко в небе, не дают мне покоя. Тихий шёпот листьев, прохладная земля, на которой были броско разбросаны листья и цветы, бросают меня в дрожь. Пора разобраться со своими проблемами. С этого дня начинаю вести дневник..."
+        }
+      }
+  },
+  "right": {
+      "title": {
+        "text": {
+          "en": "First step",
+          "ru": "Первый шаг"
+        }
+      },
+      "text": {
+        "text": {
+          "en": "Hmm... from what me should start? Would be nice a digging in a mine",
+          "ru": "Хмм... с чего бы мне начать? Было бы неплохо покопаться в шахте"
+        }
+      },
+      "pictures": [
+        {
+          "x": 5,
+          "y": 85,
+          "scale": 3.5,
+          "texture": "crystal_cave_painting"
+        }
+     ]
+  }
+*/

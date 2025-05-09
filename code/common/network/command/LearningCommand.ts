@@ -37,7 +37,7 @@ class LearningCommand extends ServerCommand<ILearningCommandProps> {
             } else {
                 text = Translation.translate("message.infinite_forest.clear_learnings");
 
-                player.learningList = {};
+                player.learnings = {};
                 ObjectPlayer.sendToClient(playerUid);
             }
 

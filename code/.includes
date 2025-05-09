@@ -35,6 +35,7 @@ api/item/ItemForest.ts
 common/item/TransferCrystal.ts
 common/item/AncientNote.ts
 common/item/WheatFlour.ts
+common/learning/Book.ts
 
 api/block/IBlockModel.ts
 api/block/BlockModel.ts
@@ -134,7 +135,6 @@ common/dimension/SkyRift.ts
 common/learning/ItemLearning.ts
 common/learning/CraftBuildLearning.ts
 common/learning/EventLearning.ts
-common/learning/Book.ts
 common/learning/LearningList.ts
 
 common/reflection/LayeredReflection.ts

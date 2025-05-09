@@ -1,11 +1,11 @@
 class ItemLearning extends LearningBase {
     public type: string = "item";
     public constructor(name: string, data: {
-        page: string, 
+        pageName: string, 
         section?: string,
         icon?: string,
     }) {
-        super(name, Object.assign(data, { icon_type: 'item' as any }));
+        super(name, Object.assign(data, { iconType: "item" as any }));
     };
 };
 

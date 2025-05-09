@@ -144,7 +144,7 @@ class LearningTableTile extends CommonTileEntity {
     
                 if(need_strings.toLowerCase().includes(Translation.translate("message.infinite_forest.transfer_learning"))) {
                     const learning = need_strings.split(" ").pop();
-                    const playerLearnings = ObjectPlayer.getOrCreate(player).learningList;
+                    const playerLearnings = ObjectPlayer.getOrCreate(player).learnings;
                     
                     if(learning in playerLearnings) {
                         this.data.learning = learning;
@@ -181,7 +181,7 @@ class LearningTableTile extends CommonTileEntity {
                     if(!this.info_pressed) {
                         this.UI.content.elements.info_image.bitmap = "ancient_note_info_pressed";
                         let text = Translation.translate("message.infinite_forest.none_learnings");
-                        let learningList = Object.keys(ObjectPlayer.get(player).learningList);
+                        let learningList = Object.keys(ObjectPlayer.get(player).learnings);
   
                         if(learningList && learningList.length > 0) {
                             text = Translation.translate("message.infinite_forest.player_learning_list");

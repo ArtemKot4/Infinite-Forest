@@ -1,16 +1,16 @@
 abstract class LearningBase {
-    public page: string;
+    public pageName: string;
     public icon: string;
     public section: string;
     public iconType: 'item' | 'default';
 
     constructor(public name: string, data: { 
-        page: string, 
+        pageName: string, 
         section?: string,
         icon?: string,
         iconType?: 'item' | 'default',
     }) {
-        this.page = data.page;
+        this.pageName = data.pageName;
         this.section = data.section || 'default';
         this.icon = data.icon;
         this.iconType = data.iconType;
