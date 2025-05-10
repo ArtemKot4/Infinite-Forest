@@ -1,3 +1,53 @@
+interface ILangSettings {
+    /**
+     * Language
+     */
+    lang?: string;
+    /**
+     * Concats lines with \n, if you use multiline format of value
+     */
+    concatMultiline?: boolean;
+    /**
+     * Enables more of performances. If it's false, it will parse faster, but considerings only inline comments.
+     @default false
+     */
+    parseAdvanced?: boolean;
+    /**
+     * Format of comments
+     */
+    commentFormat?: {
+        /**
+         * @default #
+         */
+        inline?: string;
+        /**
+         * @default #->
+         */
+        start?: string;
+        /**
+         * @default <-#
+         */
+        end?: string;
+    };
+    /**
+     * Char to embed multiline
+     * @default `
+     */
+    multilineChar?: string;
+    /**
+     * Char to embed keywords
+     */
+    keywordEmbedding?: {
+        /**
+         * @default ${
+         */
+        start: string;
+        /**
+         * @default }
+         */
+        end: string;
+    };
+}
 /**
  * Class to read, manipulate and register translations from .lang files in defined format from library.
  * @example
@@ -12,7 +62,10 @@
    ```
    ```javascript
    //in mod
-   const langFile = new LangFile("path/to/file.lang", "en", "//");
+   const langFile = new LangFile("path/to/file.lang", {
+        lang: "en",
+        parseAdvanced: true
+   });
    Game.message(JSON.stringify(langFile.keywords));
    //{
    //"rocketTier": "1 tier",
@@ -28,23 +81,19 @@
    ```
  */
 declare class LangFile {
+    path: string;
     /**
      * List of supports languages
      */
     static readonly langs: string[];
     /**
-     * Language
-     */
-    readonly lang: string;
-    /**
      * String from file
      */
     readonly file: string;
     /**
-     * Comment format
-     * @default //
+     * Settings to parse
      */
-    commentFormat: string;
+    settings: ILangSettings;
     /**
      * Entries in {[key: string]: string} format
      */
@@ -55,23 +104,31 @@ declare class LangFile {
     keywords: Record<string, string>;
     /**
      * @param path file path
-     * @param lang file language
-     * @param commentFormat comment format
+     * @param settings parse settings
      */
-    constructor(path: string, lang?: string, commentFormat?: string);
+    constructor(path: string, settings: ILangSettings);
     /**
-     * Method to get entries without comments
+     * Method to get entry [key, value] without comments.
      * @param line line
      * @param separator separator between key and value
      */
     protected getEntry(line: string, separator: string): string[];
     /**
-     * Parse file
+     * Method to default parse file.
      */
     protected parse(): void;
     /**
-     * Register translations
+     * Method to advanced parse file.
+     */
+    protected parseAdvanced(): void;
+    /**
+     * Method to register translations.
      */
     registerTranslations(): void;
-    static registerTranslationsFrom(path: string, lang: string, commentFormat?: string): LangFile;
+    /**
+     * Method to register translations from file.
+     * @param path path
+     * @param settings parse settings
+     */
+    static registerTranslationsFrom(path: string, settings?: ILangSettings): LangFile;
 }
