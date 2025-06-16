@@ -57,9 +57,8 @@ class MortarTile extends CommonTileEntity {
 
     public override onTick(): void {
         if(this.data.time > 0) {
-            if(this.data.time % 10 && this.data.progress < MortarTile.PROGRESS_MAX) {
+            if(this.data.time == 1 && this.data.progress < MortarTile.PROGRESS_MAX) {
                 this.data.progress++;
-                Game.message(this.data.progress);
             }
             if(World.getThreadTime() % 20 == 0) {
                 for(const i in Mortar.recipes) {

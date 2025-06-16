@@ -52,7 +52,7 @@ class LocalMortarTile extends LocalTileEntity {
 
         Threading.initThread("thread.infinite_forest.item_fall", () => {
             while(true) {
-                java.lang.Thread.sleep(65);
+                java.lang.Thread.sleep(68);
                 if(height > 0) {
                     height = Math.max(0, height - (speed += 0.001));
                     
@@ -96,7 +96,7 @@ class LocalMortarTile extends LocalTileEntity {
         if(item != 0 && this.getTime() > 0 && this.pestleAnimation) {
             this.pestleAnimation.transform().rotate(0, 0.05, 0);
             if(time % 20 == 0 && this.itemAnimation) {
-                this.itemAnimation.setItemRotation(0, Math.PI / MathHelper.randomFrom(2, 4, 6), 0);
+                this.itemAnimation.setItemRotation(0, 0, Math.PI / MathHelper.randomFrom(2, 4, 6));
             }
             for(let i = 0; i < 3; i++) {
                 Particles.addBreakingItemParticle(
