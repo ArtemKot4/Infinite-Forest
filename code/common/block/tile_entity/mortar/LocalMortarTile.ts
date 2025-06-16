@@ -96,7 +96,7 @@ class LocalMortarTile extends LocalTileEntity {
         if(item != 0 && this.getTime() > 0 && this.pestleAnimation) {
             this.pestleAnimation.transform().rotate(0, 0.05, 0);
             if(time % 20 == 0 && this.itemAnimation) {
-                this.itemAnimation.setItemRotation(0, 0, Math.PI / MathHelper.randomFrom(2, 4, 6));
+                this.itemAnimation.setItemRotation(Math.PI / 2, MathHelper.radian(MathHelper.randomInt(0, 180)), 0);
             }
             for(let i = 0; i < 3; i++) {
                 Particles.addBreakingItemParticle(
