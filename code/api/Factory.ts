@@ -1,5 +1,5 @@
 class Factory {
-    public field: { result: ItemInstance, input: ItemInstance[], tags?: Record<string, unknown> }[] = [];
+    public field: { result: ItemInstance, input: ItemInstance[], tags?: Record<string, any> }[] = [];
 
     public registerRecipe(result: ItemInstance, input: ItemInstance[], tags?: Record<string, unknown>): this {
         this.field.push({

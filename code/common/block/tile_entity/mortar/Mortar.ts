@@ -4,10 +4,7 @@ type IMortarInput = {
 };
 
 class Mortar extends BasicBlock implements IBlockModel {
-    public static recipes: Record<number, IMortarInput> = {};
-    public static addRecipe(id: number, recipe: IMortarInput) {
-        Mortar.recipes[id] = recipe;
-    }
+    public static factory: Factory = new Factory();
 
     public constructor() {
         super("mortar", [{
@@ -16,7 +13,7 @@ class Mortar extends BasicBlock implements IBlockModel {
             inCreative: true
         }]);
 
-        Block.setShape(this.id, 0, 0, 0, 1, 3/16, 1);
+        Block.setShape(this.id, 0, 0, 0, 1, 2/16, 1);
     }
 
     public getModel(): BlockModel {

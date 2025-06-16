@@ -51,8 +51,9 @@ Callback.addCallback("LevelDisplayed", () => {
         }]
     );
 
-    Mortar.addRecipe(296, {
-        id: ItemList.WHEAT_FLOUR.id,
-        progress: 5
-    });
+    Mortar.factory.registerRecipe({ id: ItemList.WHEAT_FLOUR.id, count: 1, data: 0 }, [{
+        id: 296,
+        count: 2,
+        data: 0  
+    }]);
 });

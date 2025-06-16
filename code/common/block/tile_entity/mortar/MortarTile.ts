@@ -17,7 +17,7 @@ class MortarTile extends CommonTileEntity {
         if(Entity.getSneaking(player) == false) { 
             if(this.data.pestle == false) {
                 if(item.id == VanillaBlockID.cobblestone_wall) {
-                    user.decreaseCarriedItem(item.count);
+                    user.decreaseCarriedItem(1);
                     this.setPestle();
                 }
             } else {
@@ -60,15 +60,14 @@ class MortarTile extends CommonTileEntity {
             if(this.data.time == 1 && this.data.progress < MortarTile.PROGRESS_MAX) {
                 this.data.progress++;
             }
-            if(World.getThreadTime() % 20 == 0) {
-                for(const i in Mortar.recipes) {
-                    const recipe = Mortar.recipes[i];
-                    if(this.data.id == Number(i) && this.data.progress >= recipe.progress) {
+            if(World.getThreadTime() % 40 == 0) {
+                Mortar.factory.forEach((field) => {
+                    if(this.data.id == field.input[0].id && this.data.count >= field.input[0].count && this.data.progress >= (field.tags && field.tags.progress ? field.tags.progress : 5)) {
                         if(this.data.count > 1) {
-                            this.data.count--;
-                            this.blockSource.spawnDroppedItem(this.x + 0.5, this.y + 0.5, this.z + 0.5, recipe.id, 1, this.data.data);
+                            this.data.count -= field.input[0].count;
+                            this.blockSource.spawnDroppedItem(this.x + 0.5, this.y + 0.5, this.z + 0.5, field.result.id, field.result.count, this.data.data);
                         } else if(this.data.count == 1) {
-                            this.setItem(new ItemStack(recipe.id, this.data.count, this.data.data));
+                            this.setItem(new ItemStack(field.result.id, field.result.count, field.result.data || this.data.data));
                         } 
                         if(this.data.count == 0) {
                             this.clearItem();
@@ -79,7 +78,7 @@ class MortarTile extends CommonTileEntity {
                         this.networkData.putInt("item", this.data.id);
                         this.networkData.sendChanges();
                     }
-                }
+                });
             }
             this.sendTime(this.data.time - 1);
         }

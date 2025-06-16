@@ -103,7 +103,7 @@ class LocalMortarTile extends LocalTileEntity {
                     item, 
                     0, 
                     this.x + MathHelper.randomFrom(0.4, 0.5, 0.6), 
-                    this.y + 0.05, 
+                    this.y - 0.05, 
                     this.z + MathHelper.randomFrom(0.4, 0.5, 0.6)
                 );
             }
