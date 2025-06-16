@@ -2,14 +2,15 @@ interface ILangSettings {
     /**
      * Language
      */
-    lang?: string;
+    lang?: typeof LangFile.langs[any];
     /**
      * Concats lines with \n, if you use multiline format of value
+     * @default true
      */
     concatMultiline?: boolean;
     /**
      * Enables more of performances. If it's false, it will parse faster, but considerings only inline comments.
-     @default false
+     * @default false
      */
     parseAdvanced?: boolean;
     /**
@@ -81,11 +82,14 @@ interface ILangSettings {
    ```
  */
 declare class LangFile {
-    path: string;
     /**
      * List of supports languages
      */
-    static readonly langs: string[];
+    static readonly langs: readonly ["ru", "en", "uk", "kz", "es", "pt", "zh"];
+    /**
+     * Path to file
+     */
+    path?: string;
     /**
      * String from file
      */

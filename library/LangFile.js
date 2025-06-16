@@ -67,15 +67,6 @@ var LangFile = /** @class */ (function () {
      * @param settings parse settings
      */
     function LangFile(path, settings) {
-        this.path = path;
-        /**
-         * Entries in {[key: string]: string} format
-         */
-        this.entries = {};
-        /**
-         * Keywords in {[key: string]: string} format
-         */
-        this.keywords = {};
         settings = settings || {};
         if (!LangFile.langs.includes(settings.lang)) {
             throw new Error("Wrong language \"".concat(settings.lang, "\" format"));
@@ -84,21 +75,26 @@ var LangFile = /** @class */ (function () {
         if (file == null) {
             throw new Error("File from path \"".concat(path, "\" is not found"));
         }
+        this.entries = {};
         settings.parseAdvanced = settings.parseAdvanced || true;
         settings.commentFormat = settings.commentFormat || {};
         settings.commentFormat.inline = settings.commentFormat.inline || "#";
-        settings.commentFormat.start = settings.commentFormat.start || "<-#";
-        settings.commentFormat.end = settings.commentFormat.end || "#->";
-        settings.keywordEmbedding = settings.keywordEmbedding || {
-            start: "${",
-            end: "}"
-        };
-        settings.multilineChar = settings.multilineChar || "`";
         this.file = file;
         if (settings.parseAdvanced == true) {
+            this.keywords = {};
+            settings.commentFormat.start = settings.commentFormat.start || "<-#";
+            settings.commentFormat.end = settings.commentFormat.end || "#->";
+            settings.keywordEmbedding = settings.keywordEmbedding || {
+                start: "${",
+                end: "}"
+            };
+            settings.concatMultiline = settings.concatMultiline || true;
+            settings.multilineChar = settings.multilineChar || "`";
+            this.settings = settings;
             this.parseAdvanced();
         }
         else {
+            this.settings = settings;
             this.parse();
         }
     }
@@ -109,34 +105,37 @@ var LangFile = /** @class */ (function () {
      */
     LangFile.prototype.getEntry = function (line, separator) {
         var _this = this;
-        return line.split(separator).map(function (v) { return v.split(_this.settings.commentFormat.inline)[0].trim(); });
+        var entry = line.split(separator).map(function (v) { return v.split(_this.settings.commentFormat.inline)[0].trim(); });
+        var index = entry.findIndex(function (v) { return !v; });
+        if (index != -1) {
+            throw new Error("Not valid format of ".concat(index == 0 ? "key" : "value", " at line \"").concat(line, "\""));
+        }
+        return entry;
     };
     /**
      * Method to default parse file.
      */
     LangFile.prototype.parse = function () {
-        var entries = {};
-        var splited = this.file.split("\n");
-        for (var i in splited) {
-            var line = splited[i].trim();
+        var lines = this.file.split("\n");
+        for (var i in lines) {
+            var line = lines[i].trim();
             var _a = __read(this.getEntry(line, "="), 2), key = _a[0], value = _a[1];
             if (line.length == 0 || line.startsWith(this.settings.commentFormat.inline)) {
                 continue;
             }
-            entries[key] = value;
+            this.entries[key] = value;
         }
     };
     /**
      * Method to advanced parse file.
      */
     LangFile.prototype.parseAdvanced = function () {
-        var entries = {};
-        var keywords = {};
-        var splited = this.file.split("\n");
+        var _a;
+        var lines = this.file.split("\n");
         var commentIndex = null;
         var longString = null;
-        for (var i in splited) {
-            var line = splited[i];
+        for (var i in lines) {
+            var line = lines[i];
             if (line.startsWith(this.settings.commentFormat.inline)) {
                 continue;
             }
@@ -147,19 +146,19 @@ var LangFile = /** @class */ (function () {
                 }
                 var stringSymbol = line.indexOf(this.settings.multilineChar);
                 if (stringSymbol != -1) {
-                    longString = line;
+                    longString = line + (this.settings.concatMultiline ? "\n" : "");
                     continue;
                 }
             }
             if (longString != null) {
                 var stringSymbol = line.indexOf(this.settings.multilineChar);
                 if (stringSymbol != -1) {
-                    longString += line.slice(longString);
-                    line = longString.replaceAll(this.settings.multilineChar, "");
+                    longString += line.substring(longString);
+                    line = longString.replace(new RegExp(this.settings.multilineChar, "g"), "");
                     longString = null;
                 }
                 else {
-                    longString += line + this.settings.concatMultiline ? "\n" : "";
+                    longString += line + (this.settings.concatMultiline ? "\n" : "");
                     continue;
                 }
             }
@@ -168,32 +167,29 @@ var LangFile = /** @class */ (function () {
                 if (commentEnd == -1) {
                     continue;
                 }
-                line = line.slice(commentEnd + this.settings.commentFormat.end.length);
+                line = line.substring(commentEnd + this.settings.commentFormat.end.length);
                 commentIndex = null;
             }
             if (!line.includes("=") && line.includes(":")) {
-                var _a = __read(this.getEntry(line, ":"), 2), key_1 = _a[0], value_1 = _a[1];
-                keywords[key_1] = value_1;
+                var _b = __read(this.getEntry(line, ":"), 2), key_1 = _b[0], value_1 = _b[1];
+                this.keywords[key_1] = value_1;
                 continue;
             }
             var commentStart = line.indexOf(this.settings.commentFormat.start);
             if (commentIndex == null && commentStart != -1) {
-                line = line.slice(0, commentStart);
+                line = line.substring(0, commentStart);
                 commentIndex = i;
             }
             if (line.includes(":=")) {
-                var _b = __read(this.getEntry(line, ":="), 2), key_2 = _b[0], value_2 = _b[1];
-                keywords[key_2] = value_2;
-                entries[key_2] = value_2;
+                var _c = __read(this.getEntry(line, ":="), 2), key_2 = _c[0], value_2 = _c[1];
+                this.keywords[key_2] = value_2;
+                this.entries[key_2] = value_2;
                 continue;
             }
             if (!line.includes("=")) {
                 continue;
             }
-            var _c = __read(this.getEntry(line, "="), 2), key = _c[0], value = _c[1];
-            if (!value) {
-                throw new Error("Wrong value from key: \"".concat(key, "\""));
-            }
+            var _d = __read(this.getEntry(line, "="), 2), key = _d[0], value = _d[1];
             if (value.includes(this.settings.keywordEmbedding.start)) {
                 var index = 0;
                 while (index < value.length) {
@@ -205,18 +201,16 @@ var LangFile = /** @class */ (function () {
                     if (lastEnd == -1) {
                         throw new Error("Wrong construction ".concat(this.settings.keywordEmbedding.start, " [keyword] ").concat(this.settings.keywordEmbedding.end));
                     }
-                    var keyName = value.slice(lastStart + (this.settings.keywordEmbedding.start.length), lastEnd);
-                    var replacement = keywords[keyName];
-                    if (replacement != undefined) {
-                        value = value.slice(0, lastStart) + replacement + value.slice(lastEnd + 1);
+                    var keyName = value.substring(lastStart + (this.settings.keywordEmbedding.start.length), lastEnd);
+                    var keyValue = this.keywords[keyName];
+                    if (keyValue != undefined) {
+                        value = value.substring(0, lastStart) + keyValue + value.substring(lastEnd + this.settings.keywordEmbedding.end.length);
                     }
-                    index = lastStart + replacement.length || 0;
+                    index = (_a = lastStart + (keyValue === null || keyValue === void 0 ? void 0 : keyValue.length)) !== null && _a !== void 0 ? _a : 0;
                 }
             }
-            entries[key] = value;
+            this.entries[key] = value;
         }
-        this.entries = entries;
-        this.keywords = keywords;
     };
     /**
      * Method to register translations.
@@ -242,13 +236,13 @@ var LangFile = /** @class */ (function () {
     /**
      * List of supports languages
      */
-    LangFile.langs = ["ru", "en", "uk", "kz"];
+    LangFile.langs = ["ru", "en", "uk", "kz", "es", "pt", "zh"];
     return LangFile;
 }());
 /*
 const file = "" +
-"aboba:= абоба" + "\n" +
-"hi = `привет " + "\n"  + " ${aboba} " + "и не только`//hehe" + "\n" +
-"as = 1" + "and heh";
+    "aboba:= абоба" + "\n" +
+    "hi = `привет " + "\n"  + " ${aboba} " + "и не только`//hehe" + "\n" +
+    "as = 1" + "and heh";
 */ 
 EXPORT("LangFile", LangFile);

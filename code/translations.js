@@ -1,6 +1,15 @@
 IMPORT("LangFile");
-LangFile.registerTranslationsFrom(__dir__ + "resources/assets/lang/en.lang", "en");
-LangFile.registerTranslationsFrom(__dir__ + "resources/assets/lang/ru.lang", "ru");
+LangFile.registerTranslationsFrom(__dir__ + "resources/assets/lang/en.lang", {
+    parseAdvanced: true,
+    concatMultiline: false,
+    lang: "en"
+});
+
+LangFile.registerTranslationsFrom(__dir__ + "resources/assets/lang/ru.lang", {
+    parseAdvanced: true,
+    concatMultiline: false,
+    lang: "ru"
+});
 
 
 Translation.addTranslation("message.infinite_forest.electric_danger", {
@@ -65,3 +74,4 @@ Translation.addTranslation("forest_text", {
     ru: "Не знаю, сколько времени прошло, помню лишь то, что разбил какой-то кристалл о землю, и очнулся уже здесь. Странное чувство... Это место очень похоже на место из сна. Надеюсь, я не совершил ошибку, надеюсь, мои кошмары меня отпустят... Тут так холодно: нужно найти, где можно согреться",
     en: "I meet with there by random, and all there is a smart",
 });
+

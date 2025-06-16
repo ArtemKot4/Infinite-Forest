@@ -1,19 +1,19 @@
-class FirefliesBottle extends BasicBlock implements IPlaceCallback, IBlockModel {
+class FirefliesBottle extends BasicBlock implements IPlaceCallback, IBlockModel, IProjectileHitCallback {
     public constructor() {
         super("fireflies_bottle", [{
             name: "block.infinite_forest.fireflies_bottle",
             texture: [["forest_bottle", 0]],
             inCreative: true
         }]);
-    };
+    }
 
     public getModel(): BlockModel | BlockModel[] {
         return new BlockModel(modelsdir, "block/bottle", "forest_bottle");
-    };
+    }
 
     public override getLightLevel(): number {
         return 10;
-    };
+    }
 
     public onPlace(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, player: number, region: BlockSource): void | Vector {
         let color = ParticleHelper.getRandomGlowworm();
@@ -31,9 +31,7 @@ class FirefliesBottle extends BasicBlock implements IPlaceCallback, IBlockModel 
             BlockSource.getDefaultForActor(player), 
             color
         );
-
-        return;
-    };
+    }
 
     public override getDrop(coords: Callback.ItemUseCoordinates, id: number, data: number, diggingLevel: number, enchant: ToolAPI.EnchantData, item: ItemInstance, region: BlockSource): ItemInstanceArray[] {
         const tile = TileEntity.getTileEntity(coords.x, coords.y, coords.z, region) as TileEntity & FirefliesBottleTile;
@@ -46,13 +44,19 @@ class FirefliesBottle extends BasicBlock implements IPlaceCallback, IBlockModel 
         };
 
         return [[id, 1, data, extra]];
-    };
+    }
 
     public override getTileEntity(): CommonTileEntity {
         return new FirefliesBottleTile();
-    };
+    }
 
     public override getSoundType(): Block.Sound {
         return "glass";
-    };
-};
+    }
+
+    public onProjectileHit(projectile: number, item: ItemStack, target: Callback.ProjectileHitTarget): void {
+        if(Entity.getType(target.entity) == EEntityType.ARROW) {
+            BlockSource.getDefaultForActor(projectile).destroyBlock(target.x, target.y, target.z, true);
+        }
+    }
+}

@@ -13,7 +13,7 @@ class AncientNote extends BasicItem implements INoTargetUseCallback, IItemUseCal
 
     public static add(text: string, learning: string = null) {
         AncientNote.list[text] = learning;
-    };
+    }
 
     public static UI: UI.Window = (() => {
         const window = new UI.Window({
@@ -66,8 +66,8 @@ class AncientNote extends BasicItem implements INoTargetUseCallback, IItemUseCal
             client.send("packet.infinite_forest.ancient_note.open_ui", {
                 text
             });
-        };
-    };
+        }
+    }
 
     public whichContains(player: number): string[] {
         let list = [];
@@ -79,16 +79,16 @@ class AncientNote extends BasicItem implements INoTargetUseCallback, IItemUseCal
                 const text = current.extra && current.extra.getString("text");
                 if(text != null) {
                     list.push(text);
-                };
-            };
-        };
+                }
+            }
+        }
         return list;
-    };
+    }
 
     public onItemUse(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, player: number): void {
         if(block.id === BlockList.LEARNING_TABLE.id) {
             return;
-        };
+        }
 
         const list = this.whichContains(player);
         Game.message(list);
@@ -104,17 +104,17 @@ class AncientNote extends BasicItem implements INoTargetUseCallback, IItemUseCal
 
             if(learning) {
                 extra.putString("learning", learning);
-            };
+            }
 
             Entity.setCarriedItem(player, this.id, 1, 0, extra);
-        };
+        }
 
         return this.openFor(player, text);
-    };
+    }
 
     public onNoTargetUse(item: ItemStack, player: number): void {
         return this.onItemUse(null, item, new ItemStack(), player);
-    };
+    }
 
     public onNameOverride(item: ItemInstance, translation: string, name: string): string {
         let text = "???";
@@ -124,14 +124,14 @@ class AncientNote extends BasicItem implements INoTargetUseCallback, IItemUseCal
 
             if(self_text) {
                 text = self_text.slice(0, 10) + "...";
-            };
+            }
 
             if(learning) {
                 text += "\n" + Translation.translate("message.infinite_forest.learning") + (learning || Translation.translate("message.infinite_forest.none"));
-            };
-        };
+            }
+        }
         return Translation.translate(name) + "\n" + Native.Color.GRAY + Translation.translate("ancient_note.infinite_forest.contains") + " " + text;
-    };
+    }
 
     public setupAllToCreative(): void {
         for(const text in AncientNote.list) {
@@ -142,19 +142,19 @@ class AncientNote extends BasicItem implements INoTargetUseCallback, IItemUseCal
 
             if(learning) {
                 extra.putString("learning", learning);
-            };
+            }
 
             Item.addToCreative(this.id, 1, 0, extra);
-        };
-    };
+        }
+    }
 
     public override inCreative(): boolean {
         return true;
-    };
+    }
 
     public override getName(): string {
         return "item.infinite_forest.ancient_note";
-    };
+    }
 
     public constructor() {
         super("ancient_note", {
@@ -163,8 +163,8 @@ class AncientNote extends BasicItem implements INoTargetUseCallback, IItemUseCal
         }, {
             stack: 1
         });
-    };
-};
+    }
+}
 
 Network.addClientPacket("packet.infinite_forest.ancient_note.open_ui", (data: {
     text: string

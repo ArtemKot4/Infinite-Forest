@@ -40,5 +40,5 @@ Callback.addCallback("ItemUse", (c, i, block, isE, player) => {
     Entity.getSneaking(player) && Game.message(IDRegistry.getNameByID(block.id) + " | " + block.data)
 }); //todo: debug
 
-const modelsdir = __dir__ + "/resources/assets/models/";
+const modelsdir = __dir__ + "resources/assets/models/";
 const NativeBlock = com.zhekasmirnov.innercore.api.NativeBlock;

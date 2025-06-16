@@ -68,7 +68,7 @@ class ForestEffectHud extends EffectHud {
                 width: 76 * 3,
                 height: 9 * 3,
                 direction: 0,
-                bitmap: this.getBitmapScale(),
+                bitmap: this.getBitmapScale()
             }
         }
     }

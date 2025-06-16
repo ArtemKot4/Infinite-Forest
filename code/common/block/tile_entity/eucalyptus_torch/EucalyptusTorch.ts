@@ -5,21 +5,21 @@ class EucalyptusTorchUnlit extends BasicBlock implements IBlockModel {
             texture: [["eucalyptus_torch", 0]],
             inCreative: true
         }]);
-    };
+    }
 
     public override getMaterial(): string {
         return "wood";
-    };
+    }
 
     public override getSoundType(): Block.Sound {
         return "wood";
-    };
+    }
 
     public getModel(): BlockModel | BlockModel[] {
         return new BlockModel(modelsdir, "block/eucalyptus_torch", "eucalyptus_torch");
-    };
+    }
 
     public override getTileEntity(): CommonTileEntity {
         return new EucalyptusTorchTile();
-    };
-};
+    }
+}

@@ -70,6 +70,7 @@ declare namespace Block {
     const destroyFunctions: Record<number, Callback.DestroyBlockFunction>;
     const destroyStartFunctions: Record<number, Callback.DestroyBlockFunction>;
     const destroyContinueFunctions: Record<number, Callback.DestroyBlockContinueFunction>;
+    const projectileHitFunctions: Record<number, Callback.ProjectileHitFunction>;
     function setEmptyCollisionShape(id: number): void;
     function setSolid(id: number, solid: boolean): void;
     function setRenderAllFaces(id: number, render: boolean): void;
@@ -90,6 +91,7 @@ declare namespace Block {
     function registerDestroyStartFunctionForID(id: number, func: Callback.DestroyBlockFunction): void;
     function registerDestroyContinueFunction(id: number, func: Callback.DestroyBlockContinueFunction): void;
     function registerDestroyContinueFunctionForID(id: number, func: Callback.DestroyBlockContinueFunction): void;
+    function registerProjectileHitFunction(id: number, func: Callback.ProjectileHitFunction): void;
 }
 declare namespace Item {
     const holdFunctions: Record<number, Callback.ItemHoldFunction>;
@@ -327,6 +329,9 @@ interface IAnimateTickCallback {
 interface IClickCallback {
     onClick(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, player: number): void;
 }
+interface IProjectileHitCallback {
+    onProjectileHit(projectile: number, item: ItemStack, target: Callback.ProjectileHitTarget): void;
+}
 declare class BasicBlock {
     readonly variationList: Block.BlockVariation[];
     readonly id: number;
@@ -492,7 +497,7 @@ declare abstract class CommonTileEntity implements TileEntity {
      * Scriptable object that contains data of tile entity.
      * You can use it instead {@link defaultValues}
      */
-    data: Scriptable;
+    data: Record<string | number, unknown>;
     /**
      * Scriptable object that contains default data of tile entity.
      */

@@ -24,7 +24,7 @@ class InfiniteForest extends Dimension {
                     [0, 1],
                     [-1, 0.4],
                 ],
-                material: { base: VanillaBlockID.water },
+                material: { base: VanillaBlockID.water }
             },
             {
                 minY: 0,
@@ -33,7 +33,7 @@ class InfiniteForest extends Dimension {
                     [0, 1],
                     [-1, 0.4],
                 ],
-                material: { base: VanillaBlockID.water },
+                material: { base: VanillaBlockID.water }
             },
             {
                 minY: 0,
@@ -45,11 +45,11 @@ class InfiniteForest extends Dimension {
                 material: {
                     base: VanillaBlockID.stone,
                     surface: { id: VanillaBlockID.dirt, data: 0, width: 3 },
-                    cover: VanillaBlockID.grass,
+                    cover: VanillaBlockID.grass
                 },
                 noise: {
                     octaves: { count: 5, scale: 70 },
-                },
+                }
             }
         ];
     }

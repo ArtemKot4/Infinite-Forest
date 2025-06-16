@@ -65,8 +65,8 @@ common/block/plant/Fironia.ts
 common/block/plant/IceFlower.ts
 common/block/plant/ElectricMushroom.ts
 
-common/block/tile_entity/windmill_station/WindmillStationTile.ts
 common/block/tile_entity/windmill_station/WindmillStation.ts
+common/block/tile_entity/windmill_station/WindmillStationTile.ts
 
 common/block/tile_entity/windmill_blades/LocalWindmillBladesTile.ts
 common/block/tile_entity/windmill_blades/WindmillBladesTile.ts
@@ -77,9 +77,9 @@ common/block/tile_entity/bottle/FirefliesBottleTile.ts
 common/block/tile_entity/bottle/Bottle.ts
 common/block/tile_entity/bottle/FirefliesBottle.ts
 
+common/block/tile_entity/cauldron/Cauldron.ts
 common/block/tile_entity/cauldron/LocalCauldronTile.ts
 common/block/tile_entity/cauldron/CauldronTile.ts
-common/block/tile_entity/cauldron/Cauldron.ts
 
 common/block/tile_entity/learning_table/LocalLearningTableTile.ts
 common/block/tile_entity/learning_table/LearningTableTile.ts
@@ -92,6 +92,10 @@ common/block/tile_entity/eucalyptus_torch/EucalyptusTorch.ts
 common/block/tile_entity/candle/LocalCandleTile.ts
 common/block/tile_entity/candle/CandleTile.ts
 common/block/tile_entity/candle/Candle.ts
+
+common/block/tile_entity/mortar/LocalMortarTile.ts
+common/block/tile_entity/mortar/MortarTile.ts
+common/block/tile_entity/mortar/Mortar.ts
 
 common/effect/WinterEffect.ts
 common/effect/CalmingEffect.ts

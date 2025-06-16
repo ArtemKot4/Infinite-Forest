@@ -50,4 +50,9 @@ Callback.addCallback("LevelDisplayed", () => {
             data: 0
         }]
     );
+
+    Mortar.addRecipe(296, {
+        id: ItemList.WHEAT_FLOUR.id,
+        progress: 5
+    });
 });
