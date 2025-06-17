@@ -3,7 +3,11 @@ Callback.addCallback("LevelDisplayed", () => {
         new ItemStack(ItemList.WHEAT_FLOUR.id, 1)
     ]);
 
-    WindmillStation.factory.registerRecipe(new ItemStack(ItemList.WHEAT_FLOUR.id), [new ItemStack(296)]);
+    WindmillStation.factory.registerRecipe({ id: ItemList.WHEAT_FLOUR.id, count: 1, data: 0 }, [{
+        id: 296,
+        count: 1,
+        data: 0  
+    }]);
 
     for(const recipe of initRecipes.entries()) {
         Recipes.addShapeless(new ItemStack(recipe[0][0], recipe[0][1]), recipe[1]);
@@ -50,10 +54,4 @@ Callback.addCallback("LevelDisplayed", () => {
             data: 0
         }]
     );
-
-    Mortar.factory.registerRecipe({ id: ItemList.WHEAT_FLOUR.id, count: 1, data: 0 }, [{
-        id: 296,
-        count: 2,
-        data: 0  
-    }]);
 });

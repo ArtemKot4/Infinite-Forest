@@ -4,8 +4,6 @@ type IMortarInput = {
 };
 
 class Mortar extends BasicBlock implements IBlockModel {
-    public static factory: Factory = new Factory();
-
     public constructor() {
         super("mortar", [{
             texture: [["stone", 0]],

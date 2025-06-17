@@ -13,8 +13,13 @@ class LocalMortarTile extends LocalTileEntity {
 
     @NetworkEvent
     public create_pestle_render(): void {
+        if(this.pestleAnimation) {
+            this.pestleAnimation.destroy();
+            delete this.pestleAnimation;
+        }
+
         if(!this.pestleAnimation) {
-            this.pestleAnimation = new Animation.Base(this.x + 0.5, this.y + 0.09, this.z + 0.5);
+            this.pestleAnimation = new Animation.Base(this.x + 0.5, this.y + 0.03, this.z + 0.5);
             this.pestleAnimation.describe({
                 mesh: LocalMortarTile.PESTLE_RENDERMESH, skin: "terrain-atlas/mortar/pestle.png"
             });
@@ -68,7 +73,7 @@ class LocalMortarTile extends LocalTileEntity {
         return this.networkData.getInt("time", 0);
     }
 
-    public onLoad(): void {
+    public override onLoad(): void {
         if(this.networkData.getBoolean("pestle") == true) {
             this.create_pestle_render();
         }
@@ -80,7 +85,7 @@ class LocalMortarTile extends LocalTileEntity {
         }
     }
 
-    public onUnload(): void {
+    public override onUnload(): void {
         if(this.pestleAnimation) {
             this.pestleAnimation.destroy();
         }
@@ -90,7 +95,7 @@ class LocalMortarTile extends LocalTileEntity {
         }
     }
 
-    public onTick(): void {
+    public override onTick(): void {
         const time = this.getTime();
         const item = Network.serverToLocalId(this.networkData.getInt("item"));
         if(item != 0 && this.getTime() > 0 && this.pestleAnimation) {

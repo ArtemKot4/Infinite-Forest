@@ -1,0 +1,18 @@
+{
+	"format_version": "1.8.0",
+
+	"animations": {
+		"animation.if.map_hold": {
+			"loop": true,
+
+			"bones": {
+				"leftArm": {
+					"rotation": ["70", 0, 0]
+				},
+				"rightArm": {
+					"rotation": ["-70", 0, 0]
+				}
+			}
+		}
+	}
+}

@@ -24,15 +24,15 @@ class MortarTile extends CommonTileEntity {
                 this.sendTime(100);
             }
         } else {
-            this.sendPacket("create_item_render", item || null);
+            if(this.data.id != 0) {
+                this.drop();
+            }
             if(item.isEmpty() == false) {
-                if(this.data.id != 0) {
-                    this.drop();
-                }
                 this.setItem(item);
                 user.decreaseCarriedItem(item.count);
             }
             this.networkData.putInt("item", item.id);
+            this.sendPacket("create_item_render", item || null);
         }
         this.networkData.sendChanges();
     }
@@ -60,19 +60,25 @@ class MortarTile extends CommonTileEntity {
             if(this.data.time == 1 && this.data.progress < MortarTile.PROGRESS_MAX) {
                 this.data.progress++;
             }
+
             if(World.getThreadTime() % 40 == 0) {
-                Mortar.factory.forEach((field) => {
-                    if(this.data.id == field.input[0].id && this.data.count >= field.input[0].count && this.data.progress >= (field.tags && field.tags.progress ? field.tags.progress : 5)) {
-                        if(this.data.count > 1) {
-                            this.data.count -= field.input[0].count;
+                WindmillStation.factory.forEach((field) => {
+                    const count = field.input[0].count * 2;
+
+                    if(this.data.id == field.input[0].id && this.data.count >= count && this.data.progress >= (field.properties && field.properties.progress ? field.properties.progress : 5)) {
+                        this.data.progress = 0;
+                        this.sendTime(5);
+
+                        if(this.data.count > count) {
+                            this.data.count -= count;
                             this.blockSource.spawnDroppedItem(this.x + 0.5, this.y + 0.5, this.z + 0.5, field.result.id, field.result.count, this.data.data);
-                        } else if(this.data.count == 1) {
+                        } else if(this.data.count == count) {
                             this.setItem(new ItemStack(field.result.id, field.result.count, field.result.data || this.data.data));
                         } 
+
                         if(this.data.count == 0) {
                             this.clearItem();
                         }
-                        this.data.progress = 0;
                         
                         this.sendPacket("create_item_render", this.data);
                         this.networkData.putInt("item", this.data.id);
@@ -84,10 +90,22 @@ class MortarTile extends CommonTileEntity {
         }
     }
 
+    public override onLoad(): void {
+        this.updateInfo();
+    }
+
     public override onProjectileHit(coords: Callback.ItemUseCoordinates, target: Callback.ProjectileHitTarget): void {
         if(Entity.getType(target.entity) == EEntityType.ARROW) {
             this.blockSource.destroyBlock(coords.x, coords.y, coords.z, true);
         }
+    }
+
+    public updateInfo(): void {
+        this.networkData.putInt("item", this.data.id);
+        this.networkData.putBoolean("pestle", this.data.pestle);
+        this.networkData.putInt("time", this.data.time);
+
+        this.networkData.sendChanges();
     }
 
     public setPestle(): void {
@@ -120,3 +138,9 @@ class MortarTile extends CommonTileEntity {
         return new LocalMortarTile();
     }
 }
+
+// Callback.addCallback("ItemUseLocal", (c, i,b,player) => {
+//     if(i.id==VanillaItemID.stick) {
+//         Commands.exec("/playanimation "+Entity.getNameTag(player)+" "+"animation.if.map_hold"+" null "+6)
+//     }
+// })

@@ -27,7 +27,7 @@ namespace Utils {
 const initRecipes: Map<[id: number, count: number], ItemInstance[]> = new Map();
 
 namespace ForestGenerator {
-    export const structurePool = new StructurePool("infinite_forest_structure_pool");
+    export const structurePool = new StructurePool("infinite_forest:structure_pool");
 }
 
 namespace ConfigManager {
