@@ -5,17 +5,17 @@ class LearningTable extends BasicBlock implements IBlockModel {
             texture: [["eucalyptus_log_side", 0]],
             inCreative: true
         }]);
-    };
+    }
 
     public getModel(): BlockModel {
         return new BlockModel(modelsdir, "block/learning_table", "learning_table");
-    };
+    }
 
     public override getSoundType(): Block.Sound {
         return "wood";
-    };
+    }
 
     public override getTileEntity(): CommonTileEntity {
         return new LearningTableTile();
-    };
-};
+    }
+}

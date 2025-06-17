@@ -3,7 +3,7 @@ class LearningTableTile extends CommonTileEntity {
 
     public static getDefaultContent(): UI.WindowContent {
         return {...this.content};
-    };
+    }
 
     public UI: UI.Window = (() => {
         const window = new UI.Window(LearningTableTile.getDefaultContent());
@@ -11,18 +11,19 @@ class LearningTableTile extends CommonTileEntity {
         return window;
     })();
 
-    public override data = {
+    public override defaultValues = {
         valid: false,
         text: null,
         learning: null
-    };
+    }
 
+    public override data: typeof this.defaultValues;
     public info_pressed: boolean = false;
 
     public override onLoad(): void {
-        this.networkData.putBoolean("valid", this.data.valid);
+        this.networkData.putBoolean("valid", this.data.valid || false);
         this.networkData.sendChanges();
-    };
+    }
 
     public dropNote(extra?: Nullable<ItemExtraData>): void {
         if(this.data.text != null) {
@@ -38,7 +39,7 @@ class LearningTableTile extends CommonTileEntity {
                 0,
                 newExtra
             );
-        };
+        }
 
         let text = null;
         let learning = null;
@@ -54,18 +55,18 @@ class LearningTableTile extends CommonTileEntity {
             this.networkData.putFloat("animationX", animationX);
             this.networkData.putFloat("animationZ", animationZ);
             this.networkData.putFloat("rotation", rotation);
-        };
+        }
         
         this.networkData.putBoolean("valid", !!extra);
         this.networkData.sendChanges();
 
-        this.sendPacket("create_animation", { valid: !!extra, animationX, animationZ, rotation });
+        this.sendPacket("create_animation", {});
 
         this.data.text = text;
         this.data.learning = learning;
         this.data.valid = !!extra;
         return;
-    };
+    }
 
     public override onClick(coords: Callback.ItemUseCoordinates, item: ItemStack, player: number): void {
         const entity = new PlayerUser(player);
@@ -78,56 +79,56 @@ class LearningTableTile extends CommonTileEntity {
                 
                 this.dropNote(carriedItem.extra);
                 entity.decreaseCarriedItem(1);
-            };
+            }
             return; 
-        };
+        }
 
         if(Entity.getSneaking(player)) {
             this.dropNote();
             return;
-        };
+        }
 
         if(this.data.valid) {
             this.drawMain(player);
             this.UI.open();
-        };
-    };
+        }
+    }
 
     public drawMain(player: number): void {
         let text = Translation.translate("message.infinite_forest.typing");
         
         if(this.data.text != null) {
             text = this.data.text;
-        };
+        }
 
         this.UI.content.elements.text.text = UIHelper.separateText(text);
 
         if("info_field" in this.UI.content.elements) {
             this.UI.content.elements.info_field.text = "";
-        };
+        }
 
         if("info_text" in this.UI.content.elements) {
             this.UI.content.elements.info_text.text = "";
-        };
+        }
 
         if("info_icon" in this.UI.content.elements) {
             this.UI.content.elements.info_icon.bitmap = "unknown";
-        };
+        }
 
         this.drawLearningInfo(player);
         this.drawEditButton(player);
         this.refresh();
         return;
-    };
+    }
 
     public refresh(): void {
         this.UI.forceRefresh();
         return;
-    };
+    }
 
     public clearLearning(): void {
         this.data.learning = null;
-    };
+    }
 
     public drawEditButton(player: number): void {
         this.UI.content.elements.button.clicker.onClick = () => {
@@ -151,13 +152,13 @@ class LearningTableTile extends CommonTileEntity {
                     } else this.clearLearning();
                 } else {
                     this.clearLearning();
-                };
+                }
                 this.refresh();
             });
 
             keyboard.open();
-        };
-    };
+        }
+    }
 
     public drawLearningInfo(player: number): void {
         this.UI.content.elements.info_image = {
@@ -194,9 +195,8 @@ class LearningTableTile extends CommonTileEntity {
                                     continue;
                                 };
                                 text += `«${current}», `;
-                            };
-
-                        };
+                            }
+                        }
     
                         this.UI.content.elements.button.clicker.onClick = () => this.drawMain(player);
                         this.UI.content.elements.text.text = UIHelper.separateText(text);
@@ -226,34 +226,34 @@ class LearningTableTile extends CommonTileEntity {
                         this.UI.content.elements.info_image.bitmap = "ancient_note_info";
                         this.drawMain(player);
                         this.info_pressed = false;
-                    };
+                    }
                     this.refresh();
                     return;
                 }
             }
-        };
-    };
+        }
+    }
 
     public override onDestroyBlock(coords: Callback.ItemUseCoordinates, player: number): void {
         if(!this.data.valid) {
             return;
-        };
+        }
 
         const extra = new ItemExtraData();
 
         if(this.data.text) {
             extra.putString("text", this.data.text);
-        };
+        }
 
         if(this.data.learning) {
             extra.putString("learning", this.data.learning);
-        };
+        }
     
         this.dropNote();
         this.selfDestroy();
-    };
+    }
 
     public override getLocalTileEntity(): LocalTileEntity {
         return new LocalLearningTableTile();
-    };
-};
+    }
+}

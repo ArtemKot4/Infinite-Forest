@@ -20,7 +20,7 @@ class FirefliesBottle extends BasicBlock implements IPlaceCallback, IBlockModel,
 
         if(item.extra) {
             color = item.extra.getInt("color", color);
-        };
+        }
 
         region.setBlock(coords.relative.x, coords.relative.y, coords.relative.z, BlockList.FIREFLIES_BOTTLE.id, 0);
 
