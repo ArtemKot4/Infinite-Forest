@@ -37,7 +37,7 @@ class LocalMortarTile extends LocalTileEntity {
             id: item ? Network.serverToLocalId(item.id) : 0,
             count: 1,
             data: 0,
-            size: 0.28,
+            size: IDRegistry.getTypeForItemId(item.id) == "block" ? 0.14 : 0.28,
             rotation: [Math.PI / 2, 0, 0]
         });
 

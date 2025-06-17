@@ -3,6 +3,7 @@ namespace BlockList {
     export const ICE_FLOWER = new IceFlower();
     export const ELECTRIC_MUSHROOM = new ElectricMushroom();
     export const BLUE_MUSHROOM_BLOCK = new BlueMushroomBlock();
+    export const SPARKLING_ROOTS = new SparklingRoots();
 
     export const PINK_HEWN = new Hewn("pink_hewn");
     export const PINK_LOG = new Log("pink_log", PINK_HEWN.stringID);

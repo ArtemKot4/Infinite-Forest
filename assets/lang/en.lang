@@ -6,13 +6,14 @@ block.infinite_forest.windmill_blades = Windmill Blades
 block.infinite_forest.bottle = Empty Bottle  
 block.infinite_forest.fireflies_bottle = Fireflies in a Bottle  
 
-block.infinite_forest.salt = Salt  
+block.infinite_forest.salt = Salt
 
 block.infinite_forest.electric_mushroom = Electric Mushroom  
 block.infinite_forest.fironia = §6Fironia
 block.infinite_forest.ice_flower = §9Moonflower
 block.infinite_forest.flame_vine = §6Flame Vine
 block.infinite_forest.flame_vine_top = §6Flame Fruit
+block.infinite_forest.sparkling_roots = §6Sparkling roots
 
 block.infinite_forest.eucalyptus_log = §2Eucalyptus Log  
 block.infinite_forest.pink_log = §dPink Log  
@@ -28,10 +29,11 @@ block.infinite_forest.mortar = Mortar
 
 # items  
 item.infinite_forest.ancient_note = Ancient Note
-item.infinite_forest.diary = Diary  
-item.infinite_forest.blue_crystal = §9Ice Crystal  
-item.infinite_forest.orange_crystal = §6Fire Crystal  
-item.infinite_forest.wheat_flour = Wheat Flour  
+item.infinite_forest.diary = Diary
+item.infinite_forest.blue_crystal = §9Ice Crystal
+item.infinite_forest.orange_crystal = §6Fire Crystal
+item.infinite_forest.wheat_flour = Wheat Flour
+item.infinite_forest.sparkling_grasses = Sparkling grasses
 
 # records
 page.infinite_forest.awake_title = Strange Feeling  

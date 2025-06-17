@@ -15,6 +15,7 @@ block.infinite_forest.fironia = §6Огнецвет
 block.infinite_forest.ice_flower = §9Луноцвет
 block.infinite_forest.flame_vine = §6Горячий стебель
 block.infinite_forest.flame_vine_top = §6Горячий плод
+block.infinite_forest.sparkling_roots = §6Мерцающие корни
 
 block.infinite_forest.eucalyptus_log = §2Эвкалиптовая древесина
 block.infinite_forest.pink_log = §dРозовая древесина
@@ -34,6 +35,7 @@ item.infinite_forest.diary = Дневник
 item.infinite_forest.blue_crystal = §9Ледяной кристалл 
 item.infinite_forest.orange_crystal = §6Огненный кристалл
 item.infinite_forest.wheat_flour = Пшеничная мука
+item.infinite_forest.sparkling_grasses = Мерцающие травы
 
 #-> записи
 различные страницы из дневника 

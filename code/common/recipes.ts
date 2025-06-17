@@ -9,6 +9,12 @@ Callback.addCallback("LevelDisplayed", () => {
         data: 0  
     }]);
 
+    WindmillStation.factory.registerRecipe({ id: ItemList.SPARKLING_GRASSES.id, count: 1, data: 0 }, [{
+        id: BlockList.SPARKLING_ROOTS.id,
+        count: 1,
+        data: 0
+    }]);
+
     for(const recipe of initRecipes.entries()) {
         Recipes.addShapeless(new ItemStack(recipe[0][0], recipe[0][1]), recipe[1]);
     }

@@ -36,6 +36,7 @@ common/item/TransferCrystal.ts
 common/item/AncientNote.ts
 common/item/WheatFlour.ts
 common/item/ForestMap.ts
+common/item/SparklingGrasses.ts
 common/learning/Book.ts
 
 api/block/IBlockModel.ts
@@ -65,6 +66,7 @@ common/block/mine/Salt.ts
 common/block/plant/Fironia.ts
 common/block/plant/IceFlower.ts
 common/block/plant/ElectricMushroom.ts
+common/block/plant/SparklingRoots.ts
 
 common/block/tile_entity/windmill_station/WindmillStation.ts
 common/block/tile_entity/windmill_station/WindmillStationTile.ts
