@@ -13,6 +13,6 @@ class SparklingGrasses extends BasicItem implements INameOverrideCallback {
     }
 
     public override getName(): string {
-        return "item.infinite_forest.sparkling_grasses"
+        return "item.infinite_forest.sparkling_grasses";
     }
 }

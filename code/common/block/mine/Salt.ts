@@ -1,9 +1,9 @@
 class Salt extends BasicBlock {
     constructor() {
         super("salt", [{
-                name: "block.infinite_forest.salt",
-                texture: [["salt", 0]],
-                inCreative: true
+            name: "block.infinite_forest.salt",
+            texture: [["salt", 0]],
+            inCreative: true
         }]);
     };
 

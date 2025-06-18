@@ -7,9 +7,6 @@ block.infinite_forest.bottle = Пустая банка
 block.infinite_forest.fireflies_bottle = Банка со светлячками
 
 block.infinite_forest.salt = Соль
-#->
-коммент
-<-#
 block.infinite_forest.electric_mushroom = Электрический гриб
 block.infinite_forest.fironia = §6Огнецвет
 block.infinite_forest.ice_flower = §9Луноцвет

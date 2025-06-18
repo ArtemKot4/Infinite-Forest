@@ -35,6 +35,64 @@ class WindmillStationTile extends CommonTileEntity {
         height: 0
     }
 
+    public override onTick(): void {
+        if(World.getThreadTime() % 20 === 0) {
+            if(!this.data.enabled) {
+                return;
+            }
+            this.setUpperItems();
+
+            if(!this.hasValidItem()) {
+                return;
+            }
+
+            if(!this.isRightItem()) {
+                return this.drop({ id: this.data.inputId, count: 1, data: 0 });
+            }
+
+            const currentWeather = World.getWeather();
+
+            const progressCount = (
+                Math.floor(currentWeather.rain / 3) + Math.floor(currentWeather.thunder / 3)
+            ) + Math.min(7, this.data.height / 10);
+
+            this.networkData.putInt("inputId", this.data.inputId);
+            this.networkData.putBoolean("enabled", this.data.enabled);
+            this.networkData.sendChanges();
+
+            WindmillStation.factory.forEach((field) => {
+                if(this.data.inputId == field.input[0].id) {
+                    this.data.progress += progressCount;
+                }
+
+                if(this.data.progress >= this.data.progressMax) {
+                    this.drop(field.result);
+                    this.data.progress = 0;
+                }
+                
+                return;
+            });
+        }
+    }
+
+    public override onDestroyBlock(coords: Callback.ItemUseCoordinates, player: number): void {
+        const vectors = [
+            [this.x, this.z + 1],
+            [this.x, this.z - 1],
+            [this.x + 1, this.z],
+            [this.x - 1, this.z] 
+        ];
+
+        for(const i in vectors) {
+            const id = this.blockSource.getBlockID(vectors[i][0], this.y, vectors[i][1]);
+
+            if(id === BlockList.WINDMILL_BLADES.getID()) {
+                BasicBlock.destroyWithTile(vectors[i][0], this.y, vectors[i][1], this.blockSource);
+            }
+        }
+        this.dropAll();
+    }
+
     public setUpperItems(): void {
         const itemEntities = this.blockSource.listEntitiesInAABB(
             this.x, this.y + 1, this.z,
@@ -91,46 +149,6 @@ class WindmillStationTile extends CommonTileEntity {
         }
     }
 
-    public override onTick(): void {
-        if(World.getThreadTime() % 20 === 0) {
-            if(!this.data.enabled) {
-                return;
-            }
-            this.setUpperItems();
-
-            if(!this.hasValidItem()) {
-                return;
-            }
-
-            if(!this.isRightItem()) {
-                return this.drop({ id: this.data.inputId, count: 1, data: 0 });
-            }
-
-            const currentWeather = World.getWeather();
-
-            const progressCount = (
-                Math.floor(currentWeather.rain / 3) + Math.floor(currentWeather.thunder / 3)
-            ) + Math.min(7, this.data.height / 10);
-
-            this.networkData.putInt("inputId", this.data.inputId);
-            this.networkData.putBoolean("enabled", this.data.enabled);
-            this.networkData.sendChanges();
-
-            WindmillStation.factory.forEach((field) => {
-                if(this.data.inputId == field.input[0].id) {
-                    this.data.progress += progressCount;
-                }
-
-                if(this.data.progress >= this.data.progressMax) {
-                    this.drop(field.result);
-                    this.data.progress = 0;
-                }
-                
-                return;
-            });
-        }
-    }
-
     public isRightItem(): boolean {
         return WindmillStation.factory.field.some((v) => v.input[0].id == this.data.inputId);
     }
@@ -145,24 +163,5 @@ class WindmillStationTile extends CommonTileEntity {
 
         this.blockSource.spawnDroppedItem(this.x + 0.5, this.y + 0.5, this.z + 0.5, stack.id, stack.count, stack.data);
         return;
-    }
-
-    public override onDestroyBlock(coords: Callback.ItemUseCoordinates, player: number): void {
-        const vectors = [
-            [this.x, this.z + 1],
-            [this.x, this.z - 1],
-            [this.x + 1, this.z],
-            [this.x - 1, this.z] 
-        ]
-
-        for(const i in vectors) {
-            const id = this.blockSource.getBlockID(vectors[i][0], this.y, vectors[i][1]);
-
-            if(id === BlockList.WINDMILL_BLADES.getID()) {
-                BasicBlock.destroyWithTile(vectors[i][0], this.y, vectors[i][1], this.blockSource);
-            }
-        }
-
-        this.dropAll();
     }
 }

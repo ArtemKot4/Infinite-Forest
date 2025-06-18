@@ -1,4 +1,8 @@
 class InfiniteForest extends Dimension {
+    public static data = {
+        vinePos: null
+    } 
+
     public constructor() {
         super(75, "infinite_forest", BiomeList.FIREFLIES_FOREST.biome);
     }
@@ -66,3 +70,9 @@ class InfiniteForest extends Dimension {
 namespace EDimension {
     export const INFINITE_FOREST = new InfiniteForest();
 }
+
+Saver.addSavesScope("infinite_forest", function read(scope) {
+    scope = scope || {}
+},  function save() {
+    return InfiniteForest.data || {}
+});

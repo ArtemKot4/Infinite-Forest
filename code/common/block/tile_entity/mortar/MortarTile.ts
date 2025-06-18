@@ -37,18 +37,7 @@ class MortarTile extends CommonTileEntity {
         this.networkData.sendChanges();
     }
 
-    public drop(): void {
-        if(!this.data.id || !this.data.count) {
-            return;
-        }
-
-        this.blockSource.spawnDroppedItem(this.x + 0.5, this.y + 0.5, this.z + 0.5, this.data.id, this.data.count, this.data.data);
-        this.data.id = 0;
-        this.data.count = 0;
-        this.data.data = 0;
-    }
-
-    public onDestroyBlock(coords: Callback.ItemUseCoordinates, player: number): void {
+    public override onDestroyBlock(coords: Callback.ItemUseCoordinates, player: number): void {
         this.drop();
         if(this.data.pestle == true) {
             this.blockSource.spawnDroppedItem(this.x + 0.5, this.y + 0.5, this.z + 0.5, VanillaBlockID.cobblestone_wall, 1, 0);
@@ -98,6 +87,17 @@ class MortarTile extends CommonTileEntity {
         if(Entity.getType(target.entity) == EEntityType.ARROW) {
             this.blockSource.destroyBlock(coords.x, coords.y, coords.z, true);
         }
+    }
+
+    public drop(): void {
+        if(!this.data.id || !this.data.count) {
+            return;
+        }
+
+        this.blockSource.spawnDroppedItem(this.x + 0.5, this.y + 0.5, this.z + 0.5, this.data.id, this.data.count, this.data.data);
+        this.data.id = 0;
+        this.data.count = 0;
+        this.data.data = 0;
     }
 
     public updateInfo(): void {

@@ -41,7 +41,7 @@ class LocalMortarTile extends LocalTileEntity {
             rotation: [Math.PI / 2, 0, 0]
         });
 
-        if(this.networkData.getInt("item") == 0 && this.networkData.getBoolean("pestle") == false) {
+        if(this.networkData.getInt("item", 0) == 0 && this.networkData.getBoolean("pestle") == false) {
             this.startFallAnimation();
             return;
         }
@@ -49,8 +49,9 @@ class LocalMortarTile extends LocalTileEntity {
     }
 
     public startFallAnimation(): void {
+        alert("fall")
         let height = MathHelper.randomFrom(0.6, 0.7, 0.8);
-        let speed = 0.005;
+        let speed = 0.008;
 
         this.itemAnimation.setPos(this.x + 0.5, this.y + height, this.z + 0.5);
         this.itemAnimation.load();
@@ -59,7 +60,7 @@ class LocalMortarTile extends LocalTileEntity {
             while(true) {
                 java.lang.Thread.sleep(68);
                 if(height > 0) {
-                    height = Math.max(0, height - (speed += 0.001));
+                    height = Math.max(0, height - (speed += 0.0005));
                     
                     this.itemAnimation.setPos(this.x + 0.5, this.y + LocalMortarTile.ITEM_POSITION + height, this.z + 0.5);
                 } else {

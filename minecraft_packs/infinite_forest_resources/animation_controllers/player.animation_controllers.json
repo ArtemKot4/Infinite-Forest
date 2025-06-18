@@ -1,0 +1,25 @@
+{
+	"format_version": "1.8.0",
+	"animation_controllers": {
+		"controller.animation.if.map_hold": {
+			"initial_state": "default",
+			"states": {
+				"default": {
+					"transitions": [
+						{
+							"map_hold": "query.is_item_name_any('item_forest_map') && query.is_first_person"
+						}
+					]
+				},
+				"map_hold": {
+					"animations": ["animation.if.map_hold"],
+					"transitions": [
+						{
+							"default": "!query.is_item_name_any('item_forest_map') || !query.is_first_person"
+						}
+					]
+				}
+			}
+		}
+	}
+}
