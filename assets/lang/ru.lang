@@ -33,6 +33,7 @@ item.infinite_forest.blue_crystal = §9Ледяной кристалл
 item.infinite_forest.orange_crystal = §6Огненный кристалл
 item.infinite_forest.wheat_flour = Пшеничная мука
 item.infinite_forest.sparkling_grasses = Мерцающие травы
+item.infinite_forest.forest_map = Карта леса
 
 #-> записи
 различные страницы из дневника 

@@ -1,6 +1,6 @@
 class InfiniteForest extends Dimension {
     public static data = {
-        vinePos: null
+        vinePos: [null, null]
     } 
 
     public constructor() {
@@ -76,3 +76,7 @@ Saver.addSavesScope("infinite_forest", function read(scope) {
 },  function save() {
     return InfiniteForest.data || {}
 });
+
+Callback.addCallback("LevelDisplayed", () => {
+    InfiniteForest.data.vinePos = [];
+})

@@ -34,6 +34,7 @@ item.infinite_forest.blue_crystal = §9Ice Crystal
 item.infinite_forest.orange_crystal = §6Fire Crystal
 item.infinite_forest.wheat_flour = Wheat Flour
 item.infinite_forest.sparkling_grasses = Sparkling grasses
+item.infinite_forest.forest_map = Map of forest
 
 # records
 page.infinite_forest.awake_title = Strange Feeling  
