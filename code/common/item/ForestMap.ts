@@ -4,7 +4,7 @@ interface IPaintedBiome {
     color: number
 }
 
-class ForestMap extends BasicItem implements IItemHoldCallback {
+class ForestMap extends BasicItem implements IItemHoldCallback, INameOverrideCallback {
     public static BIOME_ICON_SIZE: number = 128;
     public static APPEAR_SPEED: number = 1;
 
@@ -27,6 +27,10 @@ class ForestMap extends BasicItem implements IItemHoldCallback {
         ItemModel.getForWithFallback(this.id, 0).setHandModel(new RenderMesh());
     }
 
+    public onNameOverride(item: ItemInstance, translation: string, name: string): string | void {
+        return Translation.translate(name) + "\n" + Native.Color.GRAY + Translation.translate("message.infinite_forest.map_distance") + " " + ((item.extra && item.extra.getInt("distance")) || 128);
+    }
+
     public onItemHold(item: ItemInstance, playerUid: number, slotIndex: number): void {
         if(RuntimeData.local.screenName != EScreenName.IN_GAME_PLAY_SCREEN) {
             if(this.UI.isOpened()) {
@@ -36,12 +40,12 @@ class ForestMap extends BasicItem implements IItemHoldCallback {
         }
 
         if(!item.extra || item.extra && !item.extra.getString("position")) {
-            this.recordData(playerUid);
+            this.recordData(playerUid, item);
         }
         item = Entity.getCarriedItem(playerUid);
 
         const positionKey = item.extra.getString("position");
-        const distance = item.extra.getInt("distance");
+        const distance = item.extra.getInt("distance", 128);
         
         if(!this.UI.isOpened()) {
             this.UI.content.elements.text.text = Translation.translate("message.infinite_forest.coords_vine") + "["+(Math.floor(InfiniteForest.data.vinePos[0])||"?")+", " + (Math.floor(InfiniteForest.data.vinePos[1])||"?") + "]";
@@ -82,7 +86,7 @@ class ForestMap extends BasicItem implements IItemHoldCallback {
                         const positionData = item.extra.getString("position").split(":").map(v => Number(v));
                         const mapDistance = item.extra.getInt("distance", 128);
 
-                        this.recordSurfaceScreen(positionData, item.extra.getInt("distance", 128));
+                        this.recordSurfaceScreen(positionData, mapDistance);
 
                         const position = Entity.getPosition(playerUid);
                         if(
@@ -92,7 +96,8 @@ class ForestMap extends BasicItem implements IItemHoldCallback {
                             (position.z <= positionData[1] + mapDistance)
                         ) {
                             this.recordSurfaceScreen(positionData, mapDistance);
-                            this.updateGround(item.extra.getString("position"));
+                            this.updateGround(item.extra.getString("position")); 
+                            this.UI.forceRefresh();
                         }
                     }
                 } else {
@@ -129,14 +134,14 @@ class ForestMap extends BasicItem implements IItemHoldCallback {
 
         for(let x = 0; x < bitmap.getHeight(); x++) {
             for(let z = 0; z < bitmap.getWidth(); z++) { 
-                const perlin = GenerationUtils.getPerlinNoise(
-                    (position[0] + x) * 16,
-                    0,
-                    (position[1] + z) * 16,
-                    0,
-                    1 / 128,
-                    3
-                );
+                //const perlin = GenerationUtils.getPerlinNoise(
+                //     (position[0] + x) * 16,
+                //     0,
+                //     (position[1] + z) * 16,
+                //     0,
+                //     1 / 128,
+                //     3
+                // );
                 const region = BlockSource.getDefaultForDimension(EDimension.INFINITE_FOREST.id);
                 if(!region) {
                     TextureSource.put(keyName, bitmap);
@@ -146,23 +151,30 @@ class ForestMap extends BasicItem implements IItemHoldCallback {
                 const surface = GenerationUtils.findSurface(position[0] + x, 128, position[1] + z);
                 const biome = region.getBiome(position[0] + x, position[1] + z);
                 const biomeData = AbstractForestBiome.getFor(biome);
-
+                const blockID = region.getBlockID(surface.x, surface.y, surface.z);
                 if((color == 0 || color == android.graphics.Color.GRAY) && biomeData != null) {
-                    if(!AbstractForestBiome.isExists(biome)) {
-                        continue;
-                    }
-                    const mapColor = biomeData.getMapColor();
-                    color = android.graphics.Color.rgb(mapColor[0], mapColor[1], mapColor[2]);
                     //color = android.graphics.Color.rgb(mapColor[0] * perlin, mapColor[1] * perlin, mapColor[2] * perlin);
-                    
-                    if("sign" in biomeData && Math.random() < 0.02) {
-                        signsData.push([x, z, biomeData.sign]);
-                    }
-                    if(surface.y > 0 && surface.y <= 54 && region.getBlockID(surface.x, surface.y, surface.z) != 0) {
-                        color = android.graphics.Color.rgb(0, 72 * (perlin * 2), 187 * (perlin * 2));
+                    if(surface.y > 0 && surface.y <= 54 && blockID != 0) {
+                        color = android.graphics.Color.rgb(0, 72, 187)
+                        //color = android.graphics.Color.rgb(0, 72 * (perlin * 2), 187 * (perlin * 2));
                     } 
                     else if(surface.y == 55) {
                         color = android.graphics.Color.rgb(185, 205, 118);
+                    } else {
+                        if(!AbstractForestBiome.isExists(biome)) {
+                            continue;
+                        }
+                        if("sign" in biomeData && Math.random() < 0.002) {
+                            const lastSign = signsData[signsData.length - 1];
+                            if(!lastSign || (lastSign && (lastSign[0] > x + 20 || lastSign[0] < x - 20))) {// && (lastSign[1] > z + 20 || lastSign[1] < z - 20))) {
+                                signsData.push([x, z, biomeData.sign]);
+                            }
+                        }
+                        const mapColor = biomeData.getMapColor();
+                        color = android.graphics.Color.rgb(mapColor[0], mapColor[1], mapColor[2]);
+                    // else if(blockID == VanillaBlockID.leaves || blockID == VanillaBlockID.leaves2) {
+                    //     color = android.graphics.Color.rgb(0, 102 + ((surface.y - 55) * 10), 0);
+                    // }
                     }
                 }
                 bitmap.setPixel(x, z, color);
@@ -180,17 +192,16 @@ class ForestMap extends BasicItem implements IItemHoldCallback {
             alert(icon + " is not exists!");
             return;
         }
-        posX = Math.max(Math.min(0, (iconBitmap.getWidth() / 2) - posX), bitmap.getHeight());
-        posZ = Math.max(Math.min(0, (iconBitmap.getHeight() / 2) - posZ), bitmap.getWidth());
+        //iconBitmap = android.graphics.Bitmap.createScaledBitmap(iconBitmap, 64, 64, false);
         
         for(let x = 0; x < iconBitmap.getWidth(); x++) {
             for(let z = 0; z < iconBitmap.getHeight(); z++) { 
-                const color = iconBitmap.getPixel(x, z);
-                if(color == android.graphics.Color.TRANSPARENT) {
+                const pixel = iconBitmap.getPixel(x, z);
+                if(pixel == android.graphics.Color.TRANSPARENT) {
                     continue;
                 }
                 if(posX + x < bitmap.getWidth() && posZ + z < bitmap.getHeight()) {
-                    bitmap.setPixel(posX + x, posZ + z, color);
+                    bitmap.setPixel(posX + x, posZ + z, pixel);
                 }
             }
         }
@@ -267,12 +278,12 @@ class ForestMap extends BasicItem implements IItemHoldCallback {
         }
     }
 
-    public recordData(playerUid: number): void {
+    public recordData(playerUid: number, item: ItemInstance): void {
         const position = Entity.getPosition(playerUid);
         const extra = new ItemExtraData();
 
-        extra.putString("position", position.x + ":" + position.z);
-        extra.putInt("distance", 128);
+        extra.putString("position", position.x + ":" + position.z); 
+        extra.putInt("distance", item.extra ? item.extra.getInt("distance", 128) : 128);
         Entity.setCarriedItem(playerUid, this.id, 1, 0, extra);
     }
 
@@ -307,3 +318,8 @@ Translation.addTranslation("message.infinite_forest.coords_vine", {
     //     mesh.rotate(Math.PI / 2, 0, 0);
     //     return mesh;
     // })()
+
+Translation.addTranslation("message.infinite_forest.map_distance", {
+    ru: "Размер:",
+    en: "Distance:"
+});

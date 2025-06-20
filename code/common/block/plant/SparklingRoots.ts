@@ -23,16 +23,16 @@ class SparklingRoots extends BasicBlock implements IPlaceCallback, IClickCallbac
     public setShapes(): void {
         Block.setShape(this.id,  1/8, 0, 1/8, 7/8, 1, 7/8, 0);
 
-        const collisionShape = new ICRender.CollisionShape();
-        const model = new BlockRenderer.Model();
+        // const collisionShape = new ICRender.CollisionShape();
+        // const model = new BlockRenderer.Model();
 
-        collisionShape.addEntry().addBox(1/8, 0, 1/8, 7/8, 1, 7/8);
-        model.addBox(0, 0, 0, 0, 0, 0, this.id, 1);
+        // collisionShape.addEntry().addBox(1/8, 0, 1/8, 7/8, 1, 7/8);
+        // model.addBox(0, 0, 0, 0, 0, 0, this.id, 1);
         
-        const icrender = new ICRender.Model(model);
+        // const icrender = new ICRender.Model(model);
         
-        BlockRenderer.setCustomCollisionShape(this.id, 1, collisionShape);
-        BlockRenderer.setStaticICRender(this.id, 1, icrender);
+        // BlockRenderer.setCustomCollisionShape(this.id, 1, collisionShape);
+        // BlockRenderer.setStaticICRender(this.id, 1, icrender);
     }
 
     public onPlace(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, player: number, region: BlockSource): void | Vector {
@@ -58,15 +58,15 @@ class SparklingRoots extends BasicBlock implements IPlaceCallback, IClickCallbac
 
     public burn(coords: Vector, region: BlockSource, playerUid: number): void {
         const self = this;
-        region.setBlock(coords.x, coords.y, coords.z, this.id, 1);
+        //region.setBlock(coords.x, coords.y, coords.z, this.id, 1);
         region.setExtraBlock(coords.x, coords.y, coords.z, VanillaBlockID.fire);
         
-        const client = Network.getClientForPlayer(playerUid);
-        if(client) {
-            client.send("packet.infinite_forest.burn_sparkling_roots", {
-                coords, blockID: this.id
-            });
-        }
+        // const client = Network.getClientForPlayer(playerUid);
+        // if(client) {
+        //     client.send("packet.infinite_forest.burn_sparkling_roots", {
+        //         coords, blockID: this.id
+        //     });
+        // }
 
         Updatable.addUpdatable({
             time: 0,
