@@ -6,7 +6,7 @@ Callback.addCallback("LocalTick", () => {
     const pos = Player.getPosition();
     const region = BlockSource.getCurrentClientRegion();
     const biome = region.getBiome(pos.x, pos.z);
-    const params = AbstractBiome.data[biome] as AbstractBiome & BiomeBehaviour;
+    const params = AbstractForestBiome.data[biome] as AbstractForestBiome & BiomeBehaviour;
 
     if(!params) {
         return;

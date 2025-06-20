@@ -19,7 +19,7 @@ interface RGB {
 
 namespace Utils {
     export function getBiomeState(x: number, z: number, region: BlockSource): EBiomeState {
-        const biome = AbstractBiome.getFor(region.getBiome(x, z));
+        const biome = AbstractForestBiome.getFor(region.getBiome(x, z));
         return biome && biome.getBiomeState ? biome.getBiomeState() : EBiomeState.BALANCE;
     }
 }

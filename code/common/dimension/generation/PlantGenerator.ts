@@ -11,7 +11,7 @@ class PlantGenerator {
         let randomCoords = GenerationUtils.randomCoords(chunkX, chunkZ);
         let coords = GenerationUtils.findSurface(randomCoords.x, 90, randomCoords.z);
 
-        const biome = AbstractBiome.getFor(World.getBiome(coords.x, coords.z));
+        const biome = AbstractForestBiome.getFor(World.getBiome(coords.x, coords.z));
 
         if (!biome) {
             throw new NoSuchFieldException("Unregistered biome!");

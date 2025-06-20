@@ -1,4 +1,6 @@
-class WinterForest extends AbstractBiome implements BiomeBehaviour {
+class WinterForest extends AbstractForestBiome implements BiomeBehaviour {
+    public override sign = "map.winter_forest";  //❄️
+
     public constructor() {
         super("winter_forest");
     }
@@ -24,16 +26,24 @@ class WinterForest extends AbstractBiome implements BiomeBehaviour {
         };
     }
 
-    public override getRuntimeSkyColor(): RGB {
-        return { r: 255, g: 255, b: 255 };
+    public override getMapColor(): number[] {
+        return [91, 161, 206];
     }
 
-    public override getRuntimeFogColor(): RGB {
-        return { r: 255, g: 255, b: 255 };
+    public getBiomeMapCondition(perlin: number): boolean {
+        return perlin > (0.7 - 12 / 128);
     }
 
-    public override getGrassColor(): RGB {
-        return {r: 255, g: 255, b: 255};
+    public override getRuntimeSkyColor(): number[] {
+        return [255, 255, 255]
+    }
+
+    public override getRuntimeFogColor(): number[] {
+        return [255, 255, 255]
+    }
+
+    public override getGrassColor(): number[] {
+        return [255, 255, 255]
     }
 
     public override getStructures(): { name: string; chance: number; count: number; }[] {

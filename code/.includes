@@ -107,7 +107,7 @@ common/effect/FearEffect.ts
 common/effect/EffectList.ts
 
 common/dimension/biome/BiomeBehaviour.ts
-common/dimension/biome/AbstractBiome.ts
+common/dimension/biome/AbstractForestBiome.ts
 common/dimension/biome/FirefliesForest.ts
 common/dimension/biome/WinterForest.ts
 common/dimension/biome/HeartForest.ts

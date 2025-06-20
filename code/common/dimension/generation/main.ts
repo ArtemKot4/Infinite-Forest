@@ -17,12 +17,12 @@ Callback.addCallback("GenerateCustomDimensionChunk", (chunkX, chunkZ, random, di
     ForestGenerator.generateMysticPath(chunkX, chunkZ);
     PlantGenerator.init(chunkX, chunkZ);
 
-    for(const biome_id in AbstractBiome.data) {
-        const biome_data = AbstractBiome.data[biome_id];
+    for(const biomeId in AbstractForestBiome.data) {
+        const biomeData = AbstractForestBiome.data[biomeId];
 
-        if(!biome_data.getStructures) continue;
+        if(!biomeData.getStructures) continue;
 
-        const structures = biome_data.getStructures();
+        const structures = biomeData.getStructures();
 
         if(!structures) continue;
         
@@ -33,7 +33,7 @@ Callback.addCallback("GenerateCustomDimensionChunk", (chunkX, chunkZ, random, di
                 let coords = GenerationUtils.randomCoords(chunkX, chunkZ);
                 coords = GenerationUtils.findSurface(coords.x, 127, coords.z);
                 
-                if(World.getBiome(coords.x, coords.z) !== Number(biome_id)) continue;
+                if(World.getBiome(coords.x, coords.z) !== Number(biomeId)) continue;
 
                 if(World.getBlockID(coords.x, coords.y, coords.z) !== VanillaBlockID.grass) return;
 

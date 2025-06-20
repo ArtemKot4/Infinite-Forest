@@ -7,7 +7,7 @@ Callback.addCallback("ServerPlayerTick", (playerUid: number) => {
     const time = World.getThreadTime();
     const region = BlockSource.getDefaultForDimension(EDimension.INFINITE_FOREST.id);
     const biome = region.getBiome(pos.x, pos.z);
-    const params = AbstractBiome.data[biome] as AbstractBiome & BiomeBehaviour;
+    const params = AbstractForestBiome.data[biome] as AbstractForestBiome & BiomeBehaviour;
 
     if(!params) {
         return;

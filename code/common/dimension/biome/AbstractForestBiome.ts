@@ -1,6 +1,7 @@
-abstract class AbstractBiome {
-    public static readonly data: Record<number, AbstractBiome> = {};
+abstract class AbstractForestBiome {
+    public static readonly data: Record<number, AbstractForestBiome> = {};
 
+    abstract readonly sign: string;
     public readonly id: number;
     public readonly stringID: string;
     public readonly biome: CustomBiome;
@@ -13,20 +14,20 @@ abstract class AbstractBiome {
         if("getGrassColor" in this) {
             const color = this.getGrassColor();
 
-            this.biome.setGrassColor(color.r / 255, color.g / 255, color.b / 255);
-        };
+            this.biome.setGrassColor(color[0] / 255, color[1] / 255, color[2] / 255);
+        }
 
         if("getWaterColor" in this) {
             const color = this.getWaterColor();
 
-            this.biome.setWaterColor(color.r / 255, color.g / 255, color.b / 255);
-        };
+            this.biome.setWaterColor(color[0] / 255, color[1] / 255, color[2] / 255);
+        }
 
         if("getFoliageColor" in this) {
             const color = this.getFoliageColor();
 
-            this.biome.setFoliageColor(color.r / 255, color.g / 255, color.b / 255);
-        };
+            this.biome.setFoliageColor(color[0] / 255, color[1] / 255, color[2] / 255);
+        }
 
         if("getStructures" in this) {
             const structures = this.getStructures();
@@ -34,21 +35,27 @@ abstract class AbstractBiome {
             for(const structure of structures) {
                 ForestGenerator.structurePool.load(structureDIR + structure.name + ".struct", structure.name);
             }
-            
         }
 
-        AbstractBiome.data[this.id] = this;
+        AbstractForestBiome.data[this.id] = this;
     }
 
     abstract getBiomeState(): EBiomeState;
+    abstract getMapColor(): number[];
 
-    public getRuntimeSkyColor?(): RGB;
-    public getRuntimeFogColor?(): RGB;
-    public getRuntimeCloudColor?(): RGB;
+    public getBiomeMapCondition?(perlin: number): boolean;
+    public getCurse?(): string;
+    public getIconLocator(): string {
+        return null;
+    }
 
-    public getGrassColor?(): RGB;
-    public getWaterColor?(): RGB;
-    public getFoliageColor?(): RGB;
+    public getRuntimeSkyColor?(): number[];
+    public getRuntimeFogColor?(): number[];
+    public getRuntimeCloudColor?(): number[];
+
+    public getGrassColor?(): number[];
+    public getWaterColor?(): number[];
+    public getFoliageColor?(): number[];
 
     public getStructures?(): {name: string, chance: number, count: number}[];
 
@@ -66,7 +73,11 @@ abstract class AbstractBiome {
         return this.id;
     }
 
-    public static getFor(biome: number): AbstractBiome {
-        return AbstractBiome.data[biome];
+    public static isExists(biome: number): boolean {
+        return biome in AbstractForestBiome.data;
+    }
+
+    public static getFor(biome: number): Nullable<AbstractForestBiome> {
+        return AbstractForestBiome.data[biome] || null;
     }
 }

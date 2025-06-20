@@ -18,5 +18,8 @@
 	},
 	"dynamic_highlight:translucent": {
 		"fragmentShader": "./dynamic_highlight.fragment"
-	}
+	},
+    "colormatic:translucent": {
+        "fragmentShader": "./colormatic.fragment"
+    }
 }

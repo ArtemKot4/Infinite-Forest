@@ -1,4 +1,6 @@
-class FirefliesForest extends AbstractBiome implements BiomeBehaviour {
+class FirefliesForest extends AbstractForestBiome implements BiomeBehaviour {
+    public override sign = "map.fireflies_forest";
+
     public constructor() {
         super("fireflies_forest");
     }
@@ -100,6 +102,10 @@ class FirefliesForest extends AbstractBiome implements BiomeBehaviour {
         ];
     }
 
+    public getMapColor(): number[] {
+        return [48, 90, 0];
+    }
+
     public insideLocalTick(position: Vector, time: number): void {
         if(position.y >= 300) {
             return;
@@ -114,6 +120,10 @@ class FirefliesForest extends AbstractBiome implements BiomeBehaviour {
                 ParticleHelper.spawnGlowworm(position, ParticleHelper.getRandomGlowworm());
             }
         }
+    }
+
+    public override getBiomeMapCondition(): boolean {
+        return true;
     }
 
     public getLocalUpdate(): number {

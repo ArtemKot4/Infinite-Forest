@@ -35,9 +35,7 @@ item.infinite_forest.wheat_flour = Пшеничная мука
 item.infinite_forest.sparkling_grasses = Мерцающие травы
 item.infinite_forest.forest_map = Карта леса
 
-#-> записи
-различные страницы из дневника 
-<-#
+# различные страницы из дневника 
 page.infinite_forest.awake_title = Странное чувство
 
 page.infinite_forest.awake_description = `Сейчас день, и... 
