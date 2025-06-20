@@ -28,20 +28,20 @@
 	],
 	"include": [],
 	"files": [
-		"C:\\Users\\\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\\Desktop\\\u0418\u0433\u0440\u044b\\HORIZON MODDING KERNEL\\Inner Core Mod Toolchain\\toolchain\\toolchain\\declarations\\android.d.ts",
-		"C:\\Users\\\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\\Desktop\\\u0418\u0433\u0440\u044b\\HORIZON MODDING KERNEL\\Inner Core Mod Toolchain\\toolchain-infinite-forest\\declarations\\Notification.d.ts",
+		"C:\\Users\\\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\\Desktop\\\u0418\u0433\u0440\u044b\\HORIZON MODDING KERNEL\\Inner Core Mod Toolchain\\toolchain-infinite-forest\\declarations\\ConnectedTexture.d.ts",
 		"C:\\Users\\\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\\Desktop\\\u0418\u0433\u0440\u044b\\HORIZON MODDING KERNEL\\Inner Core Mod Toolchain\\toolchain-infinite-forest\\declarations\\EffectBar.d.ts",
+		"C:\\Users\\\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\\Desktop\\\u0418\u0433\u0440\u044b\\HORIZON MODDING KERNEL\\Inner Core Mod Toolchain\\toolchain-infinite-forest\\declarations\\Command.d.ts",
 		"C:\\Users\\\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\\Desktop\\\u0418\u0433\u0440\u044b\\HORIZON MODDING KERNEL\\Inner Core Mod Toolchain\\toolchain-infinite-forest\\declarations\\DependenceHelper.d.ts",
 		"C:\\Users\\\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\\Desktop\\\u0418\u0433\u0440\u044b\\HORIZON MODDING KERNEL\\Inner Core Mod Toolchain\\toolchain-infinite-forest\\declarations\\SoundLib.d.ts",
-		"C:\\Users\\\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\\Desktop\\\u0418\u0433\u0440\u044b\\HORIZON MODDING KERNEL\\Inner Core Mod Toolchain\\toolchain-infinite-forest\\declarations\\InfiniteDepth.d.ts",
-		"C:\\Users\\\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\\Desktop\\\u0418\u0433\u0440\u044b\\HORIZON MODDING KERNEL\\Inner Core Mod Toolchain\\toolchain-infinite-forest\\declarations\\DungeonUtility.d.ts",
-		"C:\\Users\\\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\\Desktop\\\u0418\u0433\u0440\u044b\\HORIZON MODDING KERNEL\\Inner Core Mod Toolchain\\toolchain-infinite-forest\\declarations\\ItemAnimHelper.d.ts",
-		"C:\\Users\\\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\\Desktop\\\u0418\u0433\u0440\u044b\\HORIZON MODDING KERNEL\\Inner Core Mod Toolchain\\toolchain-infinite-forest\\declarations\\ConnectedTexture.d.ts",
-		"C:\\Users\\\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\\Desktop\\\u0418\u0433\u0440\u044b\\HORIZON MODDING KERNEL\\Inner Core Mod Toolchain\\toolchain\\toolchain\\declarations\\core-engine.d.ts",
 		"C:\\Users\\\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\\Desktop\\\u0418\u0433\u0440\u044b\\HORIZON MODDING KERNEL\\Inner Core Mod Toolchain\\toolchain-infinite-forest\\declarations\\LangFile.d.ts",
 		"C:\\Users\\\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\\Desktop\\\u0418\u0433\u0440\u044b\\HORIZON MODDING KERNEL\\Inner Core Mod Toolchain\\toolchain-infinite-forest\\declarations\\JavaDungeonUtility.d.ts",
-		"C:\\Users\\\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\\Desktop\\\u0418\u0433\u0440\u044b\\HORIZON MODDING KERNEL\\Inner Core Mod Toolchain\\toolchain-infinite-forest\\declarations\\Command.d.ts",
-		"C:\\Users\\\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\\Desktop\\\u0418\u0433\u0440\u044b\\HORIZON MODDING KERNEL\\Inner Core Mod Toolchain\\toolchain-infinite-forest\\declarations\\main.d.ts"
+		"C:\\Users\\\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\\Desktop\\\u0418\u0433\u0440\u044b\\HORIZON MODDING KERNEL\\Inner Core Mod Toolchain\\toolchain-infinite-forest\\declarations\\Notification.d.ts",
+		"C:\\Users\\\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\\Desktop\\\u0418\u0433\u0440\u044b\\HORIZON MODDING KERNEL\\Inner Core Mod Toolchain\\toolchain-infinite-forest\\declarations\\ItemAnimHelper.d.ts",
+		"C:\\Users\\\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\\Desktop\\\u0418\u0433\u0440\u044b\\HORIZON MODDING KERNEL\\Inner Core Mod Toolchain\\toolchain\\toolchain\\declarations\\core-engine.d.ts",
+		"C:\\Users\\\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\\Desktop\\\u0418\u0433\u0440\u044b\\HORIZON MODDING KERNEL\\Inner Core Mod Toolchain\\toolchain\\toolchain\\declarations\\android.d.ts",
+		"C:\\Users\\\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\\Desktop\\\u0418\u0433\u0440\u044b\\HORIZON MODDING KERNEL\\Inner Core Mod Toolchain\\toolchain-infinite-forest\\declarations\\DungeonUtility.d.ts",
+		"C:\\Users\\\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\\Desktop\\\u0418\u0433\u0440\u044b\\HORIZON MODDING KERNEL\\Inner Core Mod Toolchain\\toolchain-infinite-forest\\declarations\\main.d.ts",
+		"C:\\Users\\\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\\Desktop\\\u0418\u0433\u0440\u044b\\HORIZON MODDING KERNEL\\Inner Core Mod Toolchain\\toolchain-infinite-forest\\declarations\\InfiniteDepth.d.ts"
 	],
 	"references": [
 		{

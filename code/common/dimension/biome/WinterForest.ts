@@ -1,5 +1,5 @@
 class WinterForest extends AbstractForestBiome implements BiomeBehaviour {
-    public override sign = "map.winter_forest";  //❄️
+    public override sign = "map.fireflies_forest";//"map.winter_forest"; 
 
     public constructor() {
         super("winter_forest");

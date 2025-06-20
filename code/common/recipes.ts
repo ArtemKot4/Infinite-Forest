@@ -1,14 +1,20 @@
 Callback.addCallback("LevelDisplayed", () => {    
-    Recipes.addShapeless(new ItemStack(VanillaItemID.bread, 1, 0), [
-        new ItemStack(ItemList.WHEAT_FLOUR.id, 1, 0)
+    Recipes.addShapeless({ id: VanillaItemID.bread, count: 1, data: 0 }, [
+        {
+            id: ItemList.WHEAT_FLOUR.id,
+            data: 0
+        }
     ]);
 
-    Recipes.addShapeless(new ItemStack(ItemList.FOREST_MAP.id, 1, 0), [
-        new ItemStack(VanillaItemID.paper, 4, 0),
-        new ItemStack(ItemList.SPARKLING_GRASSES.id, 1, 0)
+    Recipes.addShapeless({ id: ItemList.FOREST_MAP.id, count: 1, data: 0 }, [
+        { id: VanillaItemID.paper, data: 0 },
+        { id: VanillaItemID.paper, data: 0 },
+        { id: VanillaItemID.paper, data: 0 },
+        { id: VanillaItemID.paper, data: 0 },
+        { id: ItemList.SPARKLING_GRASSES.id, data: 0 }
     ]);
 
-    Recipes.addShaped(new ItemStack(263, 1, 0), [
+    Recipes.addShaped({ id: VanillaBlockID.grass, count: 1, data: 0 }, [
         "",
         " ab",
         ""
@@ -77,3 +83,9 @@ Callback.addCallback("LevelDisplayed", () => {
         }
     ]);
 });
+
+/*
+from material:
+
+"translucent:entity_alphatest_custom": ,
+*/

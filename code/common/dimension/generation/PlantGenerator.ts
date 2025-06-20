@@ -13,8 +13,9 @@ class PlantGenerator {
 
         const biome = AbstractForestBiome.getFor(World.getBiome(coords.x, coords.z));
 
-        if (!biome) {
-            throw new NoSuchFieldException("Unregistered biome!");
+        if(!biome) {
+            return;
+            //throw new NoSuchFieldException("Unregistered biome!");
         }
 
         const plantList = biome.getPlantList();

@@ -71,6 +71,7 @@ class ForestMap extends BasicItem implements IItemHoldCallback, INameOverrideCal
             while(true) {
                 java.lang.Thread.sleep(sleepTime);
                 if(!this.UI.isOpened()) {
+                    sleepTime = ForestMap.APPEAR_SPEED;
                     continue;
                 }
 
@@ -87,18 +88,18 @@ class ForestMap extends BasicItem implements IItemHoldCallback, INameOverrideCal
                         const mapDistance = item.extra.getInt("distance", 128);
 
                         this.recordSurfaceScreen(positionData, mapDistance);
-
-                        const position = Entity.getPosition(playerUid);
-                        if(
-                            (position.x >= positionData[0] + mapDistance) && 
-                            (position.x <= positionData[0] + mapDistance) &&
-                            (position.z >= positionData[1] + mapDistance) &&
-                            (position.z <= positionData[1] + mapDistance)
-                        ) {
-                            this.recordSurfaceScreen(positionData, mapDistance);
-                            this.updateGround(item.extra.getString("position")); 
-                            this.UI.forceRefresh();
-                        }
+                        this.updateGround(item.extra.getString("position")); 
+                        // const position = Entity.getPosition(playerUid);
+                        // if(
+                        //     (position.x >= positionData[0] + mapDistance) && 
+                        //     (position.x <= positionData[0] + mapDistance) &&
+                        //     (position.z >= positionData[1] + mapDistance) &&
+                        //     (position.z <= positionData[1] + mapDistance)
+                        // ) {
+                        //     Game.message("pererisovano")
+                            
+                        //     this.UI.forceRefresh();
+                        // }
                     }
                 } else {
                     sleepTime = ForestMap.APPEAR_SPEED;
@@ -132,6 +133,9 @@ class ForestMap extends BasicItem implements IItemHoldCallback, INameOverrideCal
         const bitmap = TextureSource.getNullable(keyName) || this.getEmptyGrid(distance);
         const signsData = [];
 
+        position[0] = position[0] - distance / 2;
+        position[1] = position[1] - distance / 2;
+        
         for(let x = 0; x < bitmap.getHeight(); x++) {
             for(let z = 0; z < bitmap.getWidth(); z++) { 
                 //const perlin = GenerationUtils.getPerlinNoise(
@@ -158,7 +162,14 @@ class ForestMap extends BasicItem implements IItemHoldCallback, INameOverrideCal
                         color = android.graphics.Color.rgb(0, 72, 187)
                         //color = android.graphics.Color.rgb(0, 72 * (perlin * 2), 187 * (perlin * 2));
                     } 
-                    else if(surface.y == 55) {
+                    else if(surface.y == 55 //&& 
+                        // (
+                        //     blockID == VanillaBlockID.sand || 
+                        //     blockID == VanillaBlockID.cactus || 
+                        //     blockID == VanillaBlockID.deadbush ||
+                        //     blockID == VanillaBlockID.reeds
+                        // )
+                    ) {
                         color = android.graphics.Color.rgb(185, 205, 118);
                     } else {
                         if(!AbstractForestBiome.isExists(biome)) {
@@ -176,7 +187,17 @@ class ForestMap extends BasicItem implements IItemHoldCallback, INameOverrideCal
                     //     color = android.graphics.Color.rgb(0, 102 + ((surface.y - 55) * 10), 0);
                     // }
                     }
-                }
+                    const pixelOffset = [[x + 1, z], [x, z + 1], [x - 1, z], [x, z - 1]];
+                    pixelOffset.forEach(v => {
+                        if(v[0] > 0 && v[1] > 0 && v[0] < bitmap.getWidth() && v[1] < bitmap.getHeight()) {
+                            const previousBiome = region.getBiome(position[0] + v[0], position[1] + v[1]);
+                            if(AbstractForestBiome.isExists(previousBiome) && previousBiome != biome) {
+                                color = android.graphics.Color.BLACK;
+                            }
+                        }
+                        
+                    });
+                } 
                 bitmap.setPixel(x, z, color);
             }
         }

@@ -19,7 +19,12 @@
 	"dynamic_highlight:translucent": {
 		"fragmentShader": "./dynamic_highlight.fragment"
 	},
-    "colormatic:translucent": {
+    "rainbow_translucent:entity_alphatest_custom": {
+        "+states": ["Blending"],
+        "-states": ["DisableCulling"],
+        "-defines": ["ALPHA_TEST"]
+    },
+    "colormatic:rainbow_translucent": {
         "fragmentShader": "./colormatic.fragment"
     }
 }
