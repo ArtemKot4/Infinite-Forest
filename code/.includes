@@ -35,7 +35,11 @@ api/item/ItemForest.ts
 common/item/TransferCrystal.ts
 common/item/AncientNote.ts
 common/item/WheatFlour.ts
-common/item/ForestMap.ts
+
+common/item/maps/MapBase.ts
+common/item/maps/BiomeBoundMap.ts
+common/item/maps/ForestMap.ts
+
 common/item/SparklingGrasses.ts
 common/learning/Book.ts
 
