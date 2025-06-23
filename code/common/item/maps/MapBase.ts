@@ -203,8 +203,8 @@ abstract class MapBase {
             this.updateHeight();
             if(!this.hasGroundPicture(positionKey)) {
                 this.putSurfaceScreen(positionData, distance);
-                this.updateGround(positionKey);
             }
+            this.updateGround(positionKey);
             this.UI.open();
         }
         this.startThread(playerUid);

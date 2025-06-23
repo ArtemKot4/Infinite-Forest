@@ -56,6 +56,9 @@ class BiomeBoundMap extends MapBase {
             alert(icon + " is not exists!");
             return;
         }
+        const bitmapWidth = bitmap.getWidth();
+        const scale = Math.max(1, Math.floor(bitmapWidth / 256));
+        iconBitmap = android.graphics.Bitmap.createScaledBitmap(iconBitmap, scale, scale , true);
         
         for(let x = 0; x < iconBitmap.getWidth(); x++) {
             for(let z = 0; z < iconBitmap.getHeight(); z++) { 
