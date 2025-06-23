@@ -29,7 +29,7 @@ Callback.addCallback("PlayerChangedDimension", function (playerUid: number, from
     if (Entity.getDimension(playerUid) == EDimension.INFINITE_FOREST.id) {
         const position = Entity.getPosition(playerUid);
 
-        if(InfiniteForest.data && InfiniteForest.data.vinePos.length == 0) {
+        if(InfiniteForest.data && !InfiniteForest.data.vinePos[0]) {
             InfiniteForest.data.vinePos = [MathHelper.randomInt(position.x - 512, position.x + 512), MathHelper.randomInt(position.x - 512, position.x + 512)]
             alert("Данные занесены.")
         }

@@ -62,18 +62,3 @@ class ForestMap extends BasicItem implements IItemUseCallback, IItemHoldCallback
         return "item.infinite_forest.forest_map";
     }
 }
-
-Translation.addTranslation("message.infinite_forest.coords_vine", {
-    ru: "Расположение стебля: ",
-    en: "Vine location: "
-});
-
-Translation.addTranslation("message.infinite_forest.map_distance", {
-    ru: "Размер:",
-    en: "Distance:"
-});
-
-Translation.addTranslation("message.infinite_forest.record_map_warning", {
-    en: "Oops. I guess map is not recorded. To record just click map by any block",
-    ru: "Упс. Кажется, карта не записана. Чтобы записать карту, просто нажмите по любому блоку, держа её в руках"
-});

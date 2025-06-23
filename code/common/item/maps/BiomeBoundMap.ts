@@ -1,5 +1,8 @@
 class BiomeBoundMap extends MapBase {
-    public getSurfaceScreen(position: number[], distance: number): android.graphics.Bitmap {
+    public readonly DEFAULT_DISTANCE: number = 256;
+    public readonly BIOME_ICON_SIZE: number = 16;
+
+    public override getSurfaceScreen(position: number[], distance: number): android.graphics.Bitmap {
         const bitmap = TextureSource.getNullable(this.id + "_" + "map:" + position[0] + ":" + position[1]) || this.getEmptyGrid(distance);
         const signsData = [];
 
@@ -12,7 +15,7 @@ class BiomeBoundMap extends MapBase {
         }
 
         for(let x = 0; x < bitmap.getHeight(); x++) {
-            for(let z = 0; z < bitmap.getWidth(); z++) { 
+            for(let z = 0; z < this.shift; z++) {//bitmap.getWidth(); z++) { 
                 let color = bitmap.getPixel(z, x);
                 const biome = region.getBiome(position[0] + x, position[1] + z);
                 const biomeData = AbstractForestBiome.getFor(biome);
@@ -45,5 +48,25 @@ class BiomeBoundMap extends MapBase {
             this.putSignToBitmap(bitmap, signsData[i][0], signsData[i][1], signsData[i][2]);
         } 
         return bitmap;
+    }
+
+    public putSignToBitmap(bitmap: android.graphics.Bitmap, posX: number, posZ: number, icon: string): void {
+        let iconBitmap = TextureSource.getNullable(icon);
+        if(!iconBitmap) {
+            alert(icon + " is not exists!");
+            return;
+        }
+        
+        for(let x = 0; x < iconBitmap.getWidth(); x++) {
+            for(let z = 0; z < iconBitmap.getHeight(); z++) { 
+                const pixel = iconBitmap.getPixel(x, z);
+                if(pixel == android.graphics.Color.TRANSPARENT) {
+                    continue;
+                }
+                if(posX + x < bitmap.getWidth() && posZ + z < bitmap.getHeight()) {
+                    bitmap.setPixel(posX + x, posZ + z, pixel);
+                }
+            }
+        }
     }
 }

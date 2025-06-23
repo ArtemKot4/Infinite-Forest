@@ -1,6 +1,11 @@
+interface IForestDungeon {
+    [position: string]: string 
+}
+
 class InfiniteForest extends Dimension {
     public static data = {
-        vinePos: [null, null]
+        vinePos: [null, null],
+        dungeons: new Map<[number, number], string>()
     } 
 
     public constructor() {
@@ -70,13 +75,3 @@ class InfiniteForest extends Dimension {
 namespace EDimension {
     export const INFINITE_FOREST = new InfiniteForest();
 }
-
-Saver.addSavesScope("infinite_forest", function read(scope) {
-    scope = scope || {}
-},  function save() {
-    return InfiniteForest.data || {}
-});
-
-Callback.addCallback("LevelDisplayed", () => {
-    InfiniteForest.data.vinePos = [];
-})

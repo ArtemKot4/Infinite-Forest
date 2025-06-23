@@ -18,11 +18,6 @@ ModAPI.addAPICallback("InfiniteDepth", function(InfiniteDepth) {
     });
 });
 
-Callback.addCallback("LevelLeft", () => {
-    ObjectPlayer.clearList();
-    InventorySaver.clearList();
-});
-
 Saver.addSavesScope("scope.infinite_forest.inventory_saver", 
     function save(scope: { list: typeof InventorySaver.list }) {
         InventorySaver.list = scope && scope.list ? scope.list : {};
@@ -41,21 +36,25 @@ Saver.addSavesScope("scope.infinite_forest.object_player_list",
     }
 );
 
+Saver.addSavesScope("scope.infinite_forest.data", 
+    function read(scope) {
+        scope = scope ? scope : {}
+    },  
+    function save() {
+        return InfiniteForest.data || {
+            vinePos: [],
+            dungeons: new Map()
+        }
+    }
+);
 
-// class TestBookItem extends BasicItem {
-//     public book: TestBook = new TestBook("book.background", 1.95);
-//     public onItemUse(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, player: number): void {
-//         this.book.open();
-//         return;
-//     };
-// };
+Callback.addCallback("LevelLeft", () => {
+    ObjectPlayer.clearList();
+    InventorySaver.clearList();
 
-// new TestBookItem("test_book_item", {
-//     name: "forest_diary",
-//     meta: 0
-// }, {
-//     stack: 1
-// });
+    InfiniteForest.data.vinePos = [];
+    InfiniteForest.data.dungeons = new Map();
+});
 
 Callback.addCallback("ModsLoaded", () => {
     ItemList.ANCIENT_NOTE.setupAllToCreative();

@@ -1,9 +1,8 @@
 abstract class MapBase {
-    public readonly DEFAULT_DISTANCE = 256;
-    public readonly WATER_COLOR: number = android.graphics.Color.rgb(0, 47, 60)
-    public readonly BIOME_ICON_SIZE: number = 128;
+    public abstract readonly DEFAULT_DISTANCE;
     public readonly APPEAR_SPEED: number = 1;
-
+    
+    public shift: number = 64;
     public height: number = 0;
     public UI: UI.Window = (() => {
         const window = new UI.Window(this.getDefaultContent());
@@ -46,14 +45,21 @@ abstract class MapBase {
                     if(this.height > this.getLocation().y - 50) {
                         this.height -= 4;
                         this.updateHeight();
-                    } else {
-                        const positionData = item.extra.getString("position").split(":").map(v => Number(v));
-                        const mapDistance = item.extra.getInt("distance", 128);
-                        sleepTime = 500 * ((mapDistance / 128) || 1);
+                    } else { 
+                        const positionKey = item.extra.getString("position");
+                        const positionData = positionKey.split(":").map(v => Number(v));
+                        const distance = item.extra.getInt("distance", 128);
+                        sleepTime = 500 * ((distance / 128) || 1);
                         
-                        this.putSurfaceScreen(positionData, mapDistance);
-                        this.updateGround(item.extra.getString("position")); 
+                        this.shift = Math.min(distance, this.shift + 16);
+  
+                        this.putSurfaceScreen(positionData, distance);
+                        this.updateGround(positionKey); 
                         this.updateLocator(positionData, playerUid);
+
+                        if(this.shift >= distance) {
+                            this.shift = 64;
+                        }
                     }
                 } else {
                     sleepTime = this.APPEAR_SPEED;
@@ -86,26 +92,6 @@ abstract class MapBase {
 
     public putSurfaceScreen(position: number[], distance: number): void {
         TextureSource.put(this.id + "_" + "map:" + position[0] + ":" + position[1], this.getSurfaceScreen(position, distance));
-    }
-
-    public putSignToBitmap(bitmap: android.graphics.Bitmap, posX: number, posZ: number, icon: string): void {
-        let iconBitmap = TextureSource.getNullable(icon);
-        if(!iconBitmap) {
-            alert(icon + " is not exists!");
-            return;
-        }
-        
-        for(let x = 0; x < iconBitmap.getWidth(); x++) {
-            for(let z = 0; z < iconBitmap.getHeight(); z++) { 
-                const pixel = iconBitmap.getPixel(x, z);
-                if(pixel == android.graphics.Color.TRANSPARENT) {
-                    continue;
-                }
-                if(posX + x < bitmap.getWidth() && posZ + z < bitmap.getHeight()) {
-                    bitmap.setPixel(posX + x, posZ + z, pixel);
-                }
-            }
-        }
     }
 
     public draw(position: string): void {
@@ -186,6 +172,14 @@ abstract class MapBase {
         }
     }
 
+    public getFormattedKey(positionKey: string): string {
+        return this.id + "_" + "map:" + positionKey;
+    }
+
+    public hasGroundPicture(positionKey: string): boolean {
+        return TextureSource.getNullable(this.getFormattedKey(positionKey)) != null;
+    }
+
     public open(distance: number, positionKey: string, positionData: number[], playerUid: number): void {
         if(RuntimeData.local.screenName != EScreenName.IN_GAME_PLAY_SCREEN) {
             if(this.UI.isOpened()) {
@@ -203,18 +197,20 @@ abstract class MapBase {
         // const distance = item.extra.getInt("distance", 128);
         
         if(!this.UI.isOpened()) {
-            this.UI.content.elements.text.text = Translation.translate("message.infinite_forest.coords_vine") + "["+(Math.floor(InfiniteForest.data.vinePos[0])||"?")+", " + (Math.floor(InfiniteForest.data.vinePos[1])||"?") + "]";
+            this.UI.content.elements.text.text = Translation.translate("message.infinite_forest.coords_vine") + " " + "["+(Math.floor(InfiniteForest.data.vinePos[0])||"?")+", " + (Math.floor(InfiniteForest.data.vinePos[1])||"?") + "]";
             this.height = UI.getScreenHeight() * 2.5;
 
             this.updateHeight();
-            this.putSurfaceScreen(positionData, distance);
-            this.updateGround(positionKey);
+            if(!this.hasGroundPicture(positionKey)) {
+                this.putSurfaceScreen(positionData, distance);
+                this.updateGround(positionKey);
+            }
             this.UI.open();
         }
         this.startThread(playerUid);
     }
 
     public updateGround(positionKey: string): void {
-        this.UI.content.elements.ground.bitmap = this.id + "_" + "map:" + positionKey;
+        this.UI.content.elements.ground.bitmap = this.getFormattedKey(positionKey);
     }
 }

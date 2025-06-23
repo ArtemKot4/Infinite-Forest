@@ -68,6 +68,9 @@ message.infinite_forest.transfer_learning = рассказываю о
 message.infinite_forest.hint_with_learning_transfer = Чтобы поделиться изучением, расскажите о нём:
 message.infinite_forest.learning = Изучение:
 message.infinite_forest.none = Нет
+message.infinite_forest.coords_vine = Расположение стебля:
+message.infinite_forest.map_distance = Размер:
+message.infinite_forest.record_map_warning = Упс. Кажется, карта не записана. Чтобы записать карту, просто нажмите по любому блоку, держа её в руках
 
 ancient_note.infinite_forest.empty = Эта записка пуста
 ancient_note.infinite_forest.contains = Запись:

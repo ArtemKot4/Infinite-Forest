@@ -69,6 +69,10 @@ message.infinite_forest.transfer_learning = I am tell about
 message.infinite_forest.hint_with_learning_transfer = To share of learning, tell about his:
 message.infinite_forest.learning = Learning:
 message.infinite_forest.none = None
+message.infinite_forest.coords_vine = Vine location:
+message.infinite_forest.map_distance = Size:
+message.infinite_forest.record_map_warning = Oops. I guess map is not recorded. To record just click map by any block
+
 
 ancient_note.infinite_forest.empty = This note is empty
 ancient_note.infinite_forest.contains = Recored:
