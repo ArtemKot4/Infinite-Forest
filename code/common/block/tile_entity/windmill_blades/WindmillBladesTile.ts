@@ -2,13 +2,13 @@ class WindmillBladesTile extends CommonTileEntity {
     public override data = {
         enabled: false, //false
         speed: 0.05
-    };
+    }
 
     public initDestroy() {
         this.blockSource.destroyBlock(this.x, this.y, this.z, true);
         this.selfDestroy();
         return;
-    };
+    }
 
     public override onLoad(): void {
         const stationTile = this.getStationTile();
@@ -18,17 +18,17 @@ class WindmillBladesTile extends CommonTileEntity {
             this.sendPacket("break_particle", {});
             this.initDestroy();
             return;
-        };
+        }
 
-        if(Utils.getBiomeState(this.x, this.z, this.blockSource) === EBiomeState.COLD) {
+        if(EBiomeState.is(this.x, this.z, this.blockSource) == EBiomeState.COLD) {
             this.networkData.putFloat("speed", 0.005);
         } else {
             this.data.enabled = true;
-        };
+        }
 
         this.networkData.putBoolean("enabled", this.data.enabled);
         this.networkData.sendChanges();
-    };
+    }
 
     public override onTick(): void {
         if(World.getThreadTime() % 60 === 0) {
@@ -40,22 +40,20 @@ class WindmillBladesTile extends CommonTileEntity {
             this.networkData.putInt("height", height);
             
             const stationTile = this.getStationTile();
-
             if(stationTile !== null) {
                 stationTile.data.height = height;
-            };
+            }
 
             this.switchStationMode(this.data.enabled);
-
             this.networkData.sendChanges();
             return;
-        };
-    };
+        }
+    }
 
     public override onDestroyTile(): boolean {
         this.switchStationMode(false);
         return false;
-    };
+    }
 
     public switchStationMode(value: boolean): void {
         const stationTile = this.getStationTile();
@@ -64,9 +62,9 @@ class WindmillBladesTile extends CommonTileEntity {
             stationTile.data.enabled = value;
             stationTile.networkData.putBoolean("enabled", value);
             stationTile.networkData.sendChanges()
-        };                 
+        }            
         return;                        
-    };
+    }
 
     public getStationTile(): Nullable<WindmillStationTile & TileEntity> {
         const vectors = [
@@ -81,23 +79,22 @@ class WindmillBladesTile extends CommonTileEntity {
 
             if(id === BlockList.WINDMILL_STATION.id) {
                 return TileEntity.getTileEntity(vectors[i][0], this.y, vectors[i][1], this.blockSource) as WindmillStationTile & TileEntity;
-            };
-        };
+            }
+        }
 
         return null;
-    };
+    }
 
     public findHeight(): number {
         let height = 1;
 
-        while(this.blockSource.getBlockID(this.x, this.y-height, this.z) === 0) {
+        while(this.blockSource.getBlockID(this.x, this.y - height, this.z) == 0) {
             height++;
-        };
-
+        }
         return height;
-    };
+    }
 
     public override getLocalTileEntity(): LocalTileEntity {
         return new LocalWindmillBladesTile();
     }
-};
+}

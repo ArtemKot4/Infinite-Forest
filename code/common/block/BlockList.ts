@@ -20,6 +20,7 @@ namespace BlockList {
     export const WINTER_BARK = new Bark("winter_bark", WINTER_LOG.stringID);
     export const WINTER_PLANKS = new Planks("winter_planks", WINTER_LOG.stringID, WINTER_BARK.stringID, WINTER_HEWN.stringID);
 
+    //tile entity
     export const WINDMILL_BLADES = new WindmillBlades();
     export const WINDMILL_STATION = new WindmillStation();
 
@@ -33,4 +34,8 @@ namespace BlockList {
 
     export const EUCALYPTUS_TORCH = new EucalyptusTorchUnlit();
     export const MORTAR = new Mortar();
+
+    //ether
+    export const ETHER_PIPE = new EtherPipe();
+    export const aboba = null; 
 }

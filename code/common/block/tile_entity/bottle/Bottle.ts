@@ -16,7 +16,7 @@ class Bottle extends BasicBlock implements IRandomTickCallback, IProjectileHitCa
     }
 
     public onRandomTick(x: number, y: number, z: number, id: number, data: number, region: BlockSource): void {
-        const isColdState = Utils.getBiomeState(x, z, region) === EBiomeState.COLD;
+        const isColdState = EBiomeState.is(x, z, region) == EBiomeState.COLD;
 
         if((y >= 200 || isColdState) && Curse.has("cold")) {
             region.destroyBlock(x, y, z, false);

@@ -1,8 +1,16 @@
-const enum EBiomeState {
+enum EBiomeState {
     BALANCE,
     COLD,
     FIRE
-};
+}
+
+namespace EBiomeState {
+    export function is(x: number, z: number, region: BlockSource): EBiomeState {
+        const biome = AbstractForestBiome.getFor(region.getBiome(x, z));
+        return biome && biome.getBiomeState ? biome.getBiomeState() : EBiomeState.BALANCE;
+    }
+}
+
 
 type PartialItemInstance = Partial<ItemInstance>;
 

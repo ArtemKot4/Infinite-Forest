@@ -187,14 +187,6 @@ abstract class MapBase {
             }
             return;
         }
-
-        // if(!item.extra || item.extra && !item.extra.getString("position")) {
-        //     this.recordData(playerUid, item);
-        // }
-        // item = Entity.getCarriedItem(playerUid);
-
-        // const positionKey = item.extra.getString("position");
-        // const distance = item.extra.getInt("distance", 128);
         
         if(!this.UI.isOpened()) {
             this.UI.content.elements.text.text = Translation.translate("message.infinite_forest.coords_vine") + " " + "["+(Math.floor(InfiniteForest.data.vinePos[0])||"?")+", " + (Math.floor(InfiniteForest.data.vinePos[1])||"?") + "]";

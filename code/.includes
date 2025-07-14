@@ -65,6 +65,10 @@ api/learning/LearningBase.ts
 api/reflection/Reflection.ts
 api/reflection/ReflectionBase.ts
 
+common/world/ether/IEtherProvider.ts
+common/world/ether/EtherSource.ts
+common/world/ether/EtherStorage.ts
+
 common/block/mine/Salt.ts
 
 common/block/plant/Fironia.ts
@@ -103,6 +107,9 @@ common/block/tile_entity/candle/Candle.ts
 common/block/tile_entity/mortar/LocalMortarTile.ts
 common/block/tile_entity/mortar/MortarTile.ts
 common/block/tile_entity/mortar/Mortar.ts
+
+# ether
+common/block/tile_entity/ether/pipe/EtherPipe.ts
 
 common/effect/WinterEffect.ts
 common/effect/CalmingEffect.ts

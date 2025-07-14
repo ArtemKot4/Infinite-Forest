@@ -57,6 +57,7 @@
 		"icon": "mod_icon.png"
 	},
 	"api": "CoreEngine",
+    "pushTo": "storage/emulated/0/games/horizon/packs/Test Pack For Developing/modpacks/La Fortezza Infinita/mods/InfiniteForest",
 	"linkNative": [
 		"minecraftpe",
 		"innercore",
