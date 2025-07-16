@@ -12,26 +12,37 @@ class EtherPipe extends BasicBlock implements IProjectileHitCallback {
         const width = (2 / 8) / 2;
 
         const render = new ICRender.Model();
-        const hasUpper = ICRender.BLOCK(0, 1, 0, EtherPipe.GROUP, true);
-        const hasDown = ICRender.BLOCK(0, -1, 0, EtherPipe.GROUP, true);
     
-        const upperModel = BlockRenderer.createModel();
-        upperModel.addBox(0.4 - width, 1 - 0.25, 0.4 - width, 0.6 + width, 1, 0.6 + width, this.id, -1);
+        const upperCap = BlockRenderer.createModel();
+        upperCap.addBox(0.4 - width, 1 - 0.25, 0.4 - width, 0.6 + width, 1, 0.6 + width, VanillaBlockID.stone, 2);
 
-        const downModel = BlockRenderer.createModel();
-        downModel.addBox(0.4 - width, 0, 0.4 - width, 0.6 + width, 0.25, 0.6 + width, this.id, -1);
+        const downCap = BlockRenderer.createModel();
+        downCap.addBox(0.4 - width, 0, 0.4 - width, 0.6 + width, 0.25, 0.6 + width, VanillaBlockID.stone, 2);
 
-        const commonModel = BlockRenderer.createModel();
-        commonModel.addBox(0.5 - width, 0, 0.5 - width, 0.5 + width, 1, 0.5 + width, this.id, -1);
+        const commonTube = BlockRenderer.createModel();
+        commonTube.addBox(0.5 - width, 0, 0.5 - width, 0.5 + width, 1, 0.5 + width, [
+            ["ether_pipe", 0]
+        ]);
+
+        const upperTube = BlockRenderer.createModel();
+        upperTube.addBox(0.5 - width, 0, 0.5 - width, 0.5 + width, 1 - 4 / 16, 0.5 + width, [
+            ["ether_pipe", 0]
+        ]);
+
+        const downTube = BlockRenderer.createModel();
+        downTube.addBox(0.5 - width, 4 / 16, 0.5 - width, 0.5 + width, 1, 0.5 + width, [
+            ["ether_pipe", 0]
+        ]);
         
-        render.addEntry(downModel).setCondition(hasDown);        
-        render.addEntry(upperModel).setCondition(hasUpper);
-        render.addEntry(commonModel);
+        render.addEntry(downCap).setCondition(ICRender.BLOCK(0, -1, 0, EtherPipe.GROUP, true));        
+        render.addEntry(upperCap).setCondition(ICRender.BLOCK(0, 1, 0, EtherPipe.GROUP, true));
+        render.addEntry(commonTube).setCondition(ICRender.AND(
+            ICRender.BLOCK(0, -1, 0, EtherPipe.GROUP, false),
+            ICRender.BLOCK(0, 1, 0, EtherPipe.GROUP, false)
+        ));
+        render.addEntry(downTube).setCondition(ICRender.BLOCK(0, -1, 0, EtherPipe.GROUP, true));
+        render.addEntry(upperTube).setCondition(ICRender.BLOCK(0, 1, 0, EtherPipe.GROUP, true));
         BlockRenderer.setStaticICRender(this.id, -1, render);
-    }
-
-    public override canRotate(): boolean {
-        return true;
     }
 
     public onProjectileHit(projectile: number, item: ItemStack, target: Callback.ProjectileHitTarget): void {

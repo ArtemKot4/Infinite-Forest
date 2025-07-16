@@ -1,14 +1,5 @@
 class SparklingRoots extends BasicBlock implements IPlaceCallback, IClickCallback {
-    public static RENDER: Render = (() =>{
-        const render = new Render();
-        render.addPart("body.collision", {
-            add: true,
-            height: 16,
-            width: 12,
-            pos: [2/16, 0, 2/16]
-        });
-        return render;
-    })();
+    public static GROUP = ICRender.getGroup("if.roots");
 
     public constructor() {
         super("sparkling_roots", [{
@@ -21,8 +12,36 @@ class SparklingRoots extends BasicBlock implements IPlaceCallback, IClickCallbac
     }
 
     public setShapes(): void {
-        Block.setShape(this.id,  1/8, 0, 1/8, 7/8, 1, 7/8, 0);
+        const render = new ICRender.Model();
+        const firstModel = new BlockRenderer.Model();
+        SparklingRoots.GROUP.add(this.id, -1);
 
+        firstModel.addBox(2 / 16, 0,2 / 16, 14 / 16, 1, 14 / 16, this.id, -1);
+
+        const secondModel = new BlockRenderer.Model();
+        secondModel.addBox(4 / 16, 0, 4 / 16, 12 / 16, 1, 12 / 16, this.id, -1);
+
+        const thirdModel = new BlockRenderer.Model();
+        thirdModel.addBox(5 / 16, 0, 5 / 16, 11 / 16, 1, 11 / 16, this.id, -1);
+        
+        render.addEntry(firstModel).setCondition(ICRender.BLOCK(0, 1, 0, SparklingRoots.GROUP, true));
+        render.addEntry(secondModel).setCondition(ICRender.OR(
+            ICRender.AND(
+                ICRender.BLOCK(0, 1, 0, SparklingRoots.GROUP, false),
+                ICRender.BLOCK(0, 2, 0, SparklingRoots.GROUP, true)    
+            ),
+            ICRender.AND(
+                ICRender.BLOCK(0, 2, 0, SparklingRoots.GROUP, false),
+                ICRender.BLOCK(0, 3, 0, SparklingRoots.GROUP, true)    
+            ),
+            ICRender.AND(
+                ICRender.BLOCK(0, 3, 0, SparklingRoots.GROUP, false),
+                ICRender.BLOCK(0, 4, 0, SparklingRoots.GROUP, true)    
+            )
+        ));
+        render.addEntry(thirdModel).setCondition(ICRender.BLOCK(0, 4, 0, SparklingRoots.GROUP, false));
+
+        BlockRenderer.setStaticICRender(this.id, -1, render);
         // const collisionShape = new ICRender.CollisionShape();
         // const model = new BlockRenderer.Model();
 
@@ -109,26 +128,3 @@ class SparklingRoots extends BasicBlock implements IPlaceCallback, IClickCallbac
         return "grass";
     }
 }
-
-Network.addClientPacket("packet.infinite_forest.burn_sparkling_roots", (data: { coords: Vector, blockID: number }) => {
-    Updatable.addLocalUpdatable({
-        animation: (() => {
-            const animation = new Animation.Base(data.coords.x, data.coords.y, data.coords.z);
-            animation.describe({
-                render: SparklingRoots.RENDER.getId(),
-                //material: "colormatic",
-                skin: "terrain-atlas/plants/sparkling_roots.png"
-            });
-            animation.load();
-            return animation;
-        })(),
-        update() {
-            if(BlockSource.getCurrentClientRegion().getBlockID(data.coords.x, data.coords.y, data.coords.z) != data.blockID) {
-                if(this.animation) {
-                    this.animation.destroy();
-                }
-                this.remove = true;
-            }
-        },
-    });
-});

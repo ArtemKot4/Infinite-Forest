@@ -56,6 +56,6 @@ Callback.addCallback("LevelLeft", () => {
     InfiniteForest.data.dungeons = new Map();
 });
 
-Callback.addCallback("ModsLoaded", () => {
-    ItemList.ANCIENT_NOTE.setupAllToCreative();
-});
+// Callback.addCallback("ModsLoaded", () => {
+//     ItemList.ANCIENT_NOTE.setupAllToCreative();
+// });
