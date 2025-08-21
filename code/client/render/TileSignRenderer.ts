@@ -18,7 +18,6 @@ namespace TileSignRenderer {
         if(fxs.length > 0) {
             renders = fxs;
             renders.forEach(v => v.start());
-            Game.message("Я сработало!")
         }
         return;
     }
@@ -31,7 +30,7 @@ namespace TileSignRenderer {
             const offset = Number(i);
 
             const render = new RotatingRenderFX(
-                x + addX + Number("0." + (offset + 3)), 
+                x + addX + Number("0." + (offset == 0 ? 0 : offset + 3)), 
                 y, 
                 z + 0.5, 
                 Sign.get(v).icon
@@ -47,9 +46,8 @@ namespace TileSignRenderer {
         for(const i in slots) {
             const slot = slots[i];
             if(slot.id != 0) {
-                Game.message(slot.id);
-                renders = renders.concat(getFXsForItemId(slot.id, x, y + Number("0." + (offset == 0 ? 0 : offset + 2)), z + 0.5))
-                offset++;
+                renders = renders.concat(getFXsForItemId(slot.id, x, y + Number("0." + offset), z))
+                offset+=3;
             }
         }
         return renders;
@@ -92,8 +90,7 @@ namespace TileSignRenderer {
             clearFXs();
             x = data.pos.x;
             y = data.pos.y;
-            z = data.pos.z;
-            Game.message("1");         
+            z = data.pos.z;       
             setFXs(getRendersFrom(data.pos.x, data.pos.y, data.pos.z));
         } 
     }

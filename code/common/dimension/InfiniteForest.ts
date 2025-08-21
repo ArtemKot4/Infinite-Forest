@@ -21,7 +21,7 @@ class InfiniteForest extends Dimension {
     }
 
     public hasSkyLight(): boolean {
-        return false;
+        return true;
     }
 
     public getLayers(): Dimensions.TerrainLayerParams[] {
