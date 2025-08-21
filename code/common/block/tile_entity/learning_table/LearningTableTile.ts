@@ -1,8 +1,8 @@
 class LearningTableTile extends CommonTileEntity {
-    protected static content = {...AncientNote.UI.getContent()};
+    protected static content = { ...AncientNote.UI.getContent() };
 
     public static getDefaultContent(): UI.WindowContent {
-        return {...this.content};
+        return { ...this.content };
     }
 
     public UI: UI.Window = (() => {
@@ -12,17 +12,50 @@ class LearningTableTile extends CommonTileEntity {
     })();
 
     public override defaultValues = {
-        valid: false,
+        id: 0,
+        data: 0,
+        count: 0,
+        extra: null,
         text: null,
         learning: null
     }
 
     public override data: typeof this.defaultValues;
-    public info_pressed: boolean = false;
+    public infoPressed: boolean = false;
 
     public override onLoad(): void {
-        this.networkData.putBoolean("valid", this.data.valid || false);
+        this.networkData.putInt("itemID", this.data.id || 0);
         this.networkData.sendChanges();
+    }
+
+    public setItem(item: ItemInstance): void {
+        this.data.id = item.id;
+        this.data.count = item.count;
+        this.data.extra = item.extra;
+        this.data.data = item.data;
+        this.networkData.putInt("itemID", item.id);
+        this.networkData.sendChanges();
+        this.sendPacket("create_animation", {});
+        this.sendPacket("set_sign_renders", {});
+        return;
+    }
+
+    public clearItem(): void {
+        return this.setItem(new ItemStack(0, 0, 0, null));
+    }
+
+    public dropItem(): void {
+        this.blockSource.spawnDroppedItem(
+            this.x + 0.5, 
+            this.y + 1.2,
+            this.z + 0.5,
+            this.data.id,
+            this.data.count,
+            this.data.data,
+            this.data.extra
+        );
+        this.clearItem();
+        return;
     }
 
     public dropNote(extra?: Nullable<ItemExtraData>): void {
@@ -30,6 +63,7 @@ class LearningTableTile extends CommonTileEntity {
             const newExtra = new ItemExtraData();
             newExtra.putString("text", this.data.text);
             newExtra.putString("learning", this.data.learning);
+            this.clearItem();
             this.blockSource.spawnDroppedItem(
                 this.x + 0.5, 
                 this.y + 1.2,
@@ -64,34 +98,43 @@ class LearningTableTile extends CommonTileEntity {
 
         this.data.text = text;
         this.data.learning = learning;
-        this.data.valid = !!extra;
         return;
     }
 
     public override onClick(coords: Callback.ItemUseCoordinates, item: ItemStack, player: number): void {
         const entity = new PlayerUser(player);
-        const carriedItem = Entity.getCarriedItem(player);
 
-        if(carriedItem.id === ItemList.ANCIENT_NOTE.id) {
-            if(carriedItem.extra) {
-                const text = carriedItem.extra.getString("text");
-                if(Object.keys(AncientNote.list).includes(text)) return;
-                
-                this.dropNote(carriedItem.extra);
-                entity.decreaseCarriedItem(1);
-            }
-            return; 
-        }
+        Game.message(JSON.stringify(item));
 
         if(Entity.getSneaking(player)) {
-            this.dropNote();
+            if(this.data.id == ItemList.ANCIENT_NOTE.id) {
+                this.dropNote();
+            } else {
+                this.dropItem();
+            }
             return;
         }
 
-        if(this.data.valid) {
+        if(this.data.id == ItemList.ANCIENT_NOTE.id) {
             this.drawMain(player);
             this.UI.open();
         }
+
+        if(item.id == ItemList.ANCIENT_NOTE.id) {
+            if(item.extra) {
+                const text = item.extra.getString("text");
+                if(Object.keys(AncientNote.list).includes(text)) {
+                }
+                
+                this.dropNote(item.extra);
+                entity.decreaseCarriedItem(1);
+            }
+        }
+
+        if(this.data.id != 0) {
+            this.dropItem();
+        }
+        this.setItem(item);
     }
 
     public drawMain(player: number): void {
@@ -179,11 +222,11 @@ class LearningTableTile extends CommonTileEntity {
             bitmap: "unknown",
             clicker: {
                 onClick: () => {
-                    if(!this.info_pressed) {
+                    if(!this.infoPressed) {
                         this.UI.content.elements.info_image.bitmap = "ancient_note_info_pressed";
                         let text = Translation.translate("message.infinite_forest.none_learnings");
                         let learningList = Object.keys(ObjectPlayer.get(player).learnings);
-  
+                        
                         if(learningList && learningList.length > 0) {
                             text = Translation.translate("message.infinite_forest.player_learning_list" + " ");
 
@@ -221,11 +264,11 @@ class LearningTableTile extends CommonTileEntity {
                             bitmap: "info_icon"
                         };
 
-                        this.info_pressed = true;
+                        this.infoPressed = true;
                     } else {
                         this.UI.content.elements.info_image.bitmap = "ancient_note_info";
                         this.drawMain(player);
-                        this.info_pressed = false;
+                        this.infoPressed = false;
                     }
                     this.refresh();
                     return;
@@ -235,21 +278,22 @@ class LearningTableTile extends CommonTileEntity {
     }
 
     public override onDestroyBlock(coords: Callback.ItemUseCoordinates, player: number): void {
-        if(!this.data.valid) {
-            return;
-        }
+        if(this.data.id == ItemList.ANCIENT_NOTE.id) {
+            const extra = new ItemExtraData();
 
-        const extra = new ItemExtraData();
-
-        if(this.data.text) {
-            extra.putString("text", this.data.text);
-        }
-
-        if(this.data.learning) {
-            extra.putString("learning", this.data.learning);
-        }
+            if(this.data.text) {
+                extra.putString("text", this.data.text);
+            }
     
-        this.dropNote();
+            if(this.data.learning) {
+                extra.putString("learning", this.data.learning);
+            }
+        
+            this.dropNote();
+        } else {
+            this.dropItem();
+        }
+
         this.selfDestroy();
     }
 

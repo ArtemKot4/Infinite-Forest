@@ -25,6 +25,8 @@ block.infinite_forest.eucalyptus_hewn = §2Обтёсанный эвкалипт
 block.infinite_forest.pink_hewn = §2Обтёсанное розовое дерево
 block.infinite_forest.pink_bark = §dКора розового дерева
 block.infinite_forest.mortar = Ступка
+block.infinite_forest.chair = Стул
+block.infinite_forest.candle = Эфирная свеча
 
 # предметы
 item.infinite_forest.ancient_note = Древняя записка

@@ -35,16 +35,14 @@ class LocalWindmillBladesTile extends LocalTileEntity {
         }
         
         const speed = this.networkData.getFloat("speed", 0.2);
-
         const blockSource = BlockSource.getCurrentClientRegion();
         const data = blockSource.getBlockData(this.x, this.y, this.z);
-
         const move_coords = {
             x: speed,
             z: 0
         }
 
-        if(data === 0 || data === 1) {
+        if(data == 0 || data == 1) {
             move_coords.z = move_coords.x;
             move_coords.x = 0;
         }

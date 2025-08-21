@@ -11,9 +11,9 @@ Callback.addCallback("LevelDisplayed", () => {
 
 ModAPI.addAPICallback("InfiniteDepth", function(InfiniteDepth) {
     InfiniteDepth.fromJson({
-        [EDimension.INFINITE_FOREST.id]: {
-             "min": 0,
-             "max": 512
+        [DimensionList.INFINITE_FOREST.id]: {
+            "min": 0,
+            "max": 512
         }
     });
 });

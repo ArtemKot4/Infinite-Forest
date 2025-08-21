@@ -25,6 +25,7 @@ namespace BlockList {
     export const WINDMILL_STATION = new WindmillStation();
 
     export const LEARNING_TABLE = new LearningTable();
+    export const CHAIR = new Chair();
 
     export const BOTTLE = new Bottle();
     export const FIREFLIES_BOTTLE = new FirefliesBottle();
@@ -36,6 +37,11 @@ namespace BlockList {
     export const MORTAR = new Mortar();
 
     //ether
-    export const ETHER_PIPE = new EtherPipe();
-    export const aboba = null; 
+    export const ETHER_PIPE = new EtherPipe(); 
+
+    export const candles: Candle[] = [];
+    [0, 1, 3, 5].forEach((v, i) => candles[v] = new Candle(i, v));
+
+    Item.addToCreative(candles[0].id, 1, 0);
+
 }

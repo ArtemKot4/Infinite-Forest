@@ -138,6 +138,16 @@ namespace EForestParticle {
             size: { fadeOut: 0, fadeIn: 0, start: 0.6, end: 0 }
         }
     });
+
+    export const SPARK = Particles.registerParticleType({
+        texture: "spark",
+        render: 2,
+        size: [0.4, 0.6],
+        lifetime: [5, 10],
+        animators: {
+            size: { fadeOut: 0, fadeIn: 0, start: 0.5, end: 1 }
+        }
+    });
 }
 
 interface IParticleSender {
@@ -282,6 +292,3 @@ namespace ParticleHelper {
 Network.addClientPacket("packet.infinite_forest.send_particle", (data: IParticleSender) => {
     return Particles.addParticle(data.type, data.x, data.y, data.z, data.vx, data.vy, data.vz);
 });
-  
-
-

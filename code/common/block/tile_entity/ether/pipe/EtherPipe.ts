@@ -63,4 +63,12 @@ class EtherPipe extends BasicBlock implements IProjectileHitCallback {
     public override getSoundType(): Block.Sound {
         return "glass";
     }
+
+    public static transfer(coords: Vector3, ether: number) {
+        const region = BlockSource.getDefaultForDimension(DimensionList.INFINITE_FOREST.id);
+        if(!region) {
+            return;
+        }
+        if(true) {}
+    }
 }

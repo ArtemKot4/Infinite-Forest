@@ -8,13 +8,22 @@ class SparklingRoots extends BasicBlock implements IPlaceCallback, IClickCallbac
             inCreative: true
         }]);
 
-        this.setShapes();
+        this.setConcatingModel();
+        NativeBlock.setCanContainLiquid(this.id, true);
     }
 
-    public setShapes(): void {
+    public setConcatingModel(): void {
         const render = new ICRender.Model();
         const firstModel = new BlockRenderer.Model();
         SparklingRoots.GROUP.add(this.id, -1);
+        const upperModel = BlockRenderer.createTexturedBox(0, 0, 0, 1, 1, 1, [
+            ["sparkling_roots", 0],
+            ["sparkling_roots", 0],
+            ["sparkling_roots", 0],
+            ["sparkling_roots", 0],
+            ["sparkling_roots", 0],
+            ["sparkling_roots", 0]
+        ]);
 
         firstModel.addBox(2 / 16, 0,2 / 16, 14 / 16, 1, 14 / 16, this.id, -1);
 
@@ -24,34 +33,38 @@ class SparklingRoots extends BasicBlock implements IPlaceCallback, IClickCallbac
         const thirdModel = new BlockRenderer.Model();
         thirdModel.addBox(5 / 16, 0, 5 / 16, 11 / 16, 1, 11 / 16, this.id, -1);
         
-        render.addEntry(firstModel).setCondition(ICRender.BLOCK(0, 1, 0, SparklingRoots.GROUP, true));
+        const downModel = new BlockRenderer.Model();
+        downModel.addBox(6 / 16, 0, 6 / 16, 10 / 16, 1, 10 / 16, this.id, -1);
+
+        render.addEntry(upperModel).setCondition(ICRender.BLOCK(0, 1, 0, SparklingRoots.GROUP, true));
+        render.addEntry(firstModel).setCondition(ICRender.AND(
+            ICRender.BLOCK(0, 1, 0, SparklingRoots.GROUP, false),
+            ICRender.BLOCK(0, 2, 0, SparklingRoots.GROUP, true),
+        ));
+
         render.addEntry(secondModel).setCondition(ICRender.OR(
             ICRender.AND(
                 ICRender.BLOCK(0, 1, 0, SparklingRoots.GROUP, false),
-                ICRender.BLOCK(0, 2, 0, SparklingRoots.GROUP, true)    
-            ),
-            ICRender.AND(
-                ICRender.BLOCK(0, 2, 0, SparklingRoots.GROUP, false),
                 ICRender.BLOCK(0, 3, 0, SparklingRoots.GROUP, true)    
             ),
             ICRender.AND(
-                ICRender.BLOCK(0, 3, 0, SparklingRoots.GROUP, false),
+                ICRender.BLOCK(0, 2, 0, SparklingRoots.GROUP, false),
                 ICRender.BLOCK(0, 4, 0, SparklingRoots.GROUP, true)    
+            ),
+            ICRender.AND(
+                ICRender.BLOCK(0, 3, 0, SparklingRoots.GROUP, false),
+                ICRender.BLOCK(0, 5, 0, SparklingRoots.GROUP, true)    
             )
         ));
-        render.addEntry(thirdModel).setCondition(ICRender.BLOCK(0, 4, 0, SparklingRoots.GROUP, false));
+        
+        render.addEntry(thirdModel).setCondition(ICRender.AND(
+            ICRender.BLOCK(0, 4, 0, SparklingRoots.GROUP, false),
+            ICRender.BLOCK(0, -1, 0, SparklingRoots.GROUP, false)
+        ));
+
+        render.addEntry(downModel).setCondition(ICRender.BLOCK(0, -1, 0, SparklingRoots.GROUP, true));
 
         BlockRenderer.setStaticICRender(this.id, -1, render);
-        // const collisionShape = new ICRender.CollisionShape();
-        // const model = new BlockRenderer.Model();
-
-        // collisionShape.addEntry().addBox(1/8, 0, 1/8, 7/8, 1, 7/8);
-        // model.addBox(0, 0, 0, 0, 0, 0, this.id, 1);
-        
-        // const icrender = new ICRender.Model(model);
-        
-        // BlockRenderer.setCustomCollisionShape(this.id, 1, collisionShape);
-        // BlockRenderer.setStaticICRender(this.id, 1, icrender);
     }
 
     public onPlace(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, player: number, region: BlockSource): void | Vector {
@@ -70,22 +83,14 @@ class SparklingRoots extends BasicBlock implements IPlaceCallback, IClickCallbac
             case 2:
                 data = 1;
                 break;
-        };
+        }
 
         region.setBlock(coords.relative.x, coords.relative.y, coords.relative.z, this.id, data);
     }
 
     public burn(coords: Vector, region: BlockSource, playerUid: number): void {
         const self = this;
-        //region.setBlock(coords.x, coords.y, coords.z, this.id, 1);
         region.setExtraBlock(coords.x, coords.y, coords.z, VanillaBlockID.fire);
-        
-        // const client = Network.getClientForPlayer(playerUid);
-        // if(client) {
-        //     client.send("packet.infinite_forest.burn_sparkling_roots", {
-        //         coords, blockID: this.id
-        //     });
-        // }
 
         Updatable.addUpdatable({
             time: 0,
@@ -104,8 +109,8 @@ class SparklingRoots extends BasicBlock implements IPlaceCallback, IClickCallbac
 
                     this.remove = true;
                 }
-            },
-        })
+            }
+        });
     }
 
     public onClick(coords: Callback.ItemUseCoordinates, item: ItemStack, block: Tile, playerUid: number): void {

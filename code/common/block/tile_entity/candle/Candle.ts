@@ -7,7 +7,7 @@ class Candle extends BasicBlock {
         small.setBlockTexture("candle", 0);
     
         const copy_1 = big.clone();
-        copy_1.addMesh(small, 0.3, 0, 0);
+        copy_1.addMesh(small, 0.3, -0, 0);
     
         const copy_2 = copy_1.clone();
         copy_2.addMesh(small, -0.3, 0, 0);
@@ -23,35 +23,25 @@ class Candle extends BasicBlock {
 
     public static tile = new CandleTile();
 
-    public constructor(light_level: number) {
-        super("candle_lit_" + light_level, [{
+    public constructor(id: number, lightLevel: number) {
+        super("ether_candle_lit_" + id, [{
             name: "block.infinite_forest.candle",
             texture: [["candle", 0]],
             inCreative: false
         }]);
 
-        NativeBlock.setLightLevel(this.id, light_level);
-    };
+        NativeBlock.setLightLevel(this.id, lightLevel);
+    }
 
     public getTags(): string[] {
         return ["candle"];
-    };
+    }
 
     public getModel(): RenderMesh[] {
         return Candle.meshes;
-    };
+    }
 
     public getTileEntity(): CommonTileEntity {
         return Candle.tile;
-    };
-};
-
-const CandleList: Candle[] = [];
-[0, 1, 3, 5].forEach(v => CandleList[v] = new Candle(v));
-
-Item.addToCreative(CandleList[0].id, 1, 0);
-
-Translation.addTranslation("block.infinite_forest.candle", {
-    en: "Candle",
-    ru: "Cвеча"
-});
+    }
+}

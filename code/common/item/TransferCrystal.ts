@@ -34,7 +34,7 @@ abstract class TransferCrystal extends BasicItem implements IItemUseCallback {
 
 class BlueCrystal extends TransferCrystal {
     public constructor() {
-        super("blue_crystal", EDimension.OVERWORLD, EDimension.INFINITE_FOREST.id);
+        super("blue_crystal", EDimension.OVERWORLD, DimensionList.INFINITE_FOREST.id);
     }
 
     public getName(): string {
@@ -59,7 +59,7 @@ class BlueCrystal extends TransferCrystal {
                             blockSource.explode(pos.x, pos.y - 1, pos.z, 1, false);
                         }   
                     }
-                })
+                });
             }
         }
     }
@@ -67,7 +67,7 @@ class BlueCrystal extends TransferCrystal {
 
 class OrangeCrystal extends TransferCrystal {
     public constructor() {
-        super("orange_crystal", EDimension.INFINITE_FOREST.id, EDimension.OVERWORLD);
+        super("orange_crystal", DimensionList.INFINITE_FOREST.id, EDimension.OVERWORLD);
     }
 
     public getName(): string {

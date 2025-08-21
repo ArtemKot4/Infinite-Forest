@@ -6,8 +6,8 @@ class LearningTable extends BasicBlock implements IPlaceCallback {
             texture: [["eucalyptus_log_side", 0]],
             inCreative: false
         }]);
-        Item.addToCreative(this.id, 64, 1);
-        this.setConcatinationModel();
+        Item.addToCreative(this.id, 1, 1);
+        this.setConcatingModel();
     }
 
     public override getSoundType(): Block.Sound {
@@ -19,33 +19,54 @@ class LearningTable extends BasicBlock implements IPlaceCallback {
     }
 
     public getLegWidth(): number {
-        return 0.3;
+        return 4 / 16;
     }
 
-    public setConcatinationModel(): void {
+    public setConcatingModel(): void {
         LearningTable.GROUP.add(this.id, 0);
 
         const legWidth = this.getLegWidth();
         const concatingRender = new ICRender.Model();
         const top = new BlockRenderer.Model();
-        const legHeight = 1 - 0.4;
+        const legHeight = 12 / 16;
 
-        top.addBox(0, 1 - 0.4, 0, 1, 1, 1, [
-            ["learning_table_top", 0], ["learning_table_top", 0], ["learning_table_side", 0], ["learning_table_side", 0], ["learning_table_side", 0], ["learning_table_side", 0]
+        top.addBox(0, 12 / 16, 0, 1, 1, 1, [
+            ["learning_table_top", 0], 
+            ["learning_table_top", 0], 
+            ["learning_table_side", 0], 
+            ["learning_table_side", 0], 
+            ["learning_table_side", 0], 
+            ["learning_table_side", 0]
         ]);
         concatingRender.addEntry(top);
 
+        const legTexture: BlockRenderer.ModelTextureSet = [
+            ["learning_table_leg_top", 0],
+            ["learning_table_leg_top", 0],
+            ["learning_table_leg_side", 0],
+            ["learning_table_leg_side", 0],
+            ["learning_table_leg_side", 0],
+            ["learning_table_leg_side", 0],
+        ];
+
         const firstLeftLeg = new BlockRenderer.Model();
-        firstLeftLeg.addBox(1 / 16, 0, 1 / 16, legWidth, legHeight, legWidth, this.id, -1);
+        firstLeftLeg.addBox(1 / 16, 0, 1 / 16, 1 / 16 + legWidth, legHeight, 1 / 16 + legWidth, legTexture);
 
         const secondLeftLeg = new BlockRenderer.Model();
-        secondLeftLeg.addBox(15 / 16 - legWidth, 0, 15 / 16 - legWidth, 15 / 16, legHeight, 15 / 16, this.id, -1);
+        secondLeftLeg.addBox(15 / 16 - legWidth, 0, 15 / 16 - legWidth, 15 / 16, legHeight, 15 / 16, legTexture);
 
         const firstRightLeg = new BlockRenderer.Model();
-        firstRightLeg.addBox(1 / 16, 0, 15 / 16 - legWidth, 1 / 16 + legWidth, legHeight, 15 / 16, this.id, -1);
+        firstRightLeg.addBox(1 / 16, 0, 15 / 16 - legWidth, 1 / 16 + legWidth, legHeight, 15 / 16, legTexture);
 
         const secondRightLeg = new BlockRenderer.Model();
-        secondRightLeg.addBox(15 / 16 - legWidth, 0, 1 / 16, 15 / 16, legHeight, 1 / 16 + legWidth, this.id, -1);
+        secondRightLeg.addBox(15 / 16 - legWidth, 0, 1 / 16, 15 / 16, legHeight, 1 / 16 + legWidth, legTexture);
+
+        const chest = new BlockRenderer.Model();
+        chest.addBox(3 / 16, 8 / 16, 3 / 16, 13 / 16, 12 / 16, 13 / 16, [
+            ["learning_table_top", 0],
+            ["learning_table_top", 0],
+            ["learning_table_chest", 0],
+        ]);
 
         concatingRender.addEntry(firstLeftLeg).setCondition(ICRender.AND(
             ICRender.BLOCK(-1, 0, 0, LearningTable.GROUP, true),
@@ -67,10 +88,18 @@ class LearningTable extends BasicBlock implements IPlaceCallback {
             ICRender.BLOCK(0, 0, 1, LearningTable.GROUP, true))
         );
 
+        concatingRender.addEntry(chest).setCondition(ICRender.AND(
+            ICRender.BLOCK(1, 0, 0, LearningTable.GROUP, true), 
+            ICRender.BLOCK(0, 0, 1, LearningTable.GROUP, true),
+            ICRender.BLOCK(-1, 0, 0, LearningTable.GROUP, true), 
+            ICRender.BLOCK(0, 0, -1, LearningTable.GROUP, true)
+        ));
+
         BlockRenderer.setStaticICRender(this.id, 0, concatingRender);
 
         const commonRender = new ICRender.Model();
         commonRender.addEntry(top);
+        commonRender.addEntry(chest);
         commonRender.addEntry(firstLeftLeg);
         commonRender.addEntry(secondLeftLeg);
         commonRender.addEntry(firstRightLeg);

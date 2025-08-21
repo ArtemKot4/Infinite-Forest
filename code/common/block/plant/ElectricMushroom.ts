@@ -21,11 +21,11 @@ class ElectricMushroom extends BlockPlant implements IClickCallback, IDestroyCon
         }]);
     }
 
-    public static dangerMessage(player: number) {
+    public static dangerMessage(player: number): void {
         return Game.tipMessage(Translation.translate("message.infinite_forest.electric_danger"))
     }
 
-    public static damage(player: number, damage: number = 5) {
+    public static damage(player: number, damage: number = 5): void {
         Entity.damageEntity(player, damage);
         this.dangerMessage(player);
     }

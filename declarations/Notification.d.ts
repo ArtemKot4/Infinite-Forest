@@ -1,175 +1,137 @@
-/**
- * Библиотека открыта для всех желающих легко создавать анимации, подобные анимациям достижений из Java издания игры.
- *
- * Я признателен вам за использование библиотеки и надеюсь, что вы понимаете: код открыт для ознакомления, однако копирование любой части недопустимо.
- *
- * Автор проекта: ArtemKot — github.com/ArtemKot4
- * Год основания: 2025
- * Вопросы можете задать в discord: discordapp.com/users/908847403073937419
- */
 declare let screenName: any;
-declare function separateText(text: string, line_size?: number): string;
-interface INotificationTimerParams {
+declare function separateText(text: string, lineSize?: number): string;
+interface INotificationTimerParams<thread> {
     /**
-     * time before moving back, in milliseconds
+     * Values, usings in thread.
      */
-    waitTime?: number;
-    /**
-     * time before next notification, in milliseconds
-     */
-    queueTime?: number;
-    /**
-     * time how much thread is sleep between elements moving, in milliseconds.
-     */
-    sleepTime?: number;
+    thread: {
+        /**
+         * time before moving back, in milliseconds.
+         */
+        reachTime?: number;
+        /**
+         * time between next notification, in milliseconds.
+         */
+        queueTime?: number;
+        /**
+         * time how much thread is sleep between elements moving, in milliseconds.
+         */
+        sleepTime?: number;
+    } & thread;
 }
-interface INotificationParams extends INotificationTimerParams {
+interface INotificationParams<window = {}, thread = {}, events = {}> extends INotificationTimerParams<thread> {
     /**
-     * scale of all elements
+     * Values to describe window.
      */
-    scale: number;
+    window: {
+        /**
+         * scale of all elements.
+         */
+        scale?: number;
+        /**
+         * width of window in units.
+         */
+        width?: number;
+        /**
+         * height of window in units.
+         */
+        height?: number;
+        /**
+         * x position of window.
+         */
+        x?: number;
+        /**
+         * y position of window.
+         */
+        y?: number;
+        /**
+         * color of window in red green blue alpha.
+         */
+        color?: number;
+        /**
+         * if true, window will be game overlay (can you hear sounds).
+         */
+        overlay?: boolean;
+        /**
+         * if true, window will be touchable (you can touch window with specified element events).
+         */
+        touchable?: boolean;
+    } & window;
     /**
-     * width of window. Influences on background width
+     * Events
      */
-    width: number;
+    events?: {
+        onReach?(notification: Notification): void;
+        onClose?(notification: Notification): void;
+    } & events;
     /**
-     * height of window. Influences on background height
+     * Elements from {@link UI.ElementSet}.
      */
-    height: number;
-    x?: number;
-    y?: number;
-    color?: number;
+    elements: Record<string, NotificationElement>;
 }
-type INotificationRuntimeParams = Partial<INotificationParams> & {
-    [element: string]: NotificationElement;
-};
 interface INotificationElementInitEvent {
-    onInit?(element: NotificationElement, style: INotificationStyle, runtimeStyle: INotificationRuntimeParams): void;
+    preInit?(element: NotificationElement, style: INotificationParams): void;
+    postInit?(element: NotificationElement, style: INotificationParams): void;
 }
 type NotificationElement = (UI.UICustomElement | UI.UIButtonElement | UI.UICloseButtonElement | UI.UIFrameElement | UI.UIImageElement & {
+    /**
+     * if defined, element will become slot, and scale from element will become iconScale.
+     */
     item?: string | number;
 } | UI.UIScaleElement | UI.UIScrollElement | UI.UISlotElement | UI.UISwitchElement | UI.UITabElement | UI.UITextElement & {
-    maxLineLength?: number;
+    /**
+     * Max size of line. If text bigger, element will become multiline and `\n` will be placed each specified number.
+     * @default 25
+    */
+    lineSize?: number;
 } | UI.UIFPSTextElement | UI.UIInvSlotElement) & INotificationElementInitEvent;
-type INotificationStyle = INotificationParams | (INotificationParams & {
-    [element: string]: NotificationElement;
-});
-interface INotificationWindowData extends INotificationTimerParams {
-    content: UI.WindowContent;
-}
-interface INotificationInputData {
+interface INotificationInputData<T> {
     styleName: string;
-    runtimeStyle: INotificationRuntimeParams;
+    runtimeStyle: Partial<T>;
 }
 /**
  * Class to create custom notification animations, be like as minecraft achievement animation.
- * @example
- * ```ts
-    class TransparentNotification extends Notification {
-        public mark: boolean = false;
-
-        protected onInit(style: INotificationStyle, runtimeStyle: INotificationRuntimeParams, description: INotificationWindowData): void {
-            this.mark = false;
-            this.UI.layout.setAlpha(0);
-        };
-
-        public setAlpha(value: number): void {
-            this.UI.layout.setAlpha(value);
-        };
-
-        protected run(style: INotificationStyle, runtimeStyle: INotificationRuntimeParams, data: INotificationWindowData): boolean {
-            const alpha = this.UI.layout.getAlpha();
-            if(alpha < 1 && !this.mark) {
-                this.setAlpha(alpha + 0.01);
-            } else {
-                if(!this.mark) {
-                    this.mark = true;
-                    java.lang.Thread.sleep(data.waitTime);
-                };
-            };
-            if(this.mark) {
-                this.setAlpha(alpha - 0.01);
-                if(alpha <= 0) {
-                    java.lang.Thread.sleep(style.queueTime);
-                    this.close();
-
-                    return true;
-                };
-            };
-        };
-    };
-
-    Notification.register("transparent", new TransparentNotification());
-
-    namespace ENotificationStyle {
-        export const TRANSPARENT: INotificationStyle = {
-            waitTime: 2000,
-            queueTime: 1000,
-            scale: 2.3,
-            width: 220,
-            height: 30,
-            frame: {
-                type: "custom",
-                x: 0,
-                y: 0,
-                width: 220 * 2.3,
-                height: 30 * 2.3,
-                custom: {
-                    onSetup(element) {
-                        const paint = this.paint = new android.graphics.Paint();
-                        paint.setStyle(android.graphics.Paint.Style.STROKE);
-                        paint.setARGB(100, 0, 0, 0);
-        
-                        element.setSize(220 * 2.3, 30 * 2.3);
-                    },
-                    onDraw(element, canvas, scale) {
-                        canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), this.paint);
-                    }
-                }
-            },
-            text: {
-                type: "text",
-                x: 48,
-                y: 15,
-                font: {
-                    color: android.graphics.Color.WHITE,
-                },
-                maxLineLength: 30
-            },
-            icon: {
-                type: "image",
-                x: 8,
-                y: 10,
-            }
-        };
-    };
-
-    Notification.get("transparent").addStyle("transparent", ENotificationStyle.TRANSPARENT);
-
-    Callback.addCallback("ItemUse", function(c, item, b, isE, player) {
-        const obj = {
-            text: {
-                type: "text",
-                text: Item.getName(item.id, item.data)
-            },
-            icon: {
-                type: "image",
-                item: item.id
-            }
-        } as INotificationRuntimeParams;
-
-        Notification.get("transparent").sendFor(player, "transparent", obj);
-    });
- * ```
  */
-declare abstract class Notification {
+declare abstract class Notification<T extends INotificationParams = INotificationParams> {
+    /**
+     * List of all notifications with special unique type.
+     */
     static list: Record<string, Notification>;
+    /**
+     * Type of animation. Must be unique
+     */
     type: string;
-    styles: Record<string, INotificationStyle>;
-    queue: INotificationInputData[];
-    lock: boolean;
-    stop: boolean;
+    /**
+     * List of styles
+     */
+    protected styles: Record<string, T>;
+    /**
+     * Queue, from this field takes values to restart animation after previous.
+     */
+    protected queue: INotificationInputData<T>[];
+    /**
+     * Lock value, influences on init.
+     */
+    protected lock: boolean;
+    /**
+     * Stop value, influences on work of animation.
+     */
+    protected stop: boolean;
+    /**
+     * Thread special for notification.
+     */
     thread: java.lang.Thread;
+    /**
+     * Current name of style from last start.
+     */
+    currentStyleName: string;
+    /**
+     * Current style, which usings in current notification from last start.
+     */
+    currentStyle: T;
+    /**
+     * User interface, using in animation.
+     */
     UI: UI.Window;
     constructor(type?: string);
     /**
@@ -177,102 +139,253 @@ declare abstract class Notification {
      */
     buildPacket(): void;
     /**
-     * Method to get specified Notification by type. {@link AchievementNotification} for example can be got with Notification.{@link get}("achievement")
-     * @param type type of the notification
-     */
-    static get<T extends Notification>(type: string): T;
-    /**
-     * Method to register new style for notification
+     * Method to register new style for notification.
      * @param name name of your style
      * @param style style description
      */
-    addStyle(name: string, style: INotificationStyle): this;
+    addStyle(name: string, style: T): this;
     /**
      * Method to disable thread if stop state is true.
      * @param stop state
      */
     setStop(stop: boolean): this;
     /**
-     * Method clears queue
+     * Method clears queue.
      */
     clearQueue(): void;
     /**
-     * Changes lock state
+     * Changes lock state.
      * @param lock lock state
      */
     setLock(lock: boolean): this;
+    /**
+     * Default value of UI color.
+     */
     getColor(): number;
+    /**
+     * Default value of x.
+     */
     getLocationX(): number;
+    /**
+     * Default value of y.
+     */
     getLocationY(): number;
+    /**
+     * Default value of width.
+     */
     getWidth(): number;
+    /**
+     * Default value of height.
+     */
     getHeight(): number;
+    /**
+     * Default value of scale.
+     * @default 1
+     */
     getScale(): number;
+    /**
+     * Time which using to sleep thread every cycle. Influences on speed of animation.
+     */
     getSleepTime(): number;
+    /**
+     * Time between restart animation with new data.
+     */
     getQueueTime(): number;
-    getWaitTime(): number;
-    protected getDescription(style: INotificationStyle, runtimeStyle: INotificationRuntimeParams): INotificationWindowData;
-    preventInit(styleName: string, runtimeStyle: INotificationRuntimeParams): boolean;
-    onPreventInit(styleName: string, runtimeStyle: INotificationRuntimeParams): void;
-    getStyle(styleName: string): INotificationStyle;
+    /**
+     * Time to sleep in reach state.
+     */
+    getReachTime(): number;
+    /**
+     * @returns ui is touchable or not (if not, button clicks will not work).
+     */
+    isTouchable(): boolean;
+    /**
+     * @returns ui is game overlay or not.
+     */
+    isGameOverlay(): boolean;
+    /**
+     * Condition to prevent init animation.
+     * @param styleName name of style
+     * @param runtimeStyle notification runtime params from init
+     * @returns
+     */
+    preventInit(styleName: string, runtimeStyle: Partial<T>): boolean;
+    /**
+     * Method, works when animation was prevented.
+     * @param styleName name of style
+     * @param runtimeStyle notification runtime params from init
+     */
+    protected onPreventInit(styleName: string, runtimeStyle: Partial<T>): void;
+    /**
+     * Method to get style.
+     * Throws `java.lang.NoSuchFieldException` if style is not exists.
+     * @param styleName name of style
+     * @returns Notification style
+     */
+    getStyle(styleName: string): T;
+    /**
+     * Method to set content of window
+     */
+    protected setContent(): void;
     /**
      * Method to open notification with specified style name and runtime data.
-     * @param styleName name of your style in {@link Notification.styles}
+     * @param styleName name of your style in {@link styles}
      * @param runtimeStyle your runtime data. It can be text or image
      */
-    init(styleName: string, runtimeStyle: INotificationRuntimeParams): void;
+    init(styleName: string, runtimeStyle: Partial<T>): void;
     /**
      * Method to init thread, contains logic of change notifications.
      */
-    run(style: INotificationStyle, runtimeStyle: INotificationRuntimeParams, description: INotificationWindowData): void;
+    protected run(): void;
     /**
-     * Method {@link init}s  and deletes last notification from queue
+     * Method {@link init inits} and deletes last notification from queue.
      * @returns true if notification was inited
      */
     initLast(): boolean;
     /**
-     * Method, calls after opening ui. It can be used to set default values.
-     * @param style Notification style from init.
-     * @param description Description of window.
+     * Method to get common style from basic style and runtime data.
+     * @param style your style
+     * @param runtimeStyle your runtime data
      */
-    protected onInit(style: INotificationStyle, runtimeStyle: INotificationRuntimeParams, description: INotificationWindowData): void;
+    protected getCommonStyle(style: T, runtimeStyle: Partial<T>): T;
+    /**
+     * Method, works before opening ui.
+     * @param styleName name of style
+     * @param runtimeStyle notification runtime params from init
+     */
+    protected preInit(style: T, runtimeStyle: Partial<T>): void;
+    /**
+     * Method, calls after opening ui. It can be used to set default values.
+     */
+    protected postInit(): void;
     /**
      * Method, where your thread do work. Return true to reload thread with last element from queue.
-     * @param style Notification style from init
-     * @param runtimeStyle Notification runtime params from init
-     * @param description result of {@link getDescription description}
      */
-    protected abstract work(style: INotificationStyle, runtimeStyle: INotificationRuntimeParams, description: INotificationWindowData): boolean;
+    protected abstract work(): boolean;
     /**
-     * Method to send player from server notification with specified style name and runtime data.
+     * Method to send client from server notification with specified style name and runtime data.
      * @param styleName name of your style in {@link Notification.styles}
-     * @param runtimeStyle your runtime data.
+     * @param runtimeStyle your runtime data
      */
-    sendFor(player_uid: number, styleName: string, runtimeStyle: INotificationRuntimeParams): void;
+    sendFor(playerUid: number, styleName: string, runtimeStyle: Partial<INotificationParams>): void;
     /**
      * Method, calls with using close function.
-     * @param style Notification style from init.
-     * @param runtimeStyle your runtime data.
-     * @param description result of {@link getDescription description}
      */
-    onClose(style: INotificationStyle, runtimeStyle: INotificationRuntimeParams, description: INotificationWindowData): void;
-    close(style?: INotificationStyle, runtimeStyle?: INotificationRuntimeParams, description?: INotificationWindowData): void;
+    protected onClose(): void;
+    /**
+     * Method to close ui and call close events.
+     */
+    close(): void;
+    /**
+     * Method to call reach events.
+     *
+     */
+    reach(): void;
+    /**
+     * Method works when elements reaches need position.
+     */
+    protected onReach(): void;
+    /**
+     * Method to get styled location
+     * @param style style
+     * @param x addition x value concating with main, optional
+     * @param y addition y value concating with main, optional
+     */
+    protected static getStyledLocation<T extends INotificationParams>(style: T, x?: number, y?: number): UI.WindowLocationParams;
+    /**
+     * Method to get element set from your style
+     * @param x addition x value concats to main, optional
+     * @param y addition y value concats to main, optional
+     * @param keyword word, adds to default key name, optional. If defined, after keyword `"_"` will be added
+     * @returns default `UI.ElementSet`
+     */
+    protected static getStyledElementSet<T extends INotificationParams>(style: T, x?: number, y?: number, keyword?: string): UI.ElementSet;
+    /**
+     * Method to learn, exists type of notification or not.
+     */
+    static has(type: string): boolean;
+    /**
+     * Method to get specified Notification by type. {@link AchievementNotification} for example can be got with Notification.{@link get}("achievement").
+     * Throws `java.lang.NoSuchFieldException` if notification is not exists.
+     * @param type type of the notification
+     */
+    static get<T extends Notification>(type: string): T;
+    /**
+     * Method to register new notification with special type.
+     * Throws `java.lang.SecurityException` if notification exists.
+     * @param type keyword to register notification
+     * @param notification object of notification
+     */
     static register(type: string, notification: Notification): Notification;
+    /**
+     * Method to learn is active type or not now.
+     */
+    static isActive(type: string): boolean;
+    /**
+     * Method to get active types.
+     * @returns active types of notifications
+     */
+    static getActiveTypes(): string[];
+    /**
+     * Method to init notification with special type.
+     * @param type type of notification
+     * @param styleName name of style
+     * @param runtimeStyle notification runtime params from init
+     */
+    static init(type: string, styleName: string, runtimeStyle: Partial<INotificationParams>): void;
+    /**
+     * Method to send client from server notification with specified style name and runtime data.
+     * Throws `java.lang.NoSuchFieldException` if notification is not exists.
+     * @param playerUid unique player identifier
+     * @param type type of notification
+     * @param styleName name of style
+     * @param runtimeStyle notification runtime params from init
+     */
+    static sendFor(playerUid: number, type: string, styleName: string, runtimeStyle: Partial<INotificationParams>): void;
 }
 declare namespace NotificationStyles {
-    const TRANSPARENT: INotificationStyle;
+    const TRANSPARENT: INotificationParams;
 }
 declare class TransparentNotification extends Notification {
     mark: boolean;
     setAlpha(value: number): void;
-    protected onInit(style: INotificationStyle, runtimeStyle: INotificationRuntimeParams, description: INotificationWindowData): void;
-    protected work(style: INotificationStyle, runtimeStyle: INotificationRuntimeParams, data: INotificationWindowData): boolean;
+    protected postInit(): void;
+    protected work(): boolean;
 }
 declare class AchievementNotification extends Notification {
     maxHeight: number;
     mark: boolean;
     height: number;
-    defaults: {};
-    protected updateElementsHeight(value: number): void;
-    protected onInit(style: INotificationStyle, runtimeStyle: INotificationRuntimeParams, description: INotificationWindowData): void;
-    protected work(style: INotificationStyle, runtimeStyle: INotificationRuntimeParams, data: INotificationWindowData): boolean;
+    defaultHeights: Record<string, number>;
+    protected updateElementsHeight(height: number): void;
+    protected setDefaultHeights(): void;
+    protected postInit(): void;
+    protected work(): boolean;
+}
+type IAdvancementParams = INotificationParams<{
+    /**
+    * position of the window, influences on moving of animation.
+    * @default "right"
+    */
+    position?: "left" | "right";
+    /**
+    * max count of notifications in one screen in one time when position and style equals.
+    * @default 4;
+    */
+    maxCount?: number;
+}>;
+declare class AdvancementNotification extends Notification<IAdvancementParams> {
+    maxOffset: number;
+    mark: boolean;
+    offset: number;
+    defaultOffsets: Record<string, number>;
+    protected setDefaultOffsets(): void;
+    protected updateElementsOffset(offset: number): void;
+    getSleepTime(): number;
+    protected setContent(): void;
+    protected preInit(style: IAdvancementParams, runtimeStyle: Partial<IAdvancementParams>): void;
+    protected postInit(): void;
+    animationLeft(): boolean;
+    animationRight(): boolean;
+    protected work(): boolean;
 }

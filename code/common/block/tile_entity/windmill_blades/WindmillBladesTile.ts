@@ -1,8 +1,10 @@
 class WindmillBladesTile extends CommonTileEntity {
-    public override data = {
+    public override defaultValues = {
         enabled: false, //false
         speed: 0.05
     }
+
+    public data: typeof this.defaultValues;
 
     public initDestroy() {
         this.blockSource.destroyBlock(this.x, this.y, this.z, true);
@@ -26,7 +28,7 @@ class WindmillBladesTile extends CommonTileEntity {
             this.data.enabled = true;
         }
 
-        this.networkData.putBoolean("enabled", this.data.enabled);
+        this.networkData.putBoolean("enabled", this.data.enabled || false);
         this.networkData.sendChanges();
     }
 

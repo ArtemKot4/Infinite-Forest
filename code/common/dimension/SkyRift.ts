@@ -30,8 +30,7 @@ namespace SkyRift {
     export function loadAnimation(player: number, packet: UpdatableEntity): UpdatableEntity {
         if(packet == null) {
             return packet;
-        };
-
+        }
         const entity = (entities[packet.index] = entities[packet.index] || {});
         const animation = entity.animation = (entity.animation || new Animation.Base(packet.x + 0.5, packet.y, packet.z + 0.5));
     
@@ -39,7 +38,6 @@ namespace SkyRift {
             mesh: createMesh(packet.vertexes || 8),
             scale: packet.scale || 2
         });
-
         animation.setIgnoreLightMode();
         animation.setPos(packet.x + 0.5, packet.y, packet.z + 0.5);
         animation.load();
@@ -102,7 +100,7 @@ namespace SkyRift {
         }
 
         public getDimensionID(): number {
-            return EDimension.INFINITE_FOREST.id;
+            return DimensionList.INFINITE_FOREST.id;
         }
 
         public getScaleMax(): number {

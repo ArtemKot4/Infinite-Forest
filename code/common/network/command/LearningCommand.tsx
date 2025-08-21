@@ -16,7 +16,7 @@ class LearningCommand extends ServerCommand<ILearningCommandProps> {
         const playerUid = client.getPlayerUid();
         const player = ObjectPlayer.getOrCreate(playerUid);
 
-        if(data.action === "clear") {
+        if(data.action == "clear") {
             let text = Translation.translate("message.infinite_forest.clear_learnings");
 
             if('name' in data) {
@@ -41,20 +41,13 @@ class LearningCommand extends ServerCommand<ILearningCommandProps> {
                 ObjectPlayer.sendToClient(playerUid);
             }
 
-            Notification.get("achievement").sendFor(playerUid, "IFLearning", {
-                text: {
-                    type: "text",
-                    text: text
-                },
-                icon: {
-                    type: "image",
-                    bitmap: "amulet_lock"
-                } 
+            Notification.sendFor(playerUid, "advancement", "infinite_forest.learning", {
+                elements: <NoteComponent bitmap={ "amulet_lock" }>{ text }</NoteComponent>
             });
             return;
         }
 
-        if(data.action === "add") {
+        if(data.action == "add") {
             if(!data.name) {
                 for(const learningName of Object.keys(Learning.list)) {
                     Learning.giveFor(playerUid, learningName)

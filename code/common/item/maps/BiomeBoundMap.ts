@@ -9,7 +9,7 @@ class BiomeBoundMap extends MapBase {
         position[0] = position[0] - distance / 2;
         position[1] = position[1] - distance / 2;
         
-        const region = BlockSource.getDefaultForDimension(EDimension.INFINITE_FOREST.id);
+        const region = BlockSource.getDefaultForDimension(DimensionList.INFINITE_FOREST.id);
         if(!region) {
             return bitmap;
         }

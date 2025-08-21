@@ -26,6 +26,8 @@ block.infinite_forest.eucalyptus_hewn = §2Hewn Eucalyptus
 block.infinite_forest.pink_hewn = §dHewn Pink Wood  
 block.infinite_forest.pink_bark = §dPink Bark  
 block.infinite_forest.mortar = Mortar
+block.infinite_forest.chair = Chair
+block.infinite_forest.candle = Candle of ether
 
 # items  
 item.infinite_forest.ancient_note = Ancient Note

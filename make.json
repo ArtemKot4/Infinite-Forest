@@ -63,7 +63,13 @@
 		"innercore",
 		"nativejs"
 	],
-	"excludeFromRelease": []
+	"excludeFromRelease": [],
+    "tsconfig": {
+        "jsx": "react",
+        "jsxFactory": "UI.JSX.parseElement",
+        "jsxFragmentFactory": "UI.JSX.Fragment",
+        "moduleResolution": "nodenext"
+    }
 }
 
 

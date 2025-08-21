@@ -72,6 +72,6 @@ class InfiniteForest extends Dimension {
     }
 }
 
-namespace EDimension {
+namespace DimensionList {
     export const INFINITE_FOREST = new InfiniteForest();
 }

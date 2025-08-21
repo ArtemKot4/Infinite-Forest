@@ -52,7 +52,7 @@ abstract class MapBase {
                         sleepTime = 500 * ((distance / 128) || 1);
                         
                         this.shift = Math.min(distance, this.shift + 16);
-  
+
                         this.putSurfaceScreen(positionData, distance);
                         this.updateGround(positionKey); 
                         this.updateLocator(positionData, playerUid);

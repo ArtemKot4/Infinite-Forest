@@ -1,5 +1,5 @@
 Callback.addCallback("GenerateCustomDimensionChunk", (chunkX, chunkZ, random, dimensionId) => {
-    if(dimensionId !== EDimension.INFINITE_FOREST.id) return;
+    if(dimensionId != DimensionList.INFINITE_FOREST.id) return;
 
     for(let x = chunkX * 16; x < (chunkX + 1) * 16; x++) {
         for(let z = chunkZ; z < (chunkZ + 1) * 16; z++) {
@@ -33,9 +33,9 @@ Callback.addCallback("GenerateCustomDimensionChunk", (chunkX, chunkZ, random, di
                 let coords = GenerationUtils.randomCoords(chunkX, chunkZ);
                 coords = GenerationUtils.findSurface(coords.x, 127, coords.z);
                 
-                if(World.getBiome(coords.x, coords.z) !== Number(biomeId)) continue;
+                if(World.getBiome(coords.x, coords.z) != Number(biomeId)) continue;
 
-                if(World.getBlockID(coords.x, coords.y, coords.z) !== VanillaBlockID.grass) return;
+                if(World.getBlockID(coords.x, coords.y, coords.z) != VanillaBlockID.grass) return;
 
                 if (coords.y < 55) continue;
 
@@ -102,7 +102,7 @@ namespace ForestGenerator {
 }
 
 Callback.addCallback("GenerateBiomeMap",(chunkX, chunkZ, random, dimensionId, chunkSeed, worldSeed, dimensionSeed) => {
-    if(dimensionId !== EDimension.INFINITE_FOREST.id) {
+    if(dimensionId == DimensionList.INFINITE_FOREST.id) {
         return;
     }
 

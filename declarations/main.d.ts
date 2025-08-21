@@ -20,6 +20,7 @@ declare namespace com.zhekasmirnov.innercore.api.NativeBlock {
     function setMapColor(id: number, color: number): void;
     function setBlockColorSource(id: number, source: Block.ColorSource): void;
     function setMaterialBase(id: number, base_id: number): void;
+    function setCanContainLiquid(id: number, can: boolean); //maybe exists, maybe not
 }
 declare namespace com.zhekasmirnov.innercore.api.NativeAPI {
     function getDifficulty(): EGameDifficulty;

@@ -40,7 +40,7 @@ class FearEffect extends Effect {
             const pos = Entity.getPosition(playerUid);
             const blockSource = BlockSource.getDefaultForActor(playerUid);
 
-            if(blockSource.getDimension() === EDimension.INFINITE_FOREST.id) {
+            if(blockSource.getDimension() == DimensionList.INFINITE_FOREST.id) {
                 this.breakLightning(pos, blockSource);
             }
         }

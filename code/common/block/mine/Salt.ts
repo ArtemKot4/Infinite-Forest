@@ -5,9 +5,9 @@ class Salt extends BasicBlock {
             texture: [["salt", 0]],
             inCreative: true
         }]);
-    };
+    }
 
     public override getDestroyLevel(): EDestroyLevel {
         return EDestroyLevel.STONE;
-    };
-};
+    }
+}

@@ -1,7 +1,10 @@
 # lib: esnext
 translations.js
 
+api/lib/Component.tsx
 api/render/RenderHelper.ts
+
+client/ui/book/UIMarkdownTextElement.ts
 
 client/animation/RenderSide.ts
 client/animation/BlockAnimation.ts
@@ -24,13 +27,15 @@ client/SoundHelper.ts
 
 client/ui/ForestEffectHud.ts
 
-client/ui/NotificationStyles.ts
+client/ui/NotificationStyles.tsx
 
 client/ui/book/Book.ts
 
 api/item/ItemHandComponent.ts
-
 api/item/ItemForest.ts
+
+client/render/RotatingRenderFX.ts
+client/render/TileSignRenderer.ts
 
 common/item/TransferCrystal.ts
 common/item/AncientNote.ts
@@ -59,11 +64,13 @@ api/block/wood/Planks.ts
 
 api/block/Painting.ts
 
-api/learning/Learning.ts
+api/learning/Learning.tsx
 api/learning/LearningBase.ts
+api/learning/Sign.ts
 
 api/reflection/Reflection.ts
 api/reflection/ReflectionBase.ts
+
 
 common/world/ether/IEtherProvider.ts
 common/world/ether/EtherSource.ts
@@ -108,6 +115,8 @@ common/block/tile_entity/mortar/LocalMortarTile.ts
 common/block/tile_entity/mortar/MortarTile.ts
 common/block/tile_entity/mortar/Mortar.ts
 
+common/block/tile_entity/chair/Chair.ts
+
 # ether
 common/block/tile_entity/ether/pipe/EtherPipe.ts
 
@@ -150,6 +159,7 @@ common/dimension/generation/main.ts
 common/dimension/SkyRift.ts
 
 
+common/learning/SignList.ts
 common/learning/ItemLearning.ts
 common/learning/CraftBuildLearning.ts
 common/learning/EventLearning.ts
@@ -161,7 +171,7 @@ common/reflection/ReflectionList.ts
 
 
 
-common/network/command/LearningCommand.ts
+common/network/command/LearningCommand.tsx
 common/network/command/RiftCommand.ts
 common/network/command/EffectCommand.ts
 

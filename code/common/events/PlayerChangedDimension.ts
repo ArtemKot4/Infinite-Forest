@@ -26,7 +26,7 @@ class InventorySaver {
 }
 
 Callback.addCallback("PlayerChangedDimension", function (playerUid: number, from: number, to: number) {
-    if (Entity.getDimension(playerUid) == EDimension.INFINITE_FOREST.id) {
+    if (Entity.getDimension(playerUid) == DimensionList.INFINITE_FOREST.id) {
         const position = Entity.getPosition(playerUid);
 
         if(InfiniteForest.data && !InfiniteForest.data.vinePos[0]) {
@@ -39,7 +39,7 @@ Callback.addCallback("PlayerChangedDimension", function (playerUid: number, from
         Commands.exec("/gamerule doDaylightCycle false");
         Commands.exec("/gamerule doWeatherCycle false");
 
-        if(from != EDimension.INFINITE_FOREST.id) {
+        if(from != DimensionList.INFINITE_FOREST.id) {
             InventorySaver.replaceFor(playerUid);
         }
         
@@ -48,7 +48,7 @@ Callback.addCallback("PlayerChangedDimension", function (playerUid: number, from
         Commands.exec("/gamerule doDaylightCycle true");
         Commands.exec("/gamerule doWeatherCycle true");
         
-        if(from == EDimension.INFINITE_FOREST.id) {
+        if(from == DimensionList.INFINITE_FOREST.id) {
             InventorySaver.replaceFor(playerUid);
         }
     }
