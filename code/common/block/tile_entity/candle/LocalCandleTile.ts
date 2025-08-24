@@ -9,8 +9,9 @@ class LocalCandleTile extends LocalTileEntity {
 
     public override onTick(): void {
         const flames = this.networkData.getInt("flames", 0);
-
-        if(flames <= 0) return;
+        if(flames <= 0) {
+            return;
+        }
 
         if(World.getThreadTime() % 10 === 0) {
             for(let i = 0; i < flames; i++) {

@@ -35,13 +35,20 @@ namespace SignList {
         "log",
         "planks",
         "grass",
-        "seeds",
+        "seed",
         "pumpkin",
         "melon",
         "water",
         "wheat",
         "campfire",
         "dirt",
-        "fironia"
+        "fironia",
+        "stick",
+        "sapling",
+        "crafting_table",
+        "hewn",
+        "bark",
+        "mushroom",
+        "root"
     );
 }

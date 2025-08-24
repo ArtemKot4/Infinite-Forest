@@ -1,17 +1,34 @@
-class RotatingRenderFX {
-    protected render: Render;
-    protected animation: Animation.Base;
-    protected thread!: java.lang.Thread;
-    protected inited: boolean = false;
+interface IRotatingRenderParams extends Vector {
+    skin: string;
+    x2?: number;
+    z2?: number;
+    speed?: number;
+    velocitySpeed?: number;
+    startHeight?: number;
+    readonly render?: Render;
+}
+
+class RotatingRenderFX extends RenderObject {
+    protected readonly render: Render;
     protected offset: number = 0;
-    protected maxY: number;
+    protected maxHeight: number;
+    protected speed: number;
+    protected velocitySpeed: number;
+    x2?: number;
+    y2?: number;
+    z2?: number;
 
-    public constructor(public x: number, public y: number, public z: number, public skin: string, render?: Render) {
-        this.y -= 0.2;
-        this.maxY = this.y;
-        this.y -= 0.4;
-
-        this.render = render || (() => {
+    public constructor(description: IRotatingRenderParams) {
+        description.y -= 0.2;
+        super(description.x, description.y - (description.startHeight || 0) - 0.4, description.z);
+        
+        this.speed = description.speed || 0.006;
+        this.velocitySpeed = description.velocitySpeed || 0.0008;
+        this.skin = description.skin;
+        this.x2 = description.x2 || description.x;
+        this.z2 = description.z2 || description.z;
+        this.maxHeight = description.y;
+        this.render = description.render || (() => {
             const render = new Render();
             render.getPart("head").addPart("board");
             render.setPart("board", [{
@@ -22,73 +39,67 @@ class RotatingRenderFX {
             });
             return render;
         })();
-        this.animation = new Animation.Base(this.x, this.y, this.z);
-        this.animation.setIgnoreLightMode();
     }
 
-    public load(): void {
-        if(this.animation) {
-            this.animation.destroy();
+    public override getSkin(): string {
+        return this.skin;
+    }
+
+    public override getRender(): Render {
+        return this.render;
+    }
+
+    public override getStringID(): string {
+        return "curse_fx";
+    }
+    
+    public calculatePositions(): void {
+        if(this.y < this.maxHeight) {
+            this.speed += this.velocitySpeed;
+            this.y = Math.min(this.y + this.speed, this.maxHeight);
+            this.translateBy(0, -this.speed, 0);
         }
-        this.setSkin(this.skin);
-        this.animation.load();
-        return;
+        // if(this.x != this.x2) {
+        //     if(this.x < this.x2) {
+        //         this.x = Math.min(this.x, this.x + this.speed);
+        //         transform.translate(-this.speed, 0, 0);
+        //     }
+        //     if(this.x > this.x2) {
+        //         this.x = Math.max(this.x, this.x - this.speed);
+        //         transform.translate(-this.speed, 0, 0);
+        //     }
+        // }
+        // if(this.z != this.z2) {
+        //     if(this.z < this.z2) {
+        //         this.z = Math.min(this.z, this.z + this.speed);
+        //         transform.translate(0, 0, -this.speed);
+        //     }
+        //     if(this.z > this.z2) {
+        //         this.z = Math.max(this.z, this.z - this.speed);
+        //         transform.translate(0, 0, -this.speed);
+        //     }
+        // }
     }
 
-    public setSkin(skin: string): void {
-        this.animation.describe({
-            render: this.render.getId(),
-            skin: skin
-        });
-        this.animation.refresh();
-    }
-
-    public start(): void {
-        if(this.inited == true) {
-            return;
-        }
-        this.inited = true;
-        this.load();
-        this.thread = Threading.initThread("thread.infinite_forest.curse_fx", () => {
-            const transform = this.animation.transform();
-            let speed = 0.005;
-            //let rotateSpeed = 0.3;
-
-            while(this.inited == true) {
-                java.lang.Thread.sleep(20);
-                const playerPos = Entity.getPosition(Player.getLocal());
-                const targetAngle = Math.atan2(playerPos.z - this.z, playerPos.x - this.x);
-                this.offset += (targetAngle - this.offset) * 0.4;
-
-                if(this.y < this.maxY) {
-                    speed += 0.0006;
-                    this.y = Math.min(this.y + speed, this.maxY);
-                    
-                    transform.translate(0, -speed, 0);
-                }
-                // if(rotateSpeed > 0) {
-                //     rotateSpeed = Math.max(0, rotateSpeed - 0.001); 
-                //     transform.rotate(0, rotateSpeed, 0);
-                //     if(rotateSpeed <= 0) {
-                //         Particles.addParticle(EForestParticle.SPARK, this.x, this.y, this.z, 0, 0,  0, 0);
-                //     }
-                // }
-                // else {
-                    this.render.getPart("board")
-                    .setRotation(0, this.offset - Math.PI / 2, 0);
-                //}   
-            }
-        });
-    }
-
-    public destroy(): void {
-        this.inited = false;
-        this.animation.destroy();
+    public override run(): void {
+        const playerPos = Entity.getPosition(Player.getLocal());
+        const targetAngle = Math.atan2(playerPos.z - this.z, playerPos.x - this.x);
+        
+        this.offset += (targetAngle - this.offset) * 0.4;
+        this.calculatePositions();
+        this.render.getPart("board")
+        .setRotation(0, this.offset - Math.PI / 2, 0);
     }
 }
 
 Callback.addCallback("ItemUse", (c, i) => {
     if(i.id == VanillaItemID.bone) {
-        return new RotatingRenderFX(c.x + 0.5, c.y + 0.85, c.z + 0.5, "gui/sign/fire.png").start();
+        return new RotatingRenderFX({
+            x: c.x + 0, 
+            y: c.y + 0.85,
+            z: c.z + 0.5, 
+            x2: c.x + 0.5,
+            skin: "sign/fire.png"
+        }).start();
     }
 });

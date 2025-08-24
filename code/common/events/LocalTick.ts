@@ -1,8 +1,6 @@
 Callback.addCallback("LocalTick", () => {
     const time = World.getThreadTime();
-    if(time % 20 == 0) {
-        TileSignRenderer.renderByPointed();
-    }
+    TileSignRenderer.renderByPointed();
 
     if(Player.getDimension() != DimensionList.INFINITE_FOREST.id) {
         return;

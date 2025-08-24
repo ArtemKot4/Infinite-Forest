@@ -36,7 +36,6 @@ class LearningTableTile extends CommonTileEntity {
         this.networkData.putInt("itemID", item.id);
         this.networkData.sendChanges();
         this.sendPacket("create_animation", {});
-        this.sendPacket("set_sign_renders", {});
         return;
     }
 

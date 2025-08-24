@@ -7,6 +7,7 @@ declare enum Side {
     SERVER = 1
 }
 declare namespace com.zhekasmirnov.innercore.api.NativeBlock {
+    function setCanContainLiquid(id: number, can: boolean): void;
     function setSolid(id: number, solid: boolean): void;
     function setRenderAllFaces(id: number, render: boolean): void;
     function setRenderType(id: number, type: number): void;
@@ -20,7 +21,6 @@ declare namespace com.zhekasmirnov.innercore.api.NativeBlock {
     function setMapColor(id: number, color: number): void;
     function setBlockColorSource(id: number, source: Block.ColorSource): void;
     function setMaterialBase(id: number, base_id: number): void;
-    function setCanContainLiquid(id: number, can: boolean); //maybe exists, maybe not
 }
 declare namespace com.zhekasmirnov.innercore.api.NativeAPI {
     function getDifficulty(): EGameDifficulty;
@@ -130,6 +130,76 @@ declare namespace IDRegistry {
 declare namespace RenderHelper {
     function generateMesh(dir: string, model: string, params?: RenderMesh.ImportParams, rotate?: number[]): RenderMesh;
 }
+declare namespace Animation {
+    type description = {
+        /**
+         * {@link RenderMesh} object to be displayed with animation.
+         * @since 2.0.2b20
+         */
+        mesh?: RenderMesh;
+        /**
+         * Numeric ID of the {@link Render} object to be displayed with animation.
+         * Can be obtained using {@link Render.getId}
+         */
+        render?: number;
+        /**
+         * Name of the texture to be used as render's skin.
+         */
+        skin?: string;
+        /**
+         * Animation scale.
+         * @default 1
+         */
+        scale?: number;
+        /**
+         * Animation material, can be used to apply custom materials to the
+         * animation.
+         * @since 2.0.2b20
+         */
+        material?: string;
+    };
+}
+declare class RenderObject implements Vector {
+    x: number;
+    y: number;
+    z: number;
+    thread?: java.lang.Thread;
+    animation: Animation.Base;
+    isLoaded: boolean;
+    scale?: number;
+    skin?: string;
+    transform: com.zhekasmirnov.innercore.api.NativeRenderer.Transform;
+    protected threadInited?: boolean;
+    constructor(x: number, y: number, z: number);
+    getDescription(): Animation.description;
+    autoSetPositions(): boolean;
+    getStringID(): string;
+    getRenderMesh(): Nullable<RenderMesh>;
+    getRender(): Nullable<Render>;
+    getSkin(): Nullable<string>;
+    getLightMode(): Nullable<"block" | "ignore" | "skylight">;
+    getMaterial(): Nullable<string>;
+    /**
+     * If method defined, thread will be initialized with this method. While cycle already defined.
+     */
+    run?(): void;
+    load(): void;
+    startThread(): void;
+    getFps(): number;
+    /**
+     * If thread is active, thread will stop work `run` method while `threadInit` is not true.
+     */
+    stop(): void;
+    /**
+     * If thread is active, thread will continue work.
+     */
+    start(): void;
+    destroy(): void;
+    rotateBy(x: number, y: number, z: number): typeof this.transform;
+    scaleBy(x: number, y: number, z: number): typeof this.transform;
+    translateBy(x: number, y: number, z: number): typeof this.transform;
+    exists(): boolean;
+}
 declare class RenderSide<T extends string | RenderMesh> {
     model: T;
     importParams: RenderMesh.ImportParams;
@@ -161,6 +231,7 @@ declare class Keyboard {
     open(): void;
 }
 declare namespace UIHelper {
+    const SCREEN_WIDTH = 1000;
     function separateText(text: string, line_size?: number): string;
     function getItemIcon(itemID: string | number, x: number, y: number, size?: number, bitmap?: string): UI.UISlotElement;
 }
@@ -441,7 +512,7 @@ declare abstract class LocalTileEntity implements LocalTileEntity {
     /**@deprecated
      * Use {@link onTick} instead
      */
-    tick(): void;
+    tick: () => void;
     onLoad(): void;
     onUnload(): void;
     onTick(): void;
@@ -536,6 +607,10 @@ declare abstract class CommonTileEntity implements TileEntity {
     unload(): void;
     /**@deprecated */
     update: () => void;
+    /**@deprecated
+     * Use {@link onTick} instead
+     */
+    tick: () => void;
     onCheckerTick(isInitialized: boolean, isLoaded: boolean, wasLoaded: boolean): void;
     click(id: number, count: number, data: number, coords: Callback.ItemUseCoordinates, player: number, extra: ItemExtraData): boolean | void;
     /**@deprecated
@@ -551,10 +626,6 @@ declare abstract class CommonTileEntity implements TileEntity {
      * Use {@link onDestroyTile} instead
      */
     destroy(): boolean | void;
-    /**@deprecated
-     * Use {@link onTick} instead
-     */
-    tick(): void;
     onInit(): void;
     onLoad(): void;
     onUnload(): void;
@@ -672,7 +743,7 @@ declare abstract class Dimension {
     buildVanillaSurfaces(): boolean;
     generateCaves(): [caves: boolean, underwater_caves: boolean];
     generateVanillaStructures(): boolean;
-    hasSkyLight(): boolean;
+    hasSkyLight?(): boolean;
     /** Method places colors in rgb format */
     getSkyColor?(): number[];
     /** Method places colors in rgb format */

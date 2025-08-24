@@ -8,33 +8,47 @@ namespace TileSignRenderer {
         return x == pos.x && y == pos.y && z == pos.z;
     }
 
+    export function setPosition(newX: number, newY: number, newZ: number): void {
+        x = newX;
+        y = newY;
+        z = newZ;
+    }
+
     export function clearFXs(): void {
         if(renders.length > 0) {
             renders.forEach(v => v.destroy());
         }
     }
 
-    export function setFXs(fxs: RotatingRenderFX[]): void {
+    export function startFXs(fxs: RotatingRenderFX[]): void {
         if(fxs.length > 0) {
             renders = fxs;
-            renders.forEach(v => v.start());
+            renders.forEach(v => v.load());
         }
         return;
     }
 
-    export function getFXsForItemId(itemID: number, x: number, y: number, z: number): RotatingRenderFX[] {
-        let signs = Sign.getFrom(itemID);
+    export function startFXsByPosition(x: number, y: number, z: number, renders?: RotatingRenderFX[]): void {
+        clearFXs();
+        setPosition(x, y, z);    
+        startFXs(renders || getRendersFrom(x, y, z));
+    }
+
+    export function getFXsForItemId(itemID: number, x: number, y: number, z: number, startHeight?: number): RotatingRenderFX[] {
+        const signs = Sign.getFrom(itemID);
         const addX = 0.7 - Number("0." + signs.length * 2);
 
         return signs.map((v, i) => {
             const offset = Number(i);
 
-            const render = new RotatingRenderFX(
-                x + addX + Number("0." + (offset == 0 ? 0 : offset + 3)), 
-                y, 
-                z + 0.5, 
-                Sign.get(v).icon
-            );
+            const render = new RotatingRenderFX({
+                x: x + addX + Number("0." + (offset == 0 ? 0 : offset + 3)),//x,
+                y: y,
+                z: z + 0.5,
+                skin: Sign.get(v).icon,
+                //x2: x + addX + Number("0." + (offset == 0 ? 0 : offset + 3)),
+                startHeight: startHeight || 0
+            });
             return render;
         });
     }
@@ -46,8 +60,14 @@ namespace TileSignRenderer {
         for(const i in slots) {
             const slot = slots[i];
             if(slot.id != 0) {
-                renders = renders.concat(getFXsForItemId(slot.id, x, y + Number("0." + offset), z))
-                offset+=3;
+                renders = renders.concat(getFXsForItemId(
+                    slot.id, 
+                    x, 
+                    y + Number("0." + offset), 
+                    z,
+                    Number("0." + (offset == 0 ? 0 : offset))
+                ));
+                offset += 3;
             }
         }
         return renders;
@@ -58,11 +78,12 @@ namespace TileSignRenderer {
         let renders: RotatingRenderFX[] = [];
 
         if(tile != null) {
-            if("id" in tile.data && tile.data.id != 0) {
-                let signs = Sign.getFrom(tile.data.id);
+            const id = tile.data.item instanceof Object ? tile.data.item.id : tile.data.id;
+            if(id != null) {
+                const signs = Sign.getFrom(id);
 
                 if(signs.length > 0) {                        
-                    renders = getFXsForItemId(tile.data.id, x, y, z);
+                    renders = getFXsForItemId(id, x, y, z);
                 }
             } else if(Object.keys(tile.container.slots).length > 0){
                 renders = getFXsForSlots(Object.values(tile.container.slots), x, y, z);
@@ -84,14 +105,16 @@ namespace TileSignRenderer {
     }
     
     export function renderByPointed(): void {
+        const time = World.getThreadTime();
         const data = Player.getPointed();
-
-        if(!hasSign(data.pos)) {
-            clearFXs();
-            x = data.pos.x;
-            y = data.pos.y;
-            z = data.pos.z;       
-            setFXs(getRendersFrom(data.pos.x, data.pos.y, data.pos.z));
-        } 
+        if(time % 20 == 0 && (!hasSign(data.pos) || renders.length == 0)) {
+            startFXsByPosition(data.pos.x, data.pos.y, data.pos.z);
+        }
+        if(time % 45 == 0 && renders.length > 0) {
+            const newRenders = getRendersFrom(data.pos.x, data.pos.y, data.pos.z);
+            if(newRenders.length > 0 && newRenders.length != renders.length) {
+                startFXsByPosition(data.pos.x, data.pos.y, data.pos.z, newRenders);
+            }
+        }
     }
 }

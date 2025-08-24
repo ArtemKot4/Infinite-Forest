@@ -1,42 +1,14 @@
 class LocalLearningTableTile extends LocalTileEntity {
-    public signRenders: RotatingRenderFX[];
     public animation: Animation.Item;
 
     public onLoad(): void {
         this.create_animation();
-        this.set_sign_renders();
     }
 
     public onUnload(): void {
         if(this.animation) {
             this.animation.destroy();
-            this.clearSignRenders();
         }
-    }
-
-    public clearSignRenders(): void {
-        this.signRenders.forEach(v => v.destroy());
-        this.signRenders = [];
-    }
-
-    @NetworkEvent
-    public set_sign_renders(): void {
-        this.signRenders = this.signRenders || [];
-        // const itemID = Network.localToServerId(this.networkData.getInt("itemID", 0));
-        // if(itemID == 0) {
-        //     this.clearSignRenders();
-        //     return;
-        // }
-        // const signs = Sign.getFrom(itemID);
-        // const x = 0.7 - Number("0."+signs.length*2);
-
-        // for(const i in signs) {
-        //     const offset = Number(i);
-
-        //     const render = new RotatingRenderFX(this.x + x + Number("0." + (offset == 0 ? 0 : offset + 3)), this.y, this.z + 0.5, Sign.get(signs[i]).icon);
-        //     render.start();
-        //     this.signRenders.push(render);
-        // }
     }
 
     @NetworkEvent

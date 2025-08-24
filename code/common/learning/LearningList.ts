@@ -25,5 +25,4 @@ namespace LearningList {
     export const STRANGE_DREAM = new ItemLearning("strange_dream", {
         pageName: "main", icon: "blue_crystal"
     });
-};
-
+}

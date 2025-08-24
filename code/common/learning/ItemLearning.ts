@@ -6,6 +6,6 @@ class ItemLearning extends LearningBase {
         icon?: string,
     }) {
         super(name, Object.assign(data, { iconType: "item" as any }));
-    };
-};
+    }
+}
 

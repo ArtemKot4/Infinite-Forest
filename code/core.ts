@@ -7,7 +7,7 @@ enum EBiomeState {
 namespace EBiomeState {
     export function is(x: number, z: number, region: BlockSource): EBiomeState {
         const biome = AbstractForestBiome.getFor(region.getBiome(x, z));
-        return biome && biome.getBiomeState ? biome.getBiomeState() : EBiomeState.BALANCE;
+        return biome != null && biome.getBiomeState ? biome.getBiomeState() : EBiomeState.BALANCE;
     }
 }
 
@@ -25,10 +25,5 @@ type CraftField = {
     slot_8?: PartialItemInstance;
     slot_9?: PartialItemInstance;
 };
-
-const RuntimeException = java.lang.RuntimeException;
-const NullPointerException = java.lang.NullPointerException;
-const IllegalArgumentException = java.lang.IllegalArgumentException;
-const NoSuchFieldException = java.lang.NoSuchFieldException;
 
 const structureDIR = __dir__ + "resources/assets/structures/";

@@ -1,5 +1,3 @@
-
-
 class SoundHelper {
     /**
      * Method to initialize all sounds from directory
@@ -12,7 +10,7 @@ class SoundHelper {
         for(const file of FileTools.GetListOfFiles(dir)) {
             const name = file.getName();
             SoundManager.registerSound(`infinite_forest.${name}`, name);
-        };
+        }
     };
 
     /** 
@@ -30,15 +28,15 @@ class SoundHelper {
                 volume,
                 pitch
             } satisfies IClientSoundSender);
-        };
-    };
-};
+        }
+    }
+}
 
 interface IClientSoundSender {
     name: string;
     volume?: number,
     pitch?: number
-};
+}
 
 Network.addClientPacket("packet.infinite_forest.play_sound", (data: IClientSoundSender) => {
     return SoundManager.playSound(`infinite_forest.${data.name}`, data.volume, data.pitch);
