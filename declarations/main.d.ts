@@ -72,6 +72,8 @@ declare namespace Block {
     const destroyStartFunctions: Record<number, Callback.DestroyBlockFunction>;
     const destroyContinueFunctions: Record<number, Callback.DestroyBlockContinueFunction>;
     const projectileHitFunctions: Record<number, Callback.ProjectileHitFunction>;
+    const selectionFunctions: Record<number, Callback.BlockSelectionFunction>;
+    function createPlantBlock(nameID: string, defineData: BlockVariation[]): void;
     function setEmptyCollisionShape(id: number): void;
     function setSolid(id: number, solid: boolean): void;
     function setRenderAllFaces(id: number, render: boolean): void;
@@ -93,6 +95,8 @@ declare namespace Block {
     function registerDestroyContinueFunction(id: number, func: Callback.DestroyBlockContinueFunction): void;
     function registerDestroyContinueFunctionForID(id: number, func: Callback.DestroyBlockContinueFunction): void;
     function registerProjectileHitFunction(id: number, func: Callback.ProjectileHitFunction): void;
+    function registerSelectionFunction(id: number, func: Callback.BlockSelectionFunction): void;
+    function registerSelectionFunctionForID(id: number, func: Callback.BlockSelectionFunction): void;
 }
 declare namespace Item {
     const holdFunctions: Record<number, Callback.ItemHoldFunction>;
@@ -168,7 +172,6 @@ declare class RenderObject implements Vector {
     isLoaded: boolean;
     scale?: number;
     skin?: string;
-    transform: com.zhekasmirnov.innercore.api.NativeRenderer.Transform;
     protected threadInited?: boolean;
     constructor(x: number, y: number, z: number);
     getDescription(): Animation.description;
@@ -180,24 +183,19 @@ declare class RenderObject implements Vector {
     getLightMode(): Nullable<"block" | "ignore" | "skylight">;
     getMaterial(): Nullable<string>;
     /**
-     * If method defined, thread will be initialized with this method. While cycle already defined.
+     * If method defined, thread will be initialized with this method. While cycle already defined and sleep time (from fps).
      */
     run?(): void;
     load(): void;
+    refresh(): void;
     startThread(): void;
     getFps(): number;
-    /**
-     * If thread is active, thread will stop work `run` method while `threadInit` is not true.
-     */
     stop(): void;
-    /**
-     * If thread is active, thread will continue work.
-     */
     start(): void;
     destroy(): void;
-    rotateBy(x: number, y: number, z: number): typeof this.transform;
-    scaleBy(x: number, y: number, z: number): typeof this.transform;
-    translateBy(x: number, y: number, z: number): typeof this.transform;
+    rotateBy(x: number, y: number, z: number): com.zhekasmirnov.innercore.api.NativeRenderer.Transform;
+    scaleBy(x: number, y: number, z: number): com.zhekasmirnov.innercore.api.NativeRenderer.Transform;
+    translateBy(x: number, y: number, z: number): com.zhekasmirnov.innercore.api.NativeRenderer.Transform;
     exists(): boolean;
 }
 declare class RenderSide<T extends string | RenderMesh> {
@@ -207,7 +205,7 @@ declare class RenderSide<T extends string | RenderMesh> {
     constructor(dir: string, model: RenderMesh);
     constructor(dir: string, model: string, importParams?: RenderMesh.ImportParams);
     getWithData(data: number): RenderMesh;
-    getForTile(tile_entity: TileEntity.TileEntityPrototype): RenderMesh;
+    getForTile(tileEntity: TileEntity.TileEntityPrototype): RenderMesh;
 }
 declare class BlockAnimation {
     coords: Vector;
@@ -404,6 +402,9 @@ interface IClickCallback {
 interface IProjectileHitCallback {
     onProjectileHit(projectile: number, item: ItemStack, target: Callback.ProjectileHitTarget): void;
 }
+interface IBlockSelectionCallback {
+    onSelection(block: Tile, position: BlockPosition, vector: Vector): void;
+}
 declare class BasicBlock {
     readonly variationList: Block.BlockVariation[];
     readonly id: number;
@@ -434,7 +435,7 @@ declare class BasicBlock {
     isSolid?(): boolean;
     static destroyWithTile(x: number, y: number, z: number, blockSource: BlockSource): void;
 }
-declare abstract class BlockPlant extends BasicBlock implements INeighbourChangeCallback, IPlaceCallback {
+declare class BlockPlant extends BasicBlock implements INeighbourChangeCallback, IPlaceCallback {
     static allowedBlockList: number[];
     constructor(stringID: string, variationList: Block.BlockVariation[]);
     getCreativeGroup(): string;
@@ -513,9 +514,14 @@ declare abstract class LocalTileEntity implements LocalTileEntity {
      * Use {@link onTick} instead
      */
     tick: () => void;
+    selection: () => void;
     onLoad(): void;
     onUnload(): void;
-    onTick(): void;
+    onTick?(): void;
+    /**
+     * Method, works if player looks and touchs block.
+     */
+    onSelection?(): void;
     constructor();
 }
 /**Class to create tile entities in separated client server side formats.
@@ -526,32 +532,32 @@ declare abstract class LocalTileEntity implements LocalTileEntity {
  *     public exampleMessagePacket(): void {
  *         Game.message("example");
  *         return;
- *     };
+ *     }
  *
  *     public onTick(): void {
  *         Game.message("tick work")
- *     };
- * };
+ *     }
+ * }
  *
  * class ExampleTile extends CommonTileEntity {
  *     public getLocalTileEntity(): LocalTileEntity {
  *         return new LocalExampleTile();
- *     };
+ *     }
  *
  *     public onTick(): void {
  *         this.sendPacket("exampleMessagePacket", {});
- *     };
- * };
+ *     }
+ * }
  *
  * class ExampleBlock extends BasicBlock {
  *     public constructor() {
  *         super("example_block");
- *     };
+ *     }
  *
  *     public override getTileEntity(): CommonTileEntity {
  *         return new ExampleTile();
- *     };
- * };
+ *     }
+ * }
  * ```
  */
 declare abstract class CommonTileEntity implements TileEntity {
@@ -586,11 +592,11 @@ declare abstract class CommonTileEntity implements TileEntity {
     containerEvents?: {
         [eventName: string]: (container: ItemContainer, window: UI.Window | UI.StandartWindow | UI.StandardWindow | UI.TabbedWindow, windowContent: com.zhekasmirnov.innercore.api.mod.ui.window.WindowContent, eventData: any) => void;
     };
-    client?: LocalTileEntity;
     eventNames: {
         network: string[];
         container: string[];
     };
+    client?: LocalTileEntity;
     constructor();
     created(): void;
     /**@deprecated
@@ -640,7 +646,7 @@ declare abstract class CommonTileEntity implements TileEntity {
     onDestroyBlock(coords: Callback.ItemUseCoordinates, player: number): void;
     onProjectileHit(coords: Callback.ItemUseCoordinates, target: Callback.ProjectileHitTarget): void;
     onDestroyTile(): boolean | void;
-    onTick(): void;
+    onTick?(): void;
     getGuiScreen(): Nullable<UI.IWindow>;
     getScreenByName(screenName?: string, container?: ItemContainer): Nullable<UI.IWindow>;
     getScreenName(player: number, coords: Vector): string;
@@ -872,7 +878,28 @@ declare enum ECallback {
     /**
      * Custom callback. Works in one time of 8 ticks, if player held the item.
      */
-    ITEM_HOLD = "ItemHold"
+    ITEM_HOLD = "ItemHold",
+    BLOCK_SELECTION = "BlockSelection"
+}
+declare namespace Callback {
+    /**
+     * Function used in "ItemHold" callback. Callback works one time of 8 ticks.
+     * @since 0.1a
+     * @param item ItemInstance of held item
+     * @param playerUid unique identifier of holder player
+     */
+    interface ItemHoldFunction {
+        (item: ItemInstance, playerUid: number, slotIndex: number): void;
+    }
+    interface BlockSelectionFunction {
+        (block: Tile, position: BlockPosition, vector: Vector): any;
+    }
+    interface EntitySelectionFunction {
+        (entityUid: number, vector: Vector): any;
+    }
+    function addCallback(name: "ItemHold", func: ItemHoldFunction, priority?: number): void;
+    function addCallback(name: "BlockSelection", func: BlockSelectionFunction, priority?: number): void;
+    function addCallback(name: "EntitySelection", func: EntitySelectionFunction, priority?: number): any;
 }
 /**
  * The factory of decorators to add callback from function.
@@ -905,15 +932,3 @@ declare function SubscribeEvent(event: ECallback): MethodDecorator;
  * @param descriptor
  */
 declare function SubscribeEvent(target: unknown, key: string, descriptor: PropertyDescriptor): PropertyDescriptor;
-declare namespace Callback {
-    /**
-     * Function used in "ItemHold" callback. Callback works one time of 8 ticks.
-     * @since 0.1a
-     * @param item ItemInstance of held item
-     * @param playerUid unique identifier of holder player
-     */
-    interface ItemHoldFunction {
-        (item: ItemInstance, playerUid: number, slotIndex: number): void;
-    }
-    function addCallback(name: "ItemHold", func: ItemHoldFunction, priority?: number): void;
-}

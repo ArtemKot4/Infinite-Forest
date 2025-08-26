@@ -103,18 +103,32 @@ namespace TileSignRenderer {
         }
         return renders;
     }
-    
-    export function renderByPointed(): void {
-        const time = World.getThreadTime();
-        const data = Player.getPointed();
-        if(time % 20 == 0 && (!hasSign(data.pos) || renders.length == 0)) {
-            startFXsByPosition(data.pos.x, data.pos.y, data.pos.z);
+
+    export function renderEquals(fxBefore: RotatingRenderFX[], fxNew: RotatingRenderFX[]): boolean {
+        if(fxBefore.length != fxNew.length) {
+            return false;
         }
-        if(time % 45 == 0 && renders.length > 0) {
-            const newRenders = getRendersFrom(data.pos.x, data.pos.y, data.pos.z);
-            if(newRenders.length > 0 && newRenders.length != renders.length) {
-                startFXsByPosition(data.pos.x, data.pos.y, data.pos.z, newRenders);
+        for(const i in fxNew) {
+            if(fxBefore[i].skin != fxNew[i].skin) {
+                return false;
             }
         }
+        return true;
     }
+    
+    export function renderByPointed(block: Tile, position: BlockPosition, vector: Vector): void {
+        const time = World.getThreadTime();
+        const isUsing = hasSign(position);
+        if(time % 20 == 0) {
+            if(!isUsing || isUsing && renders.length == 0) {
+                startFXsByPosition(position.x, position.y, position.z);
+            } else if(time % 40 == 0 && isUsing && renders.length > 0) {
+                const newRenders = getRendersFrom(position.x, position.y, position.z);
+                if(renderEquals(renders, newRenders) == false) {
+                    startFXsByPosition(position.x, position.y, position.z, newRenders);
+                }
+            }
+        } 
+    }
+    Callback.addCallback("BlockSelection", renderByPointed);
 }

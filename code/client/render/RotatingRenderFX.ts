@@ -30,8 +30,8 @@ class RotatingRenderFX extends RenderObject {
         this.maxHeight = description.y;
         this.render = description.render || (() => {
             const render = new Render();
-            render.getPart("head").addPart("board");
-            render.setPart("board", [{
+            render.getPart("head").addPart("display");
+            render.setPart("display", [{
                 coords: { x: 0, y: 0, z: 0 }, size: { x: 5, y: 5, z: 0.1 }, uv: { x: 0, y: 1 }
             }], {
                 width: 5,
@@ -50,7 +50,7 @@ class RotatingRenderFX extends RenderObject {
     }
 
     public override getStringID(): string {
-        return "curse_fx";
+        return "rotating_render_fx";
     }
     
     public calculatePositions(): void {
@@ -82,12 +82,15 @@ class RotatingRenderFX extends RenderObject {
     }
 
     public override run(): void {
+        if(this.isLoaded == false) {
+            return;
+        }
         const playerPos = Entity.getPosition(Player.getLocal());
         const targetAngle = Math.atan2(playerPos.z - this.z, playerPos.x - this.x);
         
         this.offset += (targetAngle - this.offset) * 0.4;
         this.calculatePositions();
-        this.render.getPart("board")
+        this.render.getPart("display")
         .setRotation(0, this.offset - Math.PI / 2, 0);
     }
 }
@@ -100,6 +103,6 @@ Callback.addCallback("ItemUse", (c, i) => {
             z: c.z + 0.5, 
             x2: c.x + 0.5,
             skin: "sign/fire.png"
-        }).start();
+        }).load();
     }
 });
