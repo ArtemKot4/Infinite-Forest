@@ -1,0 +1,6 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "infinite_forest:item/pink_stick"
+    }
+}
