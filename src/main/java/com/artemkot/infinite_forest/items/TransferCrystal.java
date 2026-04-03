@@ -4,6 +4,9 @@ import java.util.List;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -13,24 +16,35 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
 public class TransferCrystal extends Item {
-    public final int dimension;
-
-    public TransferCrystal(int dimension) {
+    private final ResourceKey<Level> targetDimension;
+    
+    public TransferCrystal(ResourceKey<Level> targetDimension) {
         super(new Item.Properties().stacksTo(1));
-        this.dimension = dimension;
+        this.targetDimension = targetDimension;
     }
-
+    
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, 
-                                List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("tooltip.infinite_forest." + BuiltInRegistries.ITEM.getKey(this).getPath()));
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+        tooltip.add(Component.translatable("tooltip.infinite_forest." + 
+            BuiltInRegistries.ITEM.getKey(this).getPath()));
     }
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        if (level.isClientSide) {
-            player.displayClientMessage(Component.literal("§7Тест. Телепортация в измерение " + dimension), true);
+        ItemStack stack = player.getItemInHand(hand);
+        
+        if (!level.isClientSide) {
+            ServerPlayer serverPlayer = (ServerPlayer) player;
+
+            ServerLevel targetDimension = serverPlayer.server.getLevel(this.targetDimension);
+            
+            if (targetDimension != null) {
+                serverPlayer.teleportTo(targetDimension, serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ(), serverPlayer.getYRot(), serverPlayer.getXRot());
+            } else {
+                player.sendSystemMessage(Component.literal("§cОшибка: Целевое измерение недоступно."));
+            }
         }
-        return InteractionResultHolder.success(player.getItemInHand(hand));
+        
+        return InteractionResultHolder.success(stack);
     }
 }

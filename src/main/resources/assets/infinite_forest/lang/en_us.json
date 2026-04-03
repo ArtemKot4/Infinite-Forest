@@ -1,9 +1,10 @@
 {
-    "fml.menu.mods.info.description.infinite_forest": "An endless forest stretches before you, accompanied by the greatest trees, and in the farthest distance, fireflies light your way. But the footsteps behind you fall silent the moment you stop. The fireflies go out one by one — along with any hope of return. The forest does not wait. It watches in silence. And it erases the screams.",
+    "fml.menu.mods.info.description.infinite_forest": "An endless forest stretches before you, accompanied by the greatest trees, and in the farthest distance, fireflies light your way.\n\nBut the footsteps behind you fall silent the moment you stop. The fireflies go out one by one — along with any hope of return. The forest does not wait. It watches in silence. And it erases the screams.",
 
-    "creativetab.infinite_forest.infinite_forest_tab": "§3Infinite Forest",
+    "creative_tab.infinite_forest.nature": "Infinite Forest: nature",
+    "creative_tab.infinite_forest.inventions": "Infinite Forest: inventions",
 
-    "tooltip.infinite_forest.ice_crystal": "§7Brings a sense of unease, cursed cold and loneliness",
+    "tooltip.infinite_forest.ice_crystal": "§7Brings a sense of unease, cold and loneliness",
     "tooltip.infinite_forest.fire_crystal": "§7Pleasantly warms, brings strange calm",
     
     "item.infinite_forest.ice_crystal": "§9Ice Crystal",

@@ -54,8 +54,7 @@ neoForge {
     runs {
         client {
             client()
-
-            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+            programArguments.addAll '--quickPlaySingleplayer', 'Infinite Forest Dev'
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
 
