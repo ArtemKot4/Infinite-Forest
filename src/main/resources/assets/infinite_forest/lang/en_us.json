@@ -4,9 +4,11 @@
     "creative_tab.infinite_forest.nature": "Infinite Forest: nature",
     "creative_tab.infinite_forest.inventions": "Infinite Forest: inventions",
 
-    "tooltip.infinite_forest.ice_crystal": "§7Brings a sense of unease, cold and loneliness",
-    "tooltip.infinite_forest.fire_crystal": "§7Pleasantly warms, brings strange calm",
-    
+    "tooltip.infinite_forest.ice_crystal": "Brings a sense of unease, cold and loneliness",
+    "tooltip.infinite_forest.fire_crystal": "Pleasantly warms, brings strange calm",
+
+    "ancient_note.infinite_forest.empty": "Has no records",
+
     "item.infinite_forest.ice_crystal": "§9Ice Crystal",
     "item.infinite_forest.fire_crystal": "§6Fire Crystal",
     "item.infinite_forest.ancient_note": "Ancient Note",
@@ -40,5 +42,7 @@
     "block.infinite_forest.pink_bark": "Pink Bark",
     "block.infinite_forest.mortar": "Mortar",
     "block.infinite_forest.chair": "Chair",
-    "block.infinite_forest.candle": "Ether Candle"
+    "block.infinite_forest.candle": "Ether Candle",
+
+    "message.infinite_forest.unknown": "Unknown"
 }

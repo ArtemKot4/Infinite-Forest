@@ -2,6 +2,7 @@ package com.artemkot.infinite_forest.items;
 
 import java.util.List;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -19,29 +20,28 @@ public class TransferCrystal extends Item {
     private final ResourceKey<Level> targetDimension;
     
     public TransferCrystal(ResourceKey<Level> targetDimension) {
-        super(new Item.Properties().stacksTo(1));
+        super(new Item.Properties().stacksTo(1).fireResistant());
         this.targetDimension = targetDimension;
     }
     
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         tooltip.add(Component.translatable("tooltip.infinite_forest." + 
-            BuiltInRegistries.ITEM.getKey(this).getPath()));
+            BuiltInRegistries.ITEM.getKey(this).getPath())
+            .withStyle(ChatFormatting.GRAY)
+        );
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        ItemStack stack = player.getItemInHand(hand);
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {
+        ItemStack stack = player.getItemInHand(usedHand);
         
         if (!level.isClientSide) {
             ServerPlayer serverPlayer = (ServerPlayer) player;
-
             ServerLevel targetDimension = serverPlayer.server.getLevel(this.targetDimension);
             
             if (targetDimension != null) {
                 serverPlayer.teleportTo(targetDimension, serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ(), serverPlayer.getYRot(), serverPlayer.getXRot());
-            } else {
-                player.sendSystemMessage(Component.literal("§cОшибка: Целевое измерение недоступно."));
             }
         }
         

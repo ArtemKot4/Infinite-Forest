@@ -8,7 +8,9 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
 
-import com.artemkot.infinite_forest.items.ItemList;
+import com.artemkot.infinite_forest.items.ancient_note.AncientNoteStorage;
+import com.artemkot.infinite_forest.items.ancient_note.ItemList;
+import com.artemkot.infinite_forest.items.data_components.AncientNoteData;
 
 public class CreativeTabList {
      public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, InfiniteForest.MOD_ID);
@@ -21,7 +23,11 @@ public class CreativeTabList {
                 .displayItems((parameters, output) -> {
                     output.accept(ItemList.ICE_CRYSTAL.get());
                     output.accept(ItemList.FIRE_CRYSTAL.get());
-                    output.accept(ItemList.ANCIENT_NOTE.get());
+                    AncientNoteStorage.container.forEach((stringId, page) -> {
+                        ItemStack stack = ItemList.ANCIENT_NOTE.toStack();
+                        stack.set(DataComponentList.ANCIENT_NOTE_DATA.get(), new AncientNoteData(stringId, "", "", ""));
+                        output.accept(stack);
+                    });
                 })
                 .build()
         );
@@ -36,6 +42,4 @@ public class CreativeTabList {
                 })
                 .build()
         );
-    
-    public static void init() {}
 }

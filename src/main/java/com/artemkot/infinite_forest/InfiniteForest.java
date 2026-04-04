@@ -2,9 +2,9 @@ package com.artemkot.infinite_forest;
 
 import org.slf4j.Logger;
 
-import com.artemkot.infinite_forest.block.BlockList;
-import com.artemkot.infinite_forest.items.ItemList;
-import com.artemkot.infinite_forest.world.sky.ForestSkyEffects;
+import com.artemkot.infinite_forest.blocks.BlockList;
+import com.artemkot.infinite_forest.items.ancient_note.ItemList;
+import com.artemkot.infinite_forest.world.sky.Sky;
 import com.mojang.logging.LogUtils;
 
 import net.neoforged.api.distmarker.Dist;
@@ -28,10 +28,7 @@ public class InfiniteForest {
         BlockList.BLOCKS.register(modEventBus);
         ItemList.ITEMS.register(modEventBus); 
         CreativeTabList.TABS.register(modEventBus);
-
-        ItemList.init();
-        BlockList.init();
-        CreativeTabList.init();
+        DataComponentList.COMPONENTS.register(modEventBus);
 
         NeoForge.EVENT_BUS.register(this);
         NeoForge.EVENT_BUS.register(new Events());
@@ -39,7 +36,7 @@ public class InfiniteForest {
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
         if(Dist.CLIENT.isClient()) {
-            modEventBus.addListener(ForestSkyEffects::register);
+            modEventBus.addListener(Sky::register);
         }
     }
 

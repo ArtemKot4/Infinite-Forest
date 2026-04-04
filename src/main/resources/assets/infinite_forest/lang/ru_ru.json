@@ -12,8 +12,10 @@
     "item.infinite_forest.sparkling_grasses": "Мерцающие травы",
     "item.infinite_forest.forest_map": "Карта лесных очертаний",
 
-    "tooltip.infinite_forest.ice_crystal": "§7Приносит чувство беспокойства, холода и одиночества",
-    "tooltip.infinite_forest.fire_crystal": "§7Приятно согревает, приносит странное спокойствие",
+    "tooltip.infinite_forest.ice_crystal": "Приносит чувство беспокойства, холода и одиночества",
+    "tooltip.infinite_forest.fire_crystal": "Приятно согревает, приносит странное спокойствие",
+
+    "ancient_note.infinite_forest.empty": "Нет записей",
 
     "block.infinite_forest.learning_table": "Исследовательский стол",
     "block.infinite_forest.iron_cauldron": "Железный котёл",
@@ -68,10 +70,15 @@
     "message.infinite_forest.coords_vine": "Расположение стебля:",
     "message.infinite_forest.map_distance": "Размер:",
     "message.infinite_forest.record_map_warning": "Упс. Кажется, карта не записана. Чтобы записать карту, просто нажмите по любому блоку, держа её в руках",
+    "message.infinite_forest.unknown": "Неизвестен",
 
     "ancient_note.infinite_forest.empty": "Эта записка пуста",
     "ancient_note.infinite_forest.contains": "Запись:",
     "ancient_note.infinite_forest.strange_walls": "Пока пусто",
-    "ancient_note.infinite_forest.flames": "Я люблю огоньки. Они так красиво светятся, и, \nкажется, они не боятся темноты. Я люблю их, и, кажется, они любят меня.",
-    "ancient_note.infinite_forest.unity_with_nature": "Мне нравятся наши места. \nЗдесь теплее, чем в остальном лесу. Люблю посидеть у берега озера, и люблю, \nкогда светлячки пролетают над ним. Очень красиво. И хоть здесь всегда темно, \nно есть в этом месте что-то такое, необыкновенное, не как в нашей деревне. \nЗдесь я чувствую себя спокойно, только редкий ветер колышит траву, наполняя её присутствием.."
+    "ancient_note.infinite_forest.flames_description": "Я люблю огоньки. Они так красиво светятся, и, \nкажется, они не боятся темноты. Я люблю их, и, кажется, они любят меня.",
+    "ancient_note.infinite_forest.flames_name": "Путеводные огни",
+    
+    "ancient_note.infinite_forest.unity_with_nature": "Мне нравятся наши места. \nЗдесь теплее, чем в остальном лесу. Люблю посидеть у берега озера, и люблю, \nкогда светлячки пролетают над ним. Очень красиво. И хоть здесь всегда темно, \nно есть в этом месте что-то такое, необыкновенное, не как в нашей деревне. \nЗдесь я чувствую себя спокойно, только редкий ветер колышит траву, наполняя её присутствием..",
+    "ancient_note.infinite_forest.moon_flower_description": "Сегодня я так устал, вновь пишу никому не нужную работу, ещё и странное место нашёл. Скользкое, будто замерзло. И в самом центре ещё странный синий цветок. Любая поверхность, что его касается, моментально замерзает. Я проверил. Пусть будет... луноцвет. Надеюсь, что удача улыбнётся мне сорвать его.",
+    "ancient_note.infinite_forest.moon_flower_name": "Цветок луны"
 }

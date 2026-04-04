@@ -10,7 +10,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.client.event.RegisterDimensionSpecialEffectsEvent;
 
 @OnlyIn(Dist.CLIENT)
-public class ForestSkyEffects extends net.minecraft.client.renderer.DimensionSpecialEffects {
+public class Sky extends net.minecraft.client.renderer.DimensionSpecialEffects {
     
     public static final ResourceLocation FOREST_SKY = 
         ResourceLocation.fromNamespaceAndPath(InfiniteForest.MOD_ID, "sky");
@@ -20,7 +20,7 @@ public class ForestSkyEffects extends net.minecraft.client.renderer.DimensionSpe
     private static final net.minecraft.world.phys.Vec3 FOG_COLOR = 
         new net.minecraft.world.phys.Vec3(0, 0.6, 0.3);
     
-    public ForestSkyEffects() {
+    public Sky() {
         super(192.0F, true, SkyType.NORMAL, false, false);
     }
     
@@ -40,10 +40,11 @@ public class ForestSkyEffects extends net.minecraft.client.renderer.DimensionSpe
                              org.joml.Matrix4f modelViewMatrix, Camera camera, 
                              org.joml.Matrix4f projectionMatrix, boolean isFoggy, 
                              Runnable setupFog) {
+        //здесь
         return false;
     }
     
     public static void register(RegisterDimensionSpecialEffectsEvent event) {
-        event.register(FOREST_SKY, new ForestSkyEffects());
+        event.register(FOREST_SKY, new Sky());
     }
 }
