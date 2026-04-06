@@ -1,4 +1,4 @@
-package com.artemkot.infinite_forest.items;
+package com.artemkot.infinite_forest.common.item;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.artemkot.infinite_forest.items.ancient_note;
+package com.artemkot.infinite_forest.common.item.ancient_note;
 
 import java.util.HashMap;
 
@@ -6,10 +6,10 @@ import javax.annotation.Nullable;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import com.artemkot.infinite_forest.DataComponentList;
-import com.artemkot.infinite_forest.items.ancient_note.AncientNote.Author;
-import com.artemkot.infinite_forest.items.ancient_note.AncientNote.Page;
-import com.artemkot.infinite_forest.items.data_components.AncientNoteData;
+import com.artemkot.infinite_forest.common.DataComponentList;
+import com.artemkot.infinite_forest.common.item.ancient_note.AncientNote.Author;
+import com.artemkot.infinite_forest.common.item.ancient_note.AncientNote.Page;
+import com.artemkot.infinite_forest.common.item.data_components.AncientNoteData;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;

@@ -1,4 +1,4 @@
-package com.artemkot.infinite_forest.items.data_components;
+package com.artemkot.infinite_forest.common.item.data_components;
 
 import java.util.Optional;
 

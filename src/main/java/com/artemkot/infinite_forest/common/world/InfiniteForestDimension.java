@@ -1,4 +1,4 @@
-package com.artemkot.infinite_forest.world;
+package com.artemkot.infinite_forest.common.world;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -11,4 +11,4 @@ public class InfiniteForestDimension {
             Registries.DIMENSION,
             ResourceLocation.fromNamespaceAndPath(com.artemkot.infinite_forest.InfiniteForest.MOD_ID, "infinite_forest")
         );
-}
+} 

@@ -1,4 +1,4 @@
-package com.artemkot.infinite_forest.world.sky;
+package com.artemkot.infinite_forest.common.world.sky;
 
 import com.artemkot.infinite_forest.InfiniteForest;
 

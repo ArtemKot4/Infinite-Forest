@@ -4,7 +4,7 @@
             "type": "ttf",
             "file": "infinite_forest:ancient_note_ether.ttf",
             "size": 9.0,
-            "oversample": 4.0
+            "oversample": 6.0
         }
     ]
 }

@@ -2,9 +2,12 @@ package com.artemkot.infinite_forest;
 
 import org.slf4j.Logger;
 
-import com.artemkot.infinite_forest.blocks.BlockList;
-import com.artemkot.infinite_forest.items.ancient_note.ItemList;
-import com.artemkot.infinite_forest.world.sky.Sky;
+import com.artemkot.infinite_forest.common.CreativeTabList;
+import com.artemkot.infinite_forest.common.DataComponentList;
+import com.artemkot.infinite_forest.common.Events;
+import com.artemkot.infinite_forest.common.block.BlockList;
+import com.artemkot.infinite_forest.common.item.ancient_note.ItemList;
+import com.artemkot.infinite_forest.common.world.sky.Sky;
 import com.mojang.logging.LogUtils;
 
 import net.neoforged.api.distmarker.Dist;

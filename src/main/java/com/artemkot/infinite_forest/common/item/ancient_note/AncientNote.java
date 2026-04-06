@@ -1,4 +1,4 @@
-package com.artemkot.infinite_forest.items.ancient_note;
+package com.artemkot.infinite_forest.common.item.ancient_note;
 
 import java.util.HashMap;
 import java.util.List;
@@ -8,10 +8,10 @@ import javax.annotation.Nullable;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import com.artemkot.infinite_forest.DataComponentList;
 import com.artemkot.infinite_forest.InfiniteForest;
 import com.artemkot.infinite_forest.client.ui.AncientNoteScreen;
-import com.artemkot.infinite_forest.items.data_components.AncientNoteData;
+import com.artemkot.infinite_forest.common.DataComponentList;
+import com.artemkot.infinite_forest.common.item.data_components.AncientNoteData;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -30,13 +30,13 @@ public class AncientNote extends Item {
         super(new Item.Properties().stacksTo(1).component(DataComponentList.ANCIENT_NOTE_DATA, AncientNoteData.EMPTY));
     }
 
-    public record Author(@Nonnull String name, @Nonnull ResourceLocation font) {
-        public static Author PLAYER = new Author("", ResourceLocation.fromNamespaceAndPath(InfiniteForest.MOD_ID, "player"));
-        public static Author ETHER = new Author("Ether", ResourceLocation.fromNamespaceAndPath(InfiniteForest.MOD_ID, "ancient_note_ether"));
-        public static Author SCIENTIST = new Author("Scientist", ResourceLocation.fromNamespaceAndPath(InfiniteForest.MOD_ID, "ancient_note_scientist"));
+    public record Author(@Nonnull String name, @Nonnull ResourceLocation textFont, @NonNull int textLineSize) {
+        public static Author PLAYER = new Author("", ResourceLocation.fromNamespaceAndPath(InfiniteForest.MOD_ID, "player"), 16);
+        public static Author ETHER = new Author("name.infinite_forest.ether", ResourceLocation.fromNamespaceAndPath(InfiniteForest.MOD_ID, "ancient_note_ether"), 16);
+        public static Author SCIENTIST = new Author("name.infinite_forest.scientist", ResourceLocation.fromNamespaceAndPath(InfiniteForest.MOD_ID, "ancient_note_scientist"), 25);
 
         public Author copyWith(String newName) {
-            return new Author(newName, font);
+            return new Author(newName, textFont, textLineSize);
         }
     }
 

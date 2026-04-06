@@ -44,5 +44,8 @@
     "block.infinite_forest.chair": "Chair",
     "block.infinite_forest.candle": "Ether Candle",
 
-    "message.infinite_forest.unknown": "Unknown"
+    "message.infinite_forest.unknown": "Unknown",
+
+    "name.infinite_forest.ether": "Ether",
+    "name.infinite_forest.scientist": "Archibald"
 }

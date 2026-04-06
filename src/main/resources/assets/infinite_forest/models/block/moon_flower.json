@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "infinite_forest:block/plants/moon_flower"
+  },
+  "render_type": "cutout"
+}

@@ -1,6 +1,6 @@
-package com.artemkot.infinite_forest;
+package com.artemkot.infinite_forest.common;
 
-import com.artemkot.infinite_forest.items.data_components.AncientNoteData;
+import com.artemkot.infinite_forest.common.item.data_components.AncientNoteData;
 
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;

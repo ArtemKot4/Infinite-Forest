@@ -1,6 +1,6 @@
-package com.artemkot.infinite_forest;
+package com.artemkot.infinite_forest.common;
 
-import com.artemkot.infinite_forest.world.InfiniteForestDimension;
+import com.artemkot.infinite_forest.common.world.InfiniteForestDimension;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;

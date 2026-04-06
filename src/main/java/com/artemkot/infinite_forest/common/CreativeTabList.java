@@ -1,4 +1,4 @@
-package com.artemkot.infinite_forest;
+package com.artemkot.infinite_forest.common;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -8,9 +8,10 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
 
-import com.artemkot.infinite_forest.items.ancient_note.AncientNoteStorage;
-import com.artemkot.infinite_forest.items.ancient_note.ItemList;
-import com.artemkot.infinite_forest.items.data_components.AncientNoteData;
+import com.artemkot.infinite_forest.InfiniteForest;
+import com.artemkot.infinite_forest.common.item.ancient_note.AncientNoteStorage;
+import com.artemkot.infinite_forest.common.item.ancient_note.ItemList;
+import com.artemkot.infinite_forest.common.item.data_components.AncientNoteData;
 
 public class CreativeTabList {
      public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, InfiniteForest.MOD_ID);

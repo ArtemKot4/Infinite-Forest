@@ -3,8 +3,8 @@
         {
             "type": "ttf",
             "file": "infinite_forest:ancient_note_scientist.ttf",
-            "size": 9.5,
-            "oversample": 4.0
+            "size": 10,
+            "oversample": 6.0
         }
     ]
 }
