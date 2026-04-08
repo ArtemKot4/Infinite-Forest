@@ -4,11 +4,6 @@
     "creative_tab.infinite_forest.nature": "Infinite Forest: nature",
     "creative_tab.infinite_forest.inventions": "Infinite Forest: inventions",
 
-    "tooltip.infinite_forest.ice_crystal": "Brings a sense of unease, cold and loneliness",
-    "tooltip.infinite_forest.fire_crystal": "Pleasantly warms, brings strange calm",
-
-    "ancient_note.infinite_forest.empty": "Has no records",
-
     "item.infinite_forest.ice_crystal": "§9Ice Crystal",
     "item.infinite_forest.fire_crystal": "§6Fire Crystal",
     "item.infinite_forest.ancient_note": "Ancient Note",
@@ -16,6 +11,11 @@
     "item.infinite_forest.wheat_flour": "Wheat Flour",
     "item.infinite_forest.sparkling_grasses": "Sparkling Grasses",
     "item.infinite_forest.forest_map": "Forest Outline Map",
+
+    "tooltip.infinite_forest.ice_crystal": "Brings a sense of unease, cold and loneliness",
+    "tooltip.infinite_forest.fire_crystal": "Pleasantly warms, brings strange calm",
+
+    "ancient_note.infinite_forest.empty": "Has no records",
 
     "block.infinite_forest.learning_table": "Learning Table",
     "block.infinite_forest.iron_cauldron": "Iron Cauldron",
@@ -44,7 +44,42 @@
     "block.infinite_forest.chair": "Chair",
     "block.infinite_forest.candle": "Ether Candle",
 
+    "page.infinite_forest.awake_title": "A Strange Feeling",
+    "page.infinite_forest.awake_description": "It is day, and...\nOnce again I try to escape the strange dream that has been troubling me for a long time.\nIn it, I wandered through a mysterious forest.\nThe tallest trees, whose crowns deepened and crowded deep in the sky, give me no peace.\nThe quiet whisper of leaves, the cool earth on which leaves and flowers were strikingly scattered,\nthrow me into a shiver.\nIt is time to deal with my problems. From this day I begin to keep a diary...",
+
+    "learning.infinite_forest.first_lucks": "First Successes",
+    "learning.infinite_forest.strange_dream": "Strange Dream",
+    "learning.infinite_forest.first_point": "Starting Point",
+    "learning.infinite_forest.cauldron_lifehack": "Water Without Bounds",
+    "learning.infinite_forest.no_more_evil": "No More Evil",
+
+    "message.infinite_forest.clear_learnings": "Your learnings have been cleared",
+    "message.infinite_forest.clear_learning": "Learning %s cleared",
+    "message.infinite_forest.unknown_learning": "Error! Unknown learning...",
+    "message.infinite_forest.rift_coords_not_enough": "Not enough coordinates!",
+    "message.infinite_forest.rift_created": "Rift created",
+    "message.infinite_forest.rift_destroyed": "Rift destroyed",
+    "message.infinite_forest.player_learning_list": "Available learnings:",
+    "message.infinite_forest.none_learnings": "No learnings",
+    "message.infinite_forest.typing": "Seems empty here. I think it's time to fix that...",
+    "message.infinite_forest.typing_placeholder": "Enter text",
+    "message.infinite_forest.transfer_learning": "telling about",
+    "message.infinite_forest.hint_with_learning_transfer": "To share a learning, tell about it:",
+    "message.infinite_forest.learning": "Learning:",
+    "message.infinite_forest.none": "None",
+    "message.infinite_forest.coords_vine": "Vine location:",
+    "message.infinite_forest.map_distance": "Size:",
+    "message.infinite_forest.record_map_warning": "Oops. Seems the map isn't recorded. To record the map, just click on any block while holding it",
     "message.infinite_forest.unknown": "Unknown",
+
+    "ancient_note.infinite_forest.empty": "This note is empty",
+    "ancient_note.infinite_forest.contains": "Record:",
+    "ancient_note.infinite_forest.strange_walls": "Empty for now",
+    "ancient_note.infinite_forest.flames_description": "I love fireflies. They glow so beautifully, and it seems they are not afraid of the dark. I love them, and it seems they love me.",
+    "ancient_note.infinite_forest.flames_name": "Guiding Lights",
+    "ancient_note.infinite_forest.unity_with_nature": "I like our places. It's warmer here than in the rest of the forest. I love sitting by the lake shore, and I love when fireflies fly over it. Very beautiful. And even though it's always dark here, there is something extraordinary about this place, not like in our village. Here I feel calm, only a rare wind sways the grass, filling it with presence...",
+    "ancient_note.infinite_forest.moon_flower_description": "Today I am so tired, again writing unnecessary work, and also found a strange place. Slippery, as if frozen. And in the very center there is a strange blue flower. Any surface that touches it instantly freezes. I checked. Let it be... moonflower. I hope luck smiles on me to pick it.",
+    "ancient_note.infinite_forest.moon_flower_name": "Moon Flower",
 
     "name.infinite_forest.ether": "Ether",
     "name.infinite_forest.scientist": "Archibald"

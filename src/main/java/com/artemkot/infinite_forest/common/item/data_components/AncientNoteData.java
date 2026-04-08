@@ -12,6 +12,9 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
 public record AncientNoteData(String stringId, String name, String description, @Nullable String learning) {
+    public AncientNoteData(String stringId) {
+        this(stringId, "", "", "");
+    }
     public static final AncientNoteData EMPTY = new AncientNoteData("custom", "", "", "");
 
     public static final Codec<AncientNoteData> CODEC = RecordCodecBuilder.create(inst -> inst.group(
@@ -40,6 +43,5 @@ public record AncientNoteData(String stringId, String name, String description, 
             description,
             learning
         );
-    }
-);
+    });
 }

@@ -11,6 +11,7 @@ import com.artemkot.infinite_forest.common.item.ancient_note.AncientNote.Author;
 import com.artemkot.infinite_forest.common.item.ancient_note.AncientNote.Page;
 import com.artemkot.infinite_forest.common.item.data_components.AncientNoteData;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
@@ -44,11 +45,25 @@ public class AncientNoteStorage {
     }
 
     public static void addNote(String stringId, @NonNull Author author, @NonNull String name, @NonNull String description, @Nullable String learning) {
+        if(name == null) {
+            name = "ancient_note.infinite_forest." + stringId + ":name";
+        }
+        if(description == null) {
+            description = "ancient_note.infinite_forest." + stringId + ":description";
+        }
+        if(Component.translatable(name).getString().equals(name)) {
+            name = "";
+        }
+  
         addNote(stringId, new Page(author, name, description, learning));    
     }
 
-    public static void addNote(Page page) {
-        addNote(page.name(), page);
+    public static void addNote(String stringId, Author author, @Nullable String learning) {
+        addNote(stringId, author, null, null, learning);
+    }
+
+    public static void addNote(String stringId, Author author) {
+        addNote(stringId, author, "");
     }
 
     public static @Nullable Page getNote(String stringId) {
@@ -56,7 +71,9 @@ public class AncientNoteStorage {
     }
 
     static {
-        addNote("flames", new Page(Author.ETHER, "ancient_note.infinite_forest.flames_name", "ancient_note.infinite_forest.flames_description", null));
-        addNote("moon_flower", new Page(Author.SCIENTIST, "ancient_note.infinite_forest.moon_flower_name", "ancient_note.infinite_forest.moon_flower_description", null));
+        addNote("flames", Author.ETHER);
+        addNote("moon_flower", Author.SCIENTIST);
+        addNote("welcome", AncientNote.Author.INFINITE_FOREST);
+        //addNote("roots_blame");
     }
 }

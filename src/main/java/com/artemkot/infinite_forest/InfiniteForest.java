@@ -10,6 +10,7 @@ import com.artemkot.infinite_forest.common.item.ancient_note.ItemList;
 import com.artemkot.infinite_forest.common.world.sky.Sky;
 import com.mojang.logging.LogUtils;
 
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -47,4 +48,8 @@ public class InfiniteForest {
 
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {}
+
+    public static ResourceLocation getResourceLocation(String name) {
+        return ResourceLocation.fromNamespaceAndPath(InfiniteForest.MOD_ID, name);
+    }
 }

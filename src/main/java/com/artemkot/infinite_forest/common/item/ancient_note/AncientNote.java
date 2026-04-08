@@ -31,10 +31,11 @@ public class AncientNote extends Item {
     }
 
     public record Author(@Nonnull String name, @Nonnull ResourceLocation textFont, @NonNull int textLineSize) {
-        public static Author PLAYER = new Author("", ResourceLocation.fromNamespaceAndPath(InfiniteForest.MOD_ID, "player"), 16);
-        public static Author ETHER = new Author("name.infinite_forest.ether", ResourceLocation.fromNamespaceAndPath(InfiniteForest.MOD_ID, "ancient_note_ether"), 16);
-        public static Author SCIENTIST = new Author("name.infinite_forest.scientist", ResourceLocation.fromNamespaceAndPath(InfiniteForest.MOD_ID, "ancient_note_scientist"), 25);
-
+        public static Author PLAYER = new Author("", InfiniteForest.getResourceLocation("player"), 16);
+        public static Author ETHER = new Author("name.infinite_forest.ether", InfiniteForest.getResourceLocation("ancient_note_ether"), 16);
+        public static Author SCIENTIST = new Author("name.infinite_forest.scientist", InfiniteForest.getResourceLocation("ancient_note_scientist"), 25);
+        public static Author INFINITE_FOREST = new Author("name.infinite_forest.infinite_forest", InfiniteForest.getResourceLocation("infinite_forest"), 21);
+        
         public Author copyWith(String newName) {
             return new Author(newName, textFont, textLineSize);
         }
@@ -42,16 +43,15 @@ public class AncientNote extends Item {
 
     public record Page(@NonNull Author author, @NonNull String name, @NonNull String description, @Nullable String learning) {
         public Page {
-            if(name == null) {
-                name = "";
-            }
-            if(description == null) {
-                description = "";
-            }
             if(learning == null) {
                 learning = "";
             }
         }
+
+        public Page(@NonNull Author author) {
+            this(author, "", "", "");
+        }
+
         public static Page ERROR = new Page(Author.ETHER, "Error with loading", "Guess, you got error. Please send bug report", null);
     }
 

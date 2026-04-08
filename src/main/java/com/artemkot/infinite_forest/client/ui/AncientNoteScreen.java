@@ -58,9 +58,7 @@ public class AncientNoteScreen extends Screen {
         public BackgroundWidget() {
             super(10, 10, 100, 20, Component.empty());
             String description = Component.translatable(page.description()).getString();
-            if(description == null) {
-                description = "";
-            }
+
             animatedText = new AnimatedText(description, page.author().textLineSize())
             .setTime(40)
             .setSpeed(0.3);
@@ -70,21 +68,22 @@ public class AncientNoteScreen extends Screen {
 
         @Override
         protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-            graphics.blit(BACKGROUND, leftPos, topPos, 0, 0, 
-                        IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_HEIGHT);
+            graphics.blit(BACKGROUND, leftPos, topPos, 0, 0, IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_HEIGHT);
             
             int textX = leftPos + 15;
             int textY = topPos + 40;
-            int textWidth = IMAGE_WIDTH - 30;
-            
-            graphics.drawString(minecraft.font, 
-                Component.translatable(page.name()).withStyle((style) -> style.withFont(page.author().textFont())), 
-                textX, topPos + 20, ChatFormatting.DARK_GRAY.getColor(), false);
-            
-            // graphics.drawString(minecraft.font, 
-            //     Component.literal(animatedText.text + this.getSpaces() + ".").withStyle((style) -> style.withFont(page.author().font())), 
-            //     textX, textY, textWidth, ChatFormatting.DARK_GRAY.getColor());
+            int rowsMax = 13;
 
+            if(page.name().equals("")) { 
+                textY -= 20;
+                rowsMax += 2;
+            } else {
+                graphics.drawString(minecraft.font, 
+                    Component.translatable(page.name()).withStyle((style) -> style.withFont(page.author().textFont())), 
+                    textX, textY - 20, ChatFormatting.DARK_GRAY.getColor(), false
+                );
+            }
+            
             animatedText.draw(minecraft, graphics, textX, textY, 10, 
                 style -> style.withFont(page.author().textFont())
                 .withColor(ChatFormatting.DARK_GRAY.getColor()
