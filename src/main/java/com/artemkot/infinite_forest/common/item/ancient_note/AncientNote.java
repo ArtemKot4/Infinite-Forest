@@ -34,7 +34,7 @@ public class AncientNote extends Item {
         public static Author PLAYER = new Author("", InfiniteForest.getResourceLocation("player"), 16);
         public static Author ETHER = new Author("name.infinite_forest.ether", InfiniteForest.getResourceLocation("ancient_note_ether"), 16);
         public static Author SCIENTIST = new Author("name.infinite_forest.scientist", InfiniteForest.getResourceLocation("ancient_note_scientist"), 25);
-        public static Author INFINITE_FOREST = new Author("name.infinite_forest.infinite_forest", InfiniteForest.getResourceLocation("infinite_forest"), 21);
+        public static Author INFINITE_FOREST = new Author("name.infinite_forest.infinite_forest", InfiniteForest.getResourceLocation("infinite_forest"), 19);
         
         public Author copyWith(String newName) {
             return new Author(newName, textFont, textLineSize);

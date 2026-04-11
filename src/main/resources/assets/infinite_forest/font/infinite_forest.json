@@ -4,7 +4,7 @@
             "type": "ttf",
             "file": "infinite_forest:infinite_forest.ttf",
             "size": 10.0,
-            "oversample": 6.0
+            "oversample": 2.0
         }
     ]
 }

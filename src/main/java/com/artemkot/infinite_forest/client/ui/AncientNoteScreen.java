@@ -51,6 +51,7 @@ public class AncientNoteScreen extends Screen {
         ResourceLocation.fromNamespaceAndPath("infinite_forest", "textures/ui/ancient_note/skip.png");
 
         public AnimatedText animatedText; 
+        public boolean showSkipIcon = true;
 
         private static final ResourceLocation BACKGROUND = 
         ResourceLocation.fromNamespaceAndPath("infinite_forest", "textures/ui/ancient_note/background.png");
@@ -71,11 +72,11 @@ public class AncientNoteScreen extends Screen {
             graphics.blit(BACKGROUND, leftPos, topPos, 0, 0, IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_HEIGHT);
             
             int textX = leftPos + 15;
-            int textY = topPos + 40;
+            int textY = topPos + 35;
             int rowsMax = 13;
 
             if(page.name().equals("")) { 
-                textY -= 20;
+                textY -= 25;
                 rowsMax += 2;
             } else {
                 graphics.drawString(minecraft.font, 
@@ -93,7 +94,7 @@ public class AncientNoteScreen extends Screen {
                 if(!closeButton.visible) {
                     closeButton.visible = true;
                 }
-            } else if(this.isMouseOver(mouseX, mouseY)) {
+            } else if(showSkipIcon && this.isMouseOver(mouseX, mouseY)) {
                 graphics.blit(SKIP, mouseX - 5, mouseY - 5, 0, 0, 10, 10, 10, 10);
             }
         }
@@ -111,6 +112,7 @@ public class AncientNoteScreen extends Screen {
 
         @Override
         public boolean mouseClicked(double mouseX, double mouseY, int button) {
+            showSkipIcon = false;
             animatedText.skip();
             return true;
         }
