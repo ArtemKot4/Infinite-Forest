@@ -76,6 +76,7 @@ public class InfiniteForest {
 
     public InfiniteForest(IEventBus modEventBus, ModContainer modContainer) {
         modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(DataGenerators::new);
 
         BlockList.BLOCKS.register(modEventBus);
         ItemList.ITEMS.register(modEventBus); 
@@ -90,14 +91,6 @@ public class InfiniteForest {
         if(Dist.CLIENT.isClient()) {
             modEventBus.addListener(Sky::register);
         }
-    }
-
-    private void gatherData(GatherDataEvent event) {
-        DataGenerator generator = event.getGenerator();
-        PackOutput output = generator.getPackOutput();
-        ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
-        CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
-        
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {}

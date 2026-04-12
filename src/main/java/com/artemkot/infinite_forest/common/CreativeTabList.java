@@ -9,6 +9,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import java.util.function.Supplier;
 
 import com.artemkot.infinite_forest.InfiniteForest;
+import com.artemkot.infinite_forest.common.block.BlockList;
 import com.artemkot.infinite_forest.common.item.ancient_note.AncientNoteStorage;
 import com.artemkot.infinite_forest.common.item.ancient_note.ItemList;
 import com.artemkot.infinite_forest.common.item.data_components.AncientNoteData;
@@ -25,6 +26,9 @@ public class CreativeTabList {
                 .displayItems((parameters, output) -> {
                     output.accept(ItemList.ICE_CRYSTAL.get());
                     output.accept(ItemList.FIRE_CRYSTAL.get());
+                    
+                    output.accept(BlockList.FIRE_FLOWER.get());
+                    output.accept(BlockList.MOON_FLOWER.get());
                     
                     AncientNoteStorage.container.forEach((stringId, page) -> {
                         if(Config.DEVELOPMENT_MODE.get() == true) {

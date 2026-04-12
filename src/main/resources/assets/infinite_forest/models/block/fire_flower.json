@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/cross",
-  "textures": {
-    "cross": "yourmodid:block/fire_flower"
-  },
-  "render_type": "cutout"
-}

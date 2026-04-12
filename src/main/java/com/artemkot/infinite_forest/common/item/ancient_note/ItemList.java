@@ -1,8 +1,11 @@
 package com.artemkot.infinite_forest.common.item.ancient_note;
 
 import com.artemkot.infinite_forest.InfiniteForest;
+import com.artemkot.infinite_forest.common.block.BlockList;
 import com.artemkot.infinite_forest.common.item.TransferCrystal;
 
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -19,4 +22,13 @@ public class ItemList {
     public static final DeferredItem<AncientNote> ANCIENT_NOTE = ITEMS.register("ancient_note", AncientNote::new);
 
     public static final DeferredItem<?> WHEAT_FLOUR = ITEMS.registerSimpleItem("wheat_flour");
+
+    static {
+        BlockList.BLOCKS.getEntries().forEach(blockHolder -> {
+            ITEMS.register(
+                blockHolder.getId().getPath(),
+                () -> new BlockItem(blockHolder.get(), new Item.Properties())
+            );
+        });
+    }
 }

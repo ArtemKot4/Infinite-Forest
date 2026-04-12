@@ -21,5 +21,4 @@ public class BlockList {
 
     public static final DeferredBlock<ForestFlower> FIRE_FLOWER = BLOCKS.register("fire_flower", ForestFlower::new);
     public static final DeferredBlock<ForestFlower> MOON_FLOWER = BLOCKS.register("moon_flower", ForestFlower::new);
-    //для датагенов: DeferredRegister#getEntries пройтись по всем блокам и вызвать их методы для получения нужных данных
 }
