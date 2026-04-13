@@ -1,7 +1,10 @@
-⚠️ CONCEPTS BRANCH — FOR THOSE WHO HAVE FINISHED THE GAME ONLY
+## For another languages: 
+1. Русский: **[клик](readme-ru.md)**
+
+# ⚠️ CONCEPTS BRANCH — FOR THOSE WHO HAVE FINISHED THE GAME ONLY
 If you have NOT played Infinite Forest — close this branch immediately.
 
-🚫 WHAT'S INSIDE
+## 🚫 WHAT'S INSIDE
 
 This branch contains:
 
@@ -17,7 +20,7 @@ Lore that is meant to be DISCOVERED BY THE PLAYER, not read on GitHub
 
 No code. Only concepts, story, and spoilers.
 
-🧠 WHO THIS IS FOR
+## 🧠 WHO THIS IS FOR
 
 Those who have already completed Infinite Forest and want to understand how it all works
 
@@ -25,7 +28,7 @@ Developers interested in narrative architecture
 
 Theorists who want to discuss the lore
 
-⚠️ IF YOU HAVEN'T PLAYED
+## ⚠️ IF YOU HAVEN'T PLAYED
 
 You will rob yourself of:
 
@@ -37,13 +40,14 @@ The secrets hidden beneath ancient roots
 
 Don't do this. The forest does not forgive those who peek at the end without walking the path.
 
-🔥 WARNING
+## 🔥 WARNING
 
 "You are reading what you were meant to discover on your own. The forest is silent. But I am not. Close this branch. Go play. Then come back. If you still want to."
 
-📜 LICENSE
+## 📜 LICENSE
 
 The concepts and lore are the intellectual property of the author. You may discuss them, but do not copy without attribution.
 
+### ❗ Last waning:
 
 One more time: if you haven't played — close this branch. You've been warned.
