@@ -1,25 +1,49 @@
+⚠️ CONCEPTS BRANCH — FOR THOSE WHO HAVE FINISHED THE GAME ONLY
+If you have NOT played Infinite Forest — close this branch immediately.
 
-Installation information
-=======
+🚫 WHAT'S INSIDE
 
-This template repository can be directly cloned to get you started with a new
-mod. Simply create a new repository cloned from this one, by following the
-instructions provided by [GitHub](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template).
+This branch contains:
 
-Once you have your clone, simply open the repository in the IDE of your choice. The usual recommendation for an IDE is either IntelliJ IDEA or Eclipse.
+The full lore of the world
 
-If at any point you are missing libraries in your IDE, or you've run into problems you can
-run `gradlew --refresh-dependencies` to refresh the local cache. `gradlew clean` to reset everything 
-{this does not affect your code} and then start the process again.
+All endings described in detail
 
-Mapping Names:
-============
-By default, the MDK is configured to use the official mapping names from Mojang for methods and fields 
-in the Minecraft codebase. These names are covered by a specific license. All modders should be aware of this
-license. For the latest license text, refer to the mapping file itself, or the reference copy here:
-https://github.com/NeoForged/NeoForm/blob/main/Mojang.md
+Reputation mechanics, curses, the secret biome
 
-Additional Resources: 
-==========
-Community Documentation: https://docs.neoforged.net/  
-NeoForged Discord: https://discord.neoforged.net/
+The full text of every note (including the final ones)
+
+Lore that is meant to be DISCOVERED BY THE PLAYER, not read on GitHub
+
+No code. Only concepts, story, and spoilers.
+
+🧠 WHO THIS IS FOR
+
+Those who have already completed Infinite Forest and want to understand how it all works
+
+Developers interested in narrative architecture
+
+Theorists who want to discuss the lore
+
+⚠️ IF YOU HAVEN'T PLAYED
+
+You will rob yourself of:
+
+The first moment of dread when the forest whispered
+
+The ending you chose yourself, not read on GitHub
+
+The secrets hidden beneath ancient roots
+
+Don't do this. The forest does not forgive those who peek at the end without walking the path.
+
+🔥 WARNING
+
+"You are reading what you were meant to discover on your own. The forest is silent. But I am not. Close this branch. Go play. Then come back. If you still want to."
+
+📜 LICENSE
+
+The concepts and lore are the intellectual property of the author. You may discuss them, but do not copy without attribution.
+
+
+One more time: if you haven't played — close this branch. You've been warned.
