@@ -2,7 +2,7 @@ package com.artemkot.infinite_forest.common.block;
 
 import javax.annotation.Nullable;
 
-import com.artemkot.infinite_forest.api.effect.Effect;
+import com.artemkot.infinite_forest.api.effect.EffectType;
 import com.mojang.serialization.MapCodec;
 
 import net.minecraft.core.BlockPos;
@@ -36,7 +36,7 @@ public class ForestFlower extends BushBlock {
         );
     }
 
-    protected @Nullable Effect getEffect() {
+    protected @Nullable EffectType getEffect() {
         return null;
     }
 

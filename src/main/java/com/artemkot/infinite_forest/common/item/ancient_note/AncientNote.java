@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import com.artemkot.infinite_forest.InfiniteForest;
+import com.artemkot.infinite_forest.ModResources;
 import com.artemkot.infinite_forest.client.ui.AncientNoteScreen;
 import com.artemkot.infinite_forest.common.DataComponentList;
 import com.artemkot.infinite_forest.common.item.data_components.AncientNoteData;
@@ -31,10 +32,10 @@ public class AncientNote extends Item {
     }
 
     public record Author(@Nonnull String name, @Nonnull ResourceLocation textFont, @NonNull int textLineSize) {
-        public static Author PLAYER = new Author("", InfiniteForest.getResourceLocation("player"), 16);
-        public static Author ETHER = new Author("name.infinite_forest.ether", InfiniteForest.getResourceLocation("ancient_note_ether"), 16);
-        public static Author SCIENTIST = new Author("name.infinite_forest.scientist", InfiniteForest.getResourceLocation("ancient_note_scientist"), 25);
-        public static Author INFINITE_FOREST = new Author("name.infinite_forest.infinite_forest", InfiniteForest.getResourceLocation("infinite_forest"), 19);
+        public static Author PLAYER = new Author("", ModResources.getResourceLocation("player"), 16);
+        public static Author ETHER = new Author("name.infinite_forest.ether", ModResources.getResourceLocation("ancient_note_ether"), 16);
+        public static Author SCIENTIST = new Author("name.infinite_forest.scientist", ModResources.getResourceLocation("ancient_note_scientist"), 25);
+        public static Author INFINITE_FOREST = new Author("name.infinite_forest.infinite_forest", ModResources.getResourceLocation("infinite_forest"), 19);
         
         public Author copyWith(String newName) {
             return new Author(newName, textFont, textLineSize);

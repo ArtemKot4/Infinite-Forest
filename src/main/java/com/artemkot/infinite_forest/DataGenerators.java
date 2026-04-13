@@ -22,6 +22,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.data.ParticleDescriptionProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
@@ -55,6 +56,7 @@ public class DataGenerators {
         addLootTableProvider();
         addBlockTagsProvider();
         addItemModelProvider();
+        addParticleDescriptionProvider();
     }
 
     private void addBlockStateProvider() {
@@ -177,5 +179,21 @@ public class DataGenerators {
                     }
                 }
         );
-}
+    }
+
+    private void addParticleDescriptionProvider() {
+        // generator.addProvider(
+        //     event.includeClient(),
+        //     (DataProvider.Factory<ParticleDescriptionProvider>) packOutput -> 
+        //         new ParticleDescriptionProvider(packOutput) {
+        //             @Override
+        //             protected void addDescriptions() {
+        //                 // Указываем тип частицы и текстуру к ней
+        //                 this.sprite(ModParticleTypes.FIRE_FLOWER_PARTICLE.get(), 
+        //                     InfiniteForest.getResourceLocation("fire_flower_particle"));
+        //             }
+        //         }
+        // );
+    }
+
 }

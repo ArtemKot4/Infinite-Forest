@@ -97,8 +97,4 @@ public class InfiniteForest {
 
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {}
-
-    public static ResourceLocation getResourceLocation(String name) {
-        return ResourceLocation.fromNamespaceAndPath(InfiniteForest.MOD_ID, name);
-    }
 }

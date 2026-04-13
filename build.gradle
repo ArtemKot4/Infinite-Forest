@@ -54,7 +54,7 @@ neoForge {
     runs {
         client {
             client()
-            programArguments.addAll '--quickPlaySingleplayer', 'Infinite Forest Dev'
+            programArguments.addAll '--quickPlaySingleplayer', 'dev'
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
 
