@@ -1,0 +1,100 @@
+Infinite Forest Mod License Agreement
+Version 3.1 (International)
+Copyright (c) 2025 ArtemKot (https://github.com/ArtemKot4). All Rights Reserved.
+
+This license applies to all versions of the Mod for Minecraft: Java Edition and
+Minecraft: Bedrock Edition (exclusively via Inner Core / Horizon Modding Kernel),
+as well as all supplementary files, concept art, and source materials contained
+within the official project repository.
+
+1. DEFINITIONS
+"Mod" means the Infinite Forest software in any form, including compiled .jar files
+(Java Edition) under the package namespace com.artemkot.*, Inner Core / Horizon
+modules (including but not limited to source code in C++, JavaScript, TypeScript,
+and associated resource files), and all textures, 3D models, sounds, shaders,
+animations, scripts, and lore texts contained therein.
+"Assets" means all visual, audio, and textual components of the Mod, including
+unused concept art, work-in-progress materials, and documentation published in the
+official repository.
+
+2. GRANT OF RIGHTS
+Licensor grants you a worldwide, non-exclusive, royalty-free license to:
+(a) Download, install, and play the Mod on any supported platform.
+(b) Create and publish videos, screenshots, and live streams featuring the Mod,
+    including for commercial monetization purposes.
+(c) Host the Mod on multiplayer servers (Java Edition) or Bedrock-compatible worlds
+    via Inner Core, including servers that accept donations, provided that no
+    Pay-to-Win mechanics (as defined in Section 5.1(c)) are implemented using Mod
+    features.
+
+3. MODPACK INCLUSION
+(a) You may include unmodified copies of the Mod in Modpacks (Java Edition) and
+    Inner Core mod collections, and distribute such packs by any means.
+(b) The Mod's files must be included as-is, without any modification, decompilation,
+    recompilation, patching, or extraction of its Assets or code. Wrapper scripts,
+    configuration files, or launch scripts that do not alter the Mod's binary or
+    source files are permitted.
+
+4. FORKING AND CONTRIBUTION
+Forking or cloning the official repository is permitted for the purpose of
+submitting Pull Requests, reporting Issues, or proposing improvements. Forks used
+solely for these purposes may remain public and are not required to be deleted.
+Any fork used to create, modify, or distribute a derivative version of the Mod
+(including but not limited to modified builds, patched versions, or independently
+distributed copies) requires explicit written permission from Licensor and
+otherwise constitutes a violation of this license.
+
+5. RESTRICTIONS
+The following actions are EXPRESSLY PROHIBITED and will result in immediate
+termination of this license and may constitute copyright infringement:
+
+5.1. Commercial Exploitation
+(a) Selling the Mod files or access to them for real currency.
+(b) Using Assets on stock platforms, NFT marketplaces, or in third-party
+    advertising campaigns.
+(c) Pay-to-Win: Selling in-game items, abilities, or location access EXCLUSIVELY
+    provided by this Mod for real currency or purchasable in-game currency on
+    multiplayer servers.
+
+5.2. Asset and Code Usage
+(a) Extraction, copying, modification, or reuse of any Asset or source code
+    fragment in another project (including but not limited to other mods, addons,
+    maps, texture packs, or video asset collections).
+(b) Porting the Mod to other Minecraft versions, editions, or modding platforms
+    (including but not limited to porting between Java Edition and Bedrock Edition,
+    or between Inner Core and other Bedrock modding frameworks) without written
+    consent from Licensor. Permission requests may be submitted via GitHub
+    Discussions or the contact method specified in the repository README.
+(c) Decompilation, reverse engineering, or any attempt to extract source code or
+    Assets from compiled Mod files, except as expressly permitted by applicable law
+    notwithstanding this prohibition.
+
+6. SOURCE AVAILABILITY
+The official repository is made publicly available as "Source Available" software
+for the purposes of transparency, bug reporting, and community collaboration.
+Public access does NOT imply an open-source license. All rights not expressly
+granted in Sections 2 and 3 are reserved by Licensor.
+
+7. INTERNATIONAL COPYRIGHT
+This license is governed by the principles of the Berne Convention for the
+Protection of Literary and Artistic Works. You acknowledge that the Mod and its
+Assets are protected by copyright in your jurisdiction and that unauthorized use
+constitutes copyright infringement enforceable through local courts and
+international DMCA-equivalent takedown procedures.
+
+8. ATTRIBUTION AND REMOVAL
+Attribution is not required when including the Mod in packs, videos, servers, or
+any other permitted use. Licensor does not reserve the right to demand removal of
+the Mod from any modpack, server, or video based on subjective content preferences.
+Licensor may report packs that contain malware or violate Mojang's EULA / Microsoft's
+Terms of Service, and may pursue legal removal only if applicable laws are breached.
+
+9. TERMINATION
+This license terminates automatically upon breach of any provision in Section 5.
+
+10. DISCLAIMER OF WARRANTY
+THE MOD IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+PARTICULAR PURPOSE, AND NONINFRINGEMENT. IN NO EVENT SHALL LICENSOR BE LIABLE
+FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY ARISING FROM, OUT OF, OR IN CONNECTION
+WITH THE MOD OR THE USE OR OTHER DEALINGS IN THE MOD.

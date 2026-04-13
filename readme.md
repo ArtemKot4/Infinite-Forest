@@ -1,7 +1,9 @@
 ## For another languages: 
-1. Русский: **[клик](readme-ru.md)**
+
+1. Русский: **[клик](README-ru.md)**
 
 # ⚠️ CONCEPTS BRANCH — FOR THOSE WHO HAVE FINISHED THE GAME ONLY
+
 If you have NOT played Infinite Forest — close this branch immediately.
 
 ## 🚫 WHAT'S INSIDE
