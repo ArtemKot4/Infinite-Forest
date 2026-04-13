@@ -46,10 +46,6 @@ Don't do this. The forest does not forgive those who peek at the end without wal
 
 "You are reading what you were meant to discover on your own. The forest is silent. But I am not. Close this branch. Go play. Then come back. If you still want to."
 
-## 📜 LICENSE
-
-The concepts and lore are the intellectual property of the author. You may discuss them, but do not copy without attribution.
-
 ### ❗ Last waning:
 
 One more time: if you haven't played — close this branch. You've been warned.
