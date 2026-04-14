@@ -20,6 +20,7 @@ public class ForestFlower extends BushBlock {
             .mapColor(MapColor.PLANT)
                 .noCollission()
                 .instabreak()
+                .lightLevel((state) -> 6)
                 .sound(SoundType.GRASS)
                 .offsetType(BlockBehaviour.OffsetType.XZ)
             );

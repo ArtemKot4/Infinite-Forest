@@ -1,23 +1,15 @@
 package com.artemkot.infinite_forest.api.effect;
 
+import com.artemkot.infinite_forest.Config;
 import com.artemkot.infinite_forest.ModResources;
-import com.mojang.blaze3d.systems.RenderSystem;
+import com.artemkot.infinite_forest.common.item.ancient_note.AncientNote;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.client.event.RenderGuiEvent;
 
 @OnlyIn(Dist.CLIENT)
 public class EffectHud {
@@ -26,56 +18,64 @@ public class EffectHud {
     protected int defaultY;
 
     protected final ResourceLocation scaleTexture;
+    protected final ResourceLocation scaleIconTexture;
     protected int x;
     protected int y;
-    protected double scaleState; // from 0 (empty) to 1 (full)
-    protected boolean appear = true;
-    protected boolean disappear = false;
     protected double alpha = 0;
+    protected int scaleState = 0;
 
-    public EffectHud(ResourceLocation scaleTexture) {
+    public EffectHud(ResourceLocation scaleTexture, ResourceLocation scaleIconTexture) {
         this.scaleTexture = scaleTexture;
+        this.scaleIconTexture = scaleIconTexture;
         this.setDefaultY(5);
     }
 
-    public void setDefaultY(int defaultY) {
+    public EffectHud setDefaultY(int defaultY) {
         this.defaultY = defaultY;
         this.y = defaultY;
+        return this;
     }
 
-    public void draw(GuiGraphics graphics, Minecraft mc) {
-        int screenWidth = mc.getWindow().getGuiScaledWidth();
-        this.x = (screenWidth - 93) / 2;
+    public void calculateAnimation(int timer, int timerMax) {
+        float progress = Math.min(1.0f, (float) (timerMax - timer) / (timerMax / 5.0f));
 
-        if(alpha < 1) { 
-            if(appear == true) {
-                graphics.setColor(1.0f, 1.0f, 1.0f, (float) alpha);
+        if(timer > 0) {
+            scaleState = (int) (77 * progress);
+
+            if(alpha < 1) { 
                 alpha = Math.min(1, alpha + 0.008);
             }
         } else {
-            appear = false;
-            scaleState = Math.min(1, scaleState + 0.008);
-        } 
-
-        if(alpha > 0) {
-            if(disappear) {
-                graphics.setColor(1.0f, 1.0f, 1.0f, (float) alpha);
+            scaleState = Math.max(0, scaleState - 1);
+            if(scaleState == 0) { 
                 alpha = Math.max(0, alpha - 0.008);
             }
-        } else {
-            disappear = false;
         }
+    }
+
+    public void draw(GuiGraphics graphics, Minecraft mc, int timer, int timerMax) {
+        int screenWidth = mc.getWindow().getGuiScaledWidth();
+
+        this.x = (screenWidth - 93) / 2;
+        this.calculateAnimation(timer, timerMax);
+        
+        graphics.setColor(1.0f, 1.0f, 1.0f, (float) alpha);
 
         graphics.blit(borderTexture, x, y, 0, 0, 93, 13, 93, 13);
-        graphics.blit(scaleBackgroundTexture, x + 8, y + 2, 0, 0, 77, 9, 77, 9);
-        graphics.blit(scaleTexture, x + 8, y + 2, 0, 0, (int) (77 * scaleState), 9, 77, 9);
+        graphics.blit(scaleBackgroundTexture, x + 8 + 4, y + 2, 0, 0, 77, 9, 77, 9);
+        graphics.blit(scaleTexture, x + 8 + 4, y + 2, 0, 0, scaleState, 9, 77, 9);
+        graphics.blit(scaleIconTexture, x + 2, y + 2, 0, 0, 9, 9, 9, 9);
+
+        if(Config.EFFECT_DATA_LOGGING.get()) {
+            graphics.drawString(mc.font, Component.literal(timer + ":" + timerMax).withStyle(
+                (format) -> format.withFont(AncientNote.Author.ETHER.textFont())), 
+                x + 93 + 5, y + 4, 0xFFFFFF
+            );
+        }
     }
 
     public void clear() {
-        this.scaleState = 0;
         this.y = defaultY;
-        this.appear = true;
-        this.disappear = false;
         this.alpha = 0;
     }
 }

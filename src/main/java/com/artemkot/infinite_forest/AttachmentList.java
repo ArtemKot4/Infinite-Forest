@@ -14,8 +14,9 @@ public class AttachmentList {
         DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, InfiniteForest.MOD_ID);
     
     public static final Supplier<AttachmentType<PlayerEffectStorage>> PLAYER_EFFECTS =
-        ATTACHMENTS.register("player_effects", () ->AttachmentType.builder(PlayerEffectStorage::new)
-            //.serialize(PlayerEffectStorage.CODEC)  // чуть позже, когда будет готово
+        ATTACHMENTS.register("player_effects", () -> AttachmentType.builder(PlayerEffectStorage::new)
+            .serialize(PlayerEffectStorage.CODEC) 
+            .sync(PlayerEffectStorage.STREAM_CODEC)
             .build()
     );
 }

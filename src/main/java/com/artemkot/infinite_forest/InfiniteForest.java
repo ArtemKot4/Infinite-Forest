@@ -2,10 +2,12 @@ package com.artemkot.infinite_forest;
 
 import org.slf4j.Logger;
 
+import com.artemkot.infinite_forest.api.effect.EffectStorage;
 import com.artemkot.infinite_forest.common.CreativeTabList;
 import com.artemkot.infinite_forest.common.DataComponentList;
 import com.artemkot.infinite_forest.common.Events;
 import com.artemkot.infinite_forest.common.block.BlockList;
+import com.artemkot.infinite_forest.common.effect.ColdEffect;
 import com.artemkot.infinite_forest.common.item.ancient_note.ItemList;
 import com.artemkot.infinite_forest.common.world.sky.Sky;
 import com.mojang.logging.LogUtils;
@@ -88,9 +90,13 @@ public class InfiniteForest {
 
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
+        AttachmentList.ATTACHMENTS.register(modEventBus);
+
         if(Dist.CLIENT.isClient()) {
             modEventBus.addListener(Sky::register);
         }
+
+        EffectStorage.registerEffect("cold", new ColdEffect());
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {}

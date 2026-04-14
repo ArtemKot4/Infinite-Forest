@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class Config {
@@ -12,6 +13,10 @@ public class Config {
     public static final ModConfigSpec.BooleanValue DEVELOPMENT_MODE = BUILDER
             .comment("Development mode")
             .define("Add ancient notes to creative. Not recommended for default players", true);
+
+    public static final ModConfigSpec.BooleanValue EFFECT_DATA_LOGGING = BUILDER
+            .comment("Log of effect data near with scale overlay. Useful for debugging.")
+            .define("logging", true);
 
     public static final ModConfigSpec.IntValue MAGIC_NUMBER = BUILDER
             .comment("A magic number")
@@ -28,6 +33,6 @@ public class Config {
     static final ModConfigSpec SPEC = BUILDER.build();
 
     private static boolean validateItemName(final Object obj) {
-        return obj instanceof String itemName && BuiltInRegistries.ITEM.containsKey(ResourceLocation.parse(itemName));
+            return obj instanceof String itemName && BuiltInRegistries.ITEM.containsKey(ResourceLocation.parse(itemName));
     }
 }
