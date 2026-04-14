@@ -16,7 +16,7 @@ public class Config {
 
     public static final ModConfigSpec.BooleanValue EFFECT_DATA_LOGGING = BUILDER
             .comment("Log of effect data near with scale overlay. Useful for debugging.")
-            .define("logging", true);
+            .define("logging", false);
 
     public static final ModConfigSpec.IntValue MAGIC_NUMBER = BUILDER
             .comment("A magic number")
