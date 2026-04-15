@@ -20,6 +20,14 @@ public class EffectPlayerData {
         this.duration = duration;
     }
 
+    public EffectPlayerData(String id, int timerMax, int duration) {
+        this(id, 0, timerMax, duration);
+    }
+
+    public EffectPlayerData(String id, int duration) {
+        this(id, 30, duration);
+    }
+
     public static final Codec<EffectPlayerData> CODEC = RecordCodecBuilder.create(instance ->
         instance.group(
             Codec.STRING.fieldOf("id").forGetter(d -> d.id),

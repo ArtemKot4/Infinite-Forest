@@ -5,11 +5,11 @@ import java.util.HashMap;
 public class CurseStorage {
     public static final HashMap<String, Curse> CURSES = new HashMap<>();
 
-    public void registerCurse(String name, Curse curse) {
+    public static void registerCurse(String name, Curse curse) {
         CURSES.put(name, curse);
     }
 
-    public Curse getCurse(String name) {
-        return CURSES.get(name);
+    public static <T extends Curse> T getCurse(String name) {
+        return (T) CURSES.get(name);
     }
 }

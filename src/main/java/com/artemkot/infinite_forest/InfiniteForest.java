@@ -10,6 +10,7 @@ import com.artemkot.infinite_forest.common.Events;
 import com.artemkot.infinite_forest.common.block.BlockList;
 import com.artemkot.infinite_forest.common.effect.ColdEffect;
 import com.artemkot.infinite_forest.common.item.ancient_note.ItemList;
+import com.artemkot.infinite_forest.common.world.curse.ColdCurse;
 import com.artemkot.infinite_forest.common.world.sky.Sky;
 import com.mojang.logging.LogUtils;
 
@@ -97,6 +98,7 @@ public class InfiniteForest {
         }
 
         EffectStorage.registerEffect("cold", new ColdEffect());
+        CurseStorage.registerCurse("cold", new ColdCurse());
     }
 
     @SubscribeEvent

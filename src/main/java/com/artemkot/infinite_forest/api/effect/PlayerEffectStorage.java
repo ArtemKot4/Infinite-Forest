@@ -48,6 +48,12 @@ public class PlayerEffectStorage {
     }
     
     public void addEffect(EffectPlayerData effect) { 
+        if(hasEffect(effect.id)) {
+            EffectPlayerData actualEffect = getEffect(effect.id);
+            actualEffect.duration = effect.duration;
+            actualEffect.timerMax = effect.timerMax;
+            effect = actualEffect;
+        }
         activeEffects.put(effect.id, effect); 
     }
     

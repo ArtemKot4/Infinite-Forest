@@ -69,7 +69,7 @@ public class EffectHud {
         
         if(Config.EFFECT_DATA_LOGGING.get()) {
             graphics.drawString(mc.font, 
-                Component.literal(effectData.duration + " | " + effectData.timer + ":" + effectData.timerMax)
+                Component.literal(effectData.duration + " of " + effectData.timer + ":" + effectData.timerMax)
                     .withStyle(style -> style.withFont(AncientNote.Author.ETHER.textFont())), 
                 x + 93 + 5, y + 4, 0xFFFFFF, false);
         }

@@ -1,13 +1,11 @@
 package com.artemkot.infinite_forest.common.block.plant;
 
-import com.artemkot.infinite_forest.InfiniteForest;
+import com.artemkot.infinite_forest.api.curse.CurseStorage;
+import com.artemkot.infinite_forest.common.block.ForestFlower;
+import com.artemkot.infinite_forest.common.world.curse.ColdCurse;
 
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.entity.player.PlayerEvent;
-
-public class MoonFlower {
-    
+public class MoonFlower extends ForestFlower {
+    public MoonFlower() {
+        CurseStorage.<ColdCurse>getCurse("cold").addFrozenBlock(this);
+    }
 }

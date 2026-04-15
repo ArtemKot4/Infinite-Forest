@@ -31,15 +31,14 @@ public class TickEvents {
             EffectPlayerData effectData = iterator.next();
             EffectType effect = EffectStorage.getEffect(effectData.id);
 
-            if(effect != null) {
-                effect.onTick(player, effectData);
-            }
-
             if(effectData.duration > 0) {
                 if(effectData.timer < effectData.timerMax) {
                     effectData.timer++;
                 } else {
                     effectData.duration--;
+                    if(effect != null) {
+                        effect.onTick(player, effectData);
+                    }
                 }
             } else {
                 if(effectData.timer > 0) {

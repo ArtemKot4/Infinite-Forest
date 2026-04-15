@@ -2,6 +2,8 @@ package com.artemkot.infinite_forest.common.block;
 
 import com.artemkot.infinite_forest.InfiniteForest;
 import com.artemkot.infinite_forest.common.block.plant.FireFlower;
+import com.artemkot.infinite_forest.common.block.plant.MoonFlower;
+
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.inventory.MenuType;
@@ -20,5 +22,5 @@ public class BlockList {
     public static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(Registries.MENU, InfiniteForest.MOD_ID);
 
     public static final DeferredBlock<FireFlower> FIRE_FLOWER = BLOCKS.register("fire_flower", FireFlower::new);
-    public static final DeferredBlock<ForestFlower> MOON_FLOWER = BLOCKS.register("moon_flower", ForestFlower::new);
+    public static final DeferredBlock<MoonFlower> MOON_FLOWER = BLOCKS.register("moon_flower", MoonFlower::new);
 }

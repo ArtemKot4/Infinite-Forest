@@ -4,6 +4,7 @@ import com.artemkot.infinite_forest.ModResources;
 import com.artemkot.infinite_forest.api.effect.EffectType;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.player.Player;
 
 import com.artemkot.infinite_forest.api.effect.EffectHud;
@@ -21,6 +22,10 @@ public class ColdEffect extends EffectType {
     }
 
     public void onTick(Player player, EffectPlayerData data) {
-        //player.sendSystemMessage(Component.literal("Холодный эффект действует!"));
+        int newFrozen = Math.min(
+            player.getTicksFrozen() + 5,
+            player.getTicksRequiredToFreeze()
+        );
+        player.setTicksFrozen(newFrozen);
     }
 }

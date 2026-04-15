@@ -56,25 +56,4 @@ public class EffectOverlayEvent {
      
         RenderSystem.disableBlend();
     }
-
-
-    //debug
-    @SubscribeEvent
-    public static void onRightClick(PlayerInteractEvent.RightClickItem event) {
-        Player player = event.getEntity();
-        
-        if(player.getItemInHand(event.getHand()).getItem() != Items.STICK) {
-            return;
-        }
-        if(player.level().isClientSide()) {
-            return;
-        }
-        
-        PlayerEffectStorage storage = player.getData(AttachmentList.PLAYER_EFFECTS.get());
-        if(storage == null) return;
-        
-        storage.addEffect(new EffectPlayerData("cold", 0, 50, 50));
-        
-        event.setCanceled(true);
-    }
 }
