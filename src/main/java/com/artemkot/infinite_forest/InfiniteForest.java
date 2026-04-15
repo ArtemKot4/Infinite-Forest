@@ -2,6 +2,7 @@ package com.artemkot.infinite_forest;
 
 import org.slf4j.Logger;
 
+import com.artemkot.infinite_forest.api.curse.CurseStorage;
 import com.artemkot.infinite_forest.api.effect.EffectStorage;
 import com.artemkot.infinite_forest.common.CreativeTabList;
 import com.artemkot.infinite_forest.common.DataComponentList;
@@ -77,7 +78,6 @@ public class InfiniteForest {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public InfiniteForest(IEventBus modEventBus, ModContainer modContainer) {
-        modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(DataGenerators::new);
 
         BlockList.BLOCKS.register(modEventBus);
@@ -98,8 +98,6 @@ public class InfiniteForest {
 
         EffectStorage.registerEffect("cold", new ColdEffect());
     }
-
-    private void commonSetup(FMLCommonSetupEvent event) {}
 
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {}

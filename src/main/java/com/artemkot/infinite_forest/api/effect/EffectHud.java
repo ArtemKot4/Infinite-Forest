@@ -3,6 +3,7 @@ package com.artemkot.infinite_forest.api.effect;
 import com.artemkot.infinite_forest.Config;
 import com.artemkot.infinite_forest.ModResources;
 import com.artemkot.infinite_forest.common.item.ancient_note.AncientNote;
+import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -36,28 +37,27 @@ public class EffectHud {
         return this;
     }
 
-    public void calculateAnimation(int timer, int timerMax) {
-        float progress = Math.min(1.0f, (float) (timerMax - timer) / (timerMax / 5.0f));
+    public void calculateAnimation(int timer, int timerMax, int duration) {
+        float progress = (float) timer / timerMax;
+        boolean addingState = duration > 0;
 
-        if(timer > 0) {
-            scaleState = (int) (77 * progress);
-
-            if(alpha < 1) { 
+        if(addingState) {
+            if(alpha < 1) {
                 alpha = Math.min(1, alpha + 0.008);
             }
         } else {
-            scaleState = Math.max(0, scaleState - 1);
-            if(scaleState == 0) { 
-                alpha = Math.max(0, alpha - 0.008);
+            if(timer <= timerMax / 5.5 && alpha > 0) {
+                alpha = Math.max(0, alpha - 0.025);
             }
         }
+        scaleState = (int) (77 * progress);
     }
 
-    public void draw(GuiGraphics graphics, Minecraft mc, int timer, int timerMax) {
+    public void draw(GuiGraphics graphics, Minecraft mc, EffectPlayerData effectData) {
         int screenWidth = mc.getWindow().getGuiScaledWidth();
-
         this.x = (screenWidth - 93) / 2;
-        this.calculateAnimation(timer, timerMax);
+        
+        this.calculateAnimation(effectData.timer, effectData.timerMax, effectData.duration);
         
         graphics.setColor(1.0f, 1.0f, 1.0f, (float) alpha);
 
@@ -65,17 +65,19 @@ public class EffectHud {
         graphics.blit(scaleBackgroundTexture, x + 8 + 4, y + 2, 0, 0, 77, 9, 77, 9);
         graphics.blit(scaleTexture, x + 8 + 4, y + 2, 0, 0, scaleState, 9, 77, 9);
         graphics.blit(scaleIconTexture, x + 2, y + 2, 0, 0, 9, 9, 9, 9);
-
+        
+        
         if(Config.EFFECT_DATA_LOGGING.get()) {
-            graphics.drawString(mc.font, Component.literal(timer + ":" + timerMax).withStyle(
-                (format) -> format.withFont(AncientNote.Author.ETHER.textFont())), 
-                x + 93 + 5, y + 4, 0xFFFFFF
-            );
+            graphics.drawString(mc.font, 
+                Component.literal(effectData.duration + " | " + effectData.timer + ":" + effectData.timerMax)
+                    .withStyle(style -> style.withFont(AncientNote.Author.ETHER.textFont())), 
+                x + 93 + 5, y + 4, 0xFFFFFF, false);
         }
     }
 
     public void clear() {
         this.y = defaultY;
+        this.scaleState = 0;
         this.alpha = 0;
     }
 }

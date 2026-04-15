@@ -43,11 +43,16 @@ public class EffectOverlayEvent {
         int yOffset = 5;
         for(EffectPlayerData effectData : effects) {
             EffectType effect = EffectStorage.getEffect(effectData.id);
-            if (effect != null && effect.getHud() != null) {
-                effect.getHud().setDefaultY(yOffset).draw(event.getGuiGraphics(), mc, effectData.timer, effectData.timerMax);
+            if (effect != null) {
+                EffectHud hud = effect.getHud();
+                if(effectData.timer < 5 && effectData.duration == effectData.timerMax) {
+                    hud.clear();
+                }
+
+                hud.setDefaultY(yOffset).draw(event.getGuiGraphics(), mc, effectData);
                 yOffset += 13;
             }
-        }
+        }   
      
         RenderSystem.disableBlend();
     }
@@ -68,7 +73,7 @@ public class EffectOverlayEvent {
         PlayerEffectStorage storage = player.getData(AttachmentList.PLAYER_EFFECTS.get());
         if(storage == null) return;
         
-        storage.addEffect(new EffectPlayerData("cold", 500, 500));;
+        storage.addEffect(new EffectPlayerData("cold", 0, 50, 50));
         
         event.setCanceled(true);
     }

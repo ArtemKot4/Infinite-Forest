@@ -1,5 +1,9 @@
 package com.artemkot.infinite_forest.api.curse;
 
-public record Curse(String name) {
-    
+import net.minecraft.world.entity.player.Player;
+
+public class Curse {
+    public void onTick(Player player) {
+        
+    }
 }
