@@ -25,6 +25,13 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 @EventBusSubscriber(modid = InfiniteForest.MOD_ID, value = Dist.CLIENT)
 public class EffectOverlayEvent {
+    public static void update(EffectHud hud, EffectPlayerData effectData, GuiGraphics graphics, Minecraft mc) {
+        hud
+        .setEffectData(effectData)
+        .setGraphics(graphics)
+        .setMinecraft(mc);
+    }
+
     @SubscribeEvent
     public static void onRenderGui(RenderGuiEvent.Post event) {
         Minecraft mc = Minecraft.getInstance();
@@ -37,20 +44,33 @@ public class EffectOverlayEvent {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
 
-        PlayerEffectStorage storage = player.getData(AttachmentList.PLAYER_EFFECTS.get());
+        EffectPlayerStorage storage = player.getData(AttachmentList.PLAYER_EFFECTS.get());
         Collection<EffectPlayerData> effects = storage.getActiveEffects();
-    
+        GuiGraphics graphics = event.getGuiGraphics();
         int yOffset = 5;
+
         for(EffectPlayerData effectData : effects) {
             EffectType effect = EffectStorage.getEffect(effectData.id);
-            if (effect != null) {
-                EffectHud hud = effect.getHud();
-                if(effectData.timer < 5 && effectData.duration == effectData.timerMax) {
-                    hud.clear();
-                }
+            if(effect == null) {
+                continue;
+            }
+            EffectHud hud = effect.getHud();
+            if(!hud.preInited && effectData.timer < 5 && effectData.duration == effectData.timerMax) {
+                hud.onPreInit();
+                hud.reset();
+                hud.setDefaultY(yOffset);
+                hud.preInited = true;
+                update(hud, effectData, graphics, mc);
+                hud.onPostInit();
+            }
+            update(hud, effectData, graphics, mc);
+            hud.draw();
+            yOffset += 13;
 
-                hud.setDefaultY(yOffset).draw(event.getGuiGraphics(), mc, effectData);
-                yOffset += 13;
+            if(!hud.terminated && effectData.timer == 0 && effectData.duration == 0) {
+                hud.onTerminate();
+                hud.terminated = true;
+                hud.preInited = false;
             }
         }   
      

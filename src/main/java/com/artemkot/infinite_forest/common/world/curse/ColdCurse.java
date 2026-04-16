@@ -8,17 +8,17 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
 
 public class ColdCurse extends Curse {
-    public HashSet<Block> frozenBlocks = new HashSet();
+    public HashSet<Block> cursedBlocks = new HashSet();
 
     public void onTick(Player player) {
         
     }
 
-    public void addFrozenBlock(Block block) {
-        frozenBlocks.add(block);
+    public void adCursedBlock(Block block) {
+        cursedBlocks.add(block);
     }
 
-    public boolean isFrozenBlock(Block block) {
-        return frozenBlocks.contains(block);
+    public boolean isCursedBlock(Block block) {
+        return cursedBlocks.contains(block);
     }
 }

@@ -13,5 +13,7 @@ public abstract class EffectType {
 
     protected abstract String getStringID();
 
-    public abstract void onTick(Player player, EffectPlayerData data);
+    public void onFull(Player player, EffectPlayerData data) {};
+    public void onFilling(Player player, EffectPlayerData data) {};
+    public void onUnfilling(Player player, EffectPlayerData data) {};
 }

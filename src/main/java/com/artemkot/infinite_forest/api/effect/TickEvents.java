@@ -20,7 +20,7 @@ public class TickEvents {
         if(player.level().isClientSide()) {
             return;
         }
-        PlayerEffectStorage storage = player.getData(AttachmentList.PLAYER_EFFECTS.get());
+        EffectPlayerStorage storage = player.getData(AttachmentList.PLAYER_EFFECTS.get());
         
         if(storage == null) {
             return;
@@ -33,15 +33,15 @@ public class TickEvents {
 
             if(effectData.duration > 0) {
                 if(effectData.timer < effectData.timerMax) {
+                    effect.onFilling(player, effectData);
                     effectData.timer++;
                 } else {
                     effectData.duration--;
-                    if(effect != null) {
-                        effect.onTick(player, effectData);
-                    }
+                    effect.onFull(player, effectData);
                 }
             } else {
                 if(effectData.timer > 0) {
+                    effect.onUnfilling(player, effectData);
                     effectData.timer--;
                 } else {
                     iterator.remove();

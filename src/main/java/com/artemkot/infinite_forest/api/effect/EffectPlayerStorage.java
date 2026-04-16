@@ -15,13 +15,13 @@ import java.util.Map;
 import com.mojang.serialization.Codec;
 
 import io.netty.buffer.ByteBuf;
-public class PlayerEffectStorage {
+public class EffectPlayerStorage {
     private final HashMap<String, EffectPlayerData> activeEffects = new HashMap<>();
     
-    public static final Codec<PlayerEffectStorage> CODEC = 
+    public static final Codec<EffectPlayerStorage> CODEC = 
         Codec.unboundedMap(Codec.STRING, EffectPlayerData.CODEC).xmap(
             map -> {
-                PlayerEffectStorage storage = new PlayerEffectStorage();
+                EffectPlayerStorage storage = new EffectPlayerStorage();
                 storage.activeEffects.putAll(map);
                 return storage;
             },
@@ -30,13 +30,13 @@ public class PlayerEffectStorage {
             }
         );
 
-    public static final StreamCodec<ByteBuf, PlayerEffectStorage> STREAM_CODEC = 
+    public static final StreamCodec<ByteBuf, EffectPlayerStorage> STREAM_CODEC = 
         ByteBufCodecs.map(HashMap::new, 
             ByteBufCodecs.STRING_UTF8,
             EffectPlayerData.STREAM_CODEC
         ).map(
             map -> {
-                PlayerEffectStorage storage = new PlayerEffectStorage();
+                EffectPlayerStorage storage = new EffectPlayerStorage();
                 storage.activeEffects.putAll(map);
                 return storage;
             },

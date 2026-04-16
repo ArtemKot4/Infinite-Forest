@@ -3,7 +3,7 @@ package com.artemkot.infinite_forest.api.curse;
 import com.artemkot.infinite_forest.AttachmentList;
 import com.artemkot.infinite_forest.InfiniteForest;
 import com.artemkot.infinite_forest.api.effect.EffectPlayerData;
-import com.artemkot.infinite_forest.api.effect.PlayerEffectStorage;
+import com.artemkot.infinite_forest.api.effect.EffectPlayerStorage;
 import com.artemkot.infinite_forest.common.world.WorldDataHandler;
 import com.artemkot.infinite_forest.common.world.curse.ColdCurse;
 
@@ -24,7 +24,7 @@ public class CurseEvents {
         BlockPos pos = event.getPos();
         BlockState state = level.getBlockState(pos);
         
-        if(!CurseStorage.<ColdCurse>getCurse("cold").isFrozenBlock(state.getBlock())) {
+        if(!CurseStorage.<ColdCurse>getCurse("cold").isCursedBlock(state.getBlock())) {
             return;
         }
 
@@ -36,7 +36,7 @@ public class CurseEvents {
             return;
         }
         event.setCanceled(true);
-        PlayerEffectStorage effects = player.getData(AttachmentList.PLAYER_EFFECTS.get());
+        EffectPlayerStorage effects = player.getData(AttachmentList.PLAYER_EFFECTS.get());
 
         player.getData(AttachmentList.PLAYER_EFFECTS.get()).addEffect(new EffectPlayerData("cold", 30));
         player.setData(AttachmentList.PLAYER_EFFECTS.get(), effects);

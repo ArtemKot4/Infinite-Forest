@@ -24,6 +24,12 @@ public class EffectHud {
     protected int y;
     protected double alpha = 0;
     protected int scaleState = 0;
+    protected boolean terminated = false;
+    protected boolean preInited = false;
+
+    protected GuiGraphics graphics;
+    protected Minecraft mc;
+    protected EffectPlayerData effectData;
 
     public EffectHud(ResourceLocation scaleTexture, ResourceLocation scaleIconTexture) {
         this.scaleTexture = scaleTexture;
@@ -37,36 +43,68 @@ public class EffectHud {
         return this;
     }
 
-    public void calculateAnimation(int timer, int timerMax, int duration) {
-        float progress = (float) timer / timerMax;
-        boolean addingState = duration > 0;
+    public EffectHud setGraphics(GuiGraphics graphics) {
+        this.graphics = graphics;
+        return this;
+    }
 
-        if(addingState) {
+    public EffectHud setMinecraft(Minecraft mc) {
+        this.mc = mc;
+        return this;
+    }
+
+    public EffectHud setEffectData(EffectPlayerData effectData) {
+        this.effectData = effectData;
+        return this;
+    }
+
+    public void calculateAnimation() {
+        float progress = (float) effectData.timer / effectData.timerMax;
+        boolean fillingState = effectData.duration > 0;
+
+        if(effectData.timer == effectData.timerMax) {
+            onFull();
+        }
+
+        if(fillingState) {
+            onFilling();
             if(alpha < 1) {
                 alpha = Math.min(1, alpha + 0.008);
             }
         } else {
-            if(timer <= timerMax / 5.5 && alpha > 0) {
+            onUnfilling();
+            if(effectData.timer <= effectData.timerMax / 5.5 && alpha > 0) {
                 alpha = Math.max(0, alpha - 0.025);
             }
         }
         scaleState = (int) (77 * progress);
     }
 
-    public void draw(GuiGraphics graphics, Minecraft mc, EffectPlayerData effectData) {
+    public void onFilling() {}
+    public void onUnfilling() {}
+    public void onFull() {}
+    public void onTick() {}
+    public void onPreInit() {}
+    public void onPostInit() {
+        mc.cameraEntity.sendSystemMessage(Component.literal("Начало!"));
+    }
+    public void onTerminate() {
+        mc.cameraEntity.sendSystemMessage(Component.literal("Конец!"));
+    }
+
+    public void drawBackground() {
         int screenWidth = mc.getWindow().getGuiScaledWidth();
         this.x = (screenWidth - 93) / 2;
-        
-        this.calculateAnimation(effectData.timer, effectData.timerMax, effectData.duration);
-        
-        graphics.setColor(1.0f, 1.0f, 1.0f, (float) alpha);
-
         graphics.blit(borderTexture, x, y, 0, 0, 93, 13, 93, 13);
+    }
+
+    public void drawScale() {
         graphics.blit(scaleBackgroundTexture, x + 8 + 4, y + 2, 0, 0, 77, 9, 77, 9);
         graphics.blit(scaleTexture, x + 8 + 4, y + 2, 0, 0, scaleState, 9, 77, 9);
         graphics.blit(scaleIconTexture, x + 2, y + 2, 0, 0, 9, 9, 9, 9);
-        
-        
+    }
+
+    public void drawLogIfNeed() {
         if(Config.EFFECT_DATA_LOGGING.get()) {
             graphics.drawString(mc.font, 
                 Component.literal(effectData.duration + " of " + effectData.timer + ":" + effectData.timerMax)
@@ -75,9 +113,29 @@ public class EffectHud {
         }
     }
 
-    public void clear() {
+    public void preDraw() {}
+    public void postDraw() {}
+
+    public void draw() {
+        this.preDraw();
+        this.calculateAnimation();
+        graphics.setColor(1.0f, 1.0f, 1.0f, (float) alpha);
+
+        this.drawBackground();
+        this.drawScale();
+        this.drawLogIfNeed();
+        this.postDraw();
+    }
+
+    public EffectHud reset() {
         this.y = defaultY;
         this.scaleState = 0;
         this.alpha = 0;
+        graphics = null;
+        mc = null;
+        effectData = null;
+        preInited = false;
+        terminated = false;
+        return this;
     }
 }
