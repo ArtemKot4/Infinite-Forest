@@ -85,12 +85,8 @@ public class EffectHud {
     public void onFull() {}
     public void onTick() {}
     public void onPreInit() {}
-    public void onPostInit() {
-        mc.cameraEntity.sendSystemMessage(Component.literal("Начало!"));
-    }
-    public void onTerminate() {
-        mc.cameraEntity.sendSystemMessage(Component.literal("Конец!"));
-    }
+    public void onPostInit() {}
+    public void onTerminate() {}
 
     public void drawBackground() {
         int screenWidth = mc.getWindow().getGuiScaledWidth();
