@@ -4,14 +4,19 @@ import java.util.HashSet;
 import java.util.Random;
 
 import com.artemkot.infinite_forest.api.curse.Curse;
+import com.artemkot.infinite_forest.api.curse.CurseStorage;
 import com.artemkot.infinite_forest.api.effect.EffectPlayerData;
 import com.artemkot.infinite_forest.api.effect.EffectPlayerStorage;
+import com.artemkot.infinite_forest.common.world.WorldDataHandler;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 public class ColdCurse extends Curse {
@@ -66,4 +71,25 @@ public class ColdCurse extends Curse {
     public boolean isCursedBlock(Block block) {
         return cursedBlocks.contains(block);
     }
+
+    public void leftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
+        Player player = event.getEntity();
+        Level level = player.level();
+        BlockPos pos = event.getPos();
+        BlockState state = level.getBlockState(pos);
+        
+        if(!CurseStorage.<ColdCurse>getCurse("cold").isCursedBlock(state.getBlock())) {
+            return;
+        }
+        if(level.isClientSide()) { 
+            event.setCanceled(true);
+            return; 
+        }
+        if(!WorldDataHandler.get(level).hasCurse("cold")) {
+            return;
+        }
+        event.setCanceled(true);
+        EffectPlayerStorage.addEffect(player, new EffectPlayerData("cold", 30));
+    }
+
 }

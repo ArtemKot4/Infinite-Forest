@@ -63,6 +63,10 @@ public class EffectPlayerStorage {
     public boolean hasEffect(String id) { 
         return activeEffects.containsKey(id); 
     }
+
+    public boolean hasFullEffect(String id) { 
+        return hasEffect(id) && getEffect(id).timer == getEffect(id).timerMax; 
+    }
     
     public EffectPlayerData getEffect(String id) { 
         return activeEffects.get(id); 
@@ -87,6 +91,10 @@ public class EffectPlayerStorage {
 
     public static boolean hasEffect(Player player, String id) { 
         return player.getData(AttachmentList.PLAYER_EFFECTS).hasEffect(id); 
+    }
+
+    public static boolean hasFullEffect(Player player, String id) { 
+        return player.getData(AttachmentList.PLAYER_EFFECTS).hasFullEffect(id); 
     }
 
     public static void removeEffect(Player player, String id) { 

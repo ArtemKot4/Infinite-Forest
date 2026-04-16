@@ -2,8 +2,11 @@ package com.artemkot.infinite_forest.common;
 
 import com.artemkot.infinite_forest.InfiniteForest;
 import com.artemkot.infinite_forest.api.curse.CurseEvents;
+import com.artemkot.infinite_forest.api.curse.CurseStorage;
+import com.artemkot.infinite_forest.api.effect.EffectPlayerStorage;
 import com.artemkot.infinite_forest.api.effect.EffectTickEvents;
 import com.artemkot.infinite_forest.common.world.InfiniteForestDimension;
+import com.artemkot.infinite_forest.common.world.curse.ColdCurse;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -16,6 +19,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerChangedDimensionEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 @EventBusSubscriber(modid = InfiniteForest.MOD_ID)
@@ -46,5 +50,17 @@ public class Events {
         }
         CurseEvents.tick(event);
         EffectTickEvents.tick(event);
+    }
+
+    @SubscribeEvent
+    public static void onLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
+        if(EffectPlayerStorage.hasFullEffect(event.getEntity(), "cold")) {
+            event.setCanceled(true);
+            return;
+        }
+        
+        if(/*has cold curse*/true) {
+            CurseStorage.<ColdCurse>getCurse("cold").leftClickBlock(event);
+        }
     }
 }
