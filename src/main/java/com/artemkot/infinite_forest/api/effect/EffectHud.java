@@ -59,7 +59,7 @@ public class EffectHud {
     }
 
     public void calculateAnimation() {
-        float progress = (float) effectData.timer / effectData.timerMax;
+        float progress = Math.min(1, (float) effectData.timer / effectData.timerMax);
         boolean fillingState = effectData.duration > 0;
 
         if(effectData.timer == effectData.timerMax) {

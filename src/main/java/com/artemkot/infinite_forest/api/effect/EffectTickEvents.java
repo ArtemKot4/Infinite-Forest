@@ -11,10 +11,8 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
-@EventBusSubscriber(modid = InfiniteForest.MOD_ID)
-public class TickEvents {
-    @SubscribeEvent
-    public static void onPlayerTick(PlayerTickEvent.Post event) {
+public class EffectTickEvents {
+    public static void tick(PlayerTickEvent.Post event) {
         Player player = event.getEntity();
 
         if(player.level().isClientSide() || (player.isCreative() || player.isSpectator())) {

@@ -1,5 +1,8 @@
 package com.artemkot.infinite_forest.common;
 
+import com.artemkot.infinite_forest.InfiniteForest;
+import com.artemkot.infinite_forest.api.curse.CurseEvents;
+import com.artemkot.infinite_forest.api.effect.EffectTickEvents;
 import com.artemkot.infinite_forest.common.world.InfiniteForestDimension;
 
 import net.minecraft.network.chat.Component;
@@ -10,12 +13,15 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerChangedDimensionEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
+@EventBusSubscriber(modid = InfiniteForest.MOD_ID)
 public class Events {
     @SubscribeEvent
-    public void onDimensionChange(PlayerEvent.PlayerChangedDimensionEvent event) {
+    public static void onDimensionChange(PlayerEvent.PlayerChangedDimensionEvent event) {
         Player player = event.getEntity();
         
         if (player.level().dimension().location().equals(InfiniteForestDimension.FOREST_DIMENSION.location())) {
@@ -31,5 +37,14 @@ public class Events {
                 player.displayClientMessage(Component.literal("§6Вечная ночь окутывает лес..."), false);
             }
         }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerTick(PlayerTickEvent.Post event) {
+        if(event.getEntity().level().isClientSide) {
+            return;
+        }
+        CurseEvents.tick(event);
+        EffectTickEvents.tick(event);
     }
 }

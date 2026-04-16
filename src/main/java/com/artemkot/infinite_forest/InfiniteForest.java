@@ -11,6 +11,7 @@ import com.artemkot.infinite_forest.common.block.BlockList;
 import com.artemkot.infinite_forest.common.effect.ColdEffect;
 import com.artemkot.infinite_forest.common.item.ancient_note.ItemList;
 import com.artemkot.infinite_forest.common.world.curse.ColdCurse;
+import com.artemkot.infinite_forest.common.world.curse.LightningCurse;
 import com.artemkot.infinite_forest.common.world.sky.Sky;
 import com.mojang.logging.LogUtils;
 
@@ -85,9 +86,7 @@ public class InfiniteForest {
         ItemList.ITEMS.register(modEventBus); 
         CreativeTabList.TABS.register(modEventBus);
         DataComponentList.COMPONENTS.register(modEventBus);
-
         NeoForge.EVENT_BUS.register(this);
-        NeoForge.EVENT_BUS.register(new Events());
 
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
@@ -99,6 +98,7 @@ public class InfiniteForest {
 
         EffectStorage.registerEffect("cold", new ColdEffect());
         CurseStorage.registerCurse("cold", new ColdCurse());
+        CurseStorage.registerCurse("lightning", new LightningCurse());
     }
 
     @SubscribeEvent
