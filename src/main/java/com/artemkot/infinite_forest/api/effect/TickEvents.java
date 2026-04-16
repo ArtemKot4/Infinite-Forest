@@ -17,7 +17,7 @@ public class TickEvents {
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         Player player = event.getEntity();
 
-        if(player.level().isClientSide()) {
+        if(player.level().isClientSide() || (player.isCreative() || player.isSpectator())) {
             return;
         }
         EffectPlayerStorage storage = player.getData(AttachmentList.PLAYER_EFFECTS.get());

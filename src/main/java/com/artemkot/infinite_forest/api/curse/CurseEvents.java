@@ -38,7 +38,7 @@ public class CurseEvents {
         event.setCanceled(true);
         EffectPlayerStorage effects = player.getData(AttachmentList.PLAYER_EFFECTS.get());
 
-        player.getData(AttachmentList.PLAYER_EFFECTS.get()).addEffect(new EffectPlayerData("cold", 30));
+        player.getData(AttachmentList.PLAYER_EFFECTS.get()).addEffect(player, new EffectPlayerData("cold", 30));
         player.setData(AttachmentList.PLAYER_EFFECTS.get(), effects);
     }
 }

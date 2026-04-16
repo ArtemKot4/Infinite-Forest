@@ -37,7 +37,7 @@ public class EffectOverlayEvent {
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
         
-        if(mc.screen != null || player == null) {
+        if(mc.screen != null || player == null || (player.isCreative() || player.isSpectator())) {
             return;
         }
 

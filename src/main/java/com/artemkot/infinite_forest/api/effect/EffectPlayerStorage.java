@@ -2,6 +2,7 @@ package com.artemkot.infinite_forest.api.effect;
 
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
@@ -47,7 +48,10 @@ public class EffectPlayerStorage {
         return activeEffects.values(); 
     }
     
-    public void addEffect(EffectPlayerData effect) { 
+    public void addEffect(Player player, EffectPlayerData effect) { 
+        if(player.isCreative() || player.isSpectator()) {
+            return;
+        }
         if(hasEffect(effect.id)) {
             EffectPlayerData actualEffect = getEffect(effect.id);
             actualEffect.duration = effect.duration;
