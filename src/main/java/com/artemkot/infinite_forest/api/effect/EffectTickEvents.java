@@ -18,7 +18,7 @@ public class EffectTickEvents {
         if(player.level().isClientSide() || (player.isCreative() || player.isSpectator())) {
             return;
         }
-        EffectPlayerStorage storage = player.getData(AttachmentList.PLAYER_EFFECTS.get());
+        EffectManager storage = player.getData(AttachmentList.PLAYER_EFFECTS.get());
         
         if(storage == null) {
             return;
@@ -28,21 +28,23 @@ public class EffectTickEvents {
         while(iterator.hasNext()) {
             EffectPlayerData effectData = iterator.next();
             EffectType effect = EffectStorage.getEffect(effectData.id);
+            boolean removed = false;
 
             if(effectData.duration > 0) {
                 if(effectData.timer < effectData.timerMax) {
-                    effect.onFilling(player, effectData);
+                    effect.onFilling(event, effectData);
                     effectData.timer++;
                 } else {
                     effectData.duration--;
-                    effect.onFull(player, effectData);
+                    effect.onFull(event, effectData);
                 }
             } else {
                 if(effectData.timer > 0) {
-                    effect.onUnfilling(player, effectData);
+                    effect.onUnfilling(event, effectData);
                     effectData.timer--;
                 } else {
                     iterator.remove();
+                    removed = true;
                 }
             }
         }

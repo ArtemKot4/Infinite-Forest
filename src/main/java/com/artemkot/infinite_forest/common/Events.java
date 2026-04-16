@@ -3,10 +3,13 @@ package com.artemkot.infinite_forest.common;
 import com.artemkot.infinite_forest.InfiniteForest;
 import com.artemkot.infinite_forest.api.curse.CurseEvents;
 import com.artemkot.infinite_forest.api.curse.CurseStorage;
-import com.artemkot.infinite_forest.api.effect.EffectPlayerStorage;
+import com.artemkot.infinite_forest.api.curse.WorldCurseData;
+import com.artemkot.infinite_forest.api.effect.EffectManager;
 import com.artemkot.infinite_forest.api.effect.EffectTickEvents;
 import com.artemkot.infinite_forest.common.world.InfiniteForestDimension;
+import com.artemkot.infinite_forest.common.world.WorldDataHandler;
 import com.artemkot.infinite_forest.common.world.curse.ColdCurse;
+import com.artemkot.infinite_forest.network.packets.SyncCursesPacket;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -15,12 +18,14 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.WorldData;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerChangedDimensionEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 @EventBusSubscriber(modid = InfiniteForest.MOD_ID)
 public class Events {
@@ -45,22 +50,34 @@ public class Events {
 
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
-        if(event.getEntity().level().isClientSide) {
-            return;
-        }
         CurseEvents.tick(event);
         EffectTickEvents.tick(event);
     }
 
     @SubscribeEvent
     public static void onLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
-        if(EffectPlayerStorage.hasFullEffect(event.getEntity(), "cold")) {
+        if(event.getEntity().isCreative()) {
+            return;
+        }
+        if(EffectManager.hasFullEffect(event.getEntity(), "cold")) {
             event.setCanceled(true);
             return;
         }
-        
-        if(/*has cold curse*/true) {
+
+        if(WorldDataHandler.hasCurse(event.getLevel(), "cold")) {
             CurseStorage.<ColdCurse>getCurse("cold").leftClickBlock(event);
         }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
+        Player player = event.getEntity();
+        if(player.level().isClientSide()) {
+            player.sendSystemMessage(Component.literal("has curse cold: " + WorldDataHandler.hasCurse(player.level(), "cold")));
+            return;
+        };
+        
+        WorldCurseData data = WorldDataHandler.getCurseData(player.level());
+        PacketDistributor.sendToPlayer((ServerPlayer) player, new SyncCursesPacket(data.getActiveCurses()));
     }
 }

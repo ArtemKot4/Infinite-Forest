@@ -1,9 +1,10 @@
 package com.artemkot.infinite_forest.api.effect;
 
+import javax.annotation.Nullable;
+
 import com.artemkot.infinite_forest.Config;
 import com.artemkot.infinite_forest.ModResources;
 import com.artemkot.infinite_forest.common.item.ancient_note.AncientNote;
-import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -31,7 +32,7 @@ public class EffectHud {
     protected Minecraft mc;
     protected EffectPlayerData effectData;
 
-    public EffectHud(ResourceLocation scaleTexture, ResourceLocation scaleIconTexture) {
+    public EffectHud(ResourceLocation scaleTexture, @Nullable ResourceLocation scaleIconTexture) {
         this.scaleTexture = scaleTexture;
         this.scaleIconTexture = scaleIconTexture;
         this.setDefaultY(5);
@@ -65,7 +66,6 @@ public class EffectHud {
         if(effectData.timer == effectData.timerMax) {
             onFull();
         }
-
         if(fillingState) {
             onFilling();
             if(alpha < 1) {
@@ -97,7 +97,9 @@ public class EffectHud {
     public void drawScale() {
         graphics.blit(scaleBackgroundTexture, x + 8 + 4, y + 2, 0, 0, 77, 9, 77, 9);
         graphics.blit(scaleTexture, x + 8 + 4, y + 2, 0, 0, scaleState, 9, 77, 9);
-        graphics.blit(scaleIconTexture, x + 2, y + 2, 0, 0, 9, 9, 9, 9);
+        if(scaleIconTexture != null) {
+            graphics.blit(scaleIconTexture, x + 2, y + 2, 0, 0, 9, 9, 9, 9);
+        }
     }
 
     public void drawLogIfNeed() {

@@ -2,7 +2,10 @@ package com.artemkot.infinite_forest.api.effect;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.artemkot.infinite_forest.AttachmentList;
 import com.artemkot.infinite_forest.InfiniteForest;
@@ -32,6 +35,8 @@ public class EffectOverlayEvent {
         .setMinecraft(mc);
     }
 
+    public static HashMap<String, Integer> queue = new HashMap<>();
+
     @SubscribeEvent
     public static void onRenderGui(RenderGuiEvent.Post event) {
         Minecraft mc = Minecraft.getInstance();
@@ -40,11 +45,10 @@ public class EffectOverlayEvent {
         if(mc.screen != null || player == null || (player.isCreative() || player.isSpectator())) {
             return;
         }
-
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
 
-        EffectPlayerStorage storage = player.getData(AttachmentList.PLAYER_EFFECTS.get());
+        EffectManager storage = player.getData(AttachmentList.PLAYER_EFFECTS.get());
         Collection<EffectPlayerData> effects = storage.getActiveEffects();
         GuiGraphics graphics = event.getGuiGraphics();
         int yOffset = 5;
@@ -55,23 +59,23 @@ public class EffectOverlayEvent {
                 continue;
             }
             EffectHud hud = effect.getHud();
-            if(!hud.preInited && effectData.timer < 5 && effectData.duration == effectData.timerMax) {
+            if(!hud.preInited && effectData.timer < effectData.timerMax && effectData.duration > 0) {
                 hud.onPreInit();
                 hud.reset();
-                hud.setDefaultY(yOffset);
                 hud.preInited = true;
                 update(hud, effectData, graphics, mc);
                 hud.onPostInit();
             }
             update(hud, effectData, graphics, mc);
+            hud.setDefaultY(yOffset);
             hud.draw();
-            yOffset += 13;
 
             if(!hud.terminated && effectData.timer == 0 && effectData.duration == 0) {
                 hud.onTerminate();
                 hud.terminated = true;
                 hud.preInited = false;
             }
+            yOffset += 13;
         }   
      
         RenderSystem.disableBlend();

@@ -1,7 +1,7 @@
 package com.artemkot.infinite_forest;
 
 import com.artemkot.infinite_forest.InfiniteForest;
-import com.artemkot.infinite_forest.api.effect.EffectPlayerStorage;
+import com.artemkot.infinite_forest.api.effect.EffectManager;
 
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -13,10 +13,10 @@ public class AttachmentList {
     public static final DeferredRegister<AttachmentType<?>> ATTACHMENTS =
         DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, InfiniteForest.MOD_ID);
     
-    public static final Supplier<AttachmentType<EffectPlayerStorage>> PLAYER_EFFECTS =
-        ATTACHMENTS.register("player_effects", () -> AttachmentType.builder(EffectPlayerStorage::new)
-            .serialize(EffectPlayerStorage.CODEC) 
-            .sync(EffectPlayerStorage.STREAM_CODEC)
+    public static final Supplier<AttachmentType<EffectManager>> PLAYER_EFFECTS =
+        ATTACHMENTS.register("player_effects", () -> AttachmentType.builder(EffectManager::new)
+            .serialize(EffectManager.CODEC) 
+            .sync(EffectManager.STREAM_CODEC)
             .build()
     );
 }

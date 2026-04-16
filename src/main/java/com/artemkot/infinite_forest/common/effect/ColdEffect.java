@@ -19,7 +19,6 @@ public class ColdEffect extends EffectType {
         @Override
         public void onFull() {
             drawOverlay = true;
-            overlay.ahead = true;
         }
 
         @Override
@@ -42,18 +41,12 @@ public class ColdEffect extends EffectType {
             if(!drawOverlay) {
                 return;
             }
-            graphics.setColor(1.0f, 1.0f, 1.0f, 1.0f);
             overlay.draw(graphics, mc);
-            graphics.setColor(1.0f, 1.0f, 1.0f, (float) alpha);
         }
     };
 
     public EffectHud getHud() {
         return HUD;
-    }
-
-    public String getStringID() {
-        return "cold";
     }
 
     public void onFull(Player player, EffectPlayerData data) {

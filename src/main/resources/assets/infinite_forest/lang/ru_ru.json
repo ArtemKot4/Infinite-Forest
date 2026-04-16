@@ -71,6 +71,8 @@
     "message.infinite_forest.map_distance": "Размер:",
     "message.infinite_forest.record_map_warning": "Упс. Кажется, карта не записана. Чтобы записать карту, просто нажмите по любому блоку, держа её в руках",
     "message.infinite_forest.unknown": "Неизвестен",
+    "message.infinite_forest.fear": "Вы нуждаетесь в свете, страх сковывает ваши руки и мысли",
+    "message.infinite_forest.cold": "Становится холодно",
 
     "ancient_note.infinite_forest.empty": "Эта записка пуста",
     "ancient_note.infinite_forest.contains": "Запись:",

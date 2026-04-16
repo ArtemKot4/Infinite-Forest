@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.artemkot.infinite_forest.network.packets.SyncCursesPacket;
 import com.mojang.serialization.Codec;
 
 import net.minecraft.core.HolderLookup;
@@ -12,7 +13,12 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
+
 public class WorldCurseData extends SavedData {
     private Set<String> activeCurses = new HashSet<>();
     
@@ -37,11 +43,24 @@ public class WorldCurseData extends SavedData {
     public void addCurse(String curseId) {
         activeCurses.add(curseId);
         setDirty();
+        syncToClients();
     }
     
     public void removeCurse(String curseId) {
         activeCurses.remove(curseId);
         setDirty();
+        syncToClients();
+    }
+
+    private void syncToClients() {
+        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+        if (server == null) return;
+        
+        SyncCursesPacket packet = new SyncCursesPacket(activeCurses);
+        
+        for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+            PacketDistributor.sendToPlayer(player, packet);
+        }
     }
     
     public boolean hasCurse(String curseId) {

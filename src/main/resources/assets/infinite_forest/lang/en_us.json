@@ -71,6 +71,7 @@
     "message.infinite_forest.map_distance": "Size:",
     "message.infinite_forest.record_map_warning": "Oops. Seems the map isn't recorded. To record the map, just click on any block while holding it",
     "message.infinite_forest.unknown": "Unknown",
+    "message.infinite_forest.fear": "You need a light, your hands fearing with mind",
 
     "ancient_note.infinite_forest.empty": "This note is empty",
     "ancient_note.infinite_forest.contains": "Record:",

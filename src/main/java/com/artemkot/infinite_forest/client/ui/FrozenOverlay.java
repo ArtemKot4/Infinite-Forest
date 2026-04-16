@@ -32,6 +32,7 @@ public class FrozenOverlay {
 
     public FrozenOverlay clear() {
         alpha = 0;
+        ahead = true;
         return this;
     }
 }

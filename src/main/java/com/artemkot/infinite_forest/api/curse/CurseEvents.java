@@ -5,7 +5,7 @@ import java.util.Iterator;
 import com.artemkot.infinite_forest.AttachmentList;
 import com.artemkot.infinite_forest.InfiniteForest;
 import com.artemkot.infinite_forest.api.effect.EffectPlayerData;
-import com.artemkot.infinite_forest.api.effect.EffectPlayerStorage;
+import com.artemkot.infinite_forest.api.effect.EffectManager;
 import com.artemkot.infinite_forest.api.effect.EffectStorage;
 import com.artemkot.infinite_forest.common.world.InfiniteForestDimension;
 import com.artemkot.infinite_forest.common.world.WorldDataHandler;
@@ -25,9 +25,13 @@ public class CurseEvents {
         Player player = event.getEntity();
         Level level = player.level();
 
-        for(String curseId : WorldDataHandler.get(level).getActiveCurses()) {
+        for(String curseId : WorldDataHandler.getActiveCurses(level)) {
             Curse curse = CurseStorage.getCurse(curseId);
             if(!curse.everywhere() && !level.dimension().equals(InfiniteForestDimension.FOREST_DIMENSION)) {
+                continue;
+            }
+            if(level.isClientSide) {
+                curse.onClientTick(event);
                 continue;
             } 
             curse.onServerTick(event);

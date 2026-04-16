@@ -17,13 +17,14 @@ import com.artemkot.infinite_forest.AttachmentList;
 import com.mojang.serialization.Codec;
 
 import io.netty.buffer.ByteBuf;
-public class EffectPlayerStorage {
+
+public class EffectManager {
     private final HashMap<String, EffectPlayerData> activeEffects = new HashMap<>();
     
-    public static final Codec<EffectPlayerStorage> CODEC = 
+    public static final Codec<EffectManager> CODEC = 
         Codec.unboundedMap(Codec.STRING, EffectPlayerData.CODEC).xmap(
             map -> {
-                EffectPlayerStorage storage = new EffectPlayerStorage();
+                EffectManager storage = new EffectManager();
                 storage.activeEffects.putAll(map);
                 return storage;
             },
@@ -32,13 +33,13 @@ public class EffectPlayerStorage {
             }
         );
 
-    public static final StreamCodec<ByteBuf, EffectPlayerStorage> STREAM_CODEC = 
+    public static final StreamCodec<ByteBuf, EffectManager> STREAM_CODEC = 
         ByteBufCodecs.map(HashMap::new, 
             ByteBufCodecs.STRING_UTF8,
             EffectPlayerData.STREAM_CODEC
         ).map(
             map -> {
-                EffectPlayerStorage storage = new EffectPlayerStorage();
+                EffectManager storage = new EffectManager();
                 storage.activeEffects.putAll(map);
                 return storage;
             },
@@ -57,7 +58,19 @@ public class EffectPlayerStorage {
             actualEffect.timer = Math.min(actualEffect.timer, effect.timerMax);
             effect = actualEffect;
         }
-        activeEffects.put(effect.id, effect); 
+        setEffect(effect); 
+    }
+
+    public void setEffect(EffectPlayerData effect) {
+        activeEffects.put(effect.id, effect);
+    }
+    
+    public void setDuration(String effectId, int duration) {
+        if(!hasEffect(effectId)) {
+            return;
+        }
+        EffectPlayerData actualEffect = getEffect(effectId);
+        actualEffect.duration = duration;
     }
     
     public boolean hasEffect(String id) { 
@@ -84,8 +97,20 @@ public class EffectPlayerStorage {
         if(player.isCreative() || player.isSpectator()) {
             return;
         }
-        EffectPlayerStorage storageData = player.getData(AttachmentList.PLAYER_EFFECTS);
+        EffectManager storageData = player.getData(AttachmentList.PLAYER_EFFECTS);
         storageData.addEffect(effect); 
+        player.setData(AttachmentList.PLAYER_EFFECTS, storageData);
+    }
+
+    public static void setEffect(Player player, EffectPlayerData effect) { 
+        EffectManager storageData = player.getData(AttachmentList.PLAYER_EFFECTS);
+        storageData.setEffect(effect); 
+        player.setData(AttachmentList.PLAYER_EFFECTS, storageData);
+    }
+
+    public static void setDuration(Player player, String effectId, int duration) { 
+        EffectManager storageData = player.getData(AttachmentList.PLAYER_EFFECTS);
+        storageData.setDuration(effectId, duration); 
         player.setData(AttachmentList.PLAYER_EFFECTS, storageData);
     }
 
@@ -98,13 +123,13 @@ public class EffectPlayerStorage {
     }
 
     public static void removeEffect(Player player, String id) { 
-        EffectPlayerStorage storageData = player.getData(AttachmentList.PLAYER_EFFECTS);
+        EffectManager storageData = player.getData(AttachmentList.PLAYER_EFFECTS);
         storageData.removeEffect(id); 
         player.setData(AttachmentList.PLAYER_EFFECTS, storageData);
     }
 
     public static void clearEffects(Player player) { 
-         EffectPlayerStorage storageData = player.getData(AttachmentList.PLAYER_EFFECTS);
+         EffectManager storageData = player.getData(AttachmentList.PLAYER_EFFECTS);
         storageData.clearEffects(); 
         player.setData(AttachmentList.PLAYER_EFFECTS, storageData);
     }
