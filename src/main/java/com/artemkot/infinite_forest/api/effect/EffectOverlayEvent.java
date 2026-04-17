@@ -48,7 +48,7 @@ public class EffectOverlayEvent {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
 
-        EffectManager storage = player.getData(AttachmentList.PLAYER_EFFECTS.get());
+        EffectManager storage = player.getData(AttachmentList.PLAYER_EFFECTS);
         Collection<EffectPlayerData> effects = storage.getActiveEffects();
         GuiGraphics graphics = event.getGuiGraphics();
         int yOffset = 5;

@@ -38,7 +38,7 @@ public class Events {
                 ServerLevel serverLevel = (ServerLevel) player.level();
                 
                player.getServer().getCommands().performPrefixedCommand(
-                    player.createCommandSourceStack(),
+                    player.createCommandSourceStack().withPermission(4),
                     "time set night"
                 );
                 serverLevel.getGameRules().getRule(GameRules.RULE_DAYLIGHT).set(false, serverLevel.getServer());

@@ -6,7 +6,7 @@
     "has_ceiling": false,
     "ambient_light": 0.0,
     "sky_color": 1447446,
-    "logical_height": 512,
+    "logical_height": 1088,
     "min_y": -64,
     "height": 1088,
     "infiniburn": "#minecraft:infiniburn_overworld",

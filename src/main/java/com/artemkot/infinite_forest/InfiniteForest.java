@@ -46,11 +46,6 @@ public class InfiniteForest {
         if(Dist.CLIENT.isClient()) {
             modEventBus.addListener(Sky::register);
         }
-
-        EffectStorage.registerEffect("cold", new ColdEffect());
-        EffectStorage.registerEffect("fear", new FearEffect());
-        CurseStorage.registerCurse("cold", new ColdCurse());
-        CurseStorage.registerCurse("lightning", new LightningCurse());
     }
 
     @SubscribeEvent

@@ -2,7 +2,9 @@ package com.artemkot.infinite_forest.common.world.curse;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
+import com.artemkot.infinite_forest.Config;
 import com.artemkot.infinite_forest.api.curse.Curse;
 import com.artemkot.infinite_forest.api.curse.CurseStorage;
 import com.artemkot.infinite_forest.api.effect.EffectPlayerData;
@@ -22,8 +24,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 public class ColdCurse extends Curse {
-    public final Set<Player> skyGuests = new HashSet();
-    public final int skyPosition = 350;
+    public final Set<UUID> skyGuests = new HashSet();
     public final HashSet<Block> cursedBlocks = new HashSet();
 
     public void runSnowInRadius(Level level, double x, double y, double z, int radius, int count, int height) {
@@ -47,35 +48,42 @@ public class ColdCurse extends Curse {
         }
     }
 
+    public int getSkyPosition() {
+        return Config.COLD_CURSE_SKY_HEIGHT.get();
+    }
+
     public boolean isSkyPosition(double y) {
-        return y > skyPosition;
+        return y > getSkyPosition();
     }
 
     @Override
     public void onServerTick(PlayerTickEvent.Post event) {
         Player player = event.getEntity();
+        UUID uuid = player.getUUID();
 
         if(isSkyPosition(player.getY())) {
-            if(!skyGuests.contains(player)) {
+            if(!skyGuests.contains(uuid)) {
                 player.sendSystemMessage(Component.translatable("message.infinite_forest.cold").withColor(ChatFormatting.BLUE.getColor()));
             }
-            skyGuests.add(player);
+            skyGuests.add(uuid);
             EffectManager.addEffect(player, new EffectPlayerData("cold", 500, 30));
-        } else if(skyGuests.contains(player)) {
+        } else if(skyGuests.contains(uuid)) {
             EffectManager.setDuration(player, "cold", 0);
-            skyGuests.remove(player);
+            skyGuests.remove(uuid);
         }
     }
 
     @Override
     public void onClientTick(PlayerTickEvent.Post event) {
         Player player = event.getEntity();
+        int skyPosition = getSkyPosition();
+        int particleCount = Config.COLD_CURSE_SNOW_PARTICLES.get();
 
         if(player.getY() >= skyPosition - 30 && player.getY() < skyPosition) {
-            runSnowInRadius(player.level(), player.getX(), skyPosition, player.getZ(), 128, 128, 5);
+            runSnowInRadius(player.level(), player.getX(), skyPosition, player.getZ(), 128, particleCount, 5);
         }
         if(isSkyPosition(player.getY())) {
-            runSnowInRadius(player.level(), player.getX(), player.getY(), player.getZ(), 16, 128, 20);
+            runSnowInRadius(player.level(), player.getX(), player.getY(), player.getZ(), 16, particleCount, 20);
         }
     }
 
@@ -102,7 +110,7 @@ public class ColdCurse extends Curse {
         event.setCanceled(true);
 
         if(!level.isClientSide) {
-            EffectManager.addEffect(player, new EffectPlayerData("cold", 10, 50));
+            EffectManager.addEffect(player, new EffectPlayerData("cold", 15, 50));
         }
     }
 }

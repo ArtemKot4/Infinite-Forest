@@ -61,23 +61,27 @@ public class EffectHud {
 
     public void calculateAnimation() {
         float progress = Math.min(1, (float) effectData.timer / effectData.timerMax);
-        boolean fillingState = effectData.duration > 0;
 
-        if(effectData.timer == effectData.timerMax) {
-            onFull();
-        }
-        if(fillingState) {
-            onFilling();
+        if(effectData.duration > 0) {
             if(alpha < 1) {
                 alpha = Math.min(1, alpha + 0.008);
             }
-        } else {
-            onUnfilling();
-            if(effectData.timer <= effectData.timerMax / 5.5 && alpha > 0) {
-                alpha = Math.max(0, alpha - 0.025);
-            }
+        } else if(effectData.timer <= effectData.timerMax / 5.5 && alpha > 0) {
+            alpha = Math.max(0, alpha - 0.025);
         }
         scaleState = (int) (77 * progress);
+    }
+
+    public boolean isFull() {
+        return effectData.duration > 0 && effectData.timer == effectData.timerMax;
+    }
+
+    public boolean isFilling() {
+        return effectData.duration > 0 && effectData.timer < effectData.timerMax;
+    }
+
+    public boolean isUnfilling() {
+        return effectData.duration == 0 && effectData.timer > 0;
     }
 
     public void onFilling() {}
@@ -111,14 +115,26 @@ public class EffectHud {
         }
     }
 
+    protected void invokeEvents() {
+        if(isFull()) {
+            onFull();
+        }
+        if(isFilling()) {
+            onFilling();
+        }
+        if(isUnfilling()) {
+            onUnfilling();
+        }
+    }
+
     public void preDraw() {}
-    public void postDraw() {}
+    public void postDraw() {} 
 
     public void draw() {
-        this.preDraw();
+        this.invokeEvents();
         this.calculateAnimation();
+        this.preDraw();
         graphics.setColor(1.0f, 1.0f, 1.0f, (float) alpha);
-
         this.drawBackground();
         this.drawScale();
         this.drawLogIfNeed();

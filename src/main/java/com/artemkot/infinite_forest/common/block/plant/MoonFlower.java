@@ -5,7 +5,5 @@ import com.artemkot.infinite_forest.common.block.ForestFlower;
 import com.artemkot.infinite_forest.common.world.curse.ColdCurse;
 
 public class MoonFlower extends ForestFlower {
-    public MoonFlower() {
-        CurseStorage.<ColdCurse>getCurse("cold").adCursedBlock(this);
-    }
+    
 }
