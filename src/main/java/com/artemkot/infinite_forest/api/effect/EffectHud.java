@@ -5,6 +5,7 @@ import javax.annotation.Nullable;
 import com.artemkot.infinite_forest.Config;
 import com.artemkot.infinite_forest.ModResources;
 import com.artemkot.infinite_forest.common.item.ancient_note.AncientNote;
+import com.artemkot.infinite_forest.common.item.data_components.Author;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -110,7 +111,7 @@ public class EffectHud {
         if(Config.EFFECT_DATA_LOGGING.get()) {
             graphics.drawString(mc.font, 
                 Component.literal(effectData.duration + " of " + effectData.timer + ":" + effectData.timerMax)
-                    .withStyle(style -> style.withFont(AncientNote.Author.ETHER.textFont())), 
+                    .withStyle(style -> style.withFont(Author.ETHER.textFont())), 
                 x + 93 + 5, y + 4, 0xFFFFFF, false);
         }
     }

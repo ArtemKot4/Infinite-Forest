@@ -9,6 +9,9 @@ import com.artemkot.infinite_forest.common.effect.FearEffect;
 import com.artemkot.infinite_forest.common.world.curse.ColdCurse;
 import com.artemkot.infinite_forest.common.world.curse.LightningCurse;
 
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -22,6 +25,6 @@ public class ModRegistry {
         CurseStorage.registerCurse("cold", new ColdCurse());
         CurseStorage.registerCurse("lightning", new LightningCurse());
 
-        CurseStorage.<ColdCurse>getCurse("cold").adCursedBlock(BlockList.MOON_FLOWER.get());
+        CurseStorage.<ColdCurse>getCurse("cold").addCursedBlock(BlockList.MOON_FLOWER.get());
     }
 }

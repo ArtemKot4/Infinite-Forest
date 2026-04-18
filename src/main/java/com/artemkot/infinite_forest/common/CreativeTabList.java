@@ -11,8 +11,9 @@ import java.util.function.Supplier;
 import com.artemkot.infinite_forest.InfiniteForest;
 import com.artemkot.infinite_forest.common.block.BlockList;
 import com.artemkot.infinite_forest.common.item.ancient_note.AncientNoteStorage;
+import com.artemkot.infinite_forest.common.item.data_components.AncientNotePage;
 import com.artemkot.infinite_forest.common.item.ancient_note.ItemList;
-import com.artemkot.infinite_forest.common.item.data_components.AncientNoteData;
+import com.artemkot.infinite_forest.common.item.data_components.Author;
 import com.artemkot.infinite_forest.Config;
 
 public class CreativeTabList {
@@ -33,10 +34,18 @@ public class CreativeTabList {
                     AncientNoteStorage.container.forEach((stringId, page) -> {
                         if(Config.DEVELOPMENT_MODE.get() == true) {
                             ItemStack stack = ItemList.ANCIENT_NOTE.toStack();
-                            stack.set(DataComponentList.ANCIENT_NOTE_DATA.get(), new AncientNoteData(stringId));
+                            stack.set(DataComponentList.ANCIENT_NOTE_DATA.get(), AncientNoteStorage.getPage(stringId));
                             output.accept(stack);
                         }
                     });
+                    ItemStack customItemStack = ItemList.ANCIENT_NOTE.toStack();
+                    ItemStack unknownItemStack = ItemList.ANCIENT_NOTE.toStack();
+
+                    customItemStack.set(DataComponentList.ANCIENT_NOTE_DATA.get(), new AncientNotePage("custom", Author.PLAYER));
+                    unknownItemStack.set(DataComponentList.ANCIENT_NOTE_DATA.get(), new AncientNotePage("unknown", Author.ETHER));
+                    
+                    output.accept(unknownItemStack);
+                    output.accept(customItemStack);
                 })
                 .build()
         );

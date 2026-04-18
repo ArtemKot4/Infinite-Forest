@@ -9,7 +9,7 @@ import com.artemkot.infinite_forest.api.curse.Curse;
 import com.artemkot.infinite_forest.api.curse.CurseStorage;
 import com.artemkot.infinite_forest.api.effect.EffectPlayerData;
 import com.artemkot.infinite_forest.api.effect.EffectManager;
-import com.artemkot.infinite_forest.common.world.WorldDataHandler;
+import com.artemkot.infinite_forest.common.world.ForestDataManager;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -53,7 +53,7 @@ public class ColdCurse extends Curse {
     }
 
     public boolean isSkyPosition(double y) {
-        return y > getSkyPosition();
+        return y >= getSkyPosition();
     }
 
     @Override
@@ -79,15 +79,14 @@ public class ColdCurse extends Curse {
         int skyPosition = getSkyPosition();
         int particleCount = Config.COLD_CURSE_SNOW_PARTICLES.get();
 
-        if(player.getY() >= skyPosition - 30 && player.getY() < skyPosition) {
-            runSnowInRadius(player.level(), player.getX(), skyPosition, player.getZ(), 128, particleCount, 5);
-        }
         if(isSkyPosition(player.getY())) {
             runSnowInRadius(player.level(), player.getX(), player.getY(), player.getZ(), 16, particleCount, 20);
+        } else if(player.getY() >= skyPosition - 60) {
+            runSnowInRadius(player.level(), player.getX(), skyPosition, player.getZ(), 128, particleCount, 5);
         }
     }
 
-    public void adCursedBlock(Block block) {
+    public void addCursedBlock(Block block) {
         cursedBlocks.add(block);
     }
 
@@ -101,7 +100,7 @@ public class ColdCurse extends Curse {
         BlockPos pos = event.getPos();
         BlockState state = level.getBlockState(pos);
 
-        if(!WorldDataHandler.hasCurse(level, "cold")) {
+        if(!ForestDataManager.hasCurse(level, "cold")) {
             return;
         }
         if(!CurseStorage.<ColdCurse>getCurse("cold").isCursedBlock(state.getBlock())) {

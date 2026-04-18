@@ -15,8 +15,6 @@
     "tooltip.infinite_forest.ice_crystal": "Приносит чувство беспокойства, холода и одиночества",
     "tooltip.infinite_forest.fire_crystal": "Приятно согревает, приносит странное спокойствие",
 
-    "ancient_note.infinite_forest.empty": "Нет записей",
-
     "block.infinite_forest.learning_table": "Исследовательский стол",
     "block.infinite_forest.iron_cauldron": "Железный котёл",
     "block.infinite_forest.windmill_station": "Станция мельницы",
@@ -57,8 +55,6 @@
     "message.infinite_forest.clear_learning": "Изучение %s удалено",
     "message.infinite_forest.unknown_learning": "Ошибка! Неизвестное изучение...",
     "message.infinite_forest.rift_coords_not_enough": "Недостаточно координат!",
-    "message.infinite_forest.rift_created": "Разлом создан",
-    "message.infinite_forest.rift_destroyed": "Разлом удалён",
     "message.infinite_forest.player_learning_list": "Доступные изучения:",
     "message.infinite_forest.none_learnings": "Изучений нет",
     "message.infinite_forest.typing": "Кажется, здесь чисто. Думаю, пришло время это исправить...",
@@ -73,6 +69,8 @@
     "message.infinite_forest.unknown": "Неизвестен",
     "message.infinite_forest.fear": "Вы нуждаетесь в свете, страх сковывает ваши руки и мысли",
     "message.infinite_forest.cold": "Становится холодно",
+    "message.infinite_forest.unknown_ancient_note": "Не видно автора... Возможно стоит протереть записку",
+    "message.infinite_forest.no_name": "Без названия",
 
     "ancient_note.infinite_forest.empty": "Эта записка пуста",
     "ancient_note.infinite_forest.contains": "Запись:",
@@ -87,5 +85,6 @@
     "ancient_note.infinite_forest.welcome:description": "Корни мои режутся от гнили, грибницы отравляют почву, истекая чёрной кровью. Надежда утонула в вязкой бездне, корни зла спустились от кристалла с солью. Страха нет давно, надежду сдуло ветром. Но корни не желают моей смерти.. Гниёт моё нутро, но жизнь ещё пылает. Я не живу. Давно я выживаю",
 
     "name.infinite_forest.ether": "Этер",
-    "name.infinite_forest.scientist": "Арчибальд"
+    "name.infinite_forest.archiebald": "Арчибальд",
+    "infinite_forest": "Бесконечный лес"
 }

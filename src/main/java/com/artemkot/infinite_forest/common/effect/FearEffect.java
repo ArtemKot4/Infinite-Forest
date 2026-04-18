@@ -8,6 +8,7 @@ import com.artemkot.infinite_forest.api.effect.EffectHud;
 import com.artemkot.infinite_forest.api.effect.EffectPlayerData;
 import com.artemkot.infinite_forest.api.effect.EffectType;
 import com.artemkot.infinite_forest.common.item.ancient_note.AncientNote;
+import com.artemkot.infinite_forest.common.item.data_components.Author;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -33,7 +34,7 @@ public class FearEffect extends EffectType {
         }
 
         public void onPostInit() {
-            Minecraft.getInstance().gui.getChat().addMessage(Component.translatable("message.infinite_forest.fear").withStyle(style -> style.withFont(AncientNote.Author.ETHER.textFont())));
+            Minecraft.getInstance().gui.getChat().addMessage(Component.translatable("message.infinite_forest.fear").withStyle(style -> style.withFont(Author.ETHER.textFont())));
         }
     };
 

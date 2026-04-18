@@ -12,7 +12,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 
 public class AnimatedText {
-    protected final ArrayList<String> fullText;
+    protected ArrayList<String> fullText;
     protected ArrayList<String> text;
     protected long lastUpdateTime = 0;
     protected double milliseconds = 50;
@@ -42,8 +42,12 @@ public class AnimatedText {
         return this;
     }
 
+    public void skip(int skipCharsCount) {
+        fastModeChars = skipCharsCount; 
+    }
+
     public void skip() {
-        fastModeChars = 10; 
+        text = new ArrayList<>(fullText);
     }
 
     public void updateText() {

@@ -3,8 +3,12 @@ package com.artemkot.infinite_forest.client.ui;
 import java.util.concurrent.ThreadLocalRandom;
 
 import com.artemkot.infinite_forest.InfiniteForest;
+import com.artemkot.infinite_forest.api.curse.ClientForestDataManager;
 import com.artemkot.infinite_forest.client.ui.widgets.TextureButton;
 import com.artemkot.infinite_forest.common.item.ancient_note.AncientNote;
+import com.artemkot.infinite_forest.common.item.data_components.AncientNotePage;
+import com.artemkot.infinite_forest.common.item.data_components.Author;
+import com.artemkot.infinite_forest.network.packets.AddFoundAncientNotePacket;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 
@@ -23,6 +27,7 @@ import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 @OnlyIn(Dist.CLIENT)
 public class AncientNoteScreen extends Screen {
@@ -39,9 +44,9 @@ public class AncientNoteScreen extends Screen {
     
     private int leftPos;
     private int topPos;
-    private final AncientNote.Page page;
+    private final AncientNotePage page;
 
-    public AncientNoteScreen(AncientNote.Page page) {
+    public AncientNoteScreen(AncientNotePage page) {
         super(Component.translatable("item.infinite_forest.ancient_note"));
         this.page = page;
     }
@@ -63,7 +68,12 @@ public class AncientNoteScreen extends Screen {
             animatedText = new AnimatedText(description, page.author().textLineSize())
             .setTime(40)
             .setSpeed(0.3);
-        
+
+            if(ClientForestDataManager.hasFoundAncientNote(page.stringId()) || page.isCustom()) {
+                animatedText.skip();
+            } else {
+                PacketDistributor.sendToServer(new AddFoundAncientNotePacket(page.stringId()));
+            }
             this.active = true;
         }
 
@@ -83,6 +93,11 @@ public class AncientNoteScreen extends Screen {
                     Component.translatable(page.name()).withStyle((style) -> style.withFont(page.author().textFont())), 
                     textX, textY - 20, ChatFormatting.DARK_GRAY.getColor(), false
                 );
+            }
+
+            if(page.isStringId("custom") && page.isContentEmpty()) {
+                graphics.drawWordWrap(minecraft.font, Component.translatable("message.infinite_forest.typing")
+                .withStyle(format -> format.withFont(Author.PLAYER.textFont())), textX, textY, 120, ChatFormatting.GRAY.getColor());
             }
             
             animatedText.draw(minecraft, graphics, textX, textY, 10, 
@@ -113,7 +128,7 @@ public class AncientNoteScreen extends Screen {
         @Override
         public boolean mouseClicked(double mouseX, double mouseY, int button) {
             showSkipIcon = false;
-            animatedText.skip();
+            animatedText.skip(10);
             return true;
         }
     }

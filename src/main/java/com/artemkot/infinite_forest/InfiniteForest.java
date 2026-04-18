@@ -10,11 +10,16 @@ import com.artemkot.infinite_forest.common.block.BlockList;
 import com.artemkot.infinite_forest.common.effect.ColdEffect;
 import com.artemkot.infinite_forest.common.effect.FearEffect;
 import com.artemkot.infinite_forest.common.item.ancient_note.ItemList;
+import com.artemkot.infinite_forest.common.world.InfiniteForestBiomeSource;
+import com.artemkot.infinite_forest.common.world.InfiniteForestDimension;
 import com.artemkot.infinite_forest.common.world.curse.ColdCurse;
 import com.artemkot.infinite_forest.common.world.curse.LightningCurse;
 import com.artemkot.infinite_forest.common.world.sky.Sky;
 import com.mojang.logging.LogUtils;
 
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -32,6 +37,8 @@ public class InfiniteForest {
 
     public InfiniteForest(IEventBus modEventBus, ModContainer modContainer) {
         modEventBus.addListener(DataGenerators::new);
+
+        //InfiniteForestDimension.BIOME_SOURCES.register(modEventBus);
 
         BlockList.BLOCKS.register(modEventBus);
         ItemList.ITEMS.register(modEventBus); 

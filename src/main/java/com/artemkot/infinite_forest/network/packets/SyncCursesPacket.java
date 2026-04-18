@@ -10,11 +10,12 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.artemkot.infinite_forest.api.curse.ClientCurseData;
+import com.artemkot.infinite_forest.ModResources;
+import com.artemkot.infinite_forest.api.curse.ClientForestDataManager;
 
 public record SyncCursesPacket(Set<String> curses) implements CustomPacketPayload {
     public static final Type<SyncCursesPacket> TYPE = new Type<>(
-        ResourceLocation.fromNamespaceAndPath("infinite_forest", "sync_curses")
+        ModResources.getResourceLocation("sync_curses")
     );
     
     public static final StreamCodec<ByteBuf, SyncCursesPacket> STREAM_CODEC = StreamCodec.composite(
@@ -30,7 +31,7 @@ public record SyncCursesPacket(Set<String> curses) implements CustomPacketPayloa
     
     public static void handle(SyncCursesPacket packet, IPayloadContext ctx) {
         ctx.enqueueWork(() -> {
-            ClientCurseData.setCurses(packet.curses());
+            ClientForestDataManager.setCurses(packet.curses());
         });
     }
 }

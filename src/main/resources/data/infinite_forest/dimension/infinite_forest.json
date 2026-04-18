@@ -4,8 +4,12 @@
         "type": "minecraft:noise",
         "settings": "infinite_forest:infinite_forest",
         "biome_source": {
-            "type": "minecraft:fixed",
-            "biome": "infinite_forest:fireflies_forest"
+            "type": "minecraft:checkerboard",
+            "biomes": [
+                "infinite_forest:fireflies_forest",
+                "infinite_forest:winter_forest"
+            ],
+            "scale": 2
         }
     }
 }

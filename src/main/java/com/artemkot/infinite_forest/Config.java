@@ -24,12 +24,16 @@ public class Config {
     }
     
     public static final ModConfigSpec.BooleanValue DEVELOPMENT_MODE = BUILDER
-            .comment("Development mode - добавлять древние записки в креатив")
-            .define("development_mode", true);
+            .comment("Development mode - добавлять древние записки в креатив. Требует перезахода в мир")
+            .define("development_mode", false);
     
     public static final ModConfigSpec.BooleanValue EFFECT_DATA_LOGGING = BUILDER
             .comment("Логирование данных эффектов для отладки")
             .define("effect_data_logging", false);
+
+    public static final ModConfigSpec.BooleanValue DATA_DEBUG_ON_PLAYER_CONNECTING = BUILDER
+            .comment("Логирование данных для отладки при подключении игрока")
+            .define("data_debug_on_player_connecting", false);
     
     public static final ModConfigSpec SPEC = BUILDER.build();
 }
