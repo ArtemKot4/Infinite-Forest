@@ -15,7 +15,7 @@ import com.artemkot.infinite_forest.api.effect.EffectPlayerData;
 public class ColdEffect extends EffectType {
     public final FrozenOverlay overlay = new FrozenOverlay();
 
-    public final EffectHud HUD = new EffectHud(ModResources.getTextureUI("effect/winter_scale.png"), ModResources.getTextureUI("effect/winter_icon.png")) {
+    public final EffectHud HUD = new EffectHud(ModResources.getTextureUI("effect/winter_scale_empty.png"), ModResources.getTextureUI("effect/winter_scale.png")) {
         @Override
         public void onUnfilling() {
             overlay.ahead = false;

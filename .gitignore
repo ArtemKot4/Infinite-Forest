@@ -43,4 +43,4 @@ run/command_history.txt
 /run/crash-reports
 /run/downloads
 /run/logs
-/run/saves
+run/saves

@@ -16,12 +16,13 @@ import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class EffectHud {
-    protected static ResourceLocation borderTexture = ModResources.getTextureUI("effect/border.png");
-    protected static ResourceLocation scaleBackgroundTexture = ModResources.getTextureUI("effect/default_scale_background.png");
+    protected static ResourceLocation BORDER_TEXTURE = ModResources.getTextureUI("effect/border.png");
+    public static final int BORDER_TEXTURE_WIDTH = 103;
+    public static final int BORDER_TEXTURE_HEIGHT = 21;
     protected int defaultY;
 
     protected final ResourceLocation scaleTexture;
-    protected final ResourceLocation scaleIconTexture;
+    protected final ResourceLocation scaleEmptyTexture;
     protected int x;
     protected int y;
     protected double alpha = 0;
@@ -33,9 +34,9 @@ public class EffectHud {
     protected Minecraft mc;
     protected EffectPlayerData effectData;
 
-    public EffectHud(ResourceLocation scaleTexture, @Nullable ResourceLocation scaleIconTexture) {
+    public EffectHud(ResourceLocation scaleEmptyTexture, ResourceLocation scaleTexture) {
+        this.scaleEmptyTexture = scaleEmptyTexture;
         this.scaleTexture = scaleTexture;
-        this.scaleIconTexture = scaleIconTexture;
         this.setDefaultY(5);
     }
 
@@ -61,8 +62,6 @@ public class EffectHud {
     }
 
     public void calculateAnimation() {
-        float progress = Math.min(1, (float) effectData.timer / effectData.timerMax);
-
         if(effectData.duration > 0) {
             if(alpha < 1) {
                 alpha = Math.min(1, alpha + 0.008);
@@ -70,7 +69,7 @@ public class EffectHud {
         } else if(effectData.timer <= effectData.timerMax / 5.5 && alpha > 0) {
             alpha = Math.max(0, alpha - 0.025);
         }
-        scaleState = (int) (77 * progress);
+        scaleState = (int) (BORDER_TEXTURE_WIDTH * Math.min(1, (float) effectData.timer / effectData.timerMax));
     }
 
     public boolean isFull() {
@@ -95,16 +94,13 @@ public class EffectHud {
 
     public void drawBackground() {
         int screenWidth = mc.getWindow().getGuiScaledWidth();
-        this.x = (screenWidth - 93) / 2;
-        graphics.blit(borderTexture, x, y, 0, 0, 93, 13, 93, 13);
+        this.x = (screenWidth - BORDER_TEXTURE_WIDTH) / 2;
+        graphics.blit(BORDER_TEXTURE, x, y, 0, 0, BORDER_TEXTURE_WIDTH, BORDER_TEXTURE_HEIGHT, BORDER_TEXTURE_WIDTH, BORDER_TEXTURE_HEIGHT);
     }
 
     public void drawScale() {
-        graphics.blit(scaleBackgroundTexture, x + 8 + 4, y + 2, 0, 0, 77, 9, 77, 9);
-        graphics.blit(scaleTexture, x + 8 + 4, y + 2, 0, 0, scaleState, 9, 77, 9);
-        if(scaleIconTexture != null) {
-            graphics.blit(scaleIconTexture, x + 2, y + 2, 0, 0, 9, 9, 9, 9);
-        }
+        graphics.blit(scaleEmptyTexture, x, y, 0, 0, BORDER_TEXTURE_WIDTH, BORDER_TEXTURE_HEIGHT, BORDER_TEXTURE_WIDTH, BORDER_TEXTURE_HEIGHT);
+        graphics.blit(scaleTexture, x, y, 0, 0, scaleState, BORDER_TEXTURE_HEIGHT, BORDER_TEXTURE_WIDTH, BORDER_TEXTURE_HEIGHT);
     }
 
     public void drawLogIfNeed() {

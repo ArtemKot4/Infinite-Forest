@@ -64,8 +64,8 @@ public class ColdCurse extends Curse {
         if(isSkyPosition(player.getY())) {
             if(!skyGuests.contains(uuid)) {
                 player.sendSystemMessage(Component.translatable("message.infinite_forest.cold").withColor(ChatFormatting.BLUE.getColor()));
+                skyGuests.add(uuid);
             }
-            skyGuests.add(uuid);
             EffectManager.addEffect(player, new EffectPlayerData("cold", 500, 30));
         } else if(skyGuests.contains(uuid)) {
             EffectManager.setDuration(player, "cold", 0);
