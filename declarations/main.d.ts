@@ -2,7 +2,7 @@ interface ILocalizeable {
     getName(): string;
     getLocalizedName(): string;
 }
-declare enum Side {
+declare enum ESide {
     CLIENT = 0,
     SERVER = 1
 }
@@ -52,8 +52,8 @@ declare namespace MathHelper {
     function randomFrom<T>(...elements: T[]): T;
     function randomFromArray<T>(array: T[]): T;
     function radian(gradus: number): number;
-    function randomInt(min: number, max: number): number;
-    function range(min: number, max: number, number?: number): number[];
+    function randomNumber(min: number, max: number): number;
+    function range(min: number, max: number, step?: number): number[];
 }
 declare namespace TileEntity {
     function buildEvents(prototype: TileEntity.TileEntityPrototype): void;
@@ -68,11 +68,14 @@ declare namespace ToolAPI {
     function isHoe(item: number): boolean;
 }
 declare namespace Block {
+    interface ISelectionFunction {
+        (block: BlockState, blockPosition: Vector, viewVector: Vector): void;
+    }
     const destroyFunctions: Record<number, Callback.DestroyBlockFunction>;
     const destroyStartFunctions: Record<number, Callback.DestroyBlockFunction>;
     const destroyContinueFunctions: Record<number, Callback.DestroyBlockContinueFunction>;
     const projectileHitFunctions: Record<number, Callback.ProjectileHitFunction>;
-    const selectionFunctions: Record<number, Callback.BlockSelectionFunction>;
+    const selectionFunctions: Record<number, ISelectionFunction>;
     function createPlantBlock(nameID: string, defineData: BlockVariation[]): void;
     function setEmptyCollisionShape(id: number): void;
     function setSolid(id: number, solid: boolean): void;
@@ -95,13 +98,15 @@ declare namespace Block {
     function registerDestroyContinueFunction(id: number, func: Callback.DestroyBlockContinueFunction): void;
     function registerDestroyContinueFunctionForID(id: number, func: Callback.DestroyBlockContinueFunction): void;
     function registerProjectileHitFunction(id: number, func: Callback.ProjectileHitFunction): void;
-    function registerSelectionFunction(id: number, func: Callback.BlockSelectionFunction): void;
-    function registerSelectionFunctionForID(id: number, func: Callback.BlockSelectionFunction): void;
+    function registerSelectionFunction(id: number, func: ISelectionFunction): void;
+    function registerSelectionFunctionForID(id: number, func: ISelectionFunction): void;
 }
 declare namespace Item {
+    type ILiquidStorageItemParams = ItemParams & LiquidItemRegistry.ILiquidStorage;
     const holdFunctions: Record<number, Callback.ItemHoldFunction>;
     function registerHoldFunctionForID(id: number, func: Callback.ItemHoldFunction): void;
     function registerHoldFunction(id: string | number, func: Callback.ItemHoldFunction): void;
+    function createLiquidStorageItem(nameID: string, name: string, texture: TextureData, params: ILiquidStorageItemParams, data?: number): void;
 }
 declare namespace World {
     function getDifficulty(): number;
@@ -127,12 +132,144 @@ declare namespace TagRegistry {
     function getDimensionTags(id: number): string[];
 }
 declare namespace IDRegistry {
+    /**
+     * Method to get valid block id: block id or vanilla block id
+     * @param id any block id
+     */
     function parseBlockID(id: string): number;
+    /**
+     * Method to get valid item id: item id or vanilla item id
+     * @param id any item id
+     */
     function parseItemID(id: string): number;
+    /**
+     * Method to get valid block or item id
+     * @param id any id of block or item
+     */
     function parseID(id: string): number;
+}
+declare namespace LiquidItemRegistry {
+    interface ILiquidStorage {
+        capacity: number;
+        liquids: string[];
+    }
+    const storage: Record<string, ILiquidStorage>;
+    function registerLiquidStorage(id: number, data: number, description: ILiquidStorage): void;
+    function getLiquidStorage(id: number, data: number): Nullable<ILiquidStorage>;
+    function getCapacity(id: number, data: number): number;
+    function getLiquids(id: number, data: number): string[];
+    function getCurrentLiquid(extra: Nullable<ItemExtraData>): Nullable<string>;
+    function getCurrentLiquidCapacity(extra: Nullable<ItemExtraData>): number;
+}
+declare namespace com {
+    namespace artemkot4 {
+        namespace fireflies {
+            namespace ui {
+                namespace utils {
+                    class FontManager {
+                        private static TYPEFACES;
+                        static registerTypeface(typeface: android.graphics.Typeface, name: string): android.graphics.Typeface;
+                        static registerTypefaceFrom(path: string, name: string): Nullable<android.graphics.Typeface>;
+                        static registerTypefacesFrom(path: string): void;
+                        static getTypeface(name: string): Nullable<android.graphics.Typeface>;
+                        static getTypefaceSafe(nameOfPath: string): android.graphics.Typeface;
+                    }
+                }
+            }
+        }
+    }
+}
+declare namespace UI {
+    interface FontDescription {
+        /** typeface, or path or name for font typeface. If not defined, will be default minecraft typeface
+         */
+        typeface?: string | android.graphics.Typeface;
+    }
+    const FontManager: typeof com.artemkot4.fireflies.ui.utils.FontManager;
+    namespace FONT_TYPESPACES {
+        const MINECRAFT: android.graphics.Typeface;
+        const DEFAULT: android.graphics.Typeface;
+        const DEFAULT_BOLD: android.graphics.Typeface;
+        const MONOSPACE: android.graphics.Typeface;
+        const SANS_SERIF: android.graphics.Typeface;
+        const SERIF: android.graphics.Typeface;
+    }
 }
 declare namespace RenderHelper {
     function generateMesh(dir: string, model: string, params?: RenderMesh.ImportParams, rotate?: number[]): RenderMesh;
+}
+declare class WorldRenderObject implements Vector {
+    static objects: {
+        [stringID: string]: {
+            [uuid: string]: WorldRenderObject;
+        };
+    };
+    x: number;
+    y: number;
+    z: number;
+    thread?: java.lang.Thread;
+    animation: Animation.Base;
+    loaded: boolean;
+    renderScale?: number;
+    skin?: string;
+    uuid: string;
+    protected threadInited?: boolean;
+    constructor(x: number, y: number, z: number);
+    getDescription(): Animation.description;
+    /** Id for thread name if need
+     */
+    getStringID(): string;
+    getRenderMesh(): Nullable<RenderMesh>;
+    getRender(): Nullable<Render>;
+    getSkin(): Nullable<string>;
+    getLightMode(): Nullable<"block" | "ignore" | "skylight">;
+    getMaterial(): Nullable<string>;
+    /**
+     * If method defined, thread will be initialized with this method. While cycle already defined and sleep time (from fps).
+     */
+    run?(): void;
+    /**
+     * Loads render object in world and puts it to the storage by id and uuid
+     */
+    load(): void;
+    refresh(): void;
+    startThread(): void;
+    getFps(): number;
+    stop(): void;
+    start(): void;
+    destroy(): void;
+    rotate(x: number, y: number, z: number): Render.Transform;
+    scale(x: number, y: number, z: number): Render.Transform;
+    translate(x: number, y: number, z: number): Render.Transform;
+    exists(): boolean;
+    static getAllByStringID(stringID: string): Nullable<{
+        [uuid: string]: WorldRenderObject;
+    }>;
+    static getAllByPositionAndStringID(stringID: string, x: number, y: number, z: number, roundFunc?: Function): WorldRenderObject[];
+    static getAllByPosition(x: number, y: number, z: number, roundFunc?: Function): WorldRenderObject[];
+    static onLevelLeft(): void;
+}
+declare class RenderSide<T extends string | RenderMesh> {
+    model: T;
+    importParams: RenderMesh.ImportParams;
+    readonly list: RenderMesh[];
+    constructor(dir: string, model: RenderMesh);
+    constructor(dir: string, model: string, importParams?: RenderMesh.ImportParams);
+    getWithData(data: number): RenderMesh;
+    getForTile(tileEntity: TileEntity.TileEntityPrototype): RenderMesh;
+}
+declare class BlockAnimation {
+    coords: Vector;
+    tileEntity?: TileEntity.TileEntityPrototype;
+    animation?: Animation.Base;
+    constructor(coords: Vector, tileEntity?: TileEntity.TileEntityPrototype);
+    load(): void;
+    describe(mesh: RenderMesh | RenderSide<string>, texture: string, scale?: number, material?: string): void;
+    rotate(x: number, y: number, z: number): Render.Transform;
+    scale(x: number, y: number, z: number): Render.Transform;
+    setPos(x: number, y: number, z: number): void;
+    refresh(): void;
+    destroy(): void;
 }
 declare namespace Animation {
     type description = {
@@ -163,68 +300,14 @@ declare namespace Animation {
         material?: string;
     };
 }
-declare class RenderObject implements Vector {
-    x: number;
-    y: number;
-    z: number;
-    thread?: java.lang.Thread;
-    animation: Animation.Base;
-    isLoaded: boolean;
-    scale?: number;
-    skin?: string;
-    protected threadInited?: boolean;
-    constructor(x: number, y: number, z: number);
-    getDescription(): Animation.description;
-    autoSetPositions(): boolean;
-    getStringID(): string;
-    getRenderMesh(): Nullable<RenderMesh>;
-    getRender(): Nullable<Render>;
-    getSkin(): Nullable<string>;
-    getLightMode(): Nullable<"block" | "ignore" | "skylight">;
-    getMaterial(): Nullable<string>;
-    /**
-     * If method defined, thread will be initialized with this method. While cycle already defined and sleep time (from fps).
-     */
-    run?(): void;
-    load(): void;
-    refresh(): void;
-    startThread(): void;
-    getFps(): number;
-    stop(): void;
-    start(): void;
-    destroy(): void;
-    rotateBy(x: number, y: number, z: number): com.zhekasmirnov.innercore.api.NativeRenderer.Transform;
-    scaleBy(x: number, y: number, z: number): com.zhekasmirnov.innercore.api.NativeRenderer.Transform;
-    translateBy(x: number, y: number, z: number): com.zhekasmirnov.innercore.api.NativeRenderer.Transform;
-    exists(): boolean;
-}
-declare class RenderSide<T extends string | RenderMesh> {
-    model: T;
-    importParams: RenderMesh.ImportParams;
-    readonly list: RenderMesh[];
-    constructor(dir: string, model: RenderMesh);
-    constructor(dir: string, model: string, importParams?: RenderMesh.ImportParams);
-    getWithData(data: number): RenderMesh;
-    getForTile(tileEntity: TileEntity.TileEntityPrototype): RenderMesh;
-}
-declare class BlockAnimation {
-    coords: Vector;
-    tile_entity?: TileEntity.TileEntityPrototype;
-    animation?: Animation.Base;
-    constructor(coords: Vector, tile_entity?: TileEntity.TileEntityPrototype);
-    load(): void;
-    describe(mesh: RenderMesh | RenderSide<string>, texture: string, scale?: number, material?: string): void;
-    rotate(x: number, y: number, z: number): com.zhekasmirnov.innercore.api.NativeRenderer.Transform;
-    scale(x: number, y: number, z: number): com.zhekasmirnov.innercore.api.NativeRenderer.Transform;
-    setPos(x: number, y: number, z: number): void;
-    refresh(): void;
-    destroy(): void;
-}
+/**
+ * Class to create android clickable field, which with click opens keyboard and inputs text.
+ */
 declare class Keyboard {
+    placeholderText: string;
     context: any;
     func: (text: string) => void;
-    default_string: string;
-    constructor(default_string: string);
+    constructor(placeholderText: string);
     getText(func: (text: string) => void): Keyboard;
     open(): void;
 }
@@ -285,13 +368,14 @@ declare class ItemStack implements ItemInstance {
     isNativeItem(): boolean;
     getStringID(): string;
     copy(): ItemStack;
+    static equals(stack1: ItemInstance, stack2: ItemInstance): boolean;
+    static contains(stack1: ItemInstance, stack2: ItemInstance): boolean;
 }
 interface IItemHoldCallback {
     onItemHold?(item: ItemInstance, playerUid: number, slotIndex: number): void;
 }
-type itemTextureAnimated = [texture: string, frames: number | number[], interval: number];
 interface IItemTextureDescription {
-    name: string | itemTextureAnimated;
+    name: string;
     meta: number;
 }
 interface IIconOverrideCallback {
@@ -344,7 +428,11 @@ declare class BasicItem<T extends Item.ItemParams = Item.ItemParams> {
     static setFunctions(instance: (IIconOverrideCallback | INoTargetUseCallback | IItemUsingReleasedCallback | IItemUsingCompleteCallback | IItemUseCallback | INameOverrideCallback | IItemHoldCallback | BasicItem) & {
         id: number;
     }): void;
-    create(params: ItemParams): void;
+    create(params?: ItemParams): void;
+}
+declare const a = 1;
+declare class LiquidStorageItem extends BasicItem {
+    constructor(stringID: string, texture: IItemTextureDescription, params: Item.ILiquidStorageItemParams, data?: number);
 }
 declare enum EDestroyLevel {
     HAND = 0,
@@ -403,6 +491,12 @@ interface IProjectileHitCallback {
     onProjectileHit(projectile: number, item: ItemStack, target: Callback.ProjectileHitTarget): void;
 }
 interface IBlockSelectionCallback {
+    /**
+     * Method, adds client event for block selection of player
+     * @param block block id and data
+     * @param position position of block
+     * @param vector look vector of player
+     */
     onSelection(block: Tile, position: BlockPosition, vector: Vector): void;
 }
 declare class BasicBlock {
@@ -410,12 +504,17 @@ declare class BasicBlock {
     readonly id: number;
     readonly stringID: string;
     constructor(stringID: string, variationList?: Block.BlockVariation[]);
+    /**
+     * Method declares, can block place rotated by data or not
+     */
     canRotate(): boolean;
-    build(): void;
-    setModel(model: BlockModel | RenderMesh | BlockRenderer.Model | ICRender.Model, data: number): this;
-    setStates(states: ReturnType<typeof this.getStates>): void;
-    getID(): number;
+    /**
+     * Method must list of blockstates which will be registered to block
+     */
     getStates(): (string | number)[];
+    /**
+     * Method must return tags which will be added to block
+     */
     getTags(): string[];
     getDrop?(coords: Callback.ItemUseCoordinates, id: number, data: number, diggingLevel: number, enchant: ToolAPI.EnchantData, item: ItemStack, region: BlockSource): ItemInstanceArray[];
     getDestroyTime?(): number;
@@ -433,7 +532,9 @@ declare class BasicBlock {
     getCreativeGroup?(): string;
     getTileEntity?(): CommonTileEntity;
     isSolid?(): boolean;
-    static destroyWithTile(x: number, y: number, z: number, blockSource: BlockSource): void;
+    static setStates(id: number, states: ReturnType<typeof BasicBlock.prototype.getStates>): void;
+    static setModel(id: number, data: number, model: BlockModel | RenderMesh | BlockRenderer.Model | ICRender.Model): void;
+    static build(blockPrototype: BasicBlock): void;
 }
 declare class BlockPlant extends BasicBlock implements INeighbourChangeCallback, IPlaceCallback {
     static allowedBlockList: number[];
@@ -491,17 +592,22 @@ declare function NetworkEvent(target: CommonTileEntity | LocalTileEntity, proper
  * @param propertyName Name of method
  */
 declare function ContainerEvent(target: CommonTileEntity | LocalTileEntity, propertyName: string): void;
-declare abstract class LocalTileEntity implements LocalTileEntity {
+declare abstract class LocalTileEntity implements LocalTileEntity, Vector {
+    readonly x: number;
+    readonly y: number;
+    readonly z: number;
+    readonly networkData: SyncedNetworkData;
     events: {
         [packetName: string]: (packetData: any, packetExtra: any) => void;
     };
     containerEvents?: {
-        [eventName: string]: (container: ItemContainer, window: UI.Window | UI.StandartWindow | UI.StandardWindow | UI.TabbedWindow, windowContent: com.zhekasmirnov.innercore.api.mod.ui.window.WindowContent, eventData: any) => void;
+        [eventName: string]: (container: ItemContainer, window: UI.Window | UI.StandartWindow | UI.StandardWindow | UI.TabbedWindow, windowContent: UI.WindowContent, eventData: any) => void;
     };
     eventNames: {
         network: string[];
         container: string[];
     };
+    sendResponse: <T = {}>(packetName: string, someData: T) => {};
     /**@deprecated
      * Use {@link onLoad} instead
      */
@@ -528,7 +634,7 @@ declare abstract class LocalTileEntity implements LocalTileEntity {
  * @example
  * ```ts
  * class LocalExampleTile extends LocalTileEntity {
- *     @NetworkEvent
+ *     \@NetworkEvent
  *     public exampleMessagePacket(): void {
  *         Game.message("example");
  *         return;
@@ -575,7 +681,7 @@ declare abstract class CommonTileEntity implements TileEntity {
      * Scriptable object that contains data of tile entity.
      * You can use it instead {@link defaultValues}
      */
-    data: Record<string | number, unknown>;
+    data: Scriptable;
     /**
      * Scriptable object that contains default data of tile entity.
      */
@@ -590,7 +696,7 @@ declare abstract class CommonTileEntity implements TileEntity {
         [packetName: string]: (packetData: any, packetExtra: any) => void;
     };
     containerEvents?: {
-        [eventName: string]: (container: ItemContainer, window: UI.Window | UI.StandartWindow | UI.StandardWindow | UI.TabbedWindow, windowContent: com.zhekasmirnov.innercore.api.mod.ui.window.WindowContent, eventData: any) => void;
+        [eventName: string]: (packetData: any, connectedClient: NetworkClient) => void;
     };
     eventNames: {
         network: string[];
@@ -727,21 +833,33 @@ interface CustomGeneratorDescription {
     biome?: number;
     layers?: Dimensions.TerrainLayerParams[];
 }
-declare abstract class Dimension {
+declare abstract class BasicDimension {
     id: number;
     stringId: string;
     static generateChunkFunctions: Record<number, (chunkX: number, chunkZ: number, random: java.util.Random) => void>;
-    static insideDimensionTransferFunctions: Record<number, (playerUid: number, from: number) => void>;
-    static outsideDimensionTransferFunctions: Record<number, (playerUid: number, to: number) => void>;
+    static insideTransferFunctions: Record<number, typeof BasicDimension.prototype.onInsideEntityTransfer>;
+    static outsideTransferFunctions: Record<number, typeof BasicDimension.prototype.onOutsideEntityTransfer>;
     dimension: Dimensions.CustomDimension;
     biome: CustomBiome;
     layers: Dimensions.TerrainLayerParams[];
+    hasSkyLight?: boolean;
+    hasBedrockLayer?: boolean;
+    hasMoon?: boolean;
+    hasSun?: boolean;
+    hasVanillaWeather?: boolean;
+    hasStars?: boolean;
+    hasClouds?: boolean;
+    canEvaporatesLiquids?: boolean;
     constructor(id: number, stringId: string, biome?: CustomBiome);
-    hasBedrockLayer(): boolean;
     addLayer(layer: Dimensions.TerrainLayerParams): void;
     getLayers?(): Dimensions.TerrainLayerParams[];
+    getSkyAtmosphereEnabled(): boolean;
     getGenerator(): Dimensions.CustomGenerator;
     getTags(): string[];
+    /**
+     * Number between 0 and 1
+     */
+    getDayTimeInterval?(): number;
     /**Specifies base generator, see CustomGenerator constructor for details. */
     getBase?(): string | number;
     modWorldgenDimension?(): string | number;
@@ -749,7 +867,6 @@ declare abstract class Dimension {
     buildVanillaSurfaces(): boolean;
     generateCaves(): [caves: boolean, underwater_caves: boolean];
     generateVanillaStructures(): boolean;
-    hasSkyLight?(): boolean;
     /** Method places colors in rgb format */
     getSkyColor?(): number[];
     /** Method places colors in rgb format */
@@ -760,9 +877,13 @@ declare abstract class Dimension {
     getFogDistance?(): [start: number, end: number];
     /** Method places colors in rgb format */
     getSunsetColor?(): number[];
+    /**
+     * Number between 0 and 1
+     */
+    getStarBrightness?(): number;
     generateDimensionChunk?(chunkX: number, chunkZ: number, random: java.util.Random): void;
-    insidePlayerDimensionTransfer?(playerUid: number, from: number): void;
-    outsidePlayerDimensionTransfer?(playerUid: number, to: number): void;
+    onInsideEntityTransfer?(entityUid: number, from: number): void;
+    onOutsideEntityTransfer?(entityUid: number, to: number): void;
 }
 /**
  * Enum with names of all callbacks
@@ -879,7 +1000,7 @@ declare enum ECallback {
      * Custom callback. Works in one time of 8 ticks, if player held the item.
      */
     ITEM_HOLD = "ItemHold",
-    BLOCK_SELECTION = "BlockSelection"
+    SELECTION = "Selection"
 }
 declare namespace Callback {
     /**
@@ -891,38 +1012,40 @@ declare namespace Callback {
     interface ItemHoldFunction {
         (item: ItemInstance, playerUid: number, slotIndex: number): void;
     }
-    interface BlockSelectionFunction {
-        (block: Tile, position: BlockPosition, vector: Vector): any;
+    interface SelectionFunction {
+        (viewVector: Vector, blockPosition: Vector, entityUid: number, block: BlockState): void;
     }
-    interface EntitySelectionFunction {
-        (entityUid: number, vector: Vector): any;
-    }
+    /** Callback calls when player hold item which id is not 0
+    */
     function addCallback(name: "ItemHold", func: ItemHoldFunction, priority?: number): void;
-    function addCallback(name: "BlockSelection", func: BlockSelectionFunction, priority?: number): void;
-    function addCallback(name: "EntitySelection", func: EntitySelectionFunction, priority?: number): any;
+    /**
+     * Callback calls when player hold selection on entity or block
+     */
+    function addCallback(name: "Selection", func: SelectionFunction, priority?: number): void;
 }
 /**
  * The factory of decorators to add callback from function.
  * @example
  * ```ts
     class Example {
-        [@SubscribeEvent(ECallback.LOCAL_TICK)]
-        public onTick() {
+        \@SubscribeEvent(ECallback.LOCAL_TICK)
+        public static onTick() {
             Game.message("example")
         }
     };
  * ```
  * @param event {@link ECallback} enum value
+ * @param priority priority
  * @returns decorator
  */
-declare function SubscribeEvent(event: ECallback): MethodDecorator;
+declare function SubscribeEvent(event: ECallback, priority?: number): MethodDecorator;
 /**
  * Decorator to add callback from function by function name and same function. Format will be "onNameOfCallback". "on" optional.
  * @example
  * ```ts
  * class ExampleDestroyBlock {
-        [@SubscribeEvent]
-        public onDestroyBlock() {
+        \@SubscribeEvent
+        public static onDestroyBlock() {
             Game.message("break block")
         }
     }
